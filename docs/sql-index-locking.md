@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** database chậm không có nghĩa là “thiếu index”. Hãy tìm query cụ thể, xem nó đọc bao nhiêu dòng và giữ lock (khóa dữ liệu) trong bao lâu. Sau đó mới thay đổi index hoặc transaction.
+
 Constraint và transaction bảo vệ invariant; index và execution plan quyết định chi phí query. Với contention, hãy xác định scope transaction và thứ tự lock trước khi dùng retry.
 
 ## Terms to Know
@@ -22,6 +24,8 @@ Tăng timeout không xử lý deadlock. Nó chỉ kéo dài thời gian giữ re
 Câu trả lời Senior mở đầu bằng **invariant**: điều gì tuyệt đối không được sai? Sau đó mới nói đến unique constraint, transaction, isolation, index và retry. Timeout hay retry không phải cơ chế bảo toàn nghiệp vụ.
 
 ## Mental model
+
+Index là cấu trúc giúp database tìm ít dòng hơn; nó không tự làm mọi query nhanh hơn. Lock là cơ chế bảo vệ dữ liệu khi nhiều giao dịch cùng sửa. Một index không phù hợp có thể làm ghi chậm hơn, còn transaction quá dài có thể khiến các request khác phải chờ.
 
 Database đồng thời làm hai việc: bảo vệ tính đúng đắn khi nhiều transaction tranh chấp, và chọn execution plan để truy cập dữ liệu. Lock là hệ quả bình thường của concurrency; vấn đề là lock giữ quá lâu, thứ tự truy cập không nhất quán, hoặc workload/index làm transaction đọc-ghi nhiều hơn cần thiết.
 

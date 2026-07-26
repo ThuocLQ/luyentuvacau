@@ -4,6 +4,8 @@
 
 Chọn collection theo access pattern và invariant, không theo thói quen. LINQ cần có execution boundary rõ; exception là contract lỗi bất thường chứ không phải luồng điều khiển thông thường.
 
+Nói đơn giản: chọn `List`, `Dictionary` hay `HashSet` dựa trên việc code cần làm gì với dữ liệu. Với LINQ, luôn biết câu query thực sự chạy ở đâu và chạy lúc nào.
+
 ## Terms to Know
 
 - [[Query shape]]: dữ liệu/filter/sort query thật sự cần.
@@ -11,7 +13,7 @@ Chọn collection theo access pattern và invariant, không theo thói quen. LIN
 - [[Data ownership]]: tầng nào được quyết định execution của query.
 
 ::: concept
-`IQueryable` tiện nhưng mang theo deferred execution và provider semantics. Đừng để nó trôi qua nhiều layer mà không ai sở hữu query cuối.
+`IQueryable` tiện nhưng mang theo deferred execution (query chỉ chạy khi được materialize) và provider semantics (mỗi provider như EF Core có cách dịch LINQ riêng). Đừng để nó trôi qua nhiều layer mà không ai sở hữu query cuối.
 :::
 
 ## Khi nào gặp
@@ -22,7 +24,9 @@ Chủ đề này thường xuất hiện dưới dạng một endpoint chậm d�
 
 Collection biểu diễn cách dữ liệu được truy cập và sở hữu trong memory; LINQ biểu diễn một pipeline thực thi có thể deferred hoặc đã materialized. `IEnumerable<T>` chạy trong memory; `IQueryable<T>` là mô tả query để provider như EF Core dịch xuống database. Chuyển từ `IQueryable` sang `IEnumerable` quá sớm có thể kéo dữ liệu khổng lồ về process.
 
-Exception là tín hiệu cho đường đi bất thường mà caller không thể xử lý bình thường ở điểm hiện tại. Nó không phải cơ chế điều khiển luồng cho validation dự đoán được, cũng không phải lý do để trả mọi lỗi là `500`. Hãy đặt boundary: domain/application trả kết quả lỗi có cấu trúc cho tình huống mong đợi; middleware ở ngoài cùng chuẩn hóa exception không mong đợi, log cùng trace và trả `ProblemDetails` an toàn.
+**Deferred execution (thực thi trì hoãn)** nghĩa là pipeline chưa chạy khi bạn viết `.Where(...)`; nó thường chạy khi bạn duyệt dữ liệu hoặc gọi `ToListAsync`. **Materialize** nghĩa là lấy kết quả thật về bộ nhớ, ví dụ thành `List<T>`.
+
+Exception là tín hiệu cho đường đi bất thường mà caller không thể xử lý bình thường ở điểm hiện tại. Nó không phù hợp cho validation dự đoán được, cũng không có nghĩa mọi lỗi đều phải trả `500`. Với tình huống mong đợi, domain/application trả kết quả lỗi có cấu trúc. Middleware ngoài cùng chuẩn hóa exception không mong đợi, log kèm trace và trả `ProblemDetails` an toàn.
 
 ## Câu trả lời 60 giây
 

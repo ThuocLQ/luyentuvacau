@@ -4,6 +4,8 @@
 
 GC quản lý object còn reachable, nhưng không thay bạn quản lý ownership hay giới hạn dữ liệu. Với API payload lớn, hãy đo allocation và p99 trước; streaming thường là bước đầu an toàn hơn pooling.
 
+Nói đơn giản: GC dọn bộ nhớ khi không còn ai giữ object. Nếu code giữ dữ liệu quá lâu, hoặc tạo quá nhiều dữ liệu cùng lúc, GC không thể “cứu” ứng dụng ngay lập tức.
+
 ## Terms to Know
 
 - [[Garbage collection]]: runtime thu hồi object không còn được giữ reference.
@@ -22,9 +24,11 @@ Khi trả lời interview, hãy nối **tốc độ cấp phát**, **vòng đờ
 
 ## Mental model
 
-Managed memory loại bỏ việc gọi `free`, không loại bỏ trách nhiệm ownership. GC chỉ thu hồi object không còn reachable; một object vẫn sống nếu còn bị giữ bởi cache tĩnh, event handler, closure, queue hoặc object graph khác.
+Managed memory loại bỏ việc gọi `free`, không loại bỏ trách nhiệm ownership (ai chịu trách nhiệm đóng hoặc trả tài nguyên). GC chỉ thu hồi object không còn reachable (không còn đường reference nào trỏ tới); một object vẫn sống nếu còn bị giữ bởi cache tĩnh, event handler, closure hoặc queue.
 
-`IDisposable` giải phóng tài nguyên khan hiếm như socket, file handle, database reader hoặc buffer native. Nó không có nghĩa managed memory được thu hồi ngay. Dùng `using` hoặc `await using` để thể hiện rõ điểm kết thúc ownership.
+**Ownership (quyền sở hữu)** trả lời câu hỏi: “ai có trách nhiệm đóng hoặc trả tài nguyên này?”. Nó đặc biệt quan trọng với stream, socket và buffer, vì các tài nguyên này không chỉ là bộ nhớ .NET thông thường.
+
+`IDisposable` giải phóng tài nguyên khan hiếm như socket, file handle, database reader hoặc buffer native (bộ nhớ do hệ điều hành hay thư viện khác quản lý). Nó không có nghĩa managed memory được thu hồi ngay. Dùng `using` hoặc `await using` để thể hiện rõ điểm kết thúc ownership.
 
 ## Invariants phải giữ
 
@@ -61,7 +65,7 @@ Managed memory loại bỏ việc gọi `free`, không loại bỏ trách nhiệ
 Đừng tối ưu bằng trực giác. Bắt đầu bằng workload cụ thể: request rate, kích thước payload, p95/p99, allocation rate và memory limit của container.
 
 - Theo dõi allocation rate, heap size, Gen2/LOH collection, working set và GC pause qua runtime counters/APM.
-- Chụp dump khi heap tăng không giảm; xem retaining path để phân biệt cache/leak với traffic growth hợp lệ.
+- Chụp dump khi heap tăng không giảm; xem retaining path (chuỗi reference đang giữ object) để phân biệt cache/leak với traffic growth hợp lệ.
 - So sánh trước/sau theo throughput và p99 dưới cùng load; giảm allocation nhưng làm tăng contention hoặc lỗi ownership không phải cải tiến.
 - Đặt alert theo dấu hiệu người dùng thấy được: restart do OOM, p99, queue backlog; không chỉ theo % memory.
 

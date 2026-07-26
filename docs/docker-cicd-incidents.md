@@ -4,6 +4,8 @@
 
 Release an toàn cần artifact bất biến và compatibility giữa app, schema, event và cache. Rollback không phải lúc nào cũng là quay code cũ; migration destructive có thể buộc phải roll-forward.
 
+> **Nói đơn giản:** đừng coi deploy là “copy code mới lên server”. Một bản deploy chỉ an toàn khi code cũ và code mới có thể cùng chạy trong thời gian chuyển đổi, và khi có sự cố bạn biết chính xác đang chạy bản nào để quay lại hoặc sửa tiếp.
+
 ## Terms to Know
 
 - [[Schema evolution]]: thay đổi contract/schema mà phiên bản cũ mới cùng chạy.
@@ -19,6 +21,8 @@ Dùng expand–migrate–contract: thêm tương thích trước, backfill có k
 Đây là nhóm câu hỏi để phân biệt người “đẩy được container” với người vận hành an toàn: image chạy local nhưng fail ở Kubernetes/host khác, deployment làm p99 tăng, rollback không an toàn với migration, secret lọt vào image, hoặc incident cần ra quyết định trước khi biết root cause.
 
 ## Mental model
+
+**Artifact bất biến** là gói chạy được tạo một lần (ví dụ image có digest). Staging và production dùng đúng gói đó; chỉ cấu hình runtime thay đổi. Nhờ vậy khi lỗi, bạn không phải đoán hai môi trường đã build khác nhau ở đâu.
 
 Artifact triển khai phải bất biến, có thể truy vết và chạy giống nhau giữa các môi trường; configuration và secret là dữ liệu runtime, không bake vào image. Delivery pipeline là chuỗi quality gate có mục tiêu rõ: build một lần, kiểm dependency/test/security, publish image có digest, deploy theo chiến lược, quan sát health và rollback/roll-forward theo khả năng tương thích.
 
@@ -44,6 +48,8 @@ Multi-stage build tách SDK/build tools khỏi runtime. Pin base image theo vers
 Image chỉ chứa runtime và application publish output. Expose port là metadata, không phải firewall. Đặt user không phải root, biến môi trường non-secret có default an toàn, và log ra stdout dưới dạng structured logs để platform thu thập. App cần xử lý `SIGTERM`: ngừng nhận request mới, hoàn tất request/job trong grace period, rồi thoát.
 
 ## CI/CD và compatibility
+
+Compatibility (tương thích) nghĩa là phiên bản mới không làm hỏng phiên bản cũ đang còn nhận traffic. Đây là lý do migration database, event và cache format phải được triển khai theo nhiều bước, thay vì sửa hoặc xóa ngay trong một lần deploy.
 
 Quality gate không phải càng nhiều càng tốt; mỗi gate phải bắt một failure mode: compile/type check, unit/integration/contract test, lint, secret/dependency/container scan, migration validation và smoke test sau deploy. Artifact manifest nên chứa version, source SHA, build time, SBOM/provenance nếu hệ thống yêu cầu.
 

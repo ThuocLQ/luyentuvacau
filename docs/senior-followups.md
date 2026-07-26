@@ -2,7 +2,9 @@
 
 ## Quick Summary
 
-Follow-up kiểm tra điều kiện áp dụng, failure mode và evidence đằng sau câu trả lời đầu tiên. Câu trả lời Senior không cần dài; cần rõ điều gì sẽ làm quyết định thay đổi.
+> **Nói đơn giản:** câu hỏi đào sâu không đòi “một đáp án đúng tuyệt đối”. Interviewer muốn biết bạn đổi quyết định thế nào khi tải tăng, dependency lỗi hoặc yêu cầu chính xác hơn.
+
+Follow-up kiểm tra điều kiện áp dụng, failure mode (cách giải pháp có thể hỏng) và evidence (bằng chứng) đằng sau câu trả lời đầu tiên. Câu trả lời Senior không cần dài; cần rõ điều gì sẽ làm quyết định thay đổi.
 
 ## Terms to Know
 
@@ -15,6 +17,8 @@ Nếu chưa có số liệu, hãy nói assumption và metric bạn sẽ xem thay
 :::
 
 ## Mục tiêu của follow-up
+
+Follow-up thường thay đổi một điều kiện của câu hỏi ban đầu: tải lớn hơn, dữ liệu nhạy cảm hơn, dependency bị timeout hoặc yêu cầu chính xác hơn. Hãy nhắc lại điều kiện mới trước khi đổi thiết kế. Điều này giúp câu trả lời có logic thay vì đổi công nghệ theo cảm tính.
 
 Câu hỏi Senior thường bắt đầu từ một câu trả lời đúng nhưng chung chung: "dùng cache", "thêm index", "dùng outbox", "scale ngang". Follow-up kiểm tra liệu bạn có thể nêu điều kiện đúng, failure mode, cách đo và quyết định khi requirement đổi không.
 
@@ -119,6 +123,8 @@ Khi luyện, trả lời theo khung ngắn: **bối cảnh → invariant/SLO →
 **Tự kiểm:** Dữ liệu này được stale bao lâu? Cache down thì traffic chuyển đi đâu?
 
 ## 7. Cách tự chấm một câu trả lời
+
+Một câu trả lời rõ ràng có thể được nghe và kiểm tra: người khác biết bạn chọn gì, không chọn gì, rủi ro còn lại là gì và signal nào sẽ báo rằng quyết định sai. Tránh dùng các từ như “tối ưu”, “an toàn”, “scale tốt” mà không nêu tiêu chí.
 
 Sau mỗi câu, tự chấm 0–2 cho từng tiêu chí:
 

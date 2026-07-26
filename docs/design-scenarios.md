@@ -2,7 +2,9 @@
 
 ## Quick Summary
 
-Với đề system design, chốt invariant và assumption trước rồi mới vẽ component. Luôn nói data flow, failure/recovery và metric cùng với giải pháp baseline.
+> **Nói đơn giản:** với mỗi đề thiết kế, hãy đi theo cùng một đường: xác định dữ liệu quan trọng nhất → nơi ghi dữ liệu đó → cách xử lý retry/duplicate → trạng thái người dùng nhìn thấy khi việc nền chưa xong. Đừng bắt đầu bằng tên công nghệ.
+
+Với đề system design, chốt invariant (quy tắc không được sai) và assumption (giả định đang dùng) trước rồi mới vẽ component. Luôn nói data flow, failure/recovery và metric cùng với giải pháp baseline (bản thiết kế nhỏ nhất chạy đúng).
 
 ## Terms to Know
 
@@ -114,6 +116,8 @@ Checkout đọc/validate giá và availability từ authoritative service trong 
 Cache stampede xử lý bằng request coalescing/bounded rebuild và rate limit. Reindex phải có version/alias swap, backfill/replay có kiểm soát, và metric projection lag/mismatch. Partition index theo tenant/catalog khi hot distribution chứng minh cần; test relevance và permission filtering như một contract.
 
 ## Cách tự kiểm khi trả lời
+
+Khi nói “dùng queue” hoặc “thêm cache”, hãy trả lời thêm bốn câu ngắn: dữ liệu gốc ở đâu, việc bị gửi lại thì sao, người dùng thấy trạng thái gì khi chưa xong, và ai sẽ biết khi hàng đợi hoặc cache bị lỗi. Bốn câu này đủ để biến câu trả lời từ danh sách công nghệ thành một thiết kế có thể vận hành.
 
 Trước khi kết thúc, tự hỏi:
 

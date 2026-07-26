@@ -2,7 +2,9 @@
 
 ## Quick Summary
 
-Question bank là bài tập trả lời có feedback, không phải danh sách để học thuộc. Mỗi câu nên có kết luận, cơ chế, failure mode, trade-off và evidence từ dự án thật.
+> **Nói đơn giản:** đừng đọc đáp án rồi gật đầu. Hãy che đáp án, tự nói trước, sau đó mới so sánh. Nếu câu trả lời thiếu điều kiện, rủi ro hoặc cách kiểm chứng, đánh dấu để ôn lại.
+
+Question bank là bài tập trả lời có feedback (phản hồi), không phải danh sách để học thuộc. Mỗi câu nên có kết luận, cơ chế, failure mode (cách nó có thể hỏng), trade-off (được gì và đổi lại gì) và evidence (bằng chứng) từ dự án thật.
 
 ## Terms to Know
 
@@ -19,6 +21,8 @@ Một câu trả lời 60–90 giây tốt nên để interviewer thấy bạn b
 Dùng tài liệu này sau khi đã đọc một cheatsheet hoặc trước mock interview. Đây không phải danh sách để học thuộc đáp án. Mục tiêu là biến kiến thức thành phản xạ trả lời có cấu trúc: hiểu bối cảnh, nêu quyết định, chỉ ra trade-off, và chứng minh cách bạn vận hành nó ở production.
 
 ## Mental model
+
+Mỗi câu hỏi là một lần kiểm tra cách suy nghĩ, không phải bài kiểm tra trí nhớ. Trước hết nói kết luận ngắn. Sau đó giải thích cơ chế: hệ thống làm gì và vì sao. Cuối cùng nói giới hạn, rủi ro và cách bạn kiểm chứng ở production.
 
 Một câu trả lời Senior không bắt đầu bằng tên framework. Nó bắt đầu bằng điều cần bảo vệ: latency, correctness, bảo mật, chi phí hoặc khả năng vận hành. Sau đó mới đến cơ chế, failure mode và bằng chứng. Interviewer thường đặt follow-up để kiểm tra bạn có phân biệt được “biết khái niệm” và “đã đưa quyết định vào production” hay không.
 
@@ -47,6 +51,8 @@ Ví dụ thay vì nói “dùng Redis để nhanh hơn”, hãy nói: “Với m
 - Kể project quá dài nhưng không có vai trò cá nhân, quyết định, kết quả và bài học.
 
 ## Rubric tự đánh giá
+
+Nếu chỉ thiếu một tên API hay một con số, bạn có thể tra lại sau. Nếu không nói được dữ liệu nào là nguồn sự thật, retry có an toàn không hoặc lỗi sẽ được phát hiện thế nào, hãy đánh dấu câu đó là cần ôn lại.
 
 Sau mỗi câu, tự chấm từng tiêu chí 0–2. Tổng 8 điểm là mục tiêu, không phải điểm thuộc lòng.
 

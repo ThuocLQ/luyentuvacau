@@ -4,6 +4,10 @@
 
 Background work cần durable handoff nếu không được mất khi restart. Cache và retry chỉ an toàn khi source of truth, unknown outcome và retry budget đều được xác định.
 
+> **Nói đơn giản:** việc “chạy nền” nhưng chỉ nằm trong memory sẽ mất khi app restart. Cache chỉ là bản sao để đọc nhanh; retry chỉ là thử lại có kiểm soát, không phải nút bấm chữa mọi lỗi.
+
+Nói đơn giản: nếu việc quan trọng chỉ nằm trong RAM, restart là có thể mất việc. Nếu có thể chạy lại, code phải chịu được việc một job hoặc message đến nhiều lần.
+
 ## Terms to Know
 
 - [[Durable queue]]: job sống qua restart/scale-out.
@@ -21,9 +25,13 @@ Chủ đề này được hỏi khi một request cần gửi email, export repo
 
 ## Mental model
 
+Durable handoff (bàn giao công việc có lưu bền) nghĩa là ghi job vào database hoặc broker trước khi trả lời thành công. At-least-once (job có thể được giao lại hơn một lần) là behavior bình thường của queue; handler phải chịu được duplicate. Unknown outcome (không biết downstream đã làm hay chưa) xuất hiện sau timeout; lúc đó retry mù có thể tạo side effect trùng.
+
 Request process, background worker, database và downstream service là các failure domain độc lập. Process có thể chết bất kỳ lúc nào; network có thể timeout dù downstream đã làm xong; message có thể đến nhiều lần và không theo thứ tự. Vì vậy một job đáng tin cậy cần state bền vững, acknowledgement sau khi state an toàn, handler idempotent, retry có giới hạn, và quan sát được.
 
-Cache là bản sao có kiểm soát, không phải source of truth. Nó chỉ giúp latency/throughput khi có key, TTL, invalidation, giới hạn kích thước và phương án hoạt động khi cache mất.
+**Durable (bền vững)** nghĩa là trạng thái còn tồn tại sau restart, thường ở database hoặc broker. **Acknowledge/ack** là xác nhận job đã xử lý. Chỉ ack sau khi kết quả cần thiết đã được lưu an toàn.
+
+Cache là bản sao có kiểm soát, không phải source of truth (nguồn dữ liệu đáng tin cậy cuối cùng). Nó giúp giảm latency/giảm tải khi có key, TTL (thời gian hết hạn), invalidation (làm vô hiệu bản cũ), giới hạn kích thước và phương án khi cache mất.
 
 ## Câu trả lời 60 giây
 

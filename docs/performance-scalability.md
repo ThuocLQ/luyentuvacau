@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** tối ưu không bắt đầu bằng cache hay tăng máy chủ. Bắt đầu bằng số liệu: request nào chậm, chậm ở đâu, tác động tới người dùng nào. Sau khi biết nút thắt mới chọn đòn bẩy phù hợp.
+
 Tối ưu bắt đầu từ evidence: user impact, p99, saturation và dependency. Scale-out không giúp khi bottleneck là hot key, connection pool hoặc downstream đang chậm.
 
 ## Terms to Know
@@ -22,6 +24,8 @@ Chỉ nhìn average latency khiến bạn bỏ qua queueing và tail latency —
 Performance không phải danh sách mẹo cache/index/async. Nó là vòng lặp: định nghĩa SLO, đo theo tải thật, tìm bottleneck, giảm hoặc phân tách bottleneck, rồi kiểm chứng bằng số liệu và guardrail.
 
 ## Mental model
+
+Latency trung bình có thể đẹp nhưng một nhóm request rất chậm vẫn làm người dùng khó chịu; vì vậy cần nhìn p95/p99. Scalability là khả năng tăng tải mà vẫn kiểm soát latency, lỗi và chi phí; không chỉ là tăng số instance.
 
 Latency end-to-end là tổng của queueing, CPU, database, network, dependency và serialization. Khi utilization gần bão hòa, queueing tăng phi tuyến: thêm traffic nhỏ có thể làm p99 tăng rất mạnh. Vì vậy average latency đẹp không chứng minh hệ thống khỏe; phải nhìn percentile, error rate, saturation và backlog.
 

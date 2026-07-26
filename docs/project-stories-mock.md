@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** project story không phải bản liệt kê công nghệ. Nó là câu chuyện về vấn đề, phần bạn chịu trách nhiệm, quyết định bạn đã đưa ra, kết quả có bằng chứng và điều bạn sẽ làm khác đi.
+
 Project story mạnh cho thấy ownership và evidence: bạn phát hiện gì, quyết định gì, đổi lấy gì và kết quả được đo ra sao. Đừng chỉ kể stack hoặc trách nhiệm chung của cả team.
 
 ## Terms to Know
@@ -21,6 +23,8 @@ Kể theo bối cảnh → trách nhiệm của bạn → cơ chế/quyết đ�
 Project story không phải bản tường thuật "team em làm". Đó là bằng chứng về judgement của bạn. Không bịa số liệu: nếu không có số chính xác, nói rõ range, proxy metric hoặc cách bạn sẽ kiểm chứng.
 
 ## Mental model: O-M-T-E-R
+
+Đọc O-M-T-E-R như một cách tránh kể lan man: **Ownership** (phần bạn chịu trách nhiệm), **Mechanism** (cơ chế đã thay đổi), **Trade-off** (đánh đổi), **Evidence** (bằng chứng) và **Reflection** (điều học được). Không cần nhận công của cả team; chỉ cần nói chính xác phần mình đã làm và phối hợp.
 
 Dùng khung **Ownership → Mechanism → Trade-off → Evidence → Reflection**.
 
@@ -95,6 +99,8 @@ Khung này chặt hơn STAR vì nó bắt buộc evidence và trade-off — hai 
 "Kết quả là canary guardrail, dashboard theo version và checklist migration/rollback có owner."
 
 ## Cách chuẩn bị story của chính bạn
+
+Chọn một việc thật mà bạn nhớ được bối cảnh và kết quả. Thay số liệu nhạy cảm bằng xu hướng hoặc khoảng hợp lý, nhưng đừng bịa. Nếu chưa có metric, nói rõ evidence thay thế: log, trace, ticket, phản hồi người dùng hoặc thay đổi tỷ lệ lỗi.
 
 Lập một bảng cho 3–5 story, mỗi story khác loại: performance/reliability, correctness/security, architecture/migration, incident, leadership/collaboration.
 

@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** DDD không bắt bạn tạo nhiều service hay class. Nó giúp team thống nhất tên gọi, xác định dữ liệu nào thuộc về ai và đặt quy tắc quan trọng ở đúng chỗ.
+
 Tách service chỉ đáng giá khi boundary, ownership team hoặc scale độc lập đã rõ. Modular monolith thường là baseline tốt hơn khi cần transaction đơn giản và tốc độ thay đổi cao.
 
 ## Terms to Know
@@ -21,6 +23,8 @@ Một đội muốn tách hệ thống order thành năm microservice vì "dễ 
 Mục tiêu kiến trúc không phải nhiều box trên sơ đồ. Mục tiêu là tạo boundary để thay đổi, deploy và xử lý sự cố an toàn với chi phí vận hành tương xứng.
 
 ## Mental model
+
+**Boundary** (ranh giới) là nơi một phần hệ thống chịu trách nhiệm cho dữ liệu và quy tắc của mình. Khi boundary rõ, team biết ai được ghi dữ liệu nào và các phần khác chỉ giao tiếp qua contract. Điều này giảm việc một thay đổi nhỏ làm vỡ cả hệ thống.
 
 DDD là cách làm rõ ngôn ngữ nghiệp vụ, ownership và invariant. Bounded context sở hữu model, data và rule của một capability; nó không nhất thiết là một microservice. Modular monolith có thể giữ boundary đó trong cùng process và vẫn hưởng local transaction, debug/deploy đơn giản.
 

@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** observability giúp trả lời “đang hỏng ở đâu và ảnh hưởng ai” dựa trên dữ liệu. Khi incident xảy ra, ưu tiên giảm ảnh hưởng trước; tìm nguyên nhân sâu và rút kinh nghiệm sau khi hệ thống ổn định.
+
 Observability giúp trả lời hệ thống đang ảnh hưởng ai, tại boundary nào và từ khi nào. Khi incident xảy ra, ổn định user impact trước rồi mới điều tra root cause dựa trên evidence.
 
 ## Terms to Know
@@ -22,6 +24,8 @@ Mười phút sau deploy, p99 của checkout tăng gấp đôi. Một người m
 Observability là khả năng trả lời câu hỏi mới từ evidence production; incident response là bảo vệ người dùng trước khi thỏa mãn tò mò kỹ thuật.
 
 ## Mental model
+
+Logs kể chi tiết từng sự kiện, metrics cho thấy xu hướng bằng số, còn traces nối các bước của một request đi qua nhiều service. Ba loại signal này bổ sung nhau. Đừng chỉ thêm dashboard: mỗi signal phải hỗ trợ một quyết định hoặc cảnh báo có hành động rõ.
 
 Metrics cho biết phạm vi và xu hướng; logs có structured context cho một sự kiện; traces chỉ ra đường đi và dependency nào tiêu thời gian. Ba tín hiệu bổ sung nhau, không thay thế nhau.
 

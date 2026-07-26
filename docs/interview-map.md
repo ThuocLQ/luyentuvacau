@@ -2,7 +2,9 @@
 
 ## Quick Summary
 
-Mục tiêu ôn không phải đọc hết: xác định gap critical, nói câu trả lời thành tiếng và gắn kiến thức với story thật. Chọn lộ trình theo thời gian còn lại và role đang phỏng vấn.
+Mục tiêu ôn không phải đọc hết: xác định gap critical (lỗ hổng ở chủ đề trọng yếu), nói câu trả lời thành tiếng và gắn kiến thức với story thật. Chọn lộ trình theo thời gian còn lại và role (loại vị trí) đang phỏng vấn.
+
+> **Nói đơn giản:** một buổi ôn tốt không cố nhồi thêm kiến thức. Nó giúp bạn phát hiện phần chưa giải thích được, luyện nói rõ phần đó, rồi quay lại đúng tài liệu cần thiết.
 
 ## Terms to Know
 
@@ -19,6 +21,8 @@ Khi trả lời: kết luận trước, nêu điều kiện, mechanism, failure 
 Đây không phải danh sách để đọc từ đầu đến cuối. Mục tiêu là biến thời gian ôn hạn chế thành câu trả lời có cấu trúc: bạn nêu đúng problem, invariant, lựa chọn, trade-off và bằng chứng production. Nếu chỉ nhớ API hoặc pattern nhưng không nói được khi nào **không** dùng, bạn chưa sẵn sàng cho vòng Senior.
 
 ## Diagnostic trước khi ôn
+
+“Lưỡng lự” không có nghĩa là bạn không biết gì. Thường bạn biết định nghĩa, nhưng chưa giải thích được khi nào dùng, đánh đổi gì và nếu lỗi thì sao. Đây là nhóm nên ưu tiên ôn lại nhất.
 
 Với từng chủ đề, tự trả lời một câu trong 60 giây mà không mở tài liệu. Tự chấm:
 
@@ -81,6 +85,8 @@ Trong 60 phút, ưu tiên **decision** hơn coverage. Ví dụ với cache phả
 Ôn Core/Data/Distributed trước, sau đó Finance. Bạn phải tách order, execution, allocation, settlement và ledger; không trả lời finance chỉ bằng "dùng distributed lock".
 
 ## Cách trả lời mặc định
+
+Khung này không bắt bạn biết hết mọi công nghệ. Khi chưa gặp case đó, hãy nói assumption của mình, chọn phương án đơn giản và nêu thông tin nào sẽ khiến bạn đổi lựa chọn. Cách trả lời thành thật nhưng có cấu trúc tốt hơn cố đoán một “đáp án phỏng vấn”.
 
 Khi gặp câu chưa từng luyện, dùng khung này:
 

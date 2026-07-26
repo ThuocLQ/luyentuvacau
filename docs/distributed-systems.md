@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** khi một việc đi qua database và message broker, cùng một thông điệp có thể được gửi lại. Vì vậy hãy thiết kế để xử lý lặp lại an toàn, thay vì hy vọng nó chỉ đến đúng một lần.
+
 Giả định message có thể trễ, trùng và cần replay. Outbox làm state nội bộ với ý định phát event được ghi nguyên tử; tính đúng ở consumer vẫn cần idempotency, ack đúng chỗ và reconciliation.
 
 ## Terms to Know
@@ -23,6 +25,8 @@ Giả định message có thể trễ, trùng và cần replay. Outbox làm stat
 Đừng hứa "exactly once" cho toàn bộ hệ thống. Qua process, database, broker và API bên thứ ba, thực tế cần giả định message có thể trễ, trùng, đảo thứ tự trong phạm vi nhất định hoặc cần replay.
 
 ## Mental model
+
+Distributed system là nơi mạng, process và dependency có thể thất bại độc lập. Timeout chỉ nói rằng bạn chưa nhận được câu trả lời; nó không chứng minh thao tác chưa xảy ra. Hãy lưu state bền, có idempotency (làm lặp lại vẫn ra một kết quả) và có đường đối soát.
 
 Một message flow đáng tin phải trả lời năm câu hỏi:
 

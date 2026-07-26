@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** saga dùng khi một quy trình qua nhiều hệ thống không thể rollback như một transaction database. Thay vì giả vờ mọi thứ xảy ra cùng lúc, nó ghi rõ từng trạng thái, retry có giới hạn và hành động bù trừ khi cần.
+
 Saga phối hợp local transaction có state, timeout và recovery; nó không phải database rollback xuyên service. Retry cần scope, budget và idempotency boundary rõ để không nhân side effect.
 
 ## Terms to Know
@@ -22,6 +24,8 @@ Compensation là một business action mới. Nó có thể không đảo hoàn 
 Đây không phải bài toán "retry cho đến khi hết lỗi". Hãy nói rõ state machine, invariant, phạm vi idempotency, ordering thực sự được broker bảo đảm, compensation và reconciliation khi thế giới thực không còn khớp với workflow.
 
 ## Mental model
+
+Compensation (hành động bù trừ) không phải nút “undo” hoàn hảo. Ví dụ hoàn tiền có thể là một giao dịch mới, không xóa được việc đã charge. Vì vậy workflow cần trạng thái rõ, bằng chứng để reconcile và cách để operator can thiệp.
 
 Trong distributed system, mỗi service chỉ commit transaction cục bộ của nó. Không có ACID xuyên service miễn phí. Một workflow phải chấp nhận trạng thái trung gian như `PendingPayment`, `Reserved`, `AwaitingShipment` và có người/tiến trình sở hữu việc đưa nó tới terminal state hoặc reconcile.
 

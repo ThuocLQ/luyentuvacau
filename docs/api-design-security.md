@@ -4,6 +4,10 @@
 
 API tốt có contract rõ, validation ở server và boundary cho retry/side effect. Authentication chỉ xác minh danh tính; authorization phải kiểm tra quyền trên đúng resource và tenant.
 
+> **Nói đơn giản:** API không tin client. Client có thể gửi lại request, gửi dữ liệu thiếu hoặc cố truy cập dữ liệu của người khác. Server phải kiểm tra dữ liệu, quyền và việc request lặp lại có tạo thêm tác dụng phụ hay không.
+
+Nói đơn giản: server không được tin dữ liệu từ client. Server phải kiểm tra dữ liệu có hợp lệ, người gọi là ai, người đó được làm gì, và retry có tạo thêm tác động hay không.
+
 ## Terms to Know
 
 - [[Idempotency boundary]]: nơi replay được nhận diện an toàn.
@@ -20,9 +24,13 @@ Một POST có side effect không tự an toàn khi client retry. Hãy xác đ�
 
 ## Mental model
 
+Contract (cam kết giữa API và client) cần nói rõ dữ liệu nào hợp lệ, lỗi nào trả về và client có thể retry hay không. Validation là kiểm tra dữ liệu đầu vào; authorization là kiểm tra người dùng này có quyền làm hành động đó trên đúng resource hay không.
+
 API là boundary không tin cậy: client có thể gửi dữ liệu sai, gửi lại request, gọi vượt quyền, hoặc bị timeout sau khi server đã hoàn tất. Validation kiểm tra dữ liệu đầu vào có hợp lệ về hình thức; authorization quyết định principal hiện tại được làm hành động nào trên resource nào; business invariant xác định trạng thái có được phép chuyển hay không.
 
-Không lớp nào thay thế lớp khác. Một JWT hợp lệ không có nghĩa người dùng được sửa order của tenant khác. Một unique constraint không tự trả lại cùng response cho retry HTTP. Một response `200` không chứng minh side effect downstream đã hoàn tất.
+**Validation** kiểm tra dữ liệu như thiếu trường, sai định dạng hoặc vượt giới hạn. **Authorization** kiểm tra quyền của người đã đăng nhập. **Business invariant (bất biến nghiệp vụ)** là quy tắc luôn phải đúng, ví dụ đơn đã hủy không được thanh toán lại.
+
+Không lớp nào thay thế lớp khác. JWT hợp lệ không có nghĩa người dùng được sửa order của tenant khác. Unique constraint không tự trả lại cùng response cho retry HTTP. Response `200` cũng không tự chứng minh side effect ở hệ thống khác đã hoàn tất.
 
 ## Câu trả lời 60 giây
 

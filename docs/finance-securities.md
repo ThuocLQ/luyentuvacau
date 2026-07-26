@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** trong hệ thống tài chính, “đã gửi yêu cầu” chưa chắc là “đã khớp” hay “đã thanh toán”. Mỗi bước có trạng thái và bằng chứng riêng; không được xóa hoặc ghi đè lịch sử chỉ để màn hình trông đơn giản.
+
 Domain tài chính ưu tiên correctness, audit và reconciliation hơn trả lời “nhanh ngay”. Tách execution facts, order state và ledger để replay, correction và đối soát không làm mất lịch sử.
 
 ## Terms to Know
@@ -22,11 +24,15 @@ Trong finance, công nghệ phục vụ business invariant. Hãy mô tả lifecy
 
 ## Mental model
 
+Hãy tách **ý định** (người dùng muốn đặt lệnh), **sự kiện đã xảy ra** (khớp lệnh, hủy, điều chỉnh) và **sổ cái** (bản ghi tài chính để đối soát). Ba thứ này liên quan nhưng không phải một. Tách chúng ra giúp hệ thống xử lý replay, partial fill và correction mà không mất lịch sử.
+
 Order là instruction của khách; execution là fact từ thị trường; allocation gán execution cho account; settlement là trao đổi cash/securities ở thời điểm sau; ledger ghi movement có thể audit. Các state machine liên quan nhưng không cùng xảy ra trong một transaction hay cùng một thời điểm.
 
 Balance là derived view. Ledger/movement và immutable fact là nguồn giải thích vì sao balance có giá trị hiện tại. Sai sót được sửa bằng correction/reversal entry, không âm thầm overwrite lịch sử.
 
 ## Invariants phải giữ
+
+Invariant là quy tắc dữ liệu không được phép sai, ví dụ số lượng đã khớp không thể lớn hơn số lượng mở, hoặc một execution không được ghi hai lần. Đặt các quy tắc này gần nơi ghi dữ liệu nhất bằng constraint, transition có điều kiện hoặc transaction; đừng chỉ dựa vào kiểm tra trong UI.
 
 - Client order ID và execution/venue ID là stable business identifier để deduplicate/replay.
 - Cancel chỉ đóng **open quantity**; execution đã xác nhận không bị xoá hoặc đảo ngược bằng việc đổi status order.

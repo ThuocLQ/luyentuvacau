@@ -2,6 +2,8 @@
 
 ## Quick Summary
 
+> **Nói đơn giản:** REST, gRPC và event không cạnh tranh để tìm ra cái “tốt nhất”. Chọn theo việc người gọi có cần câu trả lời ngay không, chấp nhận chờ bao lâu và hai bên có thể độc lập đến mức nào.
+
 Chọn REST, gRPC hay event theo coupling, latency, ownership và failure mode. Event tách thời gian nhưng đổi lại duplicate, eventual consistency và vận hành backlog.
 
 ## Terms to Know
@@ -21,6 +23,8 @@ Chọn REST, gRPC hay event theo coupling, latency, ownership và failure mode. 
 Không chọn theo độ mới của công nghệ. Bắt đầu bằng câu hỏi: ai sở hữu dữ liệu, người gọi có cần kết quả ngay không, latency/failure budget là bao nhiêu, dữ liệu có được phép thấy trễ không, và ai sẽ vận hành contract này.
 
 ## Mental model
+
+Giao tiếp đồng bộ nghĩa là bên gọi chờ câu trả lời và chịu ảnh hưởng nếu bên kia chậm hoặc lỗi. Giao tiếp bất đồng bộ qua event/queue giúp tách thời gian xử lý, nhưng đổi lại phải xử lý message đến trùng, đến muộn và quan sát backlog.
 
 Integration là một **contract giữa các boundary**, không chỉ là một HTTP endpoint hay topic. Một contract tốt nêu được ownership, input/output, lỗi, versioning, idempotency, bảo mật và cách quan sát.
 

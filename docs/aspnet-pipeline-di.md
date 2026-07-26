@@ -4,6 +4,10 @@
 
 Pipeline là thứ tự các boundary của một request; DI là ownership/lifetime của object trong các boundary đó. Sai thứ tự middleware hoặc để singleton giữ scoped state đều có thể thành lỗi correctness, không chỉ là lỗi cấu hình.
 
+> **Nói đơn giản:** request đi qua nhiều “trạm”. Mỗi trạm chỉ làm đúng việc của mình và phải đứng đúng thứ tự. DI quyết định object nào sống cùng request, object nào sống lâu hơn; nhầm lifetime rất dễ tạo lỗi ngẫu nhiên khi có tải.
+
+Nói đơn giản: request đi qua từng “trạm” theo thứ tự. DI quyết định object nào dùng riêng cho request, object nào dùng chung lâu dài; dùng sai vòng đời dễ tạo lỗi khó tái hiện.
+
 ## Terms to Know
 
 - [[Middleware]]: bước xử lý request/response theo thứ tự đăng ký.
@@ -20,9 +24,13 @@ Chủ đề này xuất hiện khi API trả sai mã lỗi, xác thực không c
 
 ## Mental model
 
+Middleware (một bước xử lý request/response) có thể chạy trước endpoint, sau endpoint, hoặc dừng request sớm. Vì vậy không có một thứ tự “cho đẹp”: middleware cần biết người dùng là ai phải đứng sau authentication; middleware cần biết route nào được gọi phải đứng sau routing.
+
 Mỗi HTTP request đi qua một pipeline theo đúng thứ tự đăng ký. Middleware có thể làm việc trước và sau phần kế tiếp, hoặc kết thúc request sớm. Dependency Injection (DI) tạo object theo lifetime; request scope là boundary sở hữu của các dependency scoped như `DbContext`.
 
-Vì vậy, thứ tự middleware và lifetime không phải chi tiết cấu hình. Chúng là một phần của tính đúng đắn: middleware nào đọc identity phải chạy sau authentication; middleware nào cần endpoint metadata phải chạy sau routing; service sống lâu không được giữ state thuộc về một request.
+**Lifetime (vòng đời)** là thời gian một object được giữ lại: transient tạo mới khi cần, scoped dùng trong một request hoặc scope, singleton sống đến khi ứng dụng dừng. `DbContext` thường là scoped vì nó mang trạng thái của một đơn vị xử lý và không an toàn khi nhiều thread dùng cùng lúc.
+
+Vì vậy, thứ tự middleware và lifetime không phải chi tiết cấu hình. Chúng là một phần của tính đúng đắn. Middleware đọc identity phải chạy sau authentication. Middleware cần endpoint metadata phải chạy sau routing. Service sống lâu không được giữ state thuộc về một request.
 
 ## Câu trả lời 60 giây
 

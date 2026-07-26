@@ -2,7 +2,11 @@
 
 ## Quick Summary
 
-Endpoint chậm thường nằm ở query shape, execution plan hoặc contention — không phải vì “EF Core chậm”. Đo SQL và số dòng thật trước, rồi mới quyết định projection, index hay concurrency semantics.
+Endpoint chậm thường nằm ở query shape, execution plan hoặc contention (chờ lock/connection/tài nguyên đang bị request khác giữ) — không phải vì “EF Core chậm”. Đo SQL và số dòng thật trước, rồi mới quyết định projection, index hay concurrency semantics.
+
+> **Nói đơn giản:** EF Core chỉ là lớp tạo SQL. Muốn biết API chậm, hãy xem database đang bị yêu cầu đọc gì, đọc bao nhiêu dòng và có phải chờ transaction khác không; đừng thêm `Include` hoặc index theo cảm tính.
+
+Nói đơn giản: EF Core tạo câu SQL, nhưng database mới là nơi phải đọc, join và sắp xếp dữ liệu. Muốn tối ưu đúng, phải xem câu SQL và cách database chạy nó trước.
 
 ## Terms to Know
 
@@ -23,13 +27,15 @@ Endpoint chậm thường nằm ở query shape, execution plan hoặc contentio
 
 ## Mental model
 
+Query shape là dữ liệu API thực sự xin: filter nào, sort thế nào, cần bao nhiêu cột và bao nhiêu dòng. Execution plan là cách database chọn để lấy dữ liệu đó. Hai thứ này quyết định chi phí nhiều hơn câu LINQ trông “đẹp” hay không.
+
 EF Core là lớp làm việc với dữ liệu, không thay thế hiểu biết về SQL. Một truy vấn tốt phải đúng ở ba tầng:
 
 - **Đúng dữ liệu:** lọc, sắp xếp và phân trang ổn định; không vô tình bỏ qua tenant hoặc trạng thái.
 - **Đúng hình dạng:** chỉ lấy cột và quan hệ mà response cần.
 - **Đúng chi phí:** SQL và plan đọc lượng dữ liệu phù hợp khi bảng đã lớn.
 
-Mọi tối ưu chỉ đáng tin khi đo được trước và sau. `ToQueryString()`, log command, trace của endpoint và actual execution plan là chuỗi bằng chứng cần có.
+Mọi tối ưu chỉ đáng tin khi đo được trước và sau. `ToQueryString()` cho biết SQL dự kiến. Log command và trace cho biết endpoint thực sự gọi gì. Actual execution plan cho biết database đã thực thi thế nào trên dữ liệu thật.
 
 ## Những điều phải nhớ
 

@@ -68,6 +68,7 @@ export function enhanceHtml(html: string): { html: string; toc: TocItem[] } {
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
   const textNodes: Text[] = []
+  const annotatedTerms = new Set<string>()
   while (walker.nextNode()) textNodes.push(walker.currentNode as Text)
   textNodes.forEach((node) => {
     const parent = node.parentElement
@@ -89,6 +90,13 @@ export function enhanceHtml(html: string): { html: string; toc: TocItem[] } {
         trigger.setAttribute('aria-describedby', `term-tooltip-${term.id}`)
         trigger.textContent = reference
         fragment.appendChild(trigger)
+        if (!annotatedTerms.has(term.id)) {
+          const note = document.createElement('span')
+          note.className = 'term-inline-note'
+          note.textContent = ` (${term.shortDefinition})`
+          fragment.appendChild(note)
+          annotatedTerms.add(term.id)
+        }
       } else fragment.append(reference)
       cursor = start + match[0].length
     }

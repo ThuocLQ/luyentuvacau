@@ -4,6 +4,8 @@
 
 `async` giải phóng thread trong lúc chờ I/O, không làm database hoặc partner API có thêm capacity. Khi fan-out lớn, điều quan trọng là giới hạn đồng thời, cancellation và cách hệ thống phản ứng khi queue đầy.
 
+Nói đơn giản: `async` giúp không lãng phí thread khi đang chờ bên ngoài trả lời. Nó không làm đối tác trả lời nhanh hơn, cũng không làm database nhận được nhiều request hơn.
+
 ## Terms to Know
 
 - [[ThreadPool starvation]]: continuation và request mới phải chờ vì thread bị block.
@@ -25,7 +27,9 @@ Một endpoint đồng bộ 2.000 đơn hàng với đối tác. Phiên bản đ
 
 `async`/`await` là mô hình compose công việc bất đồng bộ; nó không tự tạo thread. Khi await I/O, thread request được trả lại ThreadPool trong lúc chờ. Công việc CPU vẫn cần thread và nếu chạy quá nhiều vẫn gây starvation.
 
-Concurrency là nhiều việc cùng tiến triển; parallelism là nhiều việc thực sự chạy cùng lúc. `Task.WhenAll` tạo concurrency, không tạo throttling. Correctness đến từ state ownership, cancellation và các bound rõ ràng.
+**I/O (vào/ra dữ liệu)** là lúc app chờ network, database, file hoặc broker. **ThreadPool starvation** là lúc các thread sẵn có bị chặn hoặc bận quá lâu, khiến request mới và phần tiếp theo của tác vụ phải chờ.
+
+**Concurrency** là nhiều việc cùng tiến triển; **parallelism** là nhiều việc thực sự chạy cùng lúc. `Task.WhenAll` tạo concurrency, nhưng không tự giới hạn số việc. Fan-out (một request tỏa ra nhiều call) cần giới hạn theo downstream. Tính đúng đắn đến từ ownership của state, cancellation và các giới hạn rõ ràng.
 
 ## Invariants phải giữ
 

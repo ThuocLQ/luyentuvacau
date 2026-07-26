@@ -2,7 +2,9 @@
 
 ## Quick Summary
 
-Trong system design, bắt đầu từ user journey, invariant và SLO. Baseline nhỏ với source of truth rõ thường tốt hơn việc vẽ Kafka/microservice trước khi biết workload và failure mode.
+Trong system design, bắt đầu từ user journey, invariant (quy tắc dữ liệu không được sai) và SLO (mức nhanh/ổn định cần đạt). Baseline (thiết kế nhỏ nhất có thể chạy đúng) với source of truth rõ thường tốt hơn việc vẽ Kafka/microservice trước khi biết workload và failure mode.
+
+> **Nói đơn giản:** trước khi chọn công nghệ, hãy làm rõ “người dùng làm gì”, “điều gì tuyệt đối không được sai” và “thế nào là đủ nhanh/ổn định”. Sau đó mới chọn thành phần nhỏ nhất đáp ứng được các điều đó.
 
 ## Terms to Know
 
@@ -22,6 +24,8 @@ Dùng khi được yêu cầu thiết kế một hệ thống như order service
 
 ## Mental model
 
+Một thiết kế không cần chứng minh rằng bạn biết nhiều dịch vụ. Nó cần chứng minh rằng bạn biết dữ liệu nào là sự thật, lỗi nào có thể xảy ra và hệ thống sẽ khôi phục ra sao. Mỗi cache, queue hay service mới đều cần owner, monitoring và cách xử lý khi nó lỗi.
+
 System design là quá trình giảm rủi ro theo thứ tự. Bắt đầu từ user journey và invariant không được phá vỡ; định lượng workload và SLO; vẽ luồng dữ liệu/boundary; chọn storage và sync/async communication; sau đó mới nói về cache, partition, broker hay microservice. Mỗi thành phần thêm vào tạo thêm failure mode, ownership và vận hành.
 
 Thiết kế tốt nói rõ phần nào cần strong consistency, phần nào chấp nhận eventual consistency, và “đúng” được kiểm chứng bằng signal nào. Không tuyên bố exactly-once, infinite scale hoặc high availability mà không nêu scope và cost.
@@ -33,6 +37,8 @@ Thiết kế tốt nói rõ phần nào cần strong consistency, phần nào ch
 ## Khung trả lời theo trình tự
 
 ### 1. Làm rõ yêu cầu và scope
+
+Đừng cố trả lời hết trong đầu. Hãy nói các giả định ra thành tiếng. Ví dụ: “Em tạm giả định người dùng chấp nhận thấy thông báo chậm vài giây, nhưng không được tạo đơn trùng.” Câu này giúp interviewer thấy bạn biết yêu cầu nào quan trọng hơn.
 
 Hỏi actor, happy path, trạng thái, action không thể đảo ngược, dữ liệu nhạy cảm, compliance, multi-tenant, tích hợp ngoài và scenario failure. Tách functional requirement khỏi non-functional: p95/p99 latency, request rate, read/write ratio, peak/burst, RPO/RTO, retention, regional requirement và cost envelope.
 
