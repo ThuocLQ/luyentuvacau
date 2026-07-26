@@ -1,52 +1,101 @@
 # API Design, Validation & Security
 
-## Mental Model
+## Khi nào gặp
 
-An API is a long-lived contract with untrusted callers. Design for clear resource semantics, predictable failures and safe retries. Validation prevents bad input; authorization decides whether a valid caller may perform a specific action.
+Áp dụng khi thiết kế API tạo giao dịch, thanh toán, thay đổi trạng thái, public API cho đối tác, hoặc khi cần giải thích vì sao một request retry không được tạo dữ liệu trùng. Ở cấp Senior, câu trả lời phải nối contract HTTP với authorization, invariant dữ liệu, audit và vận hành.
 
-## Must Remember
+## Mental model
 
-- Use stable resource identifiers, explicit pagination and consistent error envelopes.
-- Validate shape at the edge, enforce domain invariants in the domain/application layer.
-- Authenticate identity; authorize action and resource ownership.
-- Treat idempotency keys as a persisted protocol for retryable writes, not a header you merely log.
-- Never trust client-supplied tenant, role, price or ownership fields.
+API là boundary không tin cậy: client có thể gửi dữ liệu sai, gửi lại request, gọi vượt quyền, hoặc bị timeout sau khi server đã hoàn tất. Validation kiểm tra dữ liệu đầu vào có hợp lệ về hình thức; authorization quyết định principal hiện tại được làm hành động nào trên resource nào; business invariant xác định trạng thái có được phép chuyển hay không.
 
-## Quick Comparison
+Không lớp nào thay thế lớp khác. Một JWT hợp lệ không có nghĩa người dùng được sửa order của tenant khác. Một unique constraint không tự trả lại cùng response cho retry HTTP. Một response `200` không chứng minh side effect downstream đã hoàn tất.
 
-| Concern | Question |
-|---|---|
-| Validation | Is this command structurally and semantically valid? |
-| Authorization | May this principal perform it on this resource? |
-| Idempotency | Can a repeated request produce the same outcome safely? |
+## Câu trả lời 60 giây
 
-## Production Traps
+“Tôi bắt đầu bằng contract: resource, command, status code và lỗi có cấu trúc. Ở boundary, tôi validate shape và giới hạn input; sau đó authenticate, authorize theo action và resource/tenant, rồi kiểm invariant trong transaction. Với command có side effect, tôi dùng idempotency key theo caller và operation, lưu fingerprint request, trạng thái xử lý và response cuối cùng cùng transaction với business effect. Retry cùng key trả lại kết quả đã ghi; cùng key nhưng payload khác trả lỗi conflict. Tôi không đưa thông tin nhạy cảm vào lỗi/log, và dùng audit/tracing để điều tra quyết định authorization.”
 
-- Returning database exceptions leaks schema and turns client errors into 500s.
-- Offset pagination drifts on a changing dataset; use a cursor for large/live feeds.
-- Caching an authorized response without tenant/user-aware keys leaks data.
+## Must remember
 
-## Senior Trade-offs
+- `401 Unauthorized` nghĩa là chưa xác thực/credential không hợp lệ; `403 Forbidden` nghĩa đã xác thực nhưng không có quyền.
+- `400` phù hợp request sai cú pháp/shape; `422` có thể dùng cho validation nghiệp vụ theo convention nhất quán; `409 Conflict` cho xung đột state hoặc idempotency key dùng với payload khác.
+- Model validation không đủ cho invariant cần query database, ví dụ quota tenant, trạng thái order, hoặc uniqueness theo business key.
+- Authorization phải kiểm tenant/resource ownership ở server; không tin `tenantId`, role hoặc price do client gửi.
+- Log correlation ID, subject/tenant (đã giảm nhạy cảm), authorization outcome và reason code; không log token, password, full PII hoặc secret.
 
-Version only when a breaking contract cannot be evolved compatibly. Strict validation gives reliable contracts but needs clear migration paths. Rate limits protect dependencies but should return actionable retry information.
+## Idempotency cho command có side effect
 
-## Senior Answer Pattern
+Idempotency key cần được scope theo caller hoặc tenant, operation/route và thời gian sống phù hợp. Bản ghi thường có: key, request fingerprint, trạng thái `InProgress`/`Completed`, response status/body đã được lọc, thời điểm hết hạn và correlation ID. Lưu bản ghi này trong cùng transaction với business state hoặc dùng một cơ chế atomically equivalent.
 
-Frame an API change by caller impact: contract, authorization, retry semantics, observability and rollout. A strong answer distinguishes a malformed command (400), a denied action (403), a missing resource (404) and a conflicting business state (409), then explains what the caller can safely do next.
+Luồng an toàn:
 
-## Interview Questions
+1. Client gửi key ngẫu nhiên cùng command.
+2. Server atomically claim hoặc đọc bản ghi key.
+3. Nếu completed và fingerprint giống nhau, trả response đã ghi; nếu khác, trả `409`.
+4. Nếu owner của key thực hiện command thành công, persist business effect và completed response rồi commit.
+5. Nếu process chết, request sau cần biết state là pending/retryable hay đã effect; không đơn giản chạy lại external side effect.
 
-### How do you make POST create-order safe to retry?
+Idempotency HTTP không thay thế deduplication ở consumer message hoặc idempotency với payment provider. Mỗi boundary cần khóa/identity riêng.
 
-**Short answer:** Require an idempotency key scoped to caller and operation, persist request fingerprint plus outcome atomically with the order, and return the stored outcome for the same key.
+## Authorization theo resource và tenant
 
-**Follow-up:** What if the same key has different payload? How long do you retain keys?
+Kiểm role thô như `CanApprovePayment` có thể là bước đầu, nhưng thường thiếu ownership và phạm vi dữ liệu. Load resource qua query đã filter tenant, hoặc dùng authorization handler nhận resource thật; sau đó kiểm policy, owner, state và separation of duties. Với endpoint list/search, áp tenant filter ở query layer, không lọc sau khi đã đọc dữ liệu.
 
-**Red flags:** “The client just retries until it works.”
+Thiết kế permission nhỏ và có tên theo capability, ví dụ `orders:cancel`, thay vì chỉ dựa vào role lớn như `Admin`. Quyết định policy cần có audit khi thao tác nhạy cảm, và token claims phải có expiry/audience/issuer được validate.
 
-## Final Recall
+## Quyết định và trade-off
 
-- Contract first, implementation second.
-- Validate input and enforce invariants separately.
-- Authorize resources, not only roles.
-- Make writes retry-safe deliberately.
+| Quyết định | Giá trị | Rủi ro cần kiểm soát |
+|---|---|---|
+| PUT idempotent theo resource URI | Contract đơn giản khi client sở hữu identifier | Cần định nghĩa rõ replace/merge và concurrency |
+| POST + idempotency key | Tạo command/server-generated ID, retry qua network | Cần storage, TTL, fingerprint và replay response |
+| Optimistic concurrency (ETag/version) | Tránh ghi đè im lặng | Client phải xử lý `409`/precondition failed |
+| Policy/resource authorization | Bảo vệ tenant và ownership | Cần test matrix quyền và query filter |
+| Rate limit/WAF | Giảm abuse | Không thay authorization hay validation |
+
+## Bẫy production
+
+- Chỉ check role ở controller nhưng query resource không filter tenant: IDOR, lộ dữ liệu qua ID đoán được.
+- Idempotency key chỉ cache in-memory: deploy/restart hoặc nhiều instance tạo transaction trùng.
+- Tái sử dụng key với payload khác mà vẫn trả response cũ: che lỗi client và có thể sai business effect.
+- Retry toàn bộ command chứa gọi payment/email trong transaction: tạo charge hoặc email trùng.
+- Trả exception detail/stack trace cho client hoặc log toàn bộ request header: rò secret.
+- Dùng `GET` cho action thay đổi state hoặc `DELETE` xóa audit history thay vì transition/soft state theo yêu cầu domain.
+
+## Ví dụ
+
+```csharp
+// Pseudocode: persistence must be transactional with the order effect.
+var fingerprint = RequestFingerprint.Create(command);
+var existing = await idempotencyStore.FindAsync(user.Id, "orders:create", key, ct);
+
+if (existing is { Status: Completed } && existing.Fingerprint == fingerprint)
+    return Results.Json(existing.Response, statusCode: existing.StatusCode);
+if (existing is not null && existing.Fingerprint != fingerprint)
+    return Results.Conflict(new { code = "idempotency_key_reused" });
+
+await authorization.AuthorizeAsync(user, tenant, "orders:create");
+// Validate invariant, write order and idempotency completion in one transaction.
+```
+
+Ví dụ không cho phép client quyết định tenant từ body. Tenant đến từ identity hoặc host đã được boundary tin cậy xác định.
+
+## Câu hỏi phỏng vấn
+
+### Idempotency key cần lưu gì?
+
+**Ý chính:** Caller/tenant scope, operation, key, fingerprint payload, lifecycle, response cuối, expiry và correlation/audit reference. Nó phải được persist atomically với business effect. Replay giống nhau trả lại kết quả; payload khác bị từ chối.
+
+**Follow-up:** Xử lý request đang `InProgress` thế nào? TTL bao lâu là đủ? Provider payment có idempotency boundary riêng không?
+
+**Red flags:** “Cache header trong memory”; “unique constraint là đủ cho mọi retry”.
+
+### Authentication và authorization khác nhau thế nào?
+
+**Ý chính:** Authentication xác định principal; authorization kiểm liệu principal có quyền action trên resource/tenant cụ thể. Cả hai đều không thay validation và business invariant.
+
+## Tự kiểm
+
+- Tôi có thể phân biệt validation, authorization và invariant bằng một ví dụ cancel order không?
+- Tôi có thể mô tả replay an toàn khi client timeout sau khi server commit không?
+- Tôi có thể chứng minh list endpoint không rò tenant khác bằng query và test không?
+- Tôi có thể chọn status code và error code nhất quán cho conflict, validation, authentication, authorization không?

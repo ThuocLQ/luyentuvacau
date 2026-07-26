@@ -1,54 +1,80 @@
 # Finance / Securities Domain Cheatsheet
 
-## Mental Model
+## Bài toán backend thực tế
 
-Finance systems are state machines with money and ownership invariants. An order, execution, position, cash ledger and settlement instruction are related records, but they do not become true at the same instant. Explain the lifecycle, source of truth and reconciliation boundary before naming technology.
+Khách đặt mua 1.000 cổ phiếu, venue khớp 400, khách huỷ phần còn lại và sau đó venue gửi lại message fill 400 vì retry. Nếu hệ thống chỉ có một trường `status` và `filledQuantity`, retry có thể cộng thêm 400 lần nữa; nếu cancel xoá order, không còn audit trail; nếu release buying power toàn bộ, khách có thể đặt vượt hạn mức.
 
-## Must Remember
+Trong finance, công nghệ phục vụ business invariant. Hãy mô tả lifecycle, source of truth và reconciliation boundary trước khi nói Kafka, lock hay retry.
 
-- Keep separate state machines: an order can be accepted, routed, partially filled, cancelled or expired; each filled quantity can then be allocated and settled. Cancellation stops remaining open quantity, not already executed quantity.
-- Buying power is a risk control, not the cash balance. Reserve it before accepting a risk-increasing order and release/adjust it deterministically.
-- Execution is a market fact; allocation assigns that fact to accounts; settlement exchanges cash and securities later.
-- Use append-only or auditable ledgers for monetary movements. Balances are derived views with clear correction rules.
-- Every externally visible state needs an identifier, timestamp, actor/source and immutable audit trail.
+## Mental model
 
-## Quick Comparison
+Order là instruction của khách; execution là fact từ thị trường; allocation gán execution cho account; settlement là trao đổi cash/securities ở thời điểm sau; ledger ghi movement có thể audit. Các state machine liên quan nhưng không cùng xảy ra trong một transaction hay cùng một thời điểm.
 
-| Concept | Meaning | Common mistake |
+Balance là derived view. Ledger/movement và immutable fact là nguồn giải thích vì sao balance có giá trị hiện tại. Sai sót được sửa bằng correction/reversal entry, không âm thầm overwrite lịch sử.
+
+## Invariants phải giữ
+
+- Client order ID và execution/venue ID là stable business identifier để deduplicate/replay.
+- Cancel chỉ đóng **open quantity**; execution đã xác nhận không bị xoá hoặc đảo ngược bằng việc đổi status order.
+- `executed + open + cancelled` phải nhất quán với quantity và lifecycle policy; mọi transition hợp lệ, có timestamp/source/actor.
+- Buying power là risk reservation, không đồng nhất với cash balance. Reserve trước risk-increasing order; release/adjust theo execution, cancel và policy rõ.
+- Tiền dùng decimal/minor unit cùng currency/rule rounding rõ ràng; không dùng floating point.
+- Mọi monetary/position change có audit trail append-only và correlation đến business event.
+
+## Cách ra quyết định
+
+| Khái niệm | Mục đích | Sai lầm thường gặp |
 |---|---|---|
-| Order | client instruction | treating acceptance as execution |
-| Execution | fill from market/venue | overwriting partial-fill history |
-| Ledger | accounting movements | storing only mutable balance |
-| Settlement | final delivery/payment | assuming trade date equals settlement date |
+| Order | Ý định/ủy quyền giao dịch | Coi accepted là đã executed |
+| Execution | Fact fill tại venue | Overwrite history của partial fill |
+| Allocation | Phân bổ execution cho account | Gộp allocation với execution rồi không trace được nguồn |
+| Ledger | Movement cash/securities audit được | Chỉ lưu mutable balance |
+| Settlement | Delivery/payment sau trade | Đồng nhất trade date với settlement date |
+| Reconciliation | Phát hiện/sửa disagreement với external record | Đợi EOD rồi im lặng khi thiếu dữ liệu |
 
-## Production Traps
+## Production traps
 
-- Duplicate execution messages can double credit a position unless the execution/venue key is idempotent.
-- A retry after timeout can submit an order twice unless client order IDs are unique and outcomes are queryable.
-- EOD jobs that silently skip an account create tomorrow's reconciliation incident; checkpoints and counts are mandatory.
-- Rounding, currency and timezone rules must be explicit; never use floating point for money.
+- Timeout submit order không đồng nghĩa thất bại: venue có thể đã nhận. Cần queryable outcome theo client order ID, không blind retry.
+- Duplicate/late execution message có thể double position/ledger nếu không dedup bằng execution identity và sequence/business rule.
+- EOD job bỏ sót account, currency hoặc file rồi vẫn đánh dấu hoàn tất tạo incident vào ngày sau. Cần checkpoint, count/control total và exception workflow.
+- Rounding khác nhau ở UI, risk engine và ledger tạo discrepancy nhỏ nhưng tích lũy. Rule phải tập trung và test bằng ví dụ biên.
+- Correction overwrite record cũ làm mất audit trail và không giải thích được balance tại thời điểm lịch sử.
 
-## Senior Trade-offs
+## Kiểm chứng ở production
 
-Use synchronous validation for immediate risk and user feedback; use durable events for downstream notifications, reporting and reconciliation. A strong ledger gives auditability but requires correction entries rather than mutable edits. Link to core cheatsheets for retries, outbox, transactions and observability—do not re-implement those concepts here.
+- Monitor order acceptance/rejection, venue acknowledgement lag, duplicate rate, unmatched execution, reservation leakage và settlement fail theo business date.
+- Reconcile theo control totals: số lượng execution, notional, cash, positions và record count giữa internal ledger với venue/custodian.
+- Có exception queue/workflow với owner; reconciliation mismatch không chỉ là log warning.
+- Audit truy vết được từ UI order → execution → allocation → ledger → settlement instruction và ngược lại.
+- Test property/invariant: replay cùng execution không đổi ledger; partial fill rồi cancel không release phần đã execute; correction giữ được lịch sử.
 
-## Senior Answer Pattern
+## Mẫu trả lời 30–45 giây
 
-Anchor the answer on the invariant first: no duplicate execution, no negative buying power beyond policy, and every balance explainable by ledger entries. Then separate the immediate customer path from delayed settlement/EOD work, name the reconciliation source and explain the correction process without mutating history.
+"Tôi model order, execution, allocation, settlement và ledger là các state/fact riêng. Invariant quan trọng là không duplicate execution, cancel chỉ ảnh hưởng open quantity, buying power được reserve/release theo policy và mọi balance giải thích được bằng ledger. Retry dựa trên stable business ID và outcome queryable; reconciliation với venue/custodian phát hiện disagreement thay vì tin rằng message luôn đúng một lần."
 
-## Interview Questions
+## Mẫu trả lời Senior 2 phút
 
-### How do you make order processing safe under retries?
+"Với partial fill rồi cancel, tôi lưu order quantity và execution facts riêng. Khi khớp 400/1.000, order còn 600 open; cancel chỉ đóng 600. Execution 400 có ID venue ổn định, nên replay cùng ID bị dedup và không tạo ledger/position lần hai. Buying power đã reserve lúc accept sẽ được điều chỉnh cho quantity execute và phần cancel theo rule risk, không release bừa toàn bộ.
 
-**Short answer:** Give every client instruction and execution a stable business identifier, persist the state transition and ledger effect atomically within the local source-of-truth transaction, and make each consumer reject or replay duplicates deterministically. Cross-service propagation uses an outbox and reconciliation detects disagreement with venues or custodians.
+Local transaction persist state transition, ledger effect và outbox intent cùng source of truth. Downstream allocation/settlement có thể eventual, nhưng status hiển thị cho user phải nói rõ pending/confirmed. Mỗi ngày và intraday, tôi reconcile control totals với venue/custodian; mismatch vào exception workflow có owner. Nếu có sai, tôi tạo correction entry liên kết với entry gốc thay vì sửa lịch sử. Như vậy retry, late event và audit đều có hành vi xác định."
 
-**Follow-up:** How are partial fills represented? When do you release buying power?
+## Câu hỏi follow-up và red flags
 
-**Red flags:** “Use a distributed lock around the order” or “the broker will not resend.”
+### Làm sao xử lý partial fill, cancel và late replay?
 
-## Final Recall
+**Ý chính:** Tách execution fact khỏi order state; cancel phần open, dedup replay theo execution identity, allocation/settlement dựa trên executed quantity, ledger không bị ghi hai lần.
 
-- Model lifecycle and invariants first.
-- Money needs auditable movements, not only balances.
-- Separate trade, allocation and settlement.
-- Reconciliation is a product feature, not a batch afterthought.
+**Follow-up:** Khi nào release buying power? Correction entry giữ audit thế nào? Nếu venue gửi event out-of-order thì policy gì?
+
+**Red flags:** "Cancel xoá order", "overwrite fill total", "broker không resend".
+
+### Vì sao ledger append-only quan trọng?
+
+**Ý chính:** Nó cho phép audit, reconstruct balance, correction minh bạch và reconciliation. Balance là projection có thể rebuild, không là bằng chứng duy nhất.
+
+## Final recall
+
+- Modeling lifecycle và invariant trước công nghệ.
+- Order khác execution; execution khác allocation; settlement không đồng thời với trade.
+- Money cần precision, audit movement và correction rõ ràng.
+- Reconciliation là control sản phẩm liên tục, không phải batch phụ sau EOD.

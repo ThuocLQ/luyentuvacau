@@ -1,52 +1,77 @@
 # Observability, Testing & Production Incidents
 
-## Mental Model
+## Bài toán backend thực tế
 
-Observability lets an operator ask new questions from production evidence. Logs explain events, metrics show trends and traces show a request path. Incident response stabilizes users before satisfying curiosity.
+Mười phút sau deploy, p99 của checkout tăng gấp đôi. Một người mở log toàn bộ cluster, người khác restart service và người thứ ba sửa nóng. Cả ba hành động đều có thể làm mất evidence hoặc tăng blast radius. Cách Senior làm là xác nhận user impact, ổn định hệ thống bằng rollback/feature flag nếu phù hợp, rồi dùng metrics, traces và logs để thu hẹp nguyên nhân.
 
-## Must Remember
+Observability là khả năng trả lời câu hỏi mới từ evidence production; incident response là bảo vệ người dùng trước khi thỏa mãn tò mò kỹ thuật.
 
-- Instrument golden signals: latency, traffic, errors and saturation.
-- Propagate correlation/trace IDs across HTTP and messages.
-- Log structured fields, never secrets; sample noisy success logs.
-- Test behavior at the right boundary: unit for rules, integration for persistence, contract for service interfaces.
-- Define SLOs and alerts on user impact, not CPU alone.
+## Mental model
 
-## Quick Comparison
+Metrics cho biết phạm vi và xu hướng; logs có structured context cho một sự kiện; traces chỉ ra đường đi và dependency nào tiêu thời gian. Ba tín hiệu bổ sung nhau, không thay thế nhau.
 
-| Signal | Answers |
-|---|---|
-| Metrics | Is the system degrading, and how broadly? |
-| Logs | What happened for this event? |
-| Traces | Which dependency or hop consumed time? |
+Testing là bằng chứng trước release; telemetry và release guard là bằng chứng sau release. Một thay đổi an toàn cần cả contract, rollout, rollback và khả năng quan sát tác động.
 
-## Production Traps
+## Invariants phải giữ
 
-- Logging request bodies leaks credentials and PII.
-- Alerting on every error creates fatigue; alert on burn rate or sustained impact.
-- Restarting everything destroys evidence and can amplify load.
+- Mỗi request/message có correlation hoặc trace ID được propagate qua HTTP, queue và background worker.
+- Logs có field cấu trúc cho operation, tenant an toàn, outcome, duration và error; không log password, token, request body nhạy cảm hay PII không cần thiết.
+- Alert theo SLO/user impact và sustained burn rate, không alert mỗi exception lẻ.
+- Release phải có owner, dashboard, feature flag/canary hoặc rollback path đã biết trước.
+- Test đúng boundary: unit cho business rules, integration cho persistence/transaction, contract cho interface, end-to-end cho flow quan trọng.
 
-## Senior Trade-offs
+## Cách ra quyết định
 
-High-cardinality labels make diagnosis easy but can make telemetry unaffordable. Retain detailed data around incidents and aggregate routine paths. A rollback is often safer than an urgent hotfix when the blast radius is unknown.
+| Công cụ / hành động | Dùng khi | Trade-off / cảnh báo |
+|---|---|---|
+| Metrics | Nhìn broad impact: latency, traffic, error, saturation | Label cardinality quá cao làm telemetry đắt và chậm |
+| Trace | So sánh request chậm với bình thường, tìm hop/downstream | Sampling phải đủ để thấy failure path |
+| Structured log | Điều tra event/exception cụ thể | Không dùng log như metrics; phải redaction dữ liệu nhạy cảm |
+| Rollback / flag off | Deploy mới tương quan với user impact, fix chưa chắc chắn | Cần migration backward-compatible và feature flag có owner |
+| Hotfix | Nguyên nhân đã rõ, scope nhỏ, rollback không đủ | Không hotfix trong mù mờ hoặc bỏ qua verification |
 
-## Senior Answer Pattern
+## Production traps
 
-Describe incident work as a timeline: detect impact, stabilize, compare change windows, inspect traces and dependency signals, communicate, then document prevention. Include a decision rule for rollback and a concrete follow-up such as an SLO, load test, runbook or release guard.
+- Restart mọi service làm mất memory evidence, tạo cold cache/retry burst và che nguyên nhân.
+- Dashboard chỉ có CPU/RAM mà không có p99, error rate, queue age và dependency health thì không phản ánh user impact.
+- Log request body để debug làm rò credentials/PII và tăng chi phí; dùng trace ID, event fields và redaction.
+- Alert từng 5xx gây alert fatigue; incident thật bị chìm trong tiếng ồn.
+- Schema migration không backward-compatible khiến rollback application không còn an toàn.
 
-## Interview Questions
+## Kiểm chứng ở production
 
-### What do you do when p99 doubles after deployment?
+- Đặt SLI/SLO cho journey quan trọng: success rate, p95/p99, freshness/queue age; dùng error budget hoặc burn rate làm alert.
+- Trước release, kiểm tra dashboard theo version, error budget, dependency baseline và rollback procedure.
+- Canary theo phần traffic có guardrail tự động; so version mới/cũ theo latency, error, saturation và business outcome.
+- Diễn tập incident: ai incident commander, kênh giao tiếp, decision rollback, nơi lưu evidence và action items có owner/deadline.
+- Test migration theo thứ tự expand → deploy compatible code → backfill → contract, để rollback vẫn chạy được.
 
-**Short answer:** Confirm impact, compare deploy and traces/metrics, then roll back or disable the change if that restores safety. Preserve evidence, communicate, and run root cause analysis after stabilization.
+## Mẫu trả lời 30–45 giây
 
-**Follow-up:** Which dashboard first? What is your rollback criterion?
+"Nếu p99 tăng sau deploy, tôi xác nhận scope và user impact bằng golden signals, so sánh theo version và traces. Nếu deploy là nghi phạm mạnh và rollback/flag off an toàn, tôi ổn định trước; không restart hàng loạt. Sau đó tôi giữ evidence, kiểm tra dependency và change window, cập nhật stakeholders rồi mới RCA. Prevention phải là một guard cụ thể như SLO alert, load test, canary guardrail hay migration rule."
 
-**Red flags:** “Read all logs before taking action.”
+## Mẫu trả lời Senior 2 phút
 
-## Final Recall
+"Tôi mở dashboard journey bị ảnh hưởng, xem p99, success rate, traffic và saturation theo version/region để xác nhận không phải traffic anomaly. Tôi so trace của request chậm với baseline để biết thời gian nằm ở app, DB hay dependency. Nếu thay đổi vừa deploy gây impact và có rollback compatible, tôi rollback hoặc tắt flag ngay; mục tiêu là khôi phục SLO, không chờ hiểu hết nguyên nhân.
 
-- Trace requests across boundaries.
-- Alert on user impact.
-- Stabilize before diagnosing.
-- Make tests and telemetry part of delivery.
+Trong khi ổn định, tôi ghi timeline, preserve trace/log/query plan và cử một người giao tiếp tình trạng. Sau incident, RCA phân biệt trigger, root cause và contributing factors. Action item phải đo được: thêm span cho query X, canary guardrail error rate, index/load test, hoặc migrate expand-contract. Tôi kiểm tra action có owner và review release plan để lần sau phát hiện sớm hơn."
+
+## Câu hỏi follow-up và red flags
+
+### Bạn làm gì khi p99 tăng gấp đôi sau deploy?
+
+**Ý chính:** Xác nhận impact, so deploy/version và golden signals, inspect trace/dependency, rollback hoặc flag off nếu an toàn, giữ evidence và communicate. RCA sau khi ổn định.
+
+**Follow-up:** Dashboard đầu tiên xem gì? Điều kiện rollback? Làm sao rollback khi đã có DB migration?
+
+**Red flags:** "Đọc tất cả log trước", "restart mọi service", "CPU thấp thì không phải incident".
+
+### Metrics, logs và traces khác nhau thế nào?
+
+**Ý chính:** Metrics trả lời mức độ/range; logs trả lời sự kiện; trace trả lời đường đi/latency. Correlation ID liên kết chúng.
+
+## Final recall
+
+- Alert theo user impact; trace qua boundary; log có cấu trúc và redaction.
+- Stabilize trước, điều tra bằng evidence, prevention có owner.
+- Release safety gồm rollout, rollback, migration compatibility và observability.

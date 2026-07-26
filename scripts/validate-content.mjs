@@ -16,4 +16,9 @@ const imports = [...registry.matchAll(/import \w+ from '\.\.\/\.\/docs\/([^']+)\
 const missing = imports.filter(file => { try { readFileSync(file); return false } catch { return true } })
 if (missing.length) throw new Error(`Registry imports missing content: ${missing.join(', ')}`)
 
-console.log(`Content validation passed for ${files.length} text files.`)
+const contentSlugs = [...registry.matchAll(/\{ slug: '([^']+)'[^\n]*content:/g)].map(match => match[1])
+const practicedSlugs = new Set([...registry.matchAll(/relatedDoc: '([^']+)'/g)].map(match => match[1]))
+const withoutPractice = contentSlugs.filter(slug => !practicedSlugs.has(slug))
+if (withoutPractice.length) throw new Error(`Complete cheatsheets without a linked practice question: ${withoutPractice.join(', ')}`)
+
+console.log(`Content validation passed for ${files.length} text files; every cheatsheet has linked practice.`)

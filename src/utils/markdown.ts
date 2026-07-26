@@ -48,7 +48,7 @@ export function enhanceHtml(html: string): { html: string; toc: TocItem[] } {
     wrapper.className = 'code-block'
     const toolbar = document.createElement('div')
     toolbar.className = 'code-toolbar'
-    toolbar.innerHTML = '<span>Code / Flow</span><button class="copy-button" type="button">Copy</button>'
+    toolbar.innerHTML = '<span>Mã / luồng xử lý</span><button class="copy-button" type="button">Chép mã</button>'
     pre.parentNode?.insertBefore(wrapper, pre)
     wrapper.appendChild(toolbar)
     wrapper.appendChild(pre)

@@ -11,6 +11,9 @@ interface Props {
   doc: CheatsheetMeta & { content: string }
 }
 
+const weightLabel = { Critical: 'Trọng yếu', High: 'Quan trọng', Medium: 'Bổ trợ', Specialized: 'Chuyên ngành' }
+const statusLabel = { Draft: 'Bản nháp', Review: 'Đang rà soát', Complete: 'Hoàn chỉnh' }
+
 export default function MarkdownDocument({ doc }: Props) {
   const articleRef = useRef<HTMLElement>(null)
   const [readingProgress, setReadingProgress] = useState(0)
@@ -48,9 +51,13 @@ export default function MarkdownDocument({ doc }: Props) {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.copy-button')
       if (!button) return
       const code = button.closest('.code-block')?.querySelector('pre')?.textContent ?? ''
-      await navigator.clipboard.writeText(code)
-      button.textContent = 'Copied'
-      setTimeout(() => { button.textContent = 'Copy' }, 1200)
+      try {
+        await navigator.clipboard.writeText(code)
+        button.textContent = 'Đã chép'
+        setTimeout(() => { button.textContent = 'Chép mã' }, 1200)
+      } catch {
+        button.textContent = 'Không thể chép'
+      }
     }
     article.addEventListener('click', clickHandler)
     return () => article.removeEventListener('click', clickHandler)
@@ -67,7 +74,7 @@ export default function MarkdownDocument({ doc }: Props) {
       <section className="document-main">
         <header className="document-hero">
           <Link className="back-link" to="/"><ArrowLeft size={15} /> Thư viện học</Link>
-          <div className="eyebrow">{doc.section} · {doc.interviewWeight} · {doc.status}</div>
+          <div className="eyebrow">{doc.section} · {weightLabel[doc.interviewWeight]} · {statusLabel[doc.status]}</div>
           <h1>{doc.title}</h1>
           <p>{doc.description}</p>
           <div className="doc-meta">
@@ -86,7 +93,7 @@ export default function MarkdownDocument({ doc }: Props) {
               className={needsReviewForDoc ? 'secondary-button active-review' : 'secondary-button'}
               onClick={() => needsReviewForDoc ? remove(`cheatsheet:${doc.slug}`) : addOrUpdate({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}
             >
-              <RotateCcw size={18} /> {needsReviewForDoc ? 'Đang cần review' : 'Need Review'}
+              <RotateCcw size={18} /> {needsReviewForDoc ? 'Đang cần ôn lại' : 'Cần ôn lại'}
             </button>
             <button
               className="secondary-button"
@@ -106,7 +113,7 @@ export default function MarkdownDocument({ doc }: Props) {
         />
         <nav className="doc-pagination" aria-label="Cheatsheet navigation">
           {previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}
-          {nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Vào Interview mode <ArrowRight size={17} /></Link>}
+          {nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Vào phần luyện phỏng vấn <ArrowRight size={17} /></Link>}
         </nav>
       </section>
 

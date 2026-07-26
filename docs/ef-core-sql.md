@@ -1,52 +1,82 @@
 # EF Core & Data Access
 
-## Mental Model
+## Tình huống phỏng vấn
 
-EF Core translates object queries to SQL; the database executes the plan. Treat EF as a productivity layer, not a reason to ignore SQL, transaction boundaries or data volume.
+"Một endpoint danh sách đơn hàng chậm dần khi dữ liệu tăng. Em xử lý từ đâu?"
 
-## Must Remember
+Đừng bắt đầu bằng việc thêm `Include` hoặc thêm index. Bắt đầu từ bằng chứng: p95/p99, số dòng trả về, SQL thực tế, execution plan thực tế và mẫu truy cập của endpoint. EF Core tạo SQL; database mới là nơi chọn plan và đọc dữ liệu.
 
-- Project only fields needed by the endpoint; use `AsNoTracking` for read models.
-- Inspect generated SQL and actual query plans for slow paths.
-- Avoid N+1: shape data deliberately with projection, controlled includes or separate batched queries.
-- Keep a transaction as short as possible; do not call remote services inside it.
-- Use optimistic concurrency tokens where lost updates matter.
+## Mental model
 
-## Quick Comparison
+EF Core là lớp làm việc với dữ liệu, không thay thế hiểu biết về SQL. Một truy vấn tốt phải đúng ở ba tầng:
 
-| Mode | Best for | Caveat |
+- **Đúng dữ liệu:** lọc, sắp xếp và phân trang ổn định; không vô tình bỏ qua tenant hoặc trạng thái.
+- **Đúng hình dạng:** chỉ lấy cột và quan hệ mà response cần.
+- **Đúng chi phí:** SQL và plan đọc lượng dữ liệu phù hợp khi bảng đã lớn.
+
+Mọi tối ưu chỉ đáng tin khi đo được trước và sau. `ToQueryString()`, log command, trace của endpoint và actual execution plan là chuỗi bằng chứng cần có.
+
+## Những điều phải nhớ
+
+- Với API đọc, ưu tiên `Select` sang DTO và `AsNoTracking()`. Tracking có ích khi cùng `DbContext` sẽ sửa aggregate đã nạp; nó không phải mặc định cho mọi truy vấn.
+- Tránh N+1 bằng cách thiết kế query theo response. Lazy loading dễ che giấu N+1; chỉ dùng khi team có telemetry và hiểu số query phát sinh.
+- `Include` không tự động là nhanh hơn. Nhiều collection `Include` trong một join có thể nhân số dòng. So sánh single query với `AsSplitQuery()` trên dữ liệu đại diện, vì split query đổi chi phí từ nhân dòng sang nhiều round trip và snapshot có thể khác nếu không nằm trong transaction phù hợp.
+- Không phân trang bằng `Skip` lớn vô điều kiện. Với feed lớn, keyset/seek pagination theo khóa sắp xếp ổn định thường ít tốn hơn. Luôn có tie-breaker, ví dụ `(CreatedAt, Id)`.
+- `SaveChanges` không tự giải quyết lost update. Khi cập nhật cạnh tranh quan trọng, dùng concurrency token (`rowversion`/ETag) và trả về xung đột để caller reload, merge hoặc thử lại theo quy tắc nghiệp vụ.
+- Transaction chỉ bao bọc thay đổi local cần nguyên tử. Không gọi HTTP, gửi email hay publish broker trong transaction database.
+
+## So sánh nhanh
+
+| Lựa chọn | Khi phù hợp | Đổi lại |
 |---|---|---|
-| Tracking | update a loaded aggregate | memory and change detection overhead |
-| `AsNoTracking` | read API/projection | changes are not persisted automatically |
-| Explicit transaction | multiple local writes | locks grow with duration |
+| Tracking | Nạp aggregate rồi sửa trong cùng unit of work | tốn bộ nhớ và change detection |
+| `AsNoTracking` + projection | Read model, danh sách, báo cáo nhỏ | không thể sửa entity đã trả về trực tiếp |
+| `Include` có kiểm soát | Cần graph nhỏ, quan hệ rõ | dễ over-fetch hoặc nhân dòng |
+| Projection/batch query | Response có hình dạng riêng | cần thiết kế rõ mapping |
+| Raw SQL/Dapper | Hot path đã đo, bulk operation, tính năng SQL đặc thù | mất một phần kiểm tra/compose của EF; phải giữ parameterization và test |
 
-## Production Traps
+## Cách chẩn đoán một endpoint chậm
 
-- `Include` on multiple collections can explode result rows; measure split queries versus joins.
-- Loading entities just to update one column increases lock time and conflict surface.
-- A missing composite index makes a “fast locally” endpoint scan production data.
+1. Xác định endpoint, tenant/đầu vào, p95/p99, số bản ghi và mức tải lúc chậm. Không tối ưu từ cảm giác trên máy local.
+2. Lấy SQL có parameter đại diện; kiểm tra số round trip, N+1, `SELECT *`, join và phân trang.
+3. Đọc actual plan: scan hay seek, estimated-vs-actual rows có lệch lớn không, sort/hash/spill có tốn không, index nào được dùng.
+4. Sửa query shape trước: lọc sớm, projection, phân trang ổn định, bỏ materialize trung gian. Sau đó mới tạo hoặc chỉnh index khớp predicate và order.
+5. Đo lại với dữ liệu/tải gần production, theo dõi regression qua tracing, slow-query log hoặc query budget trong integration test.
 
-## Senior Trade-offs
+`AsNoTracking()` không biến table scan thành query nhanh; còn index không cứu được query lấy hàng triệu dòng rồi map ở ứng dụng.
 
-Use EF for ordinary transactional workflows and raw SQL where a measured hot query, bulk operation or vendor feature needs it. Do not abandon EF merely because SQL exists; do not hide performance problems behind repositories that expose `IQueryable` everywhere.
+## Bẫy production
 
-## Senior Answer Pattern
+- Repository trả `IQueryable` ra mọi tầng làm mất ownership của query; controller có thể thêm `Include`, filter hoặc `ToList` ở chỗ khó kiểm soát. Nên giữ query boundary gần use case.
+- `ExecuteUpdate`/raw SQL bỏ qua change tracker. Chúng hữu ích cho bulk update nhưng cần cân nhắc concurrency token, audit field, cache invalidation và event/outbox.
+- Migration lớn có thể lock bảng hoặc rewrite dữ liệu. Tách thay đổi schema tương thích ngược, backfill theo batch, deploy code đọc được cả schema cũ/mới rồi mới enforce constraint.
+- Parameter sniffing, thống kê cũ hoặc phân bố tenant lệch có thể làm plan tốt cho một input nhưng xấu cho input khác. Đừng áp hint mù quáng: kiểm tra statistics, plan cache và workload thật.
 
-For a slow data path, narrate the evidence chain: endpoint latency and row count, generated SQL, actual plan, index/selectivity, then corrected query shape. Include a regression guard such as an integration test, query budget or dashboard. This demonstrates that the fix will survive the next data-volume increase.
+## Mẫu trả lời Senior
 
-## Interview Questions
+"Em xem endpoint đang chậm vì **query shape**, **plan** hay **contention**. Em lấy trace và SQL có parameter thật, kiểm tra actual plan cùng số dòng thực tế. Nếu đây là API read-only, em project đúng DTO, bỏ tracking, tránh N+1 và dùng pagination ổn định. Nếu plan cho thấy scan/sort không cần thiết, em tạo index phục vụ đúng predicate và ordering, đồng thời đo write cost. Với update cạnh tranh, em dùng concurrency token hoặc transaction/constraint theo invariant; không để EF che mất semantics. Cuối cùng em thêm telemetry hoặc test để regression không quay lại."
 
-### How do you prevent N+1 in EF Core?
+## Câu hỏi ôn phỏng vấn
 
-**Short answer:** Start from the response shape, inspect SQL, then project the data needed in one controlled query or use a deliberate batch. Do not blindly add `Include`; it can create cartesian explosions.
+### Làm sao ngăn N+1 trong EF Core?
 
-**Follow-up:** When do split queries help? What index supports the predicate?
+**Trả lời ngắn:** Thiết kế query từ shape của response, quan sát SQL và số command. Project dữ liệu cần thiết trong một query có kiểm soát, hoặc batch theo khóa. Không thêm `Include` theo phản xạ vì join nhiều collection có thể nhân dòng.
 
-**Red flags:** “Lazy loading is fine because EF caches.”
+**Follow-up:** Khi nào `AsSplitQuery()` có lợi? Làm sao chứng minh index hỗ trợ predicate và order của query?
 
-## Final Recall
+**Red flags:** "Lazy loading ổn vì EF có cache"; "cứ `Include` tất cả quan hệ".
 
-- Query shape and indexes decide latency.
-- Keep transactions short.
-- Use tracking only when updating.
-- Verify SQL in tests and telemetry.
+### Khi nào dùng optimistic concurrency?
+
+**Trả lời ngắn:** Khi lost update có ý nghĩa nghiệp vụ và xung đột không quá thường xuyên. Lưu version cùng entity, chỉ update khi version khớp; nếu không khớp thì trả conflict và quyết định reload/merge/retry ở use case. Nó không thay thế unique constraint hay transaction cho invariant nhiều hàng.
+
+**Follow-up:** Nếu cập nhật tồn kho liên quan nhiều bản ghi thì token một hàng có đủ không?
+
+**Red flags:** "Cứ retry `SaveChanges` đến khi thành công".
+
+## Final recall
+
+- EF Core tạo SQL; actual plan và dữ liệu thật quyết định chi phí.
+- Projection, query shape và pagination thường quan trọng hơn micro-optimization.
+- Dùng tracking khi cần update; dùng concurrency semantics khi lost update quan trọng.
+- Transaction local, ngắn và không bao quanh remote I/O.

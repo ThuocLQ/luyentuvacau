@@ -1,53 +1,117 @@
 # Background Jobs, Caching & Resilience
 
-## Mental Model
+## Khi nào gặp
 
-Background work moves a request out of the user-facing latency path; it does not make work durable by itself. Resilience is a budgeted response to known transient failure, not a collection of retries around every call.
+Chủ đề này được hỏi khi một request cần gửi email, export report, gọi đối tác, xử lý event, hoặc khi hệ thống chậm/chập chờn dưới lỗi downstream. Mục tiêu không phải là “thêm retry”, mà là bảo toàn dữ liệu, không khuếch đại sự cố và biết khi nào dừng.
 
-## Must Remember
+## Mental model
 
-- `BackgroundService` owns graceful start/stop; create a scope for scoped dependencies per work item.
-- Durable work needs persistent state or a broker before acknowledgement.
-- Cache-aside reads source on miss, writes with explicit TTL and invalidates after authoritative change.
-- Every dependency call needs timeout/deadline, cancellation and bounded retry policy.
-- Protect dependencies with concurrency limits/bulkheads; use circuit breaking when failure is sustained.
+Request process, background worker, database và downstream service là các failure domain độc lập. Process có thể chết bất kỳ lúc nào; network có thể timeout dù downstream đã làm xong; message có thể đến nhiều lần và không theo thứ tự. Vì vậy một job đáng tin cậy cần state bền vững, acknowledgement sau khi state an toàn, handler idempotent, retry có giới hạn, và quan sát được.
 
-## Quick Comparison
+Cache là bản sao có kiểm soát, không phải source of truth. Nó chỉ giúp latency/throughput khi có key, TTL, invalidation, giới hạn kích thước và phương án hoạt động khi cache mất.
 
-| Pattern | Good for | Risk |
+## Câu trả lời 60 giây
+
+“Tôi không dùng `Task.Run` hoặc in-memory queue cho công việc phải sống qua restart. Request sẽ persist command/outbox hoặc job state trước, worker lấy việc theo lease, thực thi handler idempotent và chỉ acknowledge sau khi side effect an toàn. Retry chỉ dành cho lỗi transient đã phân loại, có timeout, exponential backoff, jitter, giới hạn attempt và dead-letter/alert. Với cache, tôi dùng cache-aside cho read-heavy data, TTL và invalidation rõ ràng; dữ liệu correctness-critical vẫn kiểm ở database/source of truth. Tôi theo dõi queue age, retry rate, DLQ, dependency latency và saturation để biết hệ thống đang chậm hay đang mất dữ liệu.”
+
+## Must remember
+
+- `BackgroundService` quản lý lifecycle của process, không làm in-memory work trở nên durable.
+- Dùng broker hoặc database job table cho work cần survive restart; persist trước khi trả success cho client khi business contract yêu cầu.
+- At-least-once delivery là trạng thái bình thường. Handler phải chịu duplicate bằng idempotency key, inbox/dedup table hoặc invariant database.
+- Timeout là ngân sách thời gian, không phải bằng chứng downstream thất bại. Retry có thể tạo duplicate.
+- `CancellationToken` dừng nhận work mới và cho shutdown graceful; không hủy bừa operation đã commit một phần.
+
+## Thiết kế job durable
+
+Job record tối thiểu có identity, payload/version, trạng thái, attempt, schedule time, lease owner/expiry, idempotency key, correlation ID và lỗi đã chuẩn hóa. Worker claim atomically bằng lease có expiry để process chết không giữ job mãi. Heartbeat/lease renewal chỉ dùng cho task dài và cần giới hạn.
+
+Handler nên chia boundary: đọc/claim → làm local transaction idempotent → gọi external service có idempotency key nếu hỗ trợ → persist kết quả/next action. Không giữ database transaction mở trong lúc chờ HTTP lâu. Nếu phải publish event sau state change, dùng transactional outbox thay vì dual write.
+
+Shutdown: dừng nhận job mới, cho job đang chạy một thời gian grace period, checkpoint state nếu có thể, rồi để lease hết hạn cho worker khác. Đừng acknowledge trước khi handler bền vững.
+
+## Retry, circuit breaker và backpressure
+
+Retry chỉ có ý nghĩa với lỗi transient như reset connection, `429`, hoặc `5xx` có policy rõ. Không retry validation, authorization, malformed input hoặc business rejection. Mỗi retry cần timeout riêng và tổng deadline của operation; exponential backoff + jitter tránh thundering herd.
+
+Circuit breaker hoặc load shedding bảo vệ khi downstream liên tục lỗi. Bulkhead/queue bound ngăn một dependency chậm chiếm toàn bộ thread/connection. Khi queue tăng, backpressure có thể là trả `429/503`, giảm concurrency hoặc trì hoãn work; không phải tăng retry vô hạn.
+
+## Caching an toàn
+
+Với cache-aside, app đọc cache; miss thì đọc source of truth, sau đó đặt cache với TTL. Invalidate/ghi lại cache sau write tùy consistency cần thiết. Tránh cache stampede bằng request coalescing, stale-while-revalidate hoặc khóa ngắn theo key; không dùng distributed lock dài như một giải pháp mặc định.
+
+Không cache authorization decision hoặc balance/availability correctness-critical quá lâu nếu không có version/invalidation đáng tin. Đặt size limit, key namespace theo tenant, TTL có jitter khi nhiều key được tạo cùng lúc, và metric hit ratio nhưng không đánh giá cache chỉ bằng hit ratio: phải xem latency, source load và stale-read impact.
+
+## Quyết định và trade-off
+
+| Quyết định | Dùng khi | Điều phải chứng minh |
 |---|---|---|
-| In-process background service | short local work | lost on process restart |
-| Durable queue | retriable business work | needs idempotent consumer |
-| Cache-aside | read-heavy tolerant data | stale data / stampede |
-| Retry with jitter | transient faults | amplifies overload if unbounded |
+| In-process channel | Work có thể mất khi restart, cùng process, có backpressure | Mất work chấp nhận được và shutdown behavior rõ |
+| Broker/database job | Email, billing, event, export hoặc work cần audit | Idempotency, retry, DLQ và replay |
+| Cache-aside | Đọc nhiều, stale read chấp nhận trong TTL | Invalidation, tenant isolation, fallback source |
+| Write-through | Cần cache cập nhật cùng write, đơn giản hóa read | Cache failure semantics và write latency |
+| Circuit breaker | Downstream liên tục fail/chậm | Fallback có ý nghĩa, alert và recovery policy |
 
-## Production Traps
+## Bẫy production
 
-- Fire-and-forget from an HTTP request loses exceptions and scoped dependencies after response completion.
-- Cache invalidation after a failed write can expose impossible state; update the source first.
-- Retrying timeouts without an idempotency boundary can duplicate money movement or email.
+- `Task.Run` trong endpoint: process recycle làm mất work, scoped dependency bị dispose, không có retry/audit.
+- Retry mọi exception: khuếch đại outage, gọi trùng payment hoặc che lỗi code.
+- Acknowledge message trước khi database commit: mất work khi process chết.
+- Giữ transaction mở khi gọi HTTP: lock lâu, deadlock và giảm throughput.
+- Cache key thiếu tenant/user: lộ dữ liệu giữa khách hàng.
+- Đặt TTL dài để “giảm database” cho dữ liệu thay đổi nhanh: trả stale data sai nghiệp vụ.
+- Không đặt queue/concurrency bound: backlog ăn hết memory hoặc downstream bị bắn quá tải khi hồi phục.
 
-## Senior Trade-offs
+## Ví dụ
 
-Cache only data whose staleness is acceptable and observable. Prefer a queue when the business requires eventual completion after process failure. Use retry only when the failure is plausibly transient, the operation is safe to repeat and the caller still has time budget.
+```csharp
+protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+{
+    while (!stoppingToken.IsCancellationRequested)
+    {
+        var job = await store.TryClaimAsync(workerId, lease: TimeSpan.FromMinutes(2), stoppingToken);
+        if (job is null)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+            continue;
+        }
 
-## Senior Answer Pattern
+        try
+        {
+            await handler.HandleIdempotentlyAsync(job, stoppingToken);
+            await store.CompleteAsync(job.Id, stoppingToken);
+        }
+        catch (TransientDependencyException ex) when (job.Attempt < 5)
+        {
+            await store.RescheduleAsync(job.Id, Backoff.WithJitter(job.Attempt), ex.Code, stoppingToken);
+        }
+        catch (Exception ex)
+        {
+            await store.MoveToDeadLetterAsync(job.Id, ex.GetType().Name, stoppingToken);
+        }
+    }
+}
+```
 
-Name the delivery guarantee, acknowledgement point, idempotency key and shutdown behavior. For caching, state source of truth, freshness window, invalidation path and stampede protection. Then expose queue age, cache hit rate, timeout rate and retry exhaustion as operating signals.
+Pseudo-code này vẫn cần handler idempotent: `CompleteAsync` không cứu được duplicate nếu worker hoàn thành external effect rồi chết trước khi ghi complete.
 
-## Interview Questions
+## Câu hỏi phỏng vấn
 
-### When would you not retry an HTTP request?
+### Vì sao `BackgroundService` không phải durable job queue?
 
-**Short answer:** I do not retry a non-idempotent operation without a key or server-side deduplication, a validation/auth failure, or a request after its deadline. Retrying should be bounded and jittered so it does not turn an outage into overload.
+**Ý chính:** Nó chỉ chạy cùng lifecycle của host; in-memory work có thể mất lúc restart/deploy. Durable work cần state persist/broker, acknowledgement sau state an toàn và handler idempotent cho redelivery.
 
-**Follow-up:** How do you stop workers safely? How do you handle a poison message?
+**Follow-up:** Graceful shutdown hoạt động thế nào? Khi nào dùng database job table thay broker?
 
-**Red flags:** “Retry every exception three times.”
+**Red flags:** “Gọi `Task.Run` là đủ”; “worker retry mọi exception”.
 
-## Final Recall
+### Timeout có nghĩa downstream chưa thực hiện command không?
 
-- Durable work needs a durable handoff.
-- Timeouts and cancellation are part of the contract.
-- Cache freshness is a product decision.
-- Retries need safety, budget and observability.
+**Ý chính:** Không. Timeout chỉ nghĩa caller không nhận được kết quả trong budget. Downstream có thể đã commit; retry cần idempotency key hoặc truy vấn trạng thái trước khi tạo side effect mới.
+
+## Tự kiểm
+
+- Tôi có thể chỉ ra lúc nào job được persist, claim, acknowledge và replay không?
+- Tôi có thể phân loại một lỗi thành transient, permanent hoặc unknown outcome không?
+- Tôi có thể giải thích cache stale ảnh hưởng invariant nào và fallback ra sao không?
+- Tôi có thể nêu dashboard gồm queue age, DLQ, saturation, retry và dependency latency không?
