@@ -2,94 +2,67 @@
 
 ## Quick Summary
 
-> **Nói đơn giản:** DDD không bắt bạn tạo nhiều service hay class. Nó giúp team thống nhất tên gọi, xác định dữ liệu nào thuộc về ai và đặt quy tắc quan trọng ở đúng chỗ.
-
-Tách service chỉ đáng giá khi boundary, ownership team hoặc scale độc lập đã rõ. Modular monolith thường là baseline tốt hơn khi cần transaction đơn giản và tốc độ thay đổi cao.
+Nếu một team còn cùng deploy, cùng database và cùng thay đổi nghiệp vụ, modular monolith thường an toàn hơn microservices. Tách service chỉ có ích khi có ownership, nhịp thay đổi hoặc nhu cầu scale độc lập rõ ràng.
 
 ## Terms to Know
 
-- [[Bounded context]]: ranh giới nơi model domain giữ nghĩa nhất quán.
-- [[Data ownership]]: ai được quyết định và ghi state.
-- [[Blast radius]]: phạm vi thiệt hại khi boundary lỗi hoặc deploy sai.
+- [[Bounded context]]: phạm vi mà một từ và một rule nghiệp vụ có nghĩa nhất quán.
+- [[Data ownership]]: service/module chịu trách nhiệm ghi và bảo vệ dữ liệu của mình.
+- [[Modular monolith]]: một ứng dụng deploy cùng nhau nhưng chia module có ranh giới rõ.
 
 ::: senior-signal
-Đừng nói microservices “scale hơn”. Hãy nêu evidence về ownership, release cadence, failure isolation hoặc workload khiến boundary đáng tách.
+Nêu bằng chứng khiến bạn tách service, thay vì nói microservices luôn scale tốt hơn.
 :::
 
 ## Bài toán backend thực tế
 
-Một đội muốn tách hệ thống order thành năm microservice vì "dễ scale". Sau khi tách, mỗi thay đổi phải phối hợp nhiều team, dữ liệu vẫn dùng chung một database, một request đi qua bốn HTTP hop và lỗi một service làm toàn bộ checkout thất bại. Kiến trúc đã phân tán deployment nhưng chưa phân tán ownership; đó là distributed monolith.
-
-Mục tiêu kiến trúc không phải nhiều box trên sơ đồ. Mục tiêu là tạo boundary để thay đổi, deploy và xử lý sự cố an toàn với chi phí vận hành tương xứng.
+Ví dụ Order, Payment và Catalog dùng chung bảng và gọi lẫn nhau. Tách thành ba service ngay khiến một thay đổi checkout phải đi qua mạng, có timeout và dữ liệu chậm đồng bộ. Nếu chưa có owner/team độc lập, độ phức tạp tăng nhưng giá trị chưa tăng.
 
 ## Mental model
 
-**Boundary** (ranh giới) là nơi một phần hệ thống chịu trách nhiệm cho dữ liệu và quy tắc của mình. Khi boundary rõ, team biết ai được ghi dữ liệu nào và các phần khác chỉ giao tiếp qua contract. Điều này giảm việc một thay đổi nhỏ làm vỡ cả hệ thống.
-
-DDD là cách làm rõ ngôn ngữ nghiệp vụ, ownership và invariant. Bounded context sở hữu model, data và rule của một capability; nó không nhất thiết là một microservice. Modular monolith có thể giữ boundary đó trong cùng process và vẫn hưởng local transaction, debug/deploy đơn giản.
-
-Microservice chỉ đáng giá khi có lý do vận hành rõ: ownership độc lập, cadence deploy khác nhau, nhu cầu scale/availability khác nhau, hoặc isolation bắt buộc. Đổi lại là network latency, partial failure, versioning, eventual consistency và on-call cost.
+Architecture là cách đặt ranh giới cho thay đổi và lỗi. Module tốt có API nội bộ rõ, không đọc trực tiếp database của module khác và có rule riêng. Khi ranh giới đủ ổn định, tách deployment sau sẽ ít đau hơn.
 
 ## Invariants phải giữ
 
-- Boundary theo business capability và owner chịu trách nhiệm, không theo controller/service/repository layer.
-- Mỗi data store có một owner ghi; service khác lấy dữ liệu qua contract/event, không ghi trực tiếp bảng của owner.
-- Invariant mạnh nằm trong transaction boundary của owner; không giả định network call có atomicity xuyên service.
-- Command yêu cầu thực hiện việc; event mô tả fact đã xảy ra. Cả hai cần schema/versioning và consumer contract.
-- Module có API rõ, dependency một chiều và test boundary; không import implementation nội bộ của module khác.
+Xác định dữ liệu nào phải đúng cùng lúc. Ví dụ tạo order và giữ tồn kho có thể cần một transaction khi còn chung owner. Nếu tách owner, phải chấp nhận trạng thái `Pending`, event/reconciliation và cách giải quyết khi một bước thất bại. Đừng giả vờ mạng có transaction giống database local.
 
 ## Cách ra quyết định
 
-| Lựa chọn | Phù hợp khi | Chi phí / điều kiện |
-|---|---|---|
-| Modular monolith | Team/cadence chung, cần local transaction, boundary chưa ổn định | Phải cưỡng chế module dependency và ownership, không chỉ chia folder |
-| Microservices | Owner độc lập, scale/reliability khác biệt đã đo được | Network failure, observability, release coordination, data consistency và on-call tăng |
-| CQRS | Read/write model có nhu cầu khác biệt rõ hoặc read rất nặng | Duplicated model, lag eventual consistency, vận hành projection |
-| Event-driven | Consumer độc lập, workflow bất đồng bộ, audit/replay hữu ích | Idempotency, ordering scope, schema evolution và dead-letter handling |
+Giữ modular monolith khi domain còn thay đổi nhanh, team nhỏ, transaction chung quan trọng hoặc không có tải độc lập. Tách service khi có boundary nghiệp vụ rõ, owner vận hành riêng, cần deploy/scale/cách ly lỗi riêng và có khả năng vận hành broker, tracing, contract version.
+
+DDD không bắt bạn tạo nhiều service. Nó giúp gọi đúng tên, gom rule liên quan và tránh module này sửa state của module khác. Bắt đầu bằng module, test ranh giới và event nội bộ; chỉ phân tán khi lợi ích lớn hơn chi phí mạng và vận hành.
 
 ## Production traps
 
-- Shared database khiến release không độc lập và bypass invariant của owner.
-- Chuỗi synchronous call dài biến một dependency chậm thành outage toàn flow; timeout không thay thế isolation.
-- Tách service theo technical layer (`UserService`, `RepositoryService`) tạo chatty network, không phải bounded context.
-- "DDD entities" nhiều class nhưng rule vẫn nằm rải rác ở controller là ceremony, không bảo vệ business rule.
-- Event không versioned hoặc không có owner biến consumer thành phụ thuộc ngầm, khó migration.
+- Tách theo technical layer như “user service”, “database service” thay vì ownership nghiệp vụ.
+- Service nào cũng đọc database service khác, tạo distributed monolith.
+- Đồng bộ RPC dây chuyền trên checkout làm một dependency chậm kéo toàn flow chậm.
+- Không có owner cho event schema, retry, DLQ và reconciliation.
 
 ## Kiểm chứng ở production
 
-- Map ownership: ai deploy, ai on-call, ai ghi data, SLO nào và dependency nào cross boundary.
-- Đo deploy lead time, change failure rate, synchronous call latency/error, số incident do coupling và nhu cầu scale thật.
-- Contract test producer/consumer; theo dõi event lag, DLQ, version adoption và reconciliation mismatch.
-- Diễn tập service unavailable: flow nào fail fast, flow nào degrade, trạng thái nào được hiển thị "đang xử lý" thay vì trả kết quả sai.
+Theo dõi deploy dependency, lỗi cross-boundary, latency của call sync, backlog event và thời gian xử lý mismatch. Nếu một module luôn phải deploy cùng module khác, boundary có thể chưa đủ độc lập. Nếu service tách ra nhưng không có SLO/owner riêng, nó mới chỉ là chi phí.
 
 ## Mẫu trả lời 30–45 giây
 
-"Tôi không chọn microservices chỉ vì quy mô code. Tôi bắt đầu từ business capability, data owner và invariant. Nếu team còn chung ownership và cần local transaction, modular monolith với boundary được test thường là lựa chọn tốt hơn. Tôi chỉ extract khi có bằng chứng về deploy/scale/reliability độc lập, đồng thời chấp nhận cost của versioning, observability và eventual consistency."
+“Tôi bắt đầu bằng bounded context và data ownership. Với domain chưa ổn định, modular monolith giữ transaction và debug đơn giản. Tôi chỉ tách khi một boundary có owner, thay đổi hoặc tải độc lập rõ; khi đó thiết kế contract, idempotency, observability và reconciliation ngay từ đầu.”
 
 ## Mẫu trả lời Senior 2 phút
 
-"Khi xem xét tách service, tôi lập bản đồ capability, owner, data write path và invariant. Ví dụ order acceptance và risk reservation có invariant tức thời, nên ban đầu tôi giữ chúng trong cùng transaction boundary. Reporting có thể nhận event bất đồng bộ vì lag vài giây chấp nhận được. Nếu module order gây bottleneck hoặc có team vận hành riêng, tôi chuẩn bị seam: public contract, không truy cập bảng nội bộ, outbox event và dashboard cho lag/failure.
-
-Sau đó tôi extract từng boundary có thể đảo ngược, chạy song song hoặc migrate read path trước, đo latency/error/cost và có rollback. Tôi không dùng shared DB để "đỡ migration" vì nó giữ coupling mãi. Quyết định cuối cùng nêu rõ consistency nào synchronous, consistency nào eventual và người dùng thấy gì trong từng trạng thái."
+Khi cần tách Payment, tôi chỉ rõ Payment sở hữu payment attempt và outcome; Order không ghi bảng payment. Order phát command/event với ID ổn định, Payment xử lý idempotent và trả trạng thái để Order hiển thị `Pending` khi cần. Tôi đo timeout, duplicate, backlog và reconciliation thay vì hứa consistency tức thì.
 
 ## Câu hỏi follow-up và red flags
 
 ### Khi nào không chọn microservices?
 
-**Ý chính:** Khi boundary/owner chưa rõ, independent scale/deploy chưa có bằng chứng, local transaction và tốc độ thay đổi quan trọng hơn, hoặc đội chưa có observability/on-call maturity.
-
-**Follow-up:** Dấu hiệu nào đủ để extract? Làm sao migrate an toàn? Làm sao tránh distributed monolith?
-
-**Red flags:** "Microservices tự động scale tốt hơn", "tách theo technical layer", "dùng chung DB vẫn độc lập".
+Khi boundary/team/scale độc lập chưa được chứng minh hoặc transaction chung quan trọng. Khi đó microservices thêm network failure, versioning và vận hành nhưng không giải quyết vấn đề thật.
 
 ### Bounded context bảo vệ invariant thế nào?
 
-**Ý chính:** Context sở hữu model, data write và transaction cho rule của mình. Context khác chỉ dùng contract/event; invariant xuyên context phải được thiết kế eventual/compensation rõ ràng.
-
-**Follow-up:** Command khác event thế nào? Schema event thay đổi ra sao?
+Nó chỉ rõ ai được thay đổi state và rule nào thuộc cùng mô hình. Invariant local đặt gần owner; invariant xuyên context cần workflow, trạng thái trung gian và reconciliation.
 
 ## Final recall
 
-- Boundary là ownership + data + invariant + vận hành, không phải folder hay network hop.
-- Ưu tiên kiến trúc đơn giản nhất đáp ứng constraint hiện tại.
-- Distribution thêm failure modes; extract dựa trên evidence và migration reversible.
+- Module trước, service sau.
+- Ownership rõ quan trọng hơn sơ đồ nhiều box.
+- Tách boundary phải đi kèm contract, recovery và vận hành.

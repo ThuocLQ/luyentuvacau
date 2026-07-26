@@ -2,97 +2,67 @@
 
 ## Quick Summary
 
-> **Nói đơn giản:** REST, gRPC và event không cạnh tranh để tìm ra cái “tốt nhất”. Chọn theo việc người gọi có cần câu trả lời ngay không, chấp nhận chờ bao lâu và hai bên có thể độc lập đến mức nào.
-
-Chọn REST, gRPC hay event theo coupling, latency, ownership và failure mode. Event tách thời gian nhưng đổi lại duplicate, eventual consistency và vận hành backlog.
+Chọn giao tiếp từ việc người gọi có cần kết quả ngay, dữ liệu thuộc ai và lỗi nào chịu được. REST/gRPC phù hợp hỏi–đáp trực tiếp; event phù hợp khi bên nhận có thể xử lý sau và phải tự chịu retry/duplicate.
 
 ## Terms to Know
 
-- [[Eventual consistency]]: boundary hội tụ sau độ trễ được chấp nhận.
-- [[Data ownership]]: service nào sở hữu state/event.
-- [[Schema evolution]]: contract cũ/mới cùng sống được khi rollout.
+- [[REST]]: API HTTP có resource/contract rõ cho client hoặc service.
+- [[gRPC]]: giao tiếp RPC dùng contract có kiểu, thường hợp nội bộ cần latency thấp.
+- [[CQRS]]: tách đường ghi thay đổi dữ liệu khỏi đường đọc tối ưu cho hiển thị.
 
 ::: senior-signal
-Đừng chọn protocol theo độ “hiện đại”. Hãy nói request cần kết quả ngay hay fact đã commit có thể được xử lý sau.
+Đừng chọn event chỉ để “decouple”; nói rõ độ trễ, duplicate và ownership mà bạn chấp nhận.
 :::
 
 ## Tình huống phỏng vấn
 
-"Một service Order cần kiểm tra tồn kho, tạo payment và thông báo cho nhiều hệ thống. Em dùng REST, gRPC hay event? Có cần CQRS không?"
-
-Không chọn theo độ mới của công nghệ. Bắt đầu bằng câu hỏi: ai sở hữu dữ liệu, người gọi có cần kết quả ngay không, latency/failure budget là bao nhiêu, dữ liệu có được phép thấy trễ không, và ai sẽ vận hành contract này.
+Checkout cần trả kết quả cho người dùng, nhưng gửi email không cần chờ. Nếu API gọi email đồng bộ, email chậm làm checkout chậm. Nếu phát event cho payment mà UI cần biết payment ngay, người dùng lại thấy trạng thái khó hiểu. Mỗi bước cần chọn đường giao tiếp khác nhau.
 
 ## Mental model
 
-Giao tiếp đồng bộ nghĩa là bên gọi chờ câu trả lời và chịu ảnh hưởng nếu bên kia chậm hoặc lỗi. Giao tiếp bất đồng bộ qua event/queue giúp tách thời gian xử lý, nhưng đổi lại phải xử lý message đến trùng, đến muộn và quan sát backlog.
-
-Integration là một **contract giữa các boundary**, không chỉ là một HTTP endpoint hay topic. Một contract tốt nêu được ownership, input/output, lỗi, versioning, idempotency, bảo mật và cách quan sát.
-
-Tách command và query khi nhu cầu đọc/ghi, mô hình dữ liệu hoặc khả năng scale của chúng thật sự khác nhau. CQRS không đồng nghĩa phải có event sourcing hay microservices; có thể chỉ là hai code path rõ ràng trong modular monolith.
+Call synchronous tạo coupling về latency và availability: bên gọi chờ bên nhận. Event tách thời gian nhưng đổi lại at-least-once delivery (cùng event có thể đến hơn một lần), trạng thái chậm hội tụ và cần quan sát. CQRS chỉ hữu ích khi read/write có nhu cầu khác nhau; không phải mặc định cho mọi CRUD.
 
 ## Chọn kiểu giao tiếp
 
-| Nhu cầu | Hướng phù hợp | Cái giá phải trả |
-|---|---|---|
-| Client/public API, tương thích web | REST/HTTP, resource contract rõ | payload lớn hơn, contract phải version và cache đúng |
-| Gọi nội bộ cần schema chặt, latency thấp | gRPC | client/tooling/browser support và observability cần chuẩn hóa |
-| User phải biết quyết định ngay | synchronous request với timeout budget | coupling về availability và latency |
-| Phát fact đã commit, fan-out, xử lý có thể trễ | event bất đồng bộ | duplicate, ordering scope, backlog và eventual consistency |
-| Read model rất khác write model | CQRS có chủ đích | thêm projection, lag và vận hành nhất quán |
+Chọn REST khi client/public API cần URL, cache, debug và compatibility dễ hiểu. Chọn gRPC cho call nội bộ có contract chặt, streaming hoặc overhead HTTP/JSON đáng kể; vẫn cần timeout, auth và versioning. Chọn event khi một fact đã xảy ra cần nhiều bên phản ứng độc lập, hoặc công việc không nằm trên critical path (chuỗi việc phải xong trước khi trả lời người dùng).
 
-REST hay gRPC không làm service bớt phụ thuộc nếu caller phải biết quá nhiều internal detail. Event cũng không tự làm hệ thống loose coupling nếu consumer phụ thuộc ngầm vào schema và timing không được quản lý.
+Trước khi dùng event, trả lời: ai sở hữu event, consumer deduplicate bằng gì, xử lý poison message (message lỗi dữ liệu nên retry cũng không tự khỏi) ra sao và khi nào UI được coi là xong.
 
 ## Thiết kế REST có thể vận hành
 
-- Dùng resource và HTTP semantics nhất quán; `POST` cho command tạo mới, `PUT`/`PATCH` chỉ khi semantics được làm rõ.
-- Validation phân tầng: request shape ở edge, invariant nghiệp vụ trong use case/domain, constraint ở database. Trả lỗi có code ổn định và correlation ID, không lộ stack trace hay data nhạy cảm.
-- Command có tác dụng phụ cần idempotency key. Lưu key, request fingerprint và response theo scope caller; replay cùng payload trả kết quả trước đó, payload khác bị từ chối.
-- Phân trang, filter và sort phải có contract: giới hạn page size, sort allowlist, tie-breaker ổn định. Không cho client biến filter thành query tùy ý.
-- Version qua evolution tương thích ngược khi có thể: thêm field optional, deprecate có thời hạn. Version URL/header chỉ là cơ chế; communication và migration plan mới bảo vệ client.
+Đặt tên resource theo domain, validate input, authorize theo tenant/resource và dùng status code nhất quán. Với command tạo side effect, dùng idempotency key và outcome queryable để client retry không tạo bản ghi trùng. Pagination cần sort ổn định; API version thay đổi theo cách consumer cũ vẫn chạy được trong giai đoạn chuyển đổi.
 
 ## gRPC khi có lý do rõ ràng
 
-gRPC phù hợp nếu hai bên kiểm soát client/server, cần strongly typed schema, streaming hoặc hiệu quả nội bộ đã đo. Proto là contract cần review như API public: field number không tái sử dụng, field mới phải compatible, deadline/cancellation phải propagate và status/error phải map rõ.
-
-Đừng chọn gRPC chỉ vì binary nhỏ hơn nếu bottleneck là database hoặc remote dependency. Đừng bỏ deadline: một call nội bộ không deadline có thể giữ connection và goroutine/thread/resource tới lúc chain bị nghẽn.
+gRPC không tự làm hệ thống nhanh. Nó tốt khi contract sinh code giảm lỗi mapping và call nội bộ nhiều/nhạy latency. Nhưng browser/public client, debugging đơn giản hoặc proxy support có thể làm REST phù hợp hơn. Luôn đặt deadline và giới hạn fan-out; một call nhanh vẫn có thể kéo p99 nếu chờ nhiều dependency.
 
 ## CQRS và event: phân tách đúng chỗ
 
-Command bảo vệ invariant và tạo fact; query tối ưu cho cách đọc. Khi cùng model còn đơn giản, một database/model vẫn là CQRS ở mức code path. Tách read model chỉ khi read traffic, response shape, permission hoặc latency có nhu cầu độc lập đáng kể.
-
-Event nên mô tả fact quá khứ thuộc ownership của producer, ví dụ `OrderConfirmed`, thay vì mệnh lệnh mơ hồ như `ProcessOrder`. State thay đổi và event intent cần outbox; consumer chịu duplicate và eventual consistency. Với workflow user cần phản hồi tức thì, giữ phần quyết định cốt lõi synchronous rồi phát event cho side effect có thể hội tụ.
+Ví dụ ghi order cần transaction/constraint, còn dashboard đọc tổng hợp nhiều trạng thái. Giữ write model (dữ liệu dùng để ghi và quyết định nghiệp vụ) là source of truth; tạo read model (bản dữ liệu tối ưu để đọc) bất đồng bộ khi dashboard cần query khác. Người dùng phải biết dữ liệu có thể trễ bao lâu và hệ thống phải replay/rebuild được read model.
 
 ## Bẫy production
 
-- Chuỗi synchronous A → B → C khiến availability nhân lên và timeout cascade. Đặt deadline theo end-to-end budget, propagate cancellation, giới hạn fan-out và có fallback khi nghiệp vụ cho phép.
-- Dùng shared database để "tích hợp nhanh" phá ownership và làm migration nguy hiểm. Nếu chuyển đổi tạm thời, phải có exit plan.
-- Event chứa entity snapshot khổng lồ khóa consumer vào internal schema. Publish contract tối thiểu, stable identity/version và có schema-evolution policy.
-- Tách CQRS quá sớm tạo projection lag và hai nguồn sự thật. Hiển thị trạng thái pending hoặc read-your-write strategy thay vì giả vờ dữ liệu đã nhất quán ngay.
+- Gọi sync qua nhiều service chỉ vì “dễ code”, rồi timeout lan truyền.
+- Event không có ID/version/owner nên consumer không replay an toàn.
+- Trả `200 OK` khi command mới vào queue nhưng UI hiểu là nghiệp vụ đã hoàn tất.
+- Tạo CQRS/event sourcing cho CRUD đơn giản mà không có read/write pressure.
 
 ## Mẫu trả lời Senior
 
-"Em chốt trước ownership và trải nghiệm cần đồng bộ đến đâu. Nếu checkout cần quyết định tồn kho ngay, em gọi dependency có deadline trong latency budget và trả trạng thái rõ. Sau khi order commit, em ghi outbox rồi phát `OrderConfirmed` để notification/analytics xử lý bất đồng bộ. REST phù hợp client-facing contract; gRPC chỉ dùng nội bộ khi schema/streaming/latency thật sự có lợi. CQRS chỉ được tách read model khi query pattern hoặc scale khác write model; em công khai projection lag, version contract và theo dõi error/latency/lag cho từng boundary."
+“Tôi chọn từ critical path và ownership. Request cần phản hồi ngay dùng REST/gRPC với deadline; work có thể trễ dùng event qua outbox. Event nghĩa là consumer idempotent, schema versioned và UI thể hiện pending. CQRS chỉ tách khi read model thực sự khác write model.”
 
 ## Câu hỏi ôn phỏng vấn
 
 ### Khi nào chọn event thay vì gọi synchronous?
 
-**Trả lời ngắn:** Chọn event cho fact đã commit và công việc có thể thấy trễ, fan-out hoặc cần retry độc lập. Chọn synchronous khi caller cần quyết định ngay trong latency budget. Event không thích hợp để che một dependency mà user bắt buộc phải chờ kết quả.
-
-**Follow-up:** Làm sao client biết một async command đã hoàn thành? Đâu là ordering guarantee của topic bạn dùng?
-
-**Red flags:** "Event luôn scale hơn"; "chuyển hết thành async thì không còn failure".
+Khi bên nhận không cần quyết định response ngay, có thể xử lý độc lập và chấp nhận trạng thái trễ. Bù lại phải có retry, dedup, DLQ và monitoring.
 
 ### CQRS có bắt buộc event sourcing không?
 
-**Trả lời ngắn:** Không. CQRS là tách trách nhiệm read và write; nó có thể chỉ là hai handler/model trong một ứng dụng. Event sourcing là lưu state như chuỗi event, có chi phí version/replay/audit riêng và chỉ nên dùng khi domain thực sự cần.
-
-**Follow-up:** Read model lag ảnh hưởng UX và authorization như thế nào?
-
-**Red flags:** "CQRS nghĩa là phải có hai database và Kafka".
+Không. CQRS chỉ là tách read/write. Event sourcing là lưu event như nguồn lịch sử chính, có cost mô hình hóa và replay riêng.
 
 ## Final recall
 
-- Chọn contract từ ownership, consistency và latency budget.
-- REST/gRPC là transport; deadline, auth, idempotency và evolution mới làm boundary an toàn.
-- CQRS tách read/write khi có lý do; event làm việc có thể hội tụ, không thay thế quyết định đồng bộ.
+- Giao tiếp là quyết định về thời gian, ownership và failure.
+- Synchronous cần deadline; event cần idempotency và visibility.
+- Chỉ thêm CQRS khi access pattern chứng minh cần nó.

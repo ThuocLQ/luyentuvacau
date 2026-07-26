@@ -1,152 +1,45 @@
-# Common Design Scenarios
+# Tình huống System Design thường gặp
 
 ## Quick Summary
 
-> **Nói đơn giản:** với mỗi đề thiết kế, hãy đi theo cùng một đường: xác định dữ liệu quan trọng nhất → nơi ghi dữ liệu đó → cách xử lý retry/duplicate → trạng thái người dùng nhìn thấy khi việc nền chưa xong. Đừng bắt đầu bằng tên công nghệ.
-
-Với đề system design, chốt invariant (quy tắc không được sai) và assumption (giả định đang dùng) trước rồi mới vẽ component. Luôn nói data flow, failure/recovery và metric cùng với giải pháp baseline (bản thiết kế nhỏ nhất chạy đúng).
+Khi thiết kế payment, notification, upload hay search, đừng chọn công nghệ trước. Bắt đầu từ dữ liệu không được sai, trạng thái người dùng nhìn thấy và cách xử lý khi request/message bị gửi lại.
 
 ## Terms to Know
 
-- [[Source of truth]]: nơi giữ state chuẩn.
-- [[Idempotency boundary]]: ngăn retry tạo request/payment trùng.
-- [[Eventual consistency]]: trạng thái pending và cách hội tụ cần được nói rõ.
+- [[Idempotency boundary]]: điểm nhận diện để chạy lại không tạo thêm kết quả.
+- [[Reconciliation]]: đối soát dữ liệu giữa hai hệ thống để sửa sai lệch có audit.
+- **Source of truth (nguồn dữ liệu gốc)**: nơi có quyền quyết định trạng thái cuối cùng; cache, queue và search index không thay thế nó.
+- **Business fact**: sự việc nghiệp vụ đã xảy ra, ví dụ `OrderConfirmed`, khác với mệnh lệnh yêu cầu hệ khác làm việc.
+- **Consumer**: thành phần nhận và xử lý message; nó phải chịu được message đến trùng.
+- **DLQ**: hàng đợi giữ message lỗi vĩnh viễn để không retry vô hạn và không chặn luồng chính.
 
-::: senior-signal
-Một design tốt phải nói được điều gì sẽ đổi nếu traffic, consistency requirement hoặc dependency failure thay đổi.
-:::
+## Mental model
 
-## Tình huống phỏng vấn
+Mỗi scenario trả lời: source of truth ở đâu, trạng thái nào hợp lệ, retry tạo gì, và operator biết lỗi bằng signal nào. Queue không làm việc “tự an toàn”; nó chỉ tách thời gian xử lý, nên consumer vẫn phải chịu duplicate.
 
-"Hãy thiết kế một hệ thống nhận order, một hệ thống gửi notification, hoặc một API upload file."
+## Scenario 1: Order và payment
 
-Interviewer không chờ một sơ đồ nhiều service. Họ đánh giá cách bạn biến yêu cầu mơ hồ thành quyết định: làm rõ SLO và invariant, chọn boundary/data flow, nhận diện failure mode, rồi nói cách vận hành và phát triển hệ thống. Nếu thiếu dữ kiện, hãy nêu assumption thay vì tự bịa throughput.
+Client tạo order với idempotency key. Database lưu order `Pending` và intent phát event trong cùng transaction. Nếu provider timeout, query trạng thái bằng reference trước khi retry; timeout không có nghĩa chưa charge. Chỉ confirm order khi có evidence payment phù hợp.
 
-## Khung trả lời 8 bước
+## Scenario 2: Notification
 
-1. **Làm rõ mục tiêu:** user nào, thao tác chính, phạm vi không làm, data nhạy cảm và compliance.
-2. **Chốt SLO và tải:** read/write ratio, peak, payload, p95/p99, availability, RPO/RTO. Nêu assumption và hỏi interviewer xác nhận.
-3. **Nêu invariant:** điều gì phải đúng tuyệt đối, điều gì được eventual consistent.
-4. **Vẽ luồng happy path nhỏ nhất:** client → API → ownership của state → response; thêm identity/correlation ID.
-5. **Chọn data model và boundary:** ai là source of truth, key/partition, index/access pattern, transaction boundary.
-6. **Mở rộng theo bottleneck đã dự đoán:** cache/read model/queue/partition/replica chỉ khi đáp ứng requirement cụ thể.
-7. **Đi qua failure mode:** timeout, duplicate, stale/out-of-order event, dependency down, deploy/migration, data recovery.
-8. **Kết bằng operation và trade-off:** metrics, alert, dashboard/runbook, cost/complexity, điều kiện để đổi thiết kế.
+Producer ghi business fact; worker tạo delivery job bền vững. Consent là source of truth, nên kiểm lại trước khi gửi. Timeout có thể retry theo budget; địa chỉ sai/opt-out là lỗi vĩnh viễn và không retry.
 
-Một câu trả lời tốt đi từ requirement đến mechanism. Nói "dùng Kafka/Redis/microservices" trước khi biết problem là dấu hiệu thiết kế theo công cụ.
+## Scenario 3: File upload
 
-## Scenario 1: Order & payment workflow
+API tạo metadata rồi cấp URL upload giới hạn quyền. File chưa scan không được tải như file tin cậy. Worker scan/convert theo `FileId` và version; event trùng chỉ cập nhật một state hợp lệ.
 
-### Assumption và invariant
+## Scenario 4: Catalog và search
 
-Khách tạo order, payment provider authorize/capture, inventory reserve, notification có thể trễ. Invariant: không capture cùng một payment attempt hai lần; order không được transition trái state machine; số lượng đã reserve không vượt khả dụng. Email gửi trùng ít nghiêm trọng hơn ledger/payment sai.
+Search index có thể chậm vài giây, nhưng checkout phải kiểm giá/tồn kho từ nguồn gốc. Cache/search phục vụ đọc; không quyết định invariant tài chính hoặc tồn kho.
 
-### Thiết kế ban đầu
+## Trade-off cần nói
 
-Order API xác thực caller, nhận idempotency key và tạo `Order`/`PaymentAttempt` trong database transaction. Key, request fingerprint và response được lưu bền để retry client trả cùng kết quả. API thực hiện phần synchronous tối thiểu cần cho UX, ví dụ initiate authorize với provider có provider idempotency key và deadline; các fact đã commit được ghi vào outbox.
-
-Relay publish `OrderCreated`/`PaymentAuthorized`; inventory, fulfillment và notification consume theo business key. Mỗi consumer ghi dedup/effect trong local transaction. Workflow state được model rõ (`Pending`, `Authorized`, `Reserved`, `Confirmed`, `Failed`, `Cancelled`), không chỉ là một boolean.
-
-### Failure và consistency
-
-Provider timeout sau request không chứng minh payment chưa xảy ra: query/reconcile theo provider reference trước khi retry. Relay có thể publish duplicate; consumer phải idempotent. Ordering chỉ kỳ vọng theo `OrderId`/partition; event có version để phát hiện stale/gap. Nếu reserve thành công nhưng fulfillment lỗi, saga owner quyết định retry trong budget hoặc phát compensation idempotent như release reservation/void authorization; action đã xảy ra ngoài đời không thể giả định rollback hoàn toàn.
-
-### Mở rộng và vận hành
-
-Scale API stateless; partition workload theo order/tenant nếu hot key được đo. Không cache balance/inventory stale nếu làm hỏng invariant. Theo dõi checkout p95/p99, payment error/unknown outcome, outbox age, consumer lag, pending saga age, DLQ và reconciliation mismatch. Reconciliation là đường sửa dữ liệu có audit trail, không phải script khẩn cấp duy nhất.
-
-### Trade-off cần nói
-
-Thiết kế này chấp nhận notification và một số read model thấy trễ để đổi lấy availability/retry độc lập. Nó tăng state machine, outbox và vận hành. Nếu business cần payment+inventory quyết định đồng bộ tuyệt đối, phải nêu dependency availability/latency cost và giới hạn thực tế của external provider, không hứa distributed ACID.
-
-## Scenario 2: Notification pipeline
-
-### Assumption và invariant
-
-Một event có thể gửi email, push, SMS; người dùng quản lý consent và có thể unsubscribe. Invariant quan trọng là không gửi tới user đã opt-out và không rò nội dung/PII qua log. Duplicate notification có thể chấp nhận ở mức nào phải được product quyết định; SMS/payment alert thường cần chặt hơn marketing.
-
-### Thiết kế ban đầu
-
-Producer phát business fact qua outbox. Notification service giữ preference/consent source of truth, resolve template và enqueue delivery job bền. Job có delivery identity theo `(event, channel, recipient, template version)` để deduplicate; provider request dùng idempotency key nếu hỗ trợ. Không để request thread gọi SMTP/SMS trực tiếp.
-
-### Failure và scale
-
-Classify lỗi: throttling/timeout có retry budget; invalid address/opt-out/template invalid là permanent và cần trạng thái rõ thay vì retry. Provider callback/bounce cập nhật delivery state idempotent. Partition/limit theo channel hoặc tenant để một chiến dịch không chiếm hết quota; có DLQ, replay tool và audit ai replay lúc nào.
-
-Cache template có version và invalidation rõ. Không cache consent lâu một cách mù quáng. Dashboard cần queue age, success/failure theo provider, retry/DLQ, throttle và duplicate-suppression count.
-
-### Trade-off cần nói
-
-Queue làm delivery resilient nhưng tạo delayed visibility; UI nên hiển thị `queued/sent/failed` thay vì nói "đã gửi" ngay khi command accepted. Multi-provider tăng availability nhưng thêm template parity, routing và reconciliation.
-
-## Scenario 3: File upload & processing
-
-### Assumption và invariant
-
-Người dùng upload file lớn, cần scan virus, trích xuất/convert và tải lại file kết quả. Invariant: không cho file chưa scan truy cập như file trusted; user chỉ được đọc object thuộc tenant/quyền của họ; processing phải chịu retry mà không tạo nhiều artifact mâu thuẫn.
-
-### Thiết kế ban đầu
-
-API tạo metadata record `PendingUpload` và cấp pre-signed upload URL giới hạn object key, content type/size, thời hạn và tenant. Client upload trực tiếp object storage, tránh đi qua web tier. Storage event hoặc callback được xác minh rồi tạo durable processing job theo `FileId`/object version.
-
-Worker scan/convert trong sandbox có resource limit, ghi kết quả vào object version mới và cập nhật state bằng conditional transition. Download URL chỉ cấp sau `Available`; object metadata và access check không tin hoàn toàn vào tên file do client gửi.
-
-### Failure và scale
-
-Upload dở/không callback được dọn bằng TTL/job reconcile. Event duplicate hoặc worker restart được xử lý bằng idempotent file version/state. File độc hại, quá lớn hoặc định dạng không hỗ trợ đi quarantine với retention/audit policy. Queue cho phép bounded concurrency theo CPU/memory; thumbnail/video conversion không được làm trong request path.
-
-### Trade-off cần nói
-
-Direct upload giảm bandwidth web tier nhưng đòi hỏi pre-signed URL, lifecycle policy và audit chặt. Asynchronous processing làm user chờ, đổi lại hệ thống an toàn và scale được; UX cần polling/webhook/status rõ ràng.
-
-## Scenario 4: Read-heavy catalog/search
-
-### Assumption và invariant
-
-Catalog có read traffic cao, update giá/tồn kho; search/facet có thể stale vài giây nhưng checkout phải dùng source of truth. Đừng dùng search index làm nơi quyết định price/inventory cuối cùng.
-
-### Thiết kế ban đầu
-
-Catalog write service sở hữu normalized data và phát outbox event. Search projection/index nhận event idempotent, lưu version để không ghi đè update mới bằng event cũ. Read API dùng cache-aside cho catalog có freshness contract; cache key gồm locale/tenant/version và không chứa data vượt quyền.
-
-Checkout đọc/validate giá và availability từ authoritative service trong transaction/reservation boundary. Khi index lag, UI có thể báo thời điểm update hoặc fallback exact lookup; không cố làm mọi truy vấn full-text transactional.
-
-### Failure và scale
-
-Cache stampede xử lý bằng request coalescing/bounded rebuild và rate limit. Reindex phải có version/alias swap, backfill/replay có kiểm soát, và metric projection lag/mismatch. Partition index theo tenant/catalog khi hot distribution chứng minh cần; test relevance và permission filtering như một contract.
+Async giúp request nhanh và chịu burst, đổi lại UI phải hiển thị `pending/queued/failed`, có DLQ và đối soát. Strong consistency giảm sai lệch nhưng tăng latency và dependency trên critical path.
 
 ## Cách tự kiểm khi trả lời
 
-Khi nói “dùng queue” hoặc “thêm cache”, hãy trả lời thêm bốn câu ngắn: dữ liệu gốc ở đâu, việc bị gửi lại thì sao, người dùng thấy trạng thái gì khi chưa xong, và ai sẽ biết khi hàng đợi hoặc cache bị lỗi. Bốn câu này đủ để biến câu trả lời từ danh sách công nghệ thành một thiết kế có thể vận hành.
-
-Trước khi kết thúc, tự hỏi:
-
-- Invariant nào được database/state machine/constraint bảo vệ? Thành phần nào chỉ eventual consistent?
-- Mỗi retry có idempotency key hoặc unique effect chưa? Unknown outcome được reconcile ở đâu?
-- Ordering guarantee có scope nào? Event đến cũ/gap thì code làm gì?
-- Dependency down, queue đầy, deploy schema mới hoặc operator replay thì điều gì xảy ra?
-- Tôi có metric/alert/runbook nào chứng minh hệ thống đang hoạt động và cho phép rollback an toàn?
-
-## Câu hỏi ôn phỏng vấn
-
-### Thiết kế nào bạn đưa ra trước khi biết lưu lượng chính xác?
-
-**Trả lời ngắn:** Em làm baseline đơn giản, stateless ở API, database là source of truth với index/access pattern rõ và boundaries idempotent. Em nêu assumption về SLO/tải, instrument từ đầu, rồi scale cache/queue/partition sau khi thấy bottleneck. Không claim capacity chưa đo.
-
-**Follow-up:** Tín hiệu nào khiến bạn thêm queue? Khi nào cache làm sai business semantics?
-
-**Red flags:** "Dùng microservices + Kafka + Redis ngay từ đầu"; "scale bằng cách tăng server".
-
-### Cách trình bày trade-off khi interviewer đổi requirement?
-
-**Trả lời ngắn:** Em chỉ ra assumption nào đổi, invariant/SLO nào bị tác động, rồi so sánh lựa chọn theo consistency, latency, cost và vận hành. Ví dụ nếu UI phải read-your-write, em dùng synchronous read từ source of truth hoặc trạng thái pending thay vì giả vờ search projection tức thời.
-
-**Follow-up:** Đổi từ eventual sang strong consistency làm dependency nào thành critical path?
-
-**Red flags:** "Kiến trúc tốt là không cần đổi khi requirement đổi".
-
-## Final recall
-
-- System design là chuỗi quyết định có assumption, không phải danh sách service.
-- Invariant và SLO định hướng data flow, consistency và scale.
-- Failure/reconcile/operation là phần bắt buộc của thiết kế, không phải phần phụ.
+- Dữ liệu gốc ở đâu?
+- Duplicate, message muộn, timeout xử lý thế nào?
+- Người dùng thấy gì khi chưa xong?
+- Metric/alert nào báo operator cần can thiệp?
