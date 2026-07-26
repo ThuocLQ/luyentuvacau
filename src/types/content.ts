@@ -1,21 +1,26 @@
-export type DocCategory = 'Backend' | 'Database' | 'Architecture' | 'Distributed' | 'Practice'
+export type InterviewWeight = 'Critical' | 'High' | 'Medium' | 'Specialized'
+export type ContentStatus = 'Draft' | 'Review' | 'Complete'
 
-export interface DocMeta {
+export interface CheatsheetMeta {
   slug: string
   title: string
+  section: string
+  order: number
   description: string
-  category: DocCategory
-  icon: string
   readingMinutes: number
   tags: string[]
-  featured?: boolean
+  interviewWeight: InterviewWeight
+  status: ContentStatus
+  content?: string
 }
 
-export interface SearchEntry {
-  slug: string
-  title: string
-  description: string
-  content: string
-  category: string
-  tags: string[]
+export interface InterviewQuestion {
+  id: string
+  question: string
+  topic: string
+  difficulty: 'Senior' | 'Lead'
+  shortAnswer: string
+  followUps: string[]
+  redFlags: string[]
+  relatedDoc: string
 }

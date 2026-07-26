@@ -3,10 +3,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import type { DocMeta } from '../types/content'
+import type { CheatsheetMeta } from '../types/content'
 
 interface Props {
-  doc: DocMeta & { content: string }
+  doc: CheatsheetMeta & { content: string }
 }
 
 export default function MarkdownDocument({ doc }: Props) {
@@ -60,7 +60,7 @@ export default function MarkdownDocument({ doc }: Props) {
       <section className="document-main">
         <header className="document-hero">
           <Link className="back-link" to="/"><ArrowLeft size={15} /> Thư viện học</Link>
-          <div className="eyebrow">{doc.category}</div>
+          <div className="eyebrow">{doc.section} · {doc.interviewWeight} · {doc.status}</div>
           <h1>{doc.title}</h1>
           <p>{doc.description}</p>
           <div className="doc-meta">
