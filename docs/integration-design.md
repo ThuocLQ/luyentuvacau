@@ -1,5 +1,19 @@
 # REST, gRPC, CQRS & Event-Driven Design
 
+## Quick Summary
+
+Chọn REST, gRPC hay event theo coupling, latency, ownership và failure mode. Event tách thời gian nhưng đổi lại duplicate, eventual consistency và vận hành backlog.
+
+## Terms to Know
+
+- [[Eventual consistency]]: boundary hội tụ sau độ trễ được chấp nhận.
+- [[Data ownership]]: service nào sở hữu state/event.
+- [[Schema evolution]]: contract cũ/mới cùng sống được khi rollout.
+
+::: senior-signal
+Đừng chọn protocol theo độ “hiện đại”. Hãy nói request cần kết quả ngay hay fact đã commit có thể được xử lý sau.
+:::
+
 ## Tình huống phỏng vấn
 
 "Một service Order cần kiểm tra tồn kho, tạo payment và thông báo cho nhiều hệ thống. Em dùng REST, gRPC hay event? Có cần CQRS không?"

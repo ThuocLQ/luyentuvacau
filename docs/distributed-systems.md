@@ -1,5 +1,21 @@
 # Messaging, Idempotency & Outbox
 
+## Quick Summary
+
+Giả định message có thể trễ, trùng và cần replay. Outbox làm state nội bộ với ý định phát event được ghi nguyên tử; tính đúng ở consumer vẫn cần idempotency, ack đúng chỗ và reconciliation.
+
+## Terms to Know
+
+- [[Transactional outbox]]: ghi state và event intent trong cùng local transaction.
+- [[Idempotency]]: retry/replay không tạo business effect trùng.
+- [[Ack point]]: chỉ xác nhận sau khi effect đã được ghi bền.
+- [[Poison message]]: message lỗi vĩnh viễn, cần DLQ/runbook thay vì retry mãi.
+- [[Reconciliation]]: đối chiếu để tìm state không hội tụ.
+
+::: concept
+“Exactly once” là claim theo từng boundary. Broker có thể hỗ trợ một phần, nhưng database update và payment provider vẫn cần semantics riêng.
+:::
+
 ## Tình huống phỏng vấn
 
 "Order đã commit nhưng event không đến consumer; hoặc consumer nhận cùng một event ba lần. Thiết kế thế nào để hệ thống vẫn đúng?"
@@ -57,6 +73,10 @@ Theo dõi outbox oldest age/lag, publish failure, consumer lag, retry rate, DLQ 
 Event là contract. Thêm field theo hướng backward compatible, consumer chịu được field lạ/thiếu theo schema, version hoặc topic khi thay đổi breaking; giữ replay test cho consumer trước khi deploy producer mới.
 
 ## Bẫy production
+
+::: production-trap
+Ack consumer trước khi persist effect có thể mất work khi process chết. Retry một unknown outcome với payment có thể double-charge.
+:::
 
 - Đánh dấu outbox đã gửi trước khi broker xác nhận có thể làm mất event.
 - Ack consumer trước khi effect được lưu bền làm mất work khi process chết.

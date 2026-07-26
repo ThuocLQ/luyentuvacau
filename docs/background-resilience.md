@@ -1,5 +1,20 @@
 # Background Jobs, Caching & Resilience
 
+## Quick Summary
+
+Background work cần durable handoff nếu không được mất khi restart. Cache và retry chỉ an toàn khi source of truth, unknown outcome và retry budget đều được xác định.
+
+## Terms to Know
+
+- [[Durable queue]]: job sống qua restart/scale-out.
+- [[Retry budget]]: giới hạn retry theo thời gian và số lần.
+- [[Unknown outcome]]: timeout nhưng chưa biết downstream đã làm effect chưa.
+- [[Cache-aside]]: read cache trước rồi fallback source of truth.
+
+::: warning
+Timeout không đồng nghĩa command thất bại. Với payment hoặc external write, hãy query/reconcile trước khi retry.
+:::
+
 ## Khi nào gặp
 
 Chủ đề này được hỏi khi một request cần gửi email, export report, gọi đối tác, xử lý event, hoặc khi hệ thống chậm/chập chờn dưới lỗi downstream. Mục tiêu không phải là “thêm retry”, mà là bảo toàn dữ liệu, không khuếch đại sự cố và biết khi nào dừng.

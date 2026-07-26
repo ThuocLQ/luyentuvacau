@@ -1,5 +1,20 @@
 # Retry, Ordering, Saga & Consistency
 
+## Quick Summary
+
+Saga phối hợp local transaction có state, timeout và recovery; nó không phải database rollback xuyên service. Retry cần scope, budget và idempotency boundary rõ để không nhân side effect.
+
+## Terms to Know
+
+- [[Saga]]: workflow nhiều local transaction.
+- [[Retry budget]]: ranh giới retry tránh storm.
+- [[Reconciliation]]: cơ chế tìm flow không hội tụ.
+- [[Poison message]]: lỗi permanent cần quarantine/DLQ.
+
+::: definition
+Compensation là một business action mới. Nó có thể không đảo hoàn toàn effect mà người dùng hoặc external system đã thấy.
+:::
+
 ## Tình huống phỏng vấn
 
 "Payment đã authorize, reserve inventory thành công, nhưng tạo shipment lỗi. Nếu message bị gửi lại hoặc đến sai thứ tự thì em giữ trạng thái order đúng bằng cách nào?"

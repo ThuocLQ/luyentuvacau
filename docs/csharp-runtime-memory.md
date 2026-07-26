@@ -1,5 +1,19 @@
 # C# Runtime & Memory
 
+## Quick Summary
+
+GC quản lý object còn reachable, nhưng không thay bạn quản lý ownership hay giới hạn dữ liệu. Với API payload lớn, hãy đo allocation và p99 trước; streaming thường là bước đầu an toàn hơn pooling.
+
+## Terms to Know
+
+- [[Garbage collection]]: runtime thu hồi object không còn được giữ reference.
+- [[Large Object Heap (LOH)]]: vùng heap cho allocation lớn, cần quan sát khi export/buffer phình.
+- [[ArrayPool]]: tái sử dụng buffer sau khi profiling xác nhận allocation là nút thắt.
+
+::: must-remember
+Nói đơn giản: GC chỉ dọn được thứ không còn ai giữ. Cache, queue, closure hoặc singleton giữ reference thì object vẫn sống.
+:::
+
 ## Bài toán backend thực tế
 
 Một API tải báo cáo 30 MB cho từng khách hàng. Ban đầu endpoint trả lời nhanh ở môi trường test, nhưng khi lưu lượng tăng, p99 tăng vọt, Gen2 GC xuất hiện dày hơn và process đôi lúc bị `OutOfMemoryException`. Vấn đề không phải là "C# có GC nên không cần lo bộ nhớ"; vấn đề là mỗi request đang tạo nhiều mảng lớn, giữ chúng lâu hơn cần thiết và ép runtime làm việc nhiều hơn khả năng của máy.
@@ -32,6 +46,10 @@ Managed memory loại bỏ việc gọi `free`, không loại bỏ trách nhiệ
 
 ## Production traps
 
+::: production-trap
+`ArrayPool<T>` không phải thuốc chữa memory leak. Trả buffer quá sớm trong async I/O còn có thể làm dữ liệu của request này lẫn vào request khác.
+:::
+
 - `ToList()` một query nhiều triệu dòng trước khi export làm object graph và LOH phình lên. Hãy phân trang/stream hoặc tạo file bất đồng bộ.
 - Singleton giữ `HttpContext`, DTO request hoặc closure bắt biến lớn gây retention chéo request, lộ tenant/user data và leak bộ nhớ.
 - Event subscription không được unsubscribe khiến subscriber sống mãi theo publisher dài hạn.
@@ -48,6 +66,10 @@ Managed memory loại bỏ việc gọi `free`, không loại bỏ trách nhiệ
 - Đặt alert theo dấu hiệu người dùng thấy được: restart do OOM, p99, queue backlog; không chỉ theo % memory.
 
 ## Mẫu trả lời 30–45 giây
+
+::: interview-answer
+Một câu trả lời tốt phải nối được allocation, vòng đời object và tác động tới latency; không chỉ kể tên Gen0/Gen1/Gen2.
+:::
 
 "Ứng dụng .NET vẫn có thể hết bộ nhớ vì GC chỉ thu hồi object không còn reference. Tôi sẽ xem allocation rate, Gen2/LOH và retaining path để biết đó là burst hợp lệ, cache không giới hạn hay leak. Với endpoint payload lớn, tôi ưu tiên streaming và ownership rõ bằng `using`; chỉ cân nhắc pooling khi profiling chứng minh allocation là nút thắt, vì pool cũng tạo rủi ro lifetime và dữ liệu cũ."
 

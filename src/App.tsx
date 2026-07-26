@@ -5,6 +5,7 @@ import DocPage from './pages/DocPage'
 import InterviewPage from './pages/InterviewPage'
 import ReviewPage from './pages/ReviewPage'
 import NotFoundPage from './pages/NotFoundPage'
+import GlossaryPage from './pages/GlossaryPage'
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       { path: 'docs/:slug', element: <DocPage /> },
       { path: 'interview', element: <InterviewPage /> },
       { path: 'review', element: <ReviewPage /> },
+      { path: 'glossary', element: <GlossaryPage /> },
       { path: '*', element: <NotFoundPage /> }
     ]
   }

@@ -1,5 +1,19 @@
 # Collections, LINQ & Exceptions
 
+## Quick Summary
+
+Chọn collection theo access pattern và invariant, không theo thói quen. LINQ cần có execution boundary rõ; exception là contract lỗi bất thường chứ không phải luồng điều khiển thông thường.
+
+## Terms to Know
+
+- [[Query shape]]: dữ liệu/filter/sort query thật sự cần.
+- [[N+1 query]]: query phát sinh theo từng item.
+- [[Data ownership]]: tầng nào được quyết định execution của query.
+
+::: concept
+`IQueryable` tiện nhưng mang theo deferred execution và provider semantics. Đừng để nó trôi qua nhiều layer mà không ai sở hữu query cuối.
+:::
+
 ## Khi nào gặp
 
 Chủ đề này thường xuất hiện dưới dạng một endpoint chậm dần khi dữ liệu lớn, memory tăng vì materialize quá sớm, lookup có độ phức tạp sai, hoặc một lớp `catch (Exception)` làm API trả lỗi không nhất quán. Ở cấp Senior, điều cần chứng minh là bạn chọn cấu trúc dữ liệu và boundary xử lý lỗi theo workload, không chỉ thuộc API của .NET.

@@ -24,3 +24,14 @@ export interface InterviewQuestion {
   redFlags: string[]
   relatedDoc: string
 }
+
+export interface GlossaryTerm {
+  id: string
+  term: string
+  shortDefinition: string
+  explanation?: string
+  example?: string
+  relatedTerms?: string[]
+  relatedDocs?: string[]
+  aliases?: string[]
+}

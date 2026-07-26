@@ -1,5 +1,21 @@
 # System Design Framework cho Senior Backend
 
+## Quick Summary
+
+Trong system design, bắt đầu từ user journey, invariant và SLO. Baseline nhỏ với source of truth rõ thường tốt hơn việc vẽ Kafka/microservice trước khi biết workload và failure mode.
+
+## Terms to Know
+
+- [[SLO]]: mục tiêu dịch vụ đo được, ví dụ p99 và availability.
+- [[Data ownership]]: boundary chịu trách nhiệm ghi state và giữ invariant.
+- [[Eventual consistency]]: các boundary hội tụ sau một khoảng trễ đã được chấp nhận.
+- [[Blast radius]]: phạm vi ảnh hưởng khi một thay đổi hoặc dependency lỗi.
+- [[Hot partition]]: key/partition nhận tải lệch quá lớn.
+
+::: senior-signal
+Trước khi chọn công nghệ, nói rõ assumption nào sẽ làm bạn đổi thiết kế. Đây là tín hiệu bạn đang ra quyết định theo điều kiện, không theo khẩu hiệu.
+:::
+
 ## Khi nào gặp
 
 Dùng khi được yêu cầu thiết kế một hệ thống như order service, notification, file upload, chat, feed hoặc payment workflow trong 30–60 phút. Người phỏng vấn không chờ “kiến trúc đúng duy nhất”; họ đánh giá cách bạn làm rõ mục tiêu, chọn boundary, nói về failure mode và ưu tiên trade-off theo workload thật.
@@ -61,6 +77,10 @@ App mới/cũ, schema/event version, cache format có thể cùng tồn tại. D
 | Multi-region active-active | Latency/availability tốt hơn | Conflict, consistency và vận hành phức tạp |
 
 ## Bẫy production
+
+::: production-trap
+Nói “scale ngang” nhưng không nêu partition key, cache stale, recovery hay metric thì chưa phải thiết kế vận hành được.
+:::
 
 - Bắt đầu bằng Kafka, Kubernetes, microservice mà chưa có invariant/workload/ownership.
 - “Exactly once” mà không mô tả từng boundary database, broker, consumer và external provider.

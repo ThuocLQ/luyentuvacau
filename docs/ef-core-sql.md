@@ -1,5 +1,20 @@
 # EF Core & Data Access
 
+## Quick Summary
+
+Endpoint chậm thường nằm ở query shape, execution plan hoặc contention — không phải vì “EF Core chậm”. Đo SQL và số dòng thật trước, rồi mới quyết định projection, index hay concurrency semantics.
+
+## Terms to Know
+
+- [[Query shape]]: filter, join, sort và dữ liệu thực sự cần trả.
+- [[Execution plan]]: cách database quyết định đọc và join dữ liệu.
+- [[N+1 query]]: query danh sách rồi phát sinh thêm query cho từng item.
+- [[Optimistic concurrency]]: update chỉ thành công khi version vẫn khớp.
+
+::: definition
+`AsNoTracking()` giảm overhead cho read-only query, nhưng không phải phép tối ưu thay cho projection, index và pagination đúng.
+:::
+
 ## Tình huống phỏng vấn
 
 "Một endpoint danh sách đơn hàng chậm dần khi dữ liệu tăng. Em xử lý từ đâu?"
@@ -46,6 +61,10 @@ Mọi tối ưu chỉ đáng tin khi đo được trước và sau. `ToQueryStri
 `AsNoTracking()` không biến table scan thành query nhanh; còn index không cứu được query lấy hàng triệu dòng rồi map ở ứng dụng.
 
 ## Bẫy production
+
+::: production-trap
+`Include` mọi quan hệ có thể nhân số dòng join và làm payload/query tệ hơn N+1. Hãy bắt đầu từ shape của response.
+:::
 
 - Repository trả `IQueryable` ra mọi tầng làm mất ownership của query; controller có thể thêm `Include`, filter hoặc `ToList` ở chỗ khó kiểm soát. Nên giữ query boundary gần use case.
 - `ExecuteUpdate`/raw SQL bỏ qua change tracker. Chúng hữu ích cho bulk update nhưng cần cân nhắc concurrency token, audit field, cache invalidation và event/outbox.

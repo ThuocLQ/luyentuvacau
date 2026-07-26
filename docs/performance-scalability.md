@@ -1,5 +1,20 @@
 # Performance & Scalability
 
+## Quick Summary
+
+Tối ưu bắt đầu từ evidence: user impact, p99, saturation và dependency. Scale-out không giúp khi bottleneck là hot key, connection pool hoặc downstream đang chậm.
+
+## Terms to Know
+
+- [[p99 latency]]: nhìn phần request chậm nhất có ảnh hưởng user.
+- [[Backpressure]]: không nhận work vô hạn khi consumer đầy.
+- [[Load shedding]]: từ chối có chủ đích để bảo toàn phần quan trọng.
+- [[Hot partition]]: một key nhận tải lệch quá lớn.
+
+::: production-trap
+Chỉ nhìn average latency khiến bạn bỏ qua queueing và tail latency — thứ người dùng thường cảm nhận rõ nhất.
+:::
+
 ## Tình huống phỏng vấn
 
 "Sau một chiến dịch, p99 của API tăng từ 400 ms lên 5 giây. Em làm gì trong 30 phút đầu, và quyết định scale hay tối ưu dựa vào đâu?"

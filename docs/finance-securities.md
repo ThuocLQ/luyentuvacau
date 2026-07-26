@@ -1,5 +1,19 @@
 # Finance / Securities Domain Cheatsheet
 
+## Quick Summary
+
+Domain tài chính ưu tiên correctness, audit và reconciliation hơn trả lời “nhanh ngay”. Tách execution facts, order state và ledger để replay, correction và đối soát không làm mất lịch sử.
+
+## Terms to Know
+
+- [[Idempotency]]: replay execution không tạo effect trùng.
+- [[Reconciliation]]: đối chiếu state nội bộ với venue/source có thẩm quyền.
+- [[Source of truth]]: nơi quyết định order, execution hoặc ledger state.
+
+::: must-remember
+Cancellation chỉ đóng quantity còn lại; không được xóa execution facts đã xảy ra.
+:::
+
 ## Bài toán backend thực tế
 
 Khách đặt mua 1.000 cổ phiếu, venue khớp 400, khách huỷ phần còn lại và sau đó venue gửi lại message fill 400 vì retry. Nếu hệ thống chỉ có một trường `status` và `filledQuantity`, retry có thể cộng thêm 400 lần nữa; nếu cancel xoá order, không còn audit trail; nếu release buying power toàn bộ, khách có thể đặt vượt hạn mức.

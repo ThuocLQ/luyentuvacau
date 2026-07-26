@@ -1,27 +1,42 @@
-import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3, ListChecks, RotateCcw } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, CheckCircle2, ChevronUp, Circle, Clock3, RotateCcw } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import DocumentToc from './document/DocumentToc'
+import PersonalExample from './document/PersonalExample'
+import TermTooltip from './TermTooltip'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useReviewQueue } from '../hooks/useReviewQueue'
+import { useScrollSpy } from '../hooks/useScrollSpy'
 import type { CheatsheetMeta } from '../types/content'
 import { completeDocs } from '../data/docs'
 
-interface Props {
-  doc: CheatsheetMeta & { content: string }
-}
-
+interface Props { doc: CheatsheetMeta & { content: string } }
 const weightLabel = { Critical: 'Trọng yếu', High: 'Quan trọng', Medium: 'Bổ trợ', Specialized: 'Chuyên ngành' }
 const statusLabel = { Draft: 'Bản nháp', Review: 'Đang rà soát', Complete: 'Hoàn chỉnh' }
+const quickHeadings = /^(quick summary|terms to know|tóm tắt nhanh|bài toán backend thực tế|khi nào gặp|tình huống phỏng vấn|must remember|những điều phải nhớ|invariants phải giữ|so sánh nhanh|quick comparison|.*câu trả lời.*|.*mẫu trả lời.*|final recall|tự kiểm)$/i
+
+function quickHtml(html: string) {
+  const parsed = new DOMParser().parseFromString(html, 'text/html')
+  let keep = true
+  ;[...parsed.body.children].forEach(node => {
+    if (node.tagName === 'H2') keep = quickHeadings.test(node.textContent?.trim() ?? '')
+    if (node.tagName !== 'H1' && !keep) node.remove()
+  })
+  return parsed.body.innerHTML
+}
 
 export default function MarkdownDocument({ doc }: Props) {
   const articleRef = useRef<HTMLElement>(null)
   const [readingProgress, setReadingProgress] = useState(0)
+  const [mode, setMode] = useLocalStorage<'quick' | 'full'>('ltvc-reading-mode', 'full')
+  const [termId, setTermId] = useState<string | null>(null)
   const [completed, setCompleted] = useLocalStorage<string[]>('ltvc-completed', [])
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>('ltvc-bookmarks', [])
   const { isQueued, addOrUpdate, remove } = useReviewQueue()
-  const rendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
-
+  const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
+  const rendered = useMemo(() => mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered, [fullRendered, mode])
+  const activeHeading = useScrollSpy('.markdown-body h2, .markdown-body h3')
   const isCompleted = completed.includes(doc.slug)
   const isBookmarked = bookmarks.includes(doc.slug)
   const needsReviewForDoc = isQueued(`cheatsheet:${doc.slug}`)
@@ -30,108 +45,59 @@ export default function MarkdownDocument({ doc }: Props) {
   const nextDoc = completeDocs[currentIndex + 1]
 
   useEffect(() => {
-    window.scrollTo({ top: 0 })
+    window.scrollTo({ top: 0, behavior: 'auto' })
     const onScroll = () => {
       const article = articleRef.current
       if (!article) return
-      const rect = article.getBoundingClientRect()
-      const consumed = Math.max(0, -rect.top + 120)
-      const total = Math.max(1, article.offsetHeight - window.innerHeight + 180)
+      const consumed = Math.max(0, -article.getBoundingClientRect().top + 88)
+      const total = Math.max(1, article.offsetHeight - window.innerHeight + 120)
       setReadingProgress(Math.min(100, Math.round((consumed / total) * 100)))
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll()
     return () => window.removeEventListener('scroll', onScroll)
-  }, [doc.slug])
+  }, [doc.slug, mode])
 
   useEffect(() => {
     const article = articleRef.current
     if (!article) return
+    const handleTerm = (target: EventTarget | null) => {
+      const trigger = (target as HTMLElement)?.closest<HTMLButtonElement>('.term-trigger')
+      if (trigger?.dataset.termId) setTermId(trigger.dataset.termId)
+    }
     const clickHandler = async (event: MouseEvent) => {
+      handleTerm(event.target)
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.copy-button')
       if (!button) return
       const code = button.closest('.code-block')?.querySelector('pre')?.textContent ?? ''
-      try {
-        await navigator.clipboard.writeText(code)
-        button.textContent = 'Đã chép'
-        setTimeout(() => { button.textContent = 'Chép mã' }, 1200)
-      } catch {
-        button.textContent = 'Không thể chép'
-      }
+      try { await navigator.clipboard.writeText(code); button.textContent = 'Đã chép'; setTimeout(() => { button.textContent = 'Chép mã' }, 1200) } catch { button.textContent = 'Không thể chép' }
     }
-    article.addEventListener('click', clickHandler)
-    return () => article.removeEventListener('click', clickHandler)
+    const focusHandler = (event: FocusEvent) => handleTerm(event.target)
+    article.addEventListener('click', clickHandler); article.addEventListener('focusin', focusHandler)
+    return () => { article.removeEventListener('click', clickHandler); article.removeEventListener('focusin', focusHandler) }
   }, [rendered.html])
 
-  const toggleValue = (items: string[], slug: string, setter: (next: string[]) => void) => {
-    setter(items.includes(slug) ? items.filter(item => item !== slug) : [...items, slug])
+  const toggleValue = (items: string[], slug: string, setter: (next: string[]) => void) => setter(items.includes(slug) ? items.filter(item => item !== slug) : [...items, slug])
+  const navigateToHeading = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    window.history.replaceState(null, '', `#${id}`)
   }
 
-  return (
-    <div className="document-layout">
-      <div className="reading-progress"><span style={{ width: `${readingProgress}%` }} /></div>
-
-      <section className="document-main">
-        <header className="document-hero">
-          <Link className="back-link" to="/"><ArrowLeft size={15} /> Thư viện học</Link>
-          <div className="eyebrow">{doc.section} · {weightLabel[doc.interviewWeight]} · {statusLabel[doc.status]}</div>
-          <h1>{doc.title}</h1>
-          <p>{doc.description}</p>
-          <div className="doc-meta">
-            <span><Clock3 size={16} /> {doc.readingMinutes} phút</span>
-            {doc.tags.map(tag => <span className="tag" key={tag}>{tag}</span>)}
-          </div>
-          <div className="hero-actions">
-            <button
-              className={isCompleted ? 'primary-button success' : 'primary-button'}
-              onClick={() => toggleValue(completed, doc.slug, setCompleted)}
-            >
-              {isCompleted ? <CheckCircle2 size={18} /> : <Circle size={18} />}
-              {isCompleted ? 'Đã hoàn thành' : 'Đánh dấu đã học'}
-            </button>
-            <button
-              className={needsReviewForDoc ? 'secondary-button active-review' : 'secondary-button'}
-              onClick={() => needsReviewForDoc ? remove(`cheatsheet:${doc.slug}`) : addOrUpdate({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}
-            >
-              <RotateCcw size={18} /> {needsReviewForDoc ? 'Đang cần ôn lại' : 'Cần ôn lại'}
-            </button>
-            <button
-              className="secondary-button"
-              onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}
-            >
-              {isBookmarked ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
-              {isBookmarked ? 'Đã lưu' : 'Lưu tài liệu'}
-            </button>
-          </div>
-          <div className="study-prompt"><ListChecks size={17} /><span><strong>Gợi ý khi học:</strong> ghi lại 1 ví dụ thực tế và 1 trade-off bạn có thể giải thích khi phỏng vấn.</span></div>
-        </header>
-
-        <article
-          ref={articleRef}
-          className="markdown-body"
-          dangerouslySetInnerHTML={{ __html: rendered.html }}
-        />
-        <nav className="doc-pagination" aria-label="Cheatsheet navigation">
-          {previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}
-          {nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Vào phần luyện phỏng vấn <ArrowRight size={17} /></Link>}
-        </nav>
-      </section>
-
-      <aside className="toc-panel">
-        <div className="toc-sticky">
-          <strong>Trong bài này</strong>
-          <nav>
-            {rendered.toc
-              .filter(item => item.level <= 2)
-              .slice(0, 45)
-              .map(item => (
-                <a key={item.id} className={`toc-level-${item.level}`} href={`#${item.id}`}>
-                  {item.text}
-                </a>
-              ))}
-          </nav>
-        </div>
-      </aside>
-    </div>
-  )
+  return <div className="document-layout">
+    <div className="reading-progress"><span style={{ width: `${readingProgress}%` }} /></div>
+    <section className="document-main">
+      <header className="document-hero compact-document-hero">
+        <div className="breadcrumb"><Link to="/">Thư viện</Link><span>/</span><span>{doc.section}</span><span>/</span><span>Bài {currentIndex + 1} / {completeDocs.length}</span></div>
+        <h1>{doc.title}</h1><p>{doc.description}</p>
+        <div className="document-meta-row"><span className="weight-badge">{weightLabel[doc.interviewWeight]}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
+        <div className="document-actions"><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button><button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => needsReviewForDoc ? remove(`cheatsheet:${doc.slug}`) : addOrUpdate({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {needsReviewForDoc ? 'Đang ôn lại' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
+      </header>
+      {mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
+      <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />
+      <PersonalExample slug={doc.slug} />
+      <nav className="doc-pagination" aria-label="Điều hướng cheatsheet">{previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}{nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Luyện phỏng vấn <ArrowRight size={17} /></Link>}</nav>
+    </section>
+    <DocumentToc items={rendered.toc.filter(item => item.level > 1)} activeId={activeHeading} onNavigate={navigateToHeading} />
+    {readingProgress > 18 && <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })} aria-label="Lên đầu bài"><ChevronUp size={18} /></button>}
+    <TermTooltip termId={termId} onClose={() => setTermId(null)} />
+  </div>
 }

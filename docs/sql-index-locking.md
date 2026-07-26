@@ -1,5 +1,20 @@
 # SQL, Index, Transactions & Locking
 
+## Quick Summary
+
+Constraint và transaction bảo vệ invariant; index và execution plan quyết định chi phí query. Với contention, hãy xác định scope transaction và thứ tự lock trước khi dùng retry.
+
+## Terms to Know
+
+- [[Execution plan]]: evidence database dùng để đọc/join/sort.
+- [[Isolation level]]: mức nhìn thấy dữ liệu concurrent.
+- [[Deadlock]]: vòng chờ lock giữa transaction.
+- [[Optimistic concurrency]]: phát hiện lost update qua version.
+
+::: production-trap
+Tăng timeout không xử lý deadlock. Nó chỉ kéo dài thời gian giữ resource và che triệu chứng.
+:::
+
 ## Tình huống phỏng vấn
 
 "Hai request cùng tạo lệnh cho một business key, một request deadlock. Làm sao vừa giữ đúng dữ liệu vừa không tạo tác dụng phụ trùng?"

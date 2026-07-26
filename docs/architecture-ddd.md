@@ -1,5 +1,19 @@
 # Modular Monolith, Microservices & DDD
 
+## Quick Summary
+
+Tách service chỉ đáng giá khi boundary, ownership team hoặc scale độc lập đã rõ. Modular monolith thường là baseline tốt hơn khi cần transaction đơn giản và tốc độ thay đổi cao.
+
+## Terms to Know
+
+- [[Bounded context]]: ranh giới nơi model domain giữ nghĩa nhất quán.
+- [[Data ownership]]: ai được quyết định và ghi state.
+- [[Blast radius]]: phạm vi thiệt hại khi boundary lỗi hoặc deploy sai.
+
+::: senior-signal
+Đừng nói microservices “scale hơn”. Hãy nêu evidence về ownership, release cadence, failure isolation hoặc workload khiến boundary đáng tách.
+:::
+
 ## Bài toán backend thực tế
 
 Một đội muốn tách hệ thống order thành năm microservice vì "dễ scale". Sau khi tách, mỗi thay đổi phải phối hợp nhiều team, dữ liệu vẫn dùng chung một database, một request đi qua bốn HTTP hop và lỗi một service làm toàn bộ checkout thất bại. Kiến trúc đã phân tán deployment nhưng chưa phân tán ownership; đó là distributed monolith.

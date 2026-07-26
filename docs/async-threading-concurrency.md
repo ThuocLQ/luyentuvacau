@@ -1,5 +1,20 @@
 # Async, Threading & Concurrency
 
+## Quick Summary
+
+`async` giải phóng thread trong lúc chờ I/O, không làm database hoặc partner API có thêm capacity. Khi fan-out lớn, điều quan trọng là giới hạn đồng thời, cancellation và cách hệ thống phản ứng khi queue đầy.
+
+## Terms to Know
+
+- [[ThreadPool starvation]]: continuation và request mới phải chờ vì thread bị block.
+- [[Bounded concurrency]]: chỉ chạy số công việc mà downstream chịu được.
+- [[Backpressure]]: producer buộc phải chậm lại hoặc bị từ chối khi consumer đã quá tải.
+- [[Durable queue]]: công việc sống qua restart, không chỉ nằm trong memory process.
+
+::: concept
+async không phải “chạy nhiều hơn”. Nó là cách không giữ thread khi đang chờ. Capacity vẫn bị chặn bởi socket, DB connection, CPU và rate limit của downstream.
+:::
+
 ## Bài toán backend thực tế
 
 Một endpoint đồng bộ 2.000 đơn hàng với đối tác. Phiên bản đầu gọi `Task.WhenAll` cho mọi đơn, rồi có chỗ dùng `.Result` để lấy kết quả. Khi đối tác chậm, ThreadPool bị block, connection pool cạn, request mới xếp hàng và retry lại làm downstream quá tải hơn.
@@ -34,6 +49,10 @@ Concurrency là nhiều việc cùng tiến triển; parallelism là nhiều vi�
 
 ## Production traps
 
+::: production-trap
+`Task.WhenAll` trên danh sách lớn không tự throttle. Một burst timeout rồi retry có thể biến partner API chậm thành sự cố của chính bạn.
+:::
+
 - Fire-and-forget `Task.Run` từ HTTP request làm exception biến mất, dùng scoped service đã dispose và mất việc khi process restart.
 - `Task.WhenAll` không giới hạn trên danh sách lớn tạo burst đến partner API hoặc DB; timeout hàng loạt rồi retry tạo retry storm.
 - Chỉ tăng ThreadPool để che `.Result`/blocking I/O: triệu chứng dịu tạm thời nhưng throughput vẫn kém và latency không ổn định.
@@ -50,6 +69,10 @@ Mỗi giới hạn phải gắn với nguồn lực và metric.
 - Diễn tập restart và graceful shutdown: worker dừng nhận việc mới, hoàn tất hoặc trả lại việc an toàn; redelivery không tạo bản ghi trùng.
 
 ## Mẫu trả lời 30–45 giây
+
+::: interview-answer
+Nêu giới hạn theo dependency, chính sách khi quá tải, [[CancellationToken]] và [[idempotency boundary]] trước khi nhắc tới primitive như `SemaphoreSlim`.
+:::
 
 "`async` giúp không giữ thread khi chờ I/O, nhưng không tăng capacity của DB hay partner API. Với fan-out lớn, tôi chọn bound dựa trên dependency, truyền cancellation và quan sát queue age, timeout, retry exhaustion. Nếu công việc phải sống qua restart, tôi persist vào queue và handler idempotent; `Task.Run` trong request không phải durable background job."
 

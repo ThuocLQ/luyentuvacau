@@ -1,5 +1,19 @@
 # ASP.NET Core: Request Pipeline, DI & Configuration
 
+## Quick Summary
+
+Pipeline là thứ tự các boundary của một request; DI là ownership/lifetime của object trong các boundary đó. Sai thứ tự middleware hoặc để singleton giữ scoped state đều có thể thành lỗi correctness, không chỉ là lỗi cấu hình.
+
+## Terms to Know
+
+- [[Middleware]]: bước xử lý request/response theo thứ tự đăng ký.
+- [[Dependency Injection]]: container tạo dependency theo lifetime.
+- [[Tenant isolation]]: server bảo đảm tenant chỉ truy cập tài nguyên của họ.
+
+::: must-remember
+Authentication phải chạy trước authorization. `DbContext` scoped, không thread-safe và không được singleton giữ trực tiếp.
+:::
+
 ## Khi nào gặp
 
 Chủ đề này xuất hiện khi API trả sai mã lỗi, xác thực không chạy, URL redirect sai sau khi đặt sau reverse proxy, hoặc một service hoạt động bình thường ở máy local nhưng lỗi ngẫu nhiên khi có tải. Người phỏng vấn muốn biết bạn có nhìn request như một chuỗi các boundary rõ ràng hay chỉ nhớ vài lệnh `Use...`.
@@ -41,6 +55,10 @@ Nếu app sinh callback URL/OAuth redirect, chỉ dùng host được allow-list
 | Forwarded headers allow-list | Có proxy/ingress xác định | Cần cập nhật khi topology thay đổi |
 
 ## Bẫy production
+
+::: production-trap
+Không tin `X-Forwarded-For` từ mọi request. Chỉ trust header từ proxy/network đã khai báo, nếu không log IP và rate limit có thể bị giả mạo.
+:::
 
 - Đặt authorization trước authentication: policy luôn thấy anonymous user hoặc cho kết quả khó hiểu.
 - Redirect HTTPS trước forwarded headers: vòng lặp redirect sau ingress TLS termination.

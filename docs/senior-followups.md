@@ -1,5 +1,19 @@
 # Senior Follow-up & Trade-off Questions
 
+## Quick Summary
+
+Follow-up kiểm tra điều kiện áp dụng, failure mode và evidence đằng sau câu trả lời đầu tiên. Câu trả lời Senior không cần dài; cần rõ điều gì sẽ làm quyết định thay đổi.
+
+## Terms to Know
+
+- [[Trade-off]]: giá trị và cost đi cùng lựa chọn.
+- [[Retry budget]]: giới hạn retry phải nêu cụ thể.
+- [[Data ownership]]: tránh trả lời architecture bằng danh sách technology.
+
+::: senior-signal
+Nếu chưa có số liệu, hãy nói assumption và metric bạn sẽ xem thay vì bịa con số dự án.
+:::
+
 ## Mục tiêu của follow-up
 
 Câu hỏi Senior thường bắt đầu từ một câu trả lời đúng nhưng chung chung: "dùng cache", "thêm index", "dùng outbox", "scale ngang". Follow-up kiểm tra liệu bạn có thể nêu điều kiện đúng, failure mode, cách đo và quyết định khi requirement đổi không.

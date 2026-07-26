@@ -1,5 +1,19 @@
 # Docker, CI/CD & Production Incidents
 
+## Quick Summary
+
+Release an toàn cần artifact bất biến và compatibility giữa app, schema, event và cache. Rollback không phải lúc nào cũng là quay code cũ; migration destructive có thể buộc phải roll-forward.
+
+## Terms to Know
+
+- [[Schema evolution]]: thay đổi contract/schema mà phiên bản cũ mới cùng chạy.
+- [[Feature flag]]: tách deploy code với việc bật behavior.
+- [[Blast radius]]: giảm phạm vi ảnh hưởng bằng rollout có kiểm soát.
+
+::: must-remember
+Dùng expand–migrate–contract: thêm tương thích trước, backfill có kiểm soát, chỉ xóa khi code cũ đã hết đường dùng.
+:::
+
 ## Khi nào gặp
 
 Đây là nhóm câu hỏi để phân biệt người “đẩy được container” với người vận hành an toàn: image chạy local nhưng fail ở Kubernetes/host khác, deployment làm p99 tăng, rollback không an toàn với migration, secret lọt vào image, hoặc incident cần ra quyết định trước khi biết root cause.

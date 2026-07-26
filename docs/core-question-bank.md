@@ -1,5 +1,19 @@
 # Core Question Bank: Playbook luyện phỏng vấn Senior .NET Backend
 
+## Quick Summary
+
+Question bank là bài tập trả lời có feedback, không phải danh sách để học thuộc. Mỗi câu nên có kết luận, cơ chế, failure mode, trade-off và evidence từ dự án thật.
+
+## Terms to Know
+
+- [[p99 latency]]: ví dụ metric giúp câu trả lời bớt chung chung.
+- [[Idempotency]]: chủ đề correctness phổ biến.
+- [[Backpressure]]: cách nói về overload có vận hành.
+
+::: interview-answer
+Một câu trả lời 60–90 giây tốt nên để interviewer thấy bạn biết khi nào không dùng giải pháp đó, không chỉ biết định nghĩa.
+:::
+
 ## Khi nào dùng
 
 Dùng tài liệu này sau khi đã đọc một cheatsheet hoặc trước mock interview. Đây không phải danh sách để học thuộc đáp án. Mục tiêu là biến kiến thức thành phản xạ trả lời có cấu trúc: hiểu bối cảnh, nêu quyết định, chỉ ra trade-off, và chứng minh cách bạn vận hành nó ở production.

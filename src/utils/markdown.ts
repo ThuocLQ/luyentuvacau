@@ -1,4 +1,5 @@
 import { marked, Renderer } from 'marked'
+import { findGlossaryTerm } from '../data/glossary'
 
 marked.setOptions({
   gfm: true,
@@ -8,7 +9,8 @@ marked.setOptions({
 export function renderMarkdown(source: string): string {
   const renderer = new Renderer()
   renderer.html = () => ''
-  return marked.parse(source, { renderer }) as string
+  const directives = source.replace(/^:::(concept|definition|must-remember|example|note|warning|production-trap|senior-signal|interview-answer|comparison|final-recall)\s*\n([\s\S]*?)^:::\s*$/gm, (_, type: string, body: string) => `> [!${type}]\n> ${body.trim().replace(/\n/g, '\n> ')}`)
+  return marked.parse(directives, { renderer }) as string
 }
 
 export interface TocItem {
@@ -52,6 +54,46 @@ export function enhanceHtml(html: string): { html: string; toc: TocItem[] } {
     pre.parentNode?.insertBefore(wrapper, pre)
     wrapper.appendChild(toolbar)
     wrapper.appendChild(pre)
+  })
+
+  document.querySelectorAll('blockquote').forEach((block) => {
+    const first = block.querySelector('p')
+    const marker = first?.textContent?.match(/^\[!([a-z-]+)\]\s*/)
+    if (!marker || !first) return
+    const type = marker[1]
+    first.textContent = first.textContent?.replace(/^\[![a-z-]+\]\s*/, '') ?? ''
+    block.classList.add('semantic-block', `semantic-${type}`)
+    block.dataset.label = type.replace(/-/g, ' ')
+  })
+
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+  const textNodes: Text[] = []
+  while (walker.nextNode()) textNodes.push(walker.currentNode as Text)
+  textNodes.forEach((node) => {
+    const parent = node.parentElement
+    if (!parent || parent.closest('pre, code, a, button, .semantic-block')) return
+    const value = node.textContent ?? ''
+    if (!/\[\[[^\]]+\]\]/.test(value)) return
+    const fragment = document.createDocumentFragment()
+    let cursor = 0
+    for (const match of value.matchAll(/\[\[([^\]]+)\]\]/g)) {
+      const start = match.index ?? 0
+      fragment.append(value.slice(cursor, start))
+      const reference = match[1].trim()
+      const term = findGlossaryTerm(reference)
+      if (term) {
+        const trigger = document.createElement('button')
+        trigger.type = 'button'
+        trigger.className = 'term-trigger'
+        trigger.dataset.termId = term.id
+        trigger.setAttribute('aria-describedby', `term-tooltip-${term.id}`)
+        trigger.textContent = reference
+        fragment.appendChild(trigger)
+      } else fragment.append(reference)
+      cursor = start + match[0].length
+    }
+    fragment.append(value.slice(cursor))
+    node.parentNode?.replaceChild(fragment, node)
   })
 
   document.querySelectorAll('table').forEach((table) => {

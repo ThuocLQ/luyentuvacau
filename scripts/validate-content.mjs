@@ -21,4 +21,26 @@ const practicedSlugs = new Set([...registry.matchAll(/relatedDoc: '([^']+)'/g)].
 const withoutPractice = contentSlugs.filter(slug => !practicedSlugs.has(slug))
 if (withoutPractice.length) throw new Error(`Complete cheatsheets without a linked practice question: ${withoutPractice.join(', ')}`)
 
+const directiveTypes = new Set(['concept', 'definition', 'must-remember', 'example', 'note', 'warning', 'production-trap', 'senior-signal', 'interview-answer', 'comparison', 'final-recall'])
+const directiveErrors = visit('docs').filter(file => file.endsWith('.md')).flatMap(file => [...readFileSync(file, 'utf8').matchAll(/^:::(.*?)$/gm)].map(match => ({ file, type: match[1].trim() })).filter(item => item.type && !directiveTypes.has(item.type)))
+if (directiveErrors.length) throw new Error(`Invalid semantic directive: ${directiveErrors.map(item => `${item.file} (${item.type})`).join(', ')}`)
+const malformedDirectives = visit('docs').filter(file => file.endsWith('.md')).flatMap(file => {
+  const source = readFileSync(file, 'utf8')
+  const markerCount = [...source.matchAll(/^:::\s*(?:[a-z-]+)?\s*$/gm)].length
+  const empty = /^:::\s*[a-z-]+\s*\n\s*^:::\s*$/m.test(source)
+  return markerCount % 2 || empty ? [file] : []
+})
+if (malformedDirectives.length) throw new Error(`Empty or unclosed semantic directive in: ${malformedDirectives.join(', ')}`)
+
+const glossarySource = readFileSync('src/data/glossary.ts', 'utf8')
+const glossaryIds = [...glossarySource.matchAll(/^\s*\['([^']+)'/gm)].map(match => match[1])
+const duplicateGlossaryIds = glossaryIds.filter((id, index) => glossaryIds.indexOf(id) !== index)
+if (duplicateGlossaryIds.length) throw new Error(`Duplicate glossary IDs: ${[...new Set(duplicateGlossaryIds)].join(', ')}`)
+const glossaryDocRefs = [...glossarySource.matchAll(/, '([a-z-]+)'\],/g)].map(match => match[1])
+const unknownGlossaryDocs = glossaryDocRefs.filter(slug => !contentSlugs.includes(slug))
+if (unknownGlossaryDocs.length) throw new Error(`Glossary references unknown docs: ${[...new Set(unknownGlossaryDocs)].join(', ')}`)
+
+const missingQuickSummary = imports.filter(file => !/^## Quick Summary$/m.test(readFileSync(file, 'utf8')))
+if (missingQuickSummary.length) throw new Error(`Published docs missing Quick Summary: ${missingQuickSummary.join(', ')}`)
+
 console.log(`Content validation passed for ${files.length} text files; every cheatsheet has linked practice.`)

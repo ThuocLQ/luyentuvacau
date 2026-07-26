@@ -1,5 +1,19 @@
 # Bản đồ ôn Senior Backend .NET
 
+## Quick Summary
+
+Mục tiêu ôn không phải đọc hết: xác định gap critical, nói câu trả lời thành tiếng và gắn kiến thức với story thật. Chọn lộ trình theo thời gian còn lại và role đang phỏng vấn.
+
+## Terms to Know
+
+- [[SLO]]: biến “nhanh/ổn định” thành tiêu chí có thể nói và đo.
+- [[Trade-off]]: giá trị đổi lấy cost/rủi ro cụ thể.
+- [[Data ownership]]: điểm Senior cần nhắc khi mô tả architecture.
+
+::: final-recall
+Khi trả lời: kết luận trước, nêu điều kiện, mechanism, failure mode, trade-off và evidence. Đừng kể khái niệm rời rạc.
+:::
+
 ## Mục tiêu của bản đồ này
 
 Đây không phải danh sách để đọc từ đầu đến cuối. Mục tiêu là biến thời gian ôn hạn chế thành câu trả lời có cấu trúc: bạn nêu đúng problem, invariant, lựa chọn, trade-off và bằng chứng production. Nếu chỉ nhớ API hoặc pattern nhưng không nói được khi nào **không** dùng, bạn chưa sẵn sàng cho vòng Senior.

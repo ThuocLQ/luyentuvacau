@@ -1,5 +1,19 @@
 # API Design, Validation & Security
 
+## Quick Summary
+
+API tốt có contract rõ, validation ở server và boundary cho retry/side effect. Authentication chỉ xác minh danh tính; authorization phải kiểm tra quyền trên đúng resource và tenant.
+
+## Terms to Know
+
+- [[Idempotency boundary]]: nơi replay được nhận diện an toàn.
+- [[Rate limit]]: bảo vệ capacity theo caller hoặc resource.
+- [[Tenant isolation]]: không cho request vượt ranh giới tenant.
+
+::: must-remember
+Một POST có side effect không tự an toàn khi client retry. Hãy xác định idempotency key, payload fingerprint và response được lưu ở đâu.
+:::
+
 ## Khi nào gặp
 
 Áp dụng khi thiết kế API tạo giao dịch, thanh toán, thay đổi trạng thái, public API cho đối tác, hoặc khi cần giải thích vì sao một request retry không được tạo dữ liệu trùng. Ở cấp Senior, câu trả lời phải nối contract HTTP với authorization, invariant dữ liệu, audit và vận hành.

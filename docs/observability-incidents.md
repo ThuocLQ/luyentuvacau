@@ -1,5 +1,20 @@
 # Observability, Testing & Production Incidents
 
+## Quick Summary
+
+Observability giúp trả lời hệ thống đang ảnh hưởng ai, tại boundary nào và từ khi nào. Khi incident xảy ra, ổn định user impact trước rồi mới điều tra root cause dựa trên evidence.
+
+## Terms to Know
+
+- [[p99 latency]]: tail latency mà average dễ che mất.
+- [[Golden signals]]: latency, traffic, errors, saturation.
+- [[Correlation ID]]: nối request qua log, trace và async flow.
+- [[Blast radius]]: phạm vi cần ưu tiên ổn định.
+
+::: production-trap
+Restart mọi service hoặc đọc toàn bộ log trước khi giảm impact thường làm mất evidence và kéo dài incident.
+:::
+
 ## Bài toán backend thực tế
 
 Mười phút sau deploy, p99 của checkout tăng gấp đôi. Một người mở log toàn bộ cluster, người khác restart service và người thứ ba sửa nóng. Cả ba hành động đều có thể làm mất evidence hoặc tăng blast radius. Cách Senior làm là xác nhận user impact, ổn định hệ thống bằng rollback/feature flag nếu phù hợp, rồi dùng metrics, traces và logs để thu hẹp nguyên nhân.

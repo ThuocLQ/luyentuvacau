@@ -1,5 +1,19 @@
 # Project Stories & Mock Interview
 
+## Quick Summary
+
+Project story mạnh cho thấy ownership và evidence: bạn phát hiện gì, quyết định gì, đổi lấy gì và kết quả được đo ra sao. Đừng chỉ kể stack hoặc trách nhiệm chung của cả team.
+
+## Terms to Know
+
+- [[p99 latency]]: một evidence tốt cho story performance.
+- [[Blast radius]]: diễn đạt tác động của incident/release.
+- [[Reconciliation]]: ví dụ recovery trong story correctness.
+
+::: interview-answer
+Kể theo bối cảnh → trách nhiệm của bạn → cơ chế/quyết định → trade-off → kết quả → điều sẽ làm khác. Giữ số liệu trung thực và giải thích được cách đo.
+:::
+
 ## Bài toán interview thực tế
 
 Ở vòng Senior, interviewer không chỉ hỏi bạn biết pattern nào. Họ muốn biết bạn đã ownership một kết quả khó như thế nào: bạn nhìn thấy vấn đề bằng evidence gì, quyết định trong constraint nào, phối hợp với ai, đo kết quả ra sao và học được gì khi quyết định chưa hoàn hảo.

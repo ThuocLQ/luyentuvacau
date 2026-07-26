@@ -1,5 +1,19 @@
 # Common Design Scenarios
 
+## Quick Summary
+
+Với đề system design, chốt invariant và assumption trước rồi mới vẽ component. Luôn nói data flow, failure/recovery và metric cùng với giải pháp baseline.
+
+## Terms to Know
+
+- [[Source of truth]]: nơi giữ state chuẩn.
+- [[Idempotency boundary]]: ngăn retry tạo request/payment trùng.
+- [[Eventual consistency]]: trạng thái pending và cách hội tụ cần được nói rõ.
+
+::: senior-signal
+Một design tốt phải nói được điều gì sẽ đổi nếu traffic, consistency requirement hoặc dependency failure thay đổi.
+:::
+
 ## Tình huống phỏng vấn
 
 "Hãy thiết kế một hệ thống nhận order, một hệ thống gửi notification, hoặc một API upload file."
