@@ -30,6 +30,10 @@ Observability lets an operator ask new questions from production evidence. Logs 
 
 High-cardinality labels make diagnosis easy but can make telemetry unaffordable. Retain detailed data around incidents and aggregate routine paths. A rollback is often safer than an urgent hotfix when the blast radius is unknown.
 
+## Senior Answer Pattern
+
+Describe incident work as a timeline: detect impact, stabilize, compare change windows, inspect traces and dependency signals, communicate, then document prevention. Include a decision rule for rollback and a concrete follow-up such as an SLO, load test, runbook or release guard.
+
 ## Interview Questions
 
 ### What do you do when p99 doubles after deployment?

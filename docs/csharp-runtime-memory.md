@@ -31,6 +31,10 @@ Managed memory removes manual `free`, not ownership. Every allocation adds GC wo
 
 Pool buffers when allocation profiling shows a hot path and the lifetime is controlled. Do not pool small, infrequent allocations: complexity, stale data and double-return bugs can cost more than GC. Cache only data with an explicit size, expiry and invalidation policy.
 
+## Senior Answer Pattern
+
+Start with the workload: request rate, payload size, allocation profile and p99 impact. Then name the ownership boundary (`using`, request scope, cache expiry), show the diagnostic you would inspect (allocation rate, Gen2/LOH collections, retaining path), and only then propose pooling or streaming. This makes the answer operational rather than a list of runtime features.
+
 ## Interview Questions
 
 ### Why can a managed application still run out of memory?

@@ -196,6 +196,9 @@ a { color: inherit; }
 .study-tip svg { flex:0 0 auto; margin-top:1px; color:var(--primary-2); }
 .study-tip p { margin:0; }
 .study-tip strong { color:var(--text); }
+.active-review { color:#9a5a00; border-color:#d9a342; background:#fff5df; }
+.doc-pagination { display:flex; justify-content:space-between; gap:12px; margin-top:20px; }
+.doc-pagination .primary-button,.doc-pagination .secondary-button { max-width:48%; text-align:left; }
 .cheatsheet-home .home-hero { min-height:310px; }
 .cheatsheet-home .hero-progress { padding:28px; border:1px solid var(--border); border-radius:18px; background:color-mix(in srgb,var(--surface) 72%,transparent); }
 .cheatsheet-home .hero-progress > strong { font-size:48px; line-height:1; }
@@ -204,6 +207,18 @@ a { color: inherit; }
 .draft-card h3 { font-size:19px; }
 .interview-page .home-hero { min-height:270px; }
 .question-filters { display:flex; gap:10px; margin:22px 0; }
+.practice-controls { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin:22px 0; }
+.practice-controls label { display:grid; gap:6px; color:var(--muted); font-size:12px; font-weight:750; }
+.practice-controls select { min-width:170px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; color:var(--text); background:var(--surface); }
+.review-count { display:inline-flex; align-items:center; gap:6px; padding:11px 12px; color:var(--muted); font-size:13px; }
+.practice-card { padding:32px; border:1px solid var(--border); border-radius:20px; background:var(--surface); box-shadow:var(--shadow); }
+.practice-meta { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.timer { display:inline-flex; align-items:center; gap:6px; margin-left:auto; padding:6px 9px; border-radius:8px; color:var(--primary); background:var(--primary-soft); font:700 13px/1 "Cascadia Code",Consolas,monospace; }
+.timer.urgent { color:#a62c2c; background:#ffebeb; }
+.practice-card h2 { max-width:850px; margin:24px 0 10px; font-size:clamp(26px,4vw,38px); line-height:1.25; }
+.practice-prompt { max-width:760px; margin:0 0 24px; color:var(--muted); line-height:1.6; }
+.rating-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:19px; padding-top:16px; border-top:1px solid var(--border); }
+.rating-actions > span { color:var(--muted); font-size:12px; font-weight:750; }
 .question-filters select { min-width:170px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; color:var(--text); background:var(--surface); }
 .question-list { display:grid; gap:16px; }
 .question-card { padding:26px; border:1px solid var(--border); border-radius:18px; background:var(--surface); box-shadow:0 8px 24px rgba(32,54,78,.04); }
@@ -270,7 +285,13 @@ a { color: inherit; }
   .path-step:last-child { border-bottom:0; }
   .path-step > svg { position:static; margin-left:auto; }
   .question-filters { flex-direction:column; }
+  .practice-controls { align-items:stretch; flex-direction:column; }
+  .practice-controls select { width:100%; }
+  .practice-card { padding:23px 20px; }
+  .timer { margin-left:0; }
   .question-filters select { width:100%; }
+  .doc-pagination { flex-direction:column; }
+  .doc-pagination .primary-button,.doc-pagination .secondary-button { max-width:100%; }
   .stats-grid { grid-template-columns:1fr; }
   .reading-progress { left:0; }
 }

@@ -1,9 +1,11 @@
-import { ArrowLeft, Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3, ListChecks } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3, ListChecks, RotateCcw } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useReviewQueue } from '../hooks/useReviewQueue'
 import type { CheatsheetMeta } from '../types/content'
+import { completeDocs } from '../data/docs'
 
 interface Props {
   doc: CheatsheetMeta & { content: string }
@@ -14,10 +16,15 @@ export default function MarkdownDocument({ doc }: Props) {
   const [readingProgress, setReadingProgress] = useState(0)
   const [completed, setCompleted] = useLocalStorage<string[]>('ltvc-completed', [])
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>('ltvc-bookmarks', [])
+  const { isQueued, addOrUpdate, remove } = useReviewQueue()
   const rendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
 
   const isCompleted = completed.includes(doc.slug)
   const isBookmarked = bookmarks.includes(doc.slug)
+  const needsReviewForDoc = isQueued(`cheatsheet:${doc.slug}`)
+  const currentIndex = completeDocs.findIndex(item => item.slug === doc.slug)
+  const previousDoc = completeDocs[currentIndex - 1]
+  const nextDoc = completeDocs[currentIndex + 1]
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
@@ -76,6 +83,12 @@ export default function MarkdownDocument({ doc }: Props) {
               {isCompleted ? 'Đã hoàn thành' : 'Đánh dấu đã học'}
             </button>
             <button
+              className={needsReviewForDoc ? 'secondary-button active-review' : 'secondary-button'}
+              onClick={() => needsReviewForDoc ? remove(`cheatsheet:${doc.slug}`) : addOrUpdate({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}
+            >
+              <RotateCcw size={18} /> {needsReviewForDoc ? 'Đang cần review' : 'Need Review'}
+            </button>
+            <button
               className="secondary-button"
               onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}
             >
@@ -91,6 +104,10 @@ export default function MarkdownDocument({ doc }: Props) {
           className="markdown-body"
           dangerouslySetInnerHTML={{ __html: rendered.html }}
         />
+        <nav className="doc-pagination" aria-label="Cheatsheet navigation">
+          {previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}
+          {nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Vào Interview mode <ArrowRight size={17} /></Link>}
+        </nav>
       </section>
 
       <aside className="toc-panel">

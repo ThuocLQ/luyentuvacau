@@ -31,6 +31,10 @@
 
 Parallelism reduces wall-clock time only while a downstream dependency has capacity. Prefer a bounded queue with backpressure over unlimited tasks. Use a background service for durable work; it needs retries, shutdown handling and observability.
 
+## Senior Answer Pattern
+
+Describe the resource being protected first: database connections, a partner API, CPU or a queue partition. State the bound, the overload behavior (wait, shed or persist), cancellation behavior and metrics (queue age, active work, failures). “Use async” is incomplete without a capacity and failure policy.
+
 ## Interview Questions
 
 ### How would you process 100,000 jobs safely?

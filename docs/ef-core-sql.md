@@ -30,6 +30,10 @@ EF Core translates object queries to SQL; the database executes the plan. Treat 
 
 Use EF for ordinary transactional workflows and raw SQL where a measured hot query, bulk operation or vendor feature needs it. Do not abandon EF merely because SQL exists; do not hide performance problems behind repositories that expose `IQueryable` everywhere.
 
+## Senior Answer Pattern
+
+For a slow data path, narrate the evidence chain: endpoint latency and row count, generated SQL, actual plan, index/selectivity, then corrected query shape. Include a regression guard such as an integration test, query budget or dashboard. This demonstrates that the fix will survive the next data-volume increase.
+
 ## Interview Questions
 
 ### How do you prevent N+1 in EF Core?

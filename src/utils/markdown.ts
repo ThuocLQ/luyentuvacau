@@ -1,4 +1,4 @@
-import { marked } from 'marked'
+import { marked, Renderer } from 'marked'
 
 marked.setOptions({
   gfm: true,
@@ -6,7 +6,9 @@ marked.setOptions({
 })
 
 export function renderMarkdown(source: string): string {
-  return marked.parse(source) as string
+  const renderer = new Renderer()
+  renderer.html = () => ''
+  return marked.parse(source, { renderer }) as string
 }
 
 export interface TocItem {
@@ -57,6 +59,14 @@ export function enhanceHtml(html: string): { html: string; toc: TocItem[] } {
     wrapper.className = 'table-wrapper'
     table.parentNode?.insertBefore(wrapper, table)
     wrapper.appendChild(table)
+  })
+
+  document.querySelectorAll('a, img').forEach((node) => {
+    const attribute = node.tagName === 'A' ? 'href' : 'src'
+    const value = node.getAttribute(attribute)?.trim().toLowerCase()
+    const isSafeLink = value && (/^(https?:|mailto:|#|\/)/.test(value))
+    const isSafeImage = value && (/^(https?:|\/)/.test(value))
+    if ((node.tagName === 'A' && !isSafeLink) || (node.tagName === 'IMG' && !isSafeImage)) node.removeAttribute(attribute)
   })
 
   return { html: document.body.innerHTML, toc }

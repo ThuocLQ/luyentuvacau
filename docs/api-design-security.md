@@ -30,6 +30,10 @@ An API is a long-lived contract with untrusted callers. Design for clear resourc
 
 Version only when a breaking contract cannot be evolved compatibly. Strict validation gives reliable contracts but needs clear migration paths. Rate limits protect dependencies but should return actionable retry information.
 
+## Senior Answer Pattern
+
+Frame an API change by caller impact: contract, authorization, retry semantics, observability and rollout. A strong answer distinguishes a malformed command (400), a denied action (403), a missing resource (404) and a conflicting business state (409), then explains what the caller can safely do next.
+
 ## Interview Questions
 
 ### How do you make POST create-order safe to retry?

@@ -30,6 +30,10 @@ Distributed systems exchange messages across unreliable boundaries. A message ma
 
 Asynchronous events improve resilience and decouple releases, but add delayed visibility and operational tooling. Use synchronous calls for immediate user decisions; use events for facts and work that can safely converge.
 
+## Senior Answer Pattern
+
+For every message flow, answer five things: the business key, producer transaction, delivery semantics, consumer deduplication and recovery path. Then say how you observe it: outbox lag, retry count, dead-letter age and reconciliation mismatch. This is more credible than promising “exactly once”.
+
 ## Interview Questions
 
 ### Does the outbox give exactly-once delivery?

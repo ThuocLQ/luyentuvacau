@@ -30,6 +30,10 @@ ASP.NET Core is an ordered request pipeline. Middleware can short-circuit, enric
 
 Keep cross-cutting concerns such as correlation, errors and auth in middleware; keep business decisions in endpoints/handlers. Avoid “service locator” resolution inside application code because dependencies become invisible and hard to test.
 
+## Senior Answer Pattern
+
+When asked about a pipeline issue, walk the request from ingress to endpoint: correlation/error handling, forwarded headers, routing, authentication, authorization and endpoint execution. For DI questions, identify the state owner and lifetime before choosing a registration. That sequence catches both ordering bugs and captured-scope bugs.
+
 ## Interview Questions
 
 ### Why is DI lifetime a correctness concern, not only performance?

@@ -30,6 +30,10 @@ Architecture is a set of boundaries that makes change safe. A modular monolith c
 
 Prefer the simplest architecture that meets current constraints and leaves an extraction seam. Eventual consistency is acceptable when users can understand it and compensating behavior exists; it is not acceptable for every invariant.
 
+## Senior Answer Pattern
+
+State the invariant and its owner before proposing a service boundary. Then compare operational consequences: deployment independence, ownership, data consistency, latency, failure isolation and on-call cost. A senior recommendation ends with a reversible migration step, not a final diagram.
+
 ## Interview Questions
 
 ### When would you not choose microservices?
