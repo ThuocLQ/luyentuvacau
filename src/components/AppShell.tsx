@@ -53,7 +53,7 @@ export default function AppShell() {
           <div className="brand-mark"><BookOpen size={21} /></div>
           <div>
             <strong>Luyện Từ Và Câu</strong>
-            <span>Personal Learning Hub</span>
+            <span>Interview Learning Hub</span>
           </div>
           <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Đóng menu"><X /></button>
         </div>
@@ -62,7 +62,7 @@ export default function AppShell() {
           <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             <Home size={17} /> Tổng quan
           </NavLink>
-          <div className="nav-label">Tài liệu học</div>
+          <div className="nav-label">Lộ trình học</div>
           {docs.map(doc => (
             <NavLink
               key={doc.slug}
@@ -71,13 +71,13 @@ export default function AppShell() {
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
             >
               <span className="nav-dot" />
-              <span>{doc.title}</span>
+              <span>{doc.title}</span><small>{doc.readingMinutes}p</small>
             </NavLink>
           ))}
         </nav>
 
         <div className="sidebar-footer">
-          <span>V1.0 · Learning continuously</span>
+          <span>Học có chủ đích · V1.1</span>
         </div>
       </aside>
 
@@ -93,7 +93,7 @@ export default function AppShell() {
               id="global-search"
               value={query}
               onChange={event => setQuery(event.target.value)}
-              placeholder="Tìm tài liệu, khái niệm... "
+              placeholder="Tìm chủ đề, khái niệm, câu hỏi..."
               aria-label="Tìm kiếm"
             />
             <kbd>Ctrl K</kbd>
@@ -104,7 +104,7 @@ export default function AppShell() {
                 ) : results.map(item => (
                   <button key={item.slug} onClick={() => goToDoc(item.slug)}>
                     <strong>{item.title}</strong>
-                    <span>{item.description}</span>
+                    <span>{item.category} · {item.readingMinutes} phút · {item.description}</span>
                   </button>
                 ))}
               </div>

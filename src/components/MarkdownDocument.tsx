@@ -1,5 +1,6 @@
-import { Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3 } from 'lucide-react'
+import { ArrowLeft, Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3, ListChecks } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import type { DocMeta } from '../types/content'
@@ -58,6 +59,7 @@ export default function MarkdownDocument({ doc }: Props) {
 
       <section className="document-main">
         <header className="document-hero">
+          <Link className="back-link" to="/"><ArrowLeft size={15} /> Thư viện học</Link>
           <div className="eyebrow">{doc.category}</div>
           <h1>{doc.title}</h1>
           <p>{doc.description}</p>
@@ -81,6 +83,7 @@ export default function MarkdownDocument({ doc }: Props) {
               {isBookmarked ? 'Đã lưu' : 'Lưu tài liệu'}
             </button>
           </div>
+          <div className="study-prompt"><ListChecks size={17} /><span><strong>Gợi ý khi học:</strong> ghi lại 1 ví dụ thực tế và 1 trade-off bạn có thể giải thích khi phỏng vấn.</span></div>
         </header>
 
         <article
