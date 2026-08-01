@@ -60,4 +60,16 @@ const editorialErrors = imports.flatMap(file => {
 })
 if (editorialErrors.length) throw new Error(`Published docs do not follow the editorial format: ${editorialErrors.join('; ')}`)
 
-console.log(`Content validation passed for ${files.length} text files; every cheatsheet has linked practice and follows the editorial format.`)
+const quizSource = readFileSync('src/data/quizzes.ts', 'utf8')
+const quizIds = [...quizSource.matchAll(/^\s{4}id: '([^']+)'/gm)].map(match => match[1])
+if (quizIds.length < 18) throw new Error('Quiz bank needs at least 18 published case-based questions.')
+const duplicateQuizIds = quizIds.filter((id, index) => quizIds.indexOf(id) !== index)
+if (duplicateQuizIds.length) throw new Error(`Duplicate quiz IDs: ${[...new Set(duplicateQuizIds)].join(', ')}`)
+const quizDocRefs = [...quizSource.matchAll(/relatedDoc: '([^']+)'/g)].map(match => match[1])
+const unknownQuizDocs = quizDocRefs.filter(slug => !contentSlugs.includes(slug))
+if (unknownQuizDocs.length) throw new Error(`Quiz references unknown docs: ${[...new Set(unknownQuizDocs)].join(', ')}`)
+const quizRequirements = ['correctOptionId:', 'scenario:', 'prompt:', 'options:', 'explanation:', 'recall:', 'followUp:']
+const missingQuizFields = quizRequirements.filter(field => !quizSource.includes(field))
+if (missingQuizFields.length) throw new Error(`Quiz bank missing required fields: ${missingQuizFields.join(', ')}`)
+
+console.log(`Content validation passed for ${files.length} text files; every cheatsheet has linked practice, follows the editorial format, and has a valid quiz bank.`)

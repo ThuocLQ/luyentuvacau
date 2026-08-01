@@ -49,7 +49,15 @@ export default function MarkdownDocument({ doc }: Props) {
   const nextDoc = completeDocs[currentIndex + 1]
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' })
+    const targetId = decodeURIComponent(window.location.hash.slice(1))
+    const target = targetId ? document.getElementById(targetId) : null
+    if (target) {
+      window.requestAnimationFrame(() => {
+        target.scrollIntoView({ block: 'start', behavior: 'auto' })
+        target.setAttribute('tabindex', '-1')
+        target.focus({ preventScroll: true })
+      })
+    } else window.scrollTo({ top: 0, behavior: 'auto' })
     const onScroll = () => {
       const article = articleRef.current
       if (!article) return
