@@ -14,7 +14,7 @@ import { completeDocs } from '../data/docs'
 interface Props { doc: CheatsheetMeta & { content: string } }
 const weightLabel = { Critical: 'Trọng yếu', High: 'Quan trọng', Medium: 'Bổ trợ', Specialized: 'Chuyên ngành' }
 const statusLabel = { Draft: 'Bản nháp', Review: 'Đang rà soát', Complete: 'Hoàn chỉnh' }
-const quickHeadings = /^(quick summary|terms to know|tóm tắt nhanh|bài toán backend thực tế|khi nào gặp|tình huống phỏng vấn|must remember|những điều phải nhớ|invariants phải giữ|so sánh nhanh|quick comparison|.*câu trả lời.*|.*mẫu trả lời.*|final recall|tự kiểm)$/i
+const quickHeadings = /^(quick summary|trong 30 giây|nhớ một phút|terms to know|tóm tắt nhanh|bài toán backend thực tế|khi nào gặp|tình huống phỏng vấn|must remember|những điều phải nhớ|invariants phải giữ|so sánh nhanh|quick comparison|.*câu trả lời.*|.*mẫu trả lời.*|final recall|tự kiểm)$/i
 
 function quickHtml(html: string) {
   const parsed = new DOMParser().parseFromString(html, 'text/html')
@@ -36,7 +36,11 @@ export default function MarkdownDocument({ doc }: Props) {
   const { isQueued, addOrUpdate, remove } = useReviewQueue()
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
   const rendered = useMemo(() => mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered, [fullRendered, mode])
-  const activeHeading = useScrollSpy('.markdown-body h2, .markdown-body h3')
+  const activeHeading = useScrollSpy({
+    selector: 'h2, h3',
+    root: articleRef,
+    contentKey: `${doc.slug}:${mode}`,
+  })
   const isCompleted = completed.includes(doc.slug)
   const isBookmarked = bookmarks.includes(doc.slug)
   const needsReviewForDoc = isQueued(`cheatsheet:${doc.slug}`)

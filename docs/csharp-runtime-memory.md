@@ -1,82 +1,76 @@
-# C# Runtime & Memory
+# C# runtime và bộ nhớ: giảm áp lực RAM trước khi tối ưu
 
-## Quick Summary
+## Trong 30 giây
 
-Một API export 200.000 dòng thường chậm hoặc bị OOM không phải vì C# “không có GC”, mà vì nó tạo và giữ quá nhiều dữ liệu cùng lúc. Hãy xem object nào còn bị giữ, giảm lượng dữ liệu đồng thời trong bộ nhớ, rồi mới cân nhắc tối ưu sâu.
+- GC (bộ dọn bộ nhớ của .NET) chỉ thu hồi object không còn đường tham chiếu; nó không dọn cache, queue hay closure còn giữ dữ liệu.
+- Với export hoặc upload lớn, giảm lượng dữ liệu cùng lúc trong RAM bằng stream, batch hoặc phân trang trước khi dùng pool.
+- `Dispose` đóng tài nguyên khan hiếm như file, socket và data reader; nó không buộc GC chạy.
+- Chỉ dùng `ArrayPool<T>` sau khi đo allocation/heap. Trả buffer quá sớm có thể làm dữ liệu của request này lẫn sang request khác.
 
-::: must-remember
-Nói đơn giản: GC chỉ dọn object khi không còn ai tham chiếu đến nó. Cache, queue, singleton hoặc biến closure còn giữ object thì GC không được phép xóa.
-:::
+## Gặp ở đâu ngoài đời?
+
+API export 200.000 dòng chạy ổn khi ít người dùng, nhưng dưới tải p99 tăng, container bị restart vì hết memory và khách tải file thất bại. Nguyên nhân thường không phải “.NET không có GC”; code đã đọc cả tập dữ liệu vào `List<T>`, tạo nhiều `byte[]` lớn hoặc giữ DTO của request trong cache không giới hạn.
+
+Mục tiêu đầu tiên là giảm **peak memory** (lượng RAM cao nhất cùng lúc), không phải gọi `GC.Collect()` hay thay mọi mảng bằng pool.
+
+## Hiểu đơn giản trước
+
+Managed object sống chừng nào còn một tham chiếu đi tới nó. Một singleton giữ DTO, một event handler chưa unsubscribe, hoặc một queue không giới hạn đều có thể giữ object sau khi request đã kết thúc. GC không được phép xóa chúng vì application vẫn còn dùng được chúng.
+
+`IDisposable` giải quyết chuyện khác: ai đóng tài nguyên ngoài managed heap. Method tự mở `FileStream`, HTTP response stream hoặc database reader thì đóng bằng `using`/`await using`; object do DI hoặc caller tạo thì caller/DI sở hữu lifecycle. Đóng stream giải phóng handle đúng lúc, nhưng không nói rằng mọi object managed liên quan biến mất ngay.
 
 ## Terms to Know
 
-- [[Garbage collection]]: cơ chế runtime thu hồi object không còn được dùng.
-- [[Large Object Heap (LOH)]]: vùng dành cho object lớn; nhiều buffer lớn dễ làm bộ nhớ tăng đột biến.
-- [[ArrayPool]]: nơi mượn và trả lại buffer để giảm cấp phát lặp lại.
+- [[Garbage collection]] (GC): runtime thu hồi object managed không còn reachable (còn đường tham chiếu tới).
+- [[Large Object Heap (LOH)]]: vùng heap thường nhận allocation lớn; hãy xem đây là tín hiệu cần đo allocation và fragmentation, không phải nguyên nhân mặc định.
+- [[ArrayPool]]: pool cho mượn buffer để giảm allocation lặp lại. Buffer mượn có thể dài hơn số byte cần dùng.
+- **Đường tham chiếu giữ object còn sống (retaining path)**: chuỗi tham chiếu khiến GC chưa thể dọn object; memory dump giúp tìm chuỗi này.
 
-## Khi nào gặp
+## Cách quyết định, từng bước
 
-Endpoint tải file chạy ổn ở máy local, nhưng khi nhiều người tải cùng lúc thì p99 tăng, Gen2 GC xuất hiện nhiều và container bị restart. Nguyên nhân thường là code `ToList()` toàn bộ dữ liệu, tạo `byte[]` lớn, hoặc cache không có giới hạn.
+1. Xác định ảnh hưởng: endpoint nào, payload bao nhiêu, bao nhiêu request cùng lúc, memory limit container và p95/p99 ra sao.
+2. Đo trước khi sửa: allocation rate, managed heap, Gen2/LOH, GC pause, working set; lấy dump khi memory tăng để xem đường tham chiếu giữ object còn sống.
+3. Giảm dữ liệu đồng thời: project đúng cột, phân trang/batch, hoặc stream kết quả thay vì `ToList()` cả tập dữ liệu. Kiểm thử cancellation khi client ngắt giữa stream.
+4. Rà ownership: stream/reader tạo ở đâu phải được đóng ở đó; không giữ `HttpContext`, entity đang tracking hoặc DTO request trong singleton.
+5. Chỉ khi profiler cho thấy hot path cấp phát buffer lớn lặp lại, thử `ArrayPool<T>`, đo lại cùng workload và kiểm ownership bằng test.
 
-Đừng bắt đầu bằng `GC.Collect()` hay `ArrayPool`. Trước hết phải biết request tạo bao nhiêu dữ liệu, giữ bao lâu và người dùng bị ảnh hưởng thế nào.
+## Chọn A hay B?
 
-## Mental model
+| Cách làm | Dùng khi | Được gì | Đổi lại / không dùng khi |
+|---|---|---|---|
+| Stream hoặc `IAsyncEnumerable<T>` | payload lớn, consumer có thể nhận dần | hạ peak memory và thời gian đến byte đầu | phải xử lý cancellation/lỗi giữa luồng; không phù hợp khi cần toàn bộ dữ liệu để quyết định trước |
+| Batch/pagination | có thể chia dữ liệu và resume | giới hạn RAM, dễ retry từng phần | cần sort/key ổn định và contract rõ |
+| `using` / `await using` | code tự mở disposable resource | đóng resource theo scope rõ ràng | không dispose dependency do DI/caller sở hữu |
+| `ArrayPool<T>` | profiling chứng minh allocation buffer là bottleneck | giảm allocation lặp lại | tăng rủi ro ownership, không chữa memory leak |
+| Cache có TTL/size limit | đọc lặp lại, chấp nhận dữ liệu cũ có giới hạn | giảm tải nguồn dữ liệu | không giữ dữ liệu nhạy cảm hoặc tenant lẫn key |
 
-Managed memory giúp bạn không phải tự gọi `free`. Nó không tự quyết định ai sở hữu stream, socket hay buffer native. **Ownership (quyền sở hữu)** nghĩa là ai phải đóng hoặc trả tài nguyên sau khi dùng xong.
+## Nếu có lỗi thì sao?
 
-`IDisposable` dùng để giải phóng tài nguyên khan hiếm như file handle, socket, database reader hoặc vùng nhớ native. `using`/`await using` cho thấy rõ nơi ownership kết thúc. Dispose không ép GC chạy ngay; nó chỉ đóng tài nguyên đúng lúc.
+Một lỗi hay gặp là `Return` buffer ngay sau khi bắt đầu async I/O. I/O chưa đọc xong nhưng pool đã giao buffer đó cho request khác; response có thể sai hoặc lộ dữ liệu. Chỉ trả buffer trong `finally` sau khi mọi consumer dùng xong, và xóa buffer nhạy cảm trước/trong lúc trả nếu policy yêu cầu.
 
-Một object còn sống khi còn đường tham chiếu đến nó. Ví dụ, một singleton giữ DTO của request sẽ khiến DTO đó sống sau khi request kết thúc. Đó vừa tốn bộ nhớ vừa có thể rò dữ liệu giữa người dùng.
+OOM cũng không tự chứng minh “leak”. Có thể mỗi request materialize quá nhiều dữ liệu hoặc concurrency quá cao. Dump/đường tham chiếu giữ object còn sống phân biệt object bị giữ lâu với peak ngắn nhưng vượt memory limit; cách sửa hai trường hợp khác nhau.
 
-## Cách xử lý theo thứ tự
+## Chứng minh mình làm đúng
 
-1. Xác định request nào chậm hoặc bị OOM: payload, số request đồng thời, p95/p99 và memory limit của container.
-2. Kiểm tra allocation rate, heap, Gen2/LOH và dump. Dump cho biết object nào đang giữ dữ liệu qua retaining path.
-3. Giảm peak memory trước: phân trang, batch hoặc stream thay vì nạp toàn bộ vào `List<T>`.
-4. Rà ownership: stream/reader do method tạo phải được dispose; dependency do DI hoặc caller tạo thì không tự dispose.
-5. Chỉ dùng pool khi profiling cho thấy một buffer lớn được cấp phát lặp lại ở hot path.
+So sánh cùng traffic trước/sau: allocation rate, heap/working set, Gen2/LOH, GC pause, OOM restart và p99. Với export, kiểm số byte/dòng phát ra, cancellation và memory khi nhiều request chạy đồng thời. Một tối ưu giảm allocation nhưng tăng contention hoặc làm hỏng ownership chưa phải cải thiện.
 
-## Quyết định và trade-off
+## Nói trong phỏng vấn
 
-| Lựa chọn | Khi nào dùng | Điều cần chú ý |
-|---|---|---|
-| Streaming (`Stream`, `IAsyncEnumerable<T>`) | File/payload lớn, có thể gửi dần | xử lý cancellation và lỗi giữa luồng |
-| Batch/pagination | Có thể chia dữ liệu thành phần nhỏ | cần contract rõ về thứ tự và resume |
-| `using` / `await using` | Code tạo resource disposable | không dispose object thuộc DI/caller |
-| `ArrayPool<T>` | Buffer lớn lặp lại đã được đo là nút thắt | `Rent` một lần phải `Return` một lần trong `finally` |
-| Cache | Dữ liệu đọc nhiều, chấp nhận dữ liệu cũ trong thời gian ngắn | phải có TTL, size limit và tenant-safe key |
+“Với endpoint dùng nhiều RAM, em không bắt đầu bằng ép GC. Em đo allocation, heap và dump để biết object nào còn bị giữ. Export lớn thì em stream hoặc batch để giảm peak memory; resource do code mở được đóng bằng `await using`. Nếu profiler cho thấy buffer lớn được tạo lặp lại, em mới dùng `ArrayPool` với `try/finally` và kiểm dữ liệu không bị dùng sau `Return`. Em xác nhận bằng allocation, GC pause, OOM và p99 dưới cùng tải.”
 
-## Bẫy production
+## Interviewer thường hỏi tiếp
 
-::: production-trap
-Trả buffer về `ArrayPool<T>` trước khi async I/O dùng xong có thể làm dữ liệu request này lẫn vào request khác. Pool không chữa được memory leak.
-:::
+- Vì sao `Dispose` không có nghĩa object được GC ngay? Ai phải dispose `DbContext` lấy từ DI?
+- Khi nào pooling làm hệ thống rủi ro hơn là nhanh hơn? Bạn tìm đường tham chiếu giữ object còn sống bằng evidence nào?
 
-- `ToList()` trước khi export làm cả database và app phải giữ tập dữ liệu lớn.
-- Queue hoặc cache không có giới hạn biến traffic tăng thành OOM.
-- Event handler không unsubscribe có thể giữ subscriber sống mãi.
-- Singleton không được giữ `HttpContext`, DTO request hay entity đang tracking.
+## Tự kiểm trước khi qua bài
 
-## Kiểm chứng ở production
+- Tôi có phân biệt được object còn reachable với resource cần dispose không?
+- Với export lớn, bước nào hạ peak memory trước khi nghĩ đến pool?
+- Nếu buffer chứa dữ liệu nhạy cảm, ownership và thời điểm trả pool của tôi là gì?
 
-Theo dõi allocation rate, heap size, Gen2/LOH collection, GC pause, working set, OOM restart và p99. So sánh trước/sau dưới cùng tải. Giảm allocation nhưng làm tăng contention hoặc lỗi ownership không phải là cải thiện.
+## Nhớ một phút
 
-## Mẫu trả lời 45 giây
-
-“Nếu endpoint dùng nhiều bộ nhớ, em xem lượng allocation, object còn bị giữ và p99 trước. Với export lớn, em ưu tiên stream hoặc batch để giảm peak memory. Resource do code tạo được đóng bằng `using`; resource từ DI thì không tự dispose. Chỉ khi profiling cho thấy buffer lớn được tạo lặp lại, em mới dùng `ArrayPool` với `try/finally`, vì dùng pool sai có thể gây lẫn dữ liệu hoặc leak.”
-
-## Câu hỏi phỏng vấn
-
-### Vì sao ứng dụng có GC vẫn `OutOfMemoryException`?
-
-**Trả lời ngắn:** GC không xóa object còn reachable. OOM có thể do cache/queue không giới hạn, payload lớn materialize cùng lúc, tốc độ cấp phát quá cao, LOH hoặc memory limit của container.
-
-**Follow-up:** Làm sao tìm retaining path? Vì sao `Dispose` không buộc GC chạy?
-
-**Red flags:** “Cứ gọi `GC.Collect()`”; “pool luôn nhanh hơn”.
-
-## Final recall
-
-- Reachability quyết định GC có thể dọn gì; ownership quyết định ai đóng resource.
-- Giảm dữ liệu cùng lúc trong RAM trước khi dùng pooling.
-- Tối ưu theo allocation, p99 và dump, không theo cảm giác.
+- GC chỉ dọn object không còn reachable; cache/queue không giới hạn vẫn gây OOM.
+- Stream hoặc batch trước, pool sau khi có số đo.
+- Ownership rõ và `Return` đúng lúc quan trọng hơn một micro-optimization.

@@ -1,36 +1,66 @@
-# Bản đồ ôn Senior Backend .NET
+# Bản đồ ôn phỏng vấn Senior Backend .NET
 
-## Quick Summary
+## Trong 30 giây
 
-Đọc nhiều nhưng không nói được là chưa sẵn sàng phỏng vấn. Hãy chọn phần chưa giải thích được, tự trả lời thành tiếng, rồi ôn lại đúng lỗ hổng thay vì đọc lại toàn bộ.
+- Đừng đọc hết tài liệu rồi mới luyện; hãy chọn một lỗ hổng, nói trước, rồi ôn đúng phần thiếu.
+- Một câu trả lời Senior cần có: bối cảnh, quyết định, cái giá phải trả và bằng chứng đã kiểm tra.
+- Không biết một khái niệm thì học mental model; nói thiếu rủi ro thì học phần lỗi và trade-off.
+- Mục tiêu là giải thích được quyết định, không phải nhớ tên pattern.
+
+## Gặp ở đâu ngoài đời?
+
+Ngày mai bạn có vòng Senior Backend. Bạn biết Redis, Kafka và `async`, nhưng khi được hỏi “partner payment timeout thì làm gì?” lại không biết bắt đầu từ đâu. Lỗi không nằm ở việc thiếu thêm tài liệu; bạn cần một cách biến kiến thức thành câu trả lời có điều kiện.
+
+## Hiểu đơn giản trước
+
+Ôn phỏng vấn giống debug hơn là đọc giáo trình. Một câu trả lời lưỡng lự là triệu chứng. Hãy xác định nó thiếu **cơ chế** (chưa hiểu chuyện gì xảy ra), thiếu **quyết định** (không biết chọn gì), hay thiếu **evidence (bằng chứng kiểm tra)**.
 
 ## Terms to Know
 
-- [[SLO]]: tiêu chí đo “nhanh/ổn định”.
-- [[Trade-off]]: điều được và chi phí/rủi ro phải chấp nhận.
+- [[Trade-off]] (điều được và cái giá phải trả): lý do một lựa chọn không đúng cho mọi tình huống.
+- [[SLO]] (mục tiêu mức dịch vụ): con số hoặc ngưỡng nói rõ “đủ nhanh/ổn định” nghĩa là gì.
+- [[Invariant]] (quy tắc không được sai): ví dụ một payment không được ghi nhận hai lần.
 
-## Diagnostic trước khi ôn
+## Cách quyết định, từng bước
 
-Tự trả lời một câu trong 60 giây. Nếu chỉ nêu keyword, đọc mental model. Nếu biết khái niệm nhưng không nói được failure/trade-off, đọc decision table và làm lại. Nếu nói được context → quyết định → bằng chứng, chuyển sang follow-up.
+1. Chọn một câu bạn chưa trả lời trôi chảy. Nói tối đa một phút trước khi xem gợi ý; đây là cách lộ phần thiếu thật.
+2. Ghi một lỗi cụ thể, như “chưa biết timeout payment có thể đã được xử lý”. Ôn bài liên quan, không mở nhiều tab mới.
+3. Nói lại theo khung: kết luận → ràng buộc/invariant → cơ chế → trade-off → cách kiểm chứng.
+4. Đổi một ràng buộc: tải tăng, downstream chậm, hoặc dữ liệu nhạy cảm hơn. Nếu quyết định không đổi, nói rõ vì sao.
 
-## Lộ trình 30 phút
+## Chọn A hay B?
 
-Ôn Async, EF/SQL và API/Outbox. Mỗi phần trả lời một câu: vì sao `.Result` nguy hiểm, query chậm đo ở đâu, retry payment an toàn thế nào. Kết thúc bằng hai câu nói thành tiếng.
+| Khi bạn cần | Cách ôn | Không nên làm |
+|---|---|---|
+| Chuẩn bị nhanh trước vòng đầu | Chọn Async, API, EF/SQL và một case distributed | Đọc toàn bộ theo thứ tự sidebar |
+| Trả lời được nhưng thiếu chiều sâu | Làm follow-up và nêu failure/evidence | Thêm thuật ngữ vào câu trả lời |
+| Vòng system design | Bắt đầu user journey, ownership, invariant | Vẽ microservice hoặc Kafka trước yêu cầu |
 
-## Lộ trình 60 phút
+## Nếu có lỗi thì sao?
 
-Core/runtime → request/data → distributed correctness → production. Mỗi chủ đề chỉ giữ một quyết định thật: giới hạn concurrency theo downstream, transaction giữ invariant nào, event duplicate được xử lý ở đâu, p99 tăng sau deploy làm gì trước.
+Nếu bạn chọn sai độ sâu, hậu quả thường là trả lời dài nhưng rỗng. Dấu hiệu là câu có nhiều công nghệ nhưng không nói được dữ liệu gốc ở đâu hoặc ai chịu trách nhiệm khi timeout. Khôi phục bằng cách quay về một case nhỏ và nói lại chỉ với các thành phần cần thiết.
 
-## Lộ trình 90 phút
+## Chứng minh mình làm đúng
 
-Thêm một design flow và hai project story: một cải tiến, một incident. Sau mỗi phần ghi đúng lỗi cần ôn, ví dụ “chưa giải thích được idempotency record”, không ghi chung chung “ôn microservices”.
+Ghi lại câu bạn đã đánh dấu “lưỡng lự”, rồi sau một lượt ôn tự nói lại mà không nhìn đáp án. Với case production, nêu metric, trace, constraint hoặc runbook bạn sẽ dùng; “em sẽ monitor” chưa là bằng chứng.
 
-## Cách trả lời mặc định
+## Nói trong phỏng vấn
 
-Nói context và điều không được sai; chọn giải pháp; nêu điều nó đánh đổi; cuối cùng nói metric/test/rollback chứng minh quyết định. Nếu chưa có kinh nghiệm trực tiếp, nêu giả định và cách sẽ kiểm chứng.
+“Em sẽ bắt đầu từ điều không được sai và đường đi của request. Ví dụ payment timeout là kết quả chưa biết, nên em đối soát theo reference trước retry thay vì gửi lại. Cách này chậm hơn một chút ở nhánh lỗi, nhưng tránh charge trùng; em theo dõi số unknown outcome và mismatch khi đối soát.”
 
-## Final recall
+## Interviewer thường hỏi tiếp
 
-- Ưu tiên phần lưỡng lự, không ưu tiên phần quen.
-- Nói trước, xem đáp án sau.
-- Một câu tốt luôn có điều kiện, rủi ro và bằng chứng.
+- Nếu partner không có API tra trạng thái, bạn chặn hành động rủi ro và đối soát thế nào?
+- Bạn biết câu trả lời này đúng trong môi trường hiện tại bằng signal nào?
+
+## Tự kiểm trước khi qua bài
+
+- Tôi có nói được một invariant của case mình đang ôn không?
+- Tôi biết một điều giải pháp của mình chưa giải quyết không?
+- Tôi sẽ xem bằng chứng nào trước khi kết luận có incident?
+
+## Nhớ một phút
+
+- Nói trước, xem sau.
+- Ôn đúng lỗ hổng đã gọi tên.
+- Câu Senior luôn có điều kiện, rủi ro và bằng chứng.

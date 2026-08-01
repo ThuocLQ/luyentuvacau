@@ -40,7 +40,24 @@ const glossaryDocRefs = [...glossarySource.matchAll(/, '([a-z-]+)'\],/g)].map(ma
 const unknownGlossaryDocs = glossaryDocRefs.filter(slug => !contentSlugs.includes(slug))
 if (unknownGlossaryDocs.length) throw new Error(`Glossary references unknown docs: ${[...new Set(unknownGlossaryDocs)].join(', ')}`)
 
-const missingQuickSummary = imports.filter(file => !/^## Quick Summary$/m.test(readFileSync(file, 'utf8')))
-if (missingQuickSummary.length) throw new Error(`Published docs missing Quick Summary: ${missingQuickSummary.join(', ')}`)
+const requiredEditorialSections = [
+  'Trong 30 giây',
+  'Gặp ở đâu ngoài đời?',
+  'Hiểu đơn giản trước',
+  'Cách quyết định, từng bước',
+  'Chọn A hay B?',
+  'Nếu có lỗi thì sao?',
+  'Chứng minh mình làm đúng',
+  'Nói trong phỏng vấn',
+  'Interviewer thường hỏi tiếp',
+  'Tự kiểm trước khi qua bài',
+  'Nhớ một phút',
+]
+const editorialErrors = imports.flatMap(file => {
+  const source = readFileSync(file, 'utf8')
+  const missing = requiredEditorialSections.filter(section => !new RegExp(`^## ${section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'm').test(source))
+  return missing.length ? [`${file} (thiếu: ${missing.join(', ')})`] : []
+})
+if (editorialErrors.length) throw new Error(`Published docs do not follow the editorial format: ${editorialErrors.join('; ')}`)
 
-console.log(`Content validation passed for ${files.length} text files; every cheatsheet has linked practice.`)
+console.log(`Content validation passed for ${files.length} text files; every cheatsheet has linked practice and follows the editorial format.`)

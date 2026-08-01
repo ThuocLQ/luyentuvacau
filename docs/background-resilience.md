@@ -1,40 +1,81 @@
-# Background Jobs, Caching & Resilience
+# Background job bền vững: không mất việc, không làm trùng việc
 
-## Quick Summary
+## Trong 30 giây
 
-Job chỉ nằm trong RAM sẽ mất khi app restart. Ghi job bền trước, worker xử lý lặp lại an toàn và chỉ retry lỗi tạm thời; cache là bản sao đọc nhanh, không phải dữ liệu gốc.
+- `Task.Run` hay queue trong RAM không sống qua restart; việc quan trọng cần durable handoff.
+- Job handler phải idempotent vì broker có thể giao lại.
+- Ack/xóa job chỉ sau khi effect bền đã được ghi.
+- Retry có điều kiện, deadline và budget; timeout external write thường cần query outcome trước.
+- Bounded concurrency và circuit breaker bảo vệ dependency khi nó chậm.
 
-## Terms to Know
+## Gặp ở đâu ngoài đời?
 
-- [[Durable queue]]: hàng đợi còn dữ liệu sau restart.
-- [[Retry budget]]: giới hạn số lần và thời gian retry.
-- [[Unknown outcome]]: timeout nhưng chưa biết bên kia đã làm hay chưa.
+API tạo invoice rồi chạy `Task.Run` để gửi email. App recycle ngay sau response: invoice có, email mất. Chuyển sang broker nhưng worker gửi email xong lại crash trước ack: lần giao lại gửi email lần hai. Hai lỗi khác nhau: mất việc và làm trùng việc.
 
-::: warning
-Timeout không chứng minh command thất bại. Với payment/external write, query hoặc reconcile trước khi retry.
+## Hiểu đơn giản trước
+
+Một background job an toàn có ba điểm: giao việc bền, xử lý có thể lặp và xác nhận đúng lúc. Broker chỉ giữ job; nó không hiểu email/payment đã tạo effect gì. Handler cần một ID ổn định và nơi ghi outcome để lần chạy sau biết phải làm tiếp hay dừng.
+
+## Từ cần biết
+
+- [[Durable queue]] (hàng đợi sống qua restart) — nơi giao việc quan trọng.
+- [[Ack point]] (điểm xác nhận an toàn) — chỉ sau persistence/effect cần thiết.
+- [[Circuit breaker]] (tạm ngừng gọi dependency lỗi) — bảo vệ capacity, không che lỗi.
+- [[Backpressure]] (làm chậm/từ chối khi quá tải) — tốt hơn nhận vô hạn.
+
+## Cách quyết định, từng bước
+
+1. Request ghi business state và job/outbox trong transaction nếu job không được mất.
+2. Worker nhận job, dùng job ID/idempotency key để kiểm tra effect đã có chưa.
+3. Gọi dependency với timeout; phân loại lỗi tạm thời, lỗi vĩnh viễn và unknown outcome.
+4. Ghi outcome bền, rồi mới ack. Crash bất kỳ lúc nào phải chạy lại an toàn.
+5. Giới hạn concurrency theo capacity thật của database/partner; mở circuit khi partner liên tục lỗi.
+
+## Chọn A hay B?
+
+| Chọn | Khi dùng | Đổi lại |
+|---|---|---|
+| In-process `BackgroundService` | Việc có thể mất hoặc chỉ dọn dẹp nội bộ | Không durable qua crash/deploy |
+| Durable queue | Email, invoice, sync đối tác, workflow quan trọng | Cần broker, retry, DLQ, vận hành |
+| Retry | Lỗi tạm thời, effect idempotent | Có thể khuếch đại tải |
+| Reconcile | Outcome external write chưa biết | Trễ hơn nhưng tránh duplicate |
+
+## Nếu có lỗi thì sao?
+
+Partner trả timeout sau khi nhận yêu cầu. Không retry ngay nếu không biết partner đã làm chưa: query bằng idempotency key/reference, hoặc cho reconciliation job xử lý. Job payload sai thì vào DLQ kèm lỗi và owner; đừng để retry vô hạn chiếm hết worker.
+
+::: production-trap
+Ack trước khi ghi outcome làm mất job khi process chết ngay sau ack. Ack sau outcome có thể giao lại; đó là lý do handler phải idempotent.
 :::
 
-## Mental model
+## Chứng minh mình làm đúng
 
-Request persist job/outbox rồi mới trả thành công khi contract yêu cầu. Worker claim job, làm effect idempotent và chỉ ack sau khi state an toàn. Cache cần TTL, key theo tenant, giới hạn size và fallback về source of truth.
+- Theo dõi queue depth, job age, success/failure, retry exhausted, DLQ và dependency latency.
+- Test restart trước/sau external call và trước/sau ack.
+- Cảnh báo khi concurrency chạm limit hoặc circuit mở quá lâu.
 
-## Retry, circuit breaker và backpressure
+## Nói trong phỏng vấn
 
-Retry chỉ cho timeout/429/5xx đã phân loại, có deadline và jitter. Khi downstream lỗi liên tục, giảm concurrency hoặc từ chối/buffer work; đừng tạo retry storm.
+“Em không dùng `Task.Run` cho việc không được mất. Em lưu job bền, handler có job ID để delivery lại không tạo effect trùng, và chỉ ack sau khi outcome đã ghi bền. Retry chỉ cho lỗi tạm thời có budget; với timeout ở external write em query hoặc đối soát trước. Em giới hạn concurrency theo partner và theo dõi job age, DLQ để biết người dùng đang chờ ở đâu.”
 
-Ví dụ provider email trả lỗi liên tục. Nếu mọi worker vẫn gửi và retry, queue và provider đều quá tải. Circuit breaker là cơ chế tạm ngừng gọi dependency đang lỗi sau một ngưỡng, trả về fallback/đưa job vào trạng thái chờ; sau thời gian ngắn nó thử vài request để xem dependency đã hồi phục chưa. Dùng nó để bảo vệ tài nguyên, không để che lỗi vĩnh viễn.
+## Interviewer thường hỏi tiếp
 
-Ví dụ worker đã gửi email rồi process chết trước khi đánh dấu hoàn tất. Khi job được giao lại, handler phải dùng delivery ID/idempotency key để provider hoặc database nhận ra đây là lần thử cũ. Chỉ ack/xóa job sau khi outcome bền đã được ghi; ack trước commit có thể làm mất job nếu app chết ngay sau đó.
+### BackgroundService có dùng được không?
 
-## Bẫy production
+Có, cho polling/dọn dẹp có thể khôi phục từ state bền. Nó không tự biến hàng đợi memory thành durable job queue.
 
-- `Task.Run` từ request mất work khi recycle.
-- Ack trước database commit làm mất message.
-- Cache key thiếu tenant làm rò dữ liệu.
-- Giữ transaction mở khi gọi HTTP gây lock dài.
+### Tại sao không retry mọi exception?
 
-## Final recall
+Validation, auth hoặc payload sai không tự khỏi; retry chỉ làm tắc queue. Cần phân loại và DLQ/manual handling.
 
-- Durable handoff, idempotent handler, ack sau persistence.
+## Tự kiểm trước khi qua bài
+
+- Nếu worker chết ngay sau external call, lần sau biết outcome bằng gì?
+- Ack ở đâu và vì sao?
+- Capacity nào quyết định số job chạy song song?
+
+## Nhớ một phút
+
+- Durable handoff, idempotent handler, ack sau outcome.
 - Retry có điều kiện và giới hạn.
-- Cache không thay invariant của database.
+- Khi quá tải, bảo vệ dependency trước.

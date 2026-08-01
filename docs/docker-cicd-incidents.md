@@ -1,69 +1,82 @@
-# Docker, CI/CD & Production Incidents
+# Deploy an toàn: code, schema và traffic không đổi cùng một nhịp
 
-## Quick Summary
+## Trong 30 giây
 
-Một deploy làm p99 tăng và lỗi 5xx vì image mới dùng cột database mà pod cũ chưa biết. Vấn đề không nằm ở Docker; vấn đề là code, schema và cấu hình đổi không cùng nhịp. Build một artifact, triển khai theo bước tương thích và quan sát trước khi mở rộng traffic.
+- Một deploy an toàn là đưa đúng artifact đã kiểm tra qua từng môi trường và giới hạn blast radius.
+- Bản app cũ/mới thường chạy cùng lúc; schema và event phải tương thích trong giai đoạn đó.
+- Database đổi theo expand → migrate → contract, không drop/rename ngay.
+- Readiness chỉ kiểm tra app có nhận traffic được; đừng phụ thuộc mọi service xa đều khỏe.
+- Rollback chỉ an toàn nếu code cũ vẫn hiểu state/schema hiện tại.
 
-## Terms to Know
+## Gặp ở đâu ngoài đời?
 
-- [[Schema evolution]]: đổi cấu trúc dữ liệu nhưng bản cũ và mới vẫn chạy được một thời gian.
-- [[Feature flag]]: công tắc bật/tắt hành vi mới mà không phải deploy lại.
-- [[Blast radius]]: phạm vi người dùng bị ảnh hưởng khi thay đổi lỗi.
-- **Pod**: một bản sao ứng dụng đang chạy trong Kubernetes; lúc rolling deploy có thể có pod cũ và pod mới cùng tồn tại.
-- **Readiness**: kiểm tra xem bản app đã sẵn sàng nhận traffic hay chưa, không phải kiểm tra mọi hệ thống xa đều hoàn hảo.
+Release mới đổi tên cột `status` thành `state`. Rolling deploy khiến pod mới ghi `state`, pod cũ vẫn đọc `status`; một phần request lỗi ngẫu nhiên. Rollback cũng không cứu được nếu migration đã xóa cột cũ. Lỗi không phải Docker — lỗi là app và dữ liệu đổi không tương thích.
 
-::: must-remember
-Với database, dùng **expand → migrate → contract**: thêm phần mới tương thích, chuyển dữ liệu có kiểm soát, rồi chỉ xóa phần cũ khi không còn code nào dùng.
-:::
+## Hiểu đơn giản trước
 
-## Khi nào gặp
+**Artifact bất biến** là image được gắn digest/commit cụ thể; staging và production chạy cùng đúng image đó. Config/secret được đưa vào lúc chạy, không nhét vào image. Trong rollout có nhiều version app/consumer cùng tồn tại, nên database/event cần “nói được cả tiếng cũ và tiếng mới” tạm thời.
 
-Gặp khi image chạy local nhưng fail ở production, migration khiến rollback hỏng, hoặc deploy vừa xong thì latency tăng. Câu trả lời cần nói được: đang chạy bản nào, người dùng bị ảnh hưởng thế nào và đường thoát an toàn là gì.
+## Từ cần biết
 
-## Mental model
+- [[Schema evolution]] (đổi schema mà bản cũ/mới cùng chạy) — nền của rollback an toàn.
+- [[Feature flag]] (bật/tắt behavior không cần deploy lại) — giảm blast radius.
+- [[Blast radius]] (phạm vi người dùng bị ảnh hưởng) — lý do dùng canary.
+- **Readiness** (app đã sẵn sàng nhận traffic) — không phải health check mọi dependency xa.
 
-**Artifact bất biến** là image đã build xong và được định danh bằng commit SHA hoặc digest. Staging và production dùng đúng artifact đó; secret và URL môi trường chỉ được truyền lúc chạy. Nhờ vậy có thể so sánh hoặc rollback chính xác.
+## Cách quyết định, từng bước
 
-Một lần deploy có nhiều phần phụ thuộc: app, schema, event và cache. Nếu app cũ còn chạy, bản mới phải đọc/ghi được dữ liệu cũ; nếu không, rolling deploy sẽ tạo lỗi ngẫu nhiên theo pod.
+1. Build một image theo commit/digest; chạy type check, test, scan secret/dependency và test contract liên quan.
+2. **Expand:** thêm cột/bảng/field optional, code mới vẫn đọc được dữ liệu cũ.
+3. **Migrate:** backfill theo batch có checkpoint, đo lỗi/lag; bật behavior bằng flag hoặc canary nhỏ.
+4. **Contract:** chỉ xóa field cũ sau khi không còn app/consumer dùng, đã quan sát qua ít nhất một release ổn định.
+5. Nếu metric xấu, chọn tắt flag, rollback hoặc roll-forward dựa trên compatibility, không theo phản xạ.
 
-## CI/CD và compatibility
-
-Pipeline nên bắt lỗi theo từng nguyên nhân: build/type check, test, quét dependency/secret, kiểm migration và smoke test. Không thêm gate chỉ để “đủ quy trình”. Mỗi gate phải trả lời: nó chặn lỗi nào?
-
-Migration an toàn thường thêm column hoặc bảng trước; app đọc được cả format cũ/mới; backfill theo batch; quan sát; sau một release mới bỏ field cũ. Không drop/rename cột ngay khi còn pod cũ hoặc consumer cũ.
-
-## Incident response
-
-1. Xác nhận ảnh hưởng: lỗi nào, từ khi nào, tenant/region nào.
-2. Giảm tác động: tắt flag, giảm traffic hoặc rollback nếu artifact cũ còn tương thích.
-3. Giữ bằng chứng: deploy diff, trace, metric, queue/database saturation. Đừng restart hàng loạt.
-4. Cập nhật trạng thái rõ: impact, việc đang làm, mốc cập nhật tiếp theo.
-5. Sau khi ổn định, tạo action có owner và hạn; thêm test, alert hoặc runbook để ngăn tái diễn.
-
-## Quyết định và trade-off
+## Chọn A hay B?
 
 | Chọn | Khi phù hợp | Đổi lại |
 |---|---|---|
-| Rolling deploy | App stateless, tương thích ngược | Cần readiness và schema an toàn |
-| Canary | Rủi ro cao, có metric tốt | Phức tạp chia traffic |
-| Feature flag | Muốn tách deploy khỏi bật tính năng | Cần owner, ngày hết hạn, fallback |
-| Roll-forward | State mới không chạy được với code cũ | Cần hotfix nhỏ và kiểm soát phạm vi |
+| Rolling deploy | App stateless, schema tương thích | Có nhiều version cùng chạy |
+| Canary | Rủi ro cao, có metric theo version | Cần route traffic/quan sát tốt |
+| Feature flag | Muốn tách deploy khỏi bật behavior | Nợ flag, cần owner và expiry |
+| Roll-forward | Code cũ không hiểu state mới | Cần hotfix nhanh, phạm vi nhỏ |
 
-## Bẫy production
+## Nếu có lỗi thì sao?
 
-- Dùng `latest`: không biết chính xác image nào đang chạy.
-- Cho readiness phụ thuộc mọi dịch vụ xa: một dependency lỗi làm cả app mất traffic dù còn degrade được.
-- Đưa secret vào image hoặc log config: rò dữ liệu khi image/log bị lộ.
-- Retry deploy vô hạn khi metric xấu: mở rộng outage.
+Canary báo 5xx/p99 xấu: dừng mở traffic, giữ version/diff/trace. Nếu artifact cũ tương thích schema thì rollback; nếu migration đã đổi meaning dữ liệu thì tắt feature hoặc release bản tương thích để roll-forward. Không retry deploy vô hạn vì mỗi lần có thể làm outage rộng hơn.
 
-## Câu hỏi phỏng vấn
+::: production-trap
+Tag `latest` khiến bạn không trả lời được pod đang chạy image nào. Không truy được artifact thì cũng không kiểm chứng, rollback hoặc điều tra chính xác.
+:::
 
-### Rollback thế nào khi deploy kèm migration?
+## Chứng minh mình làm đúng
 
-**Trả lời ngắn:** Chỉ rollback khi code cũ còn đọc/ghi được schema hiện tại. Nếu migration đã đổi ý nghĩa dữ liệu, tắt feature hoặc roll-forward bằng bản sửa tương thích; không ép image cũ chạy trên state mới.
+- Từ incident truy được image digest, commit, config version và migration version.
+- Dashboard canary theo p99, error, business outcome và saturation, không chỉ toàn hệ thống.
+- Smoke/contract test dùng artifact thật; migration có metric tiến độ và checkpoint.
+- Feature flag có owner, expiry, fallback và test đường tắt.
 
-## Tự kiểm
+## Nói trong phỏng vấn
 
-- Tôi có truy từ lỗi về image digest và commit được không?
-- App cũ/mới có chạy cùng schema/event trong thời gian rollout không?
-- Tôi biết bước giảm impact trước khi tìm root cause không?
+“Em build một artifact bất biến rồi promote đúng artifact đó, không build lại theo môi trường. Với database em dùng expand–migrate–contract vì pod cũ và mới có thể chạy cùng lúc. Em canary hoặc flag behavior mới và theo dõi metric theo version. Khi lỗi, em chỉ rollback nếu code cũ còn tương thích state hiện tại; nếu không thì tắt feature hoặc roll-forward bản sửa. Nhờ digest, migration version và trace, em điều tra được đúng change gây ảnh hưởng.”
+
+## Interviewer thường hỏi tiếp
+
+### Rollback deploy kèm migration thế nào?
+
+Chỉ rollback app khi schema mới vẫn tương thích code cũ. Migration phá hủy hoặc đổi nghĩa dữ liệu cần chiến lược expand/flag/roll-forward, không ép app cũ chạy trên state lạ.
+
+### Readiness có nên gọi mọi dependency không?
+
+Không mặc định. Một dependency xa lỗi có thể làm mọi pod mất traffic dù app còn phục vụ phần degrade được. Readiness kiểm tra khả năng phục vụ của chính app theo policy rõ.
+
+## Tự kiểm trước khi qua bài
+
+- Trong rollout nào app cũ và mới có thể chạy song song?
+- Có thể truy image digest và migration version từ một alert không?
+- Điều kiện nào khiến rollback nguy hiểm hơn roll-forward?
+
+## Nhớ một phút
+
+- Artifact xác định được, schema tương thích, traffic mở dần.
+- Expand → migrate → contract.
+- Rollback là quyết định compatibility, không phải nút bấm mặc định.

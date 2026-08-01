@@ -1,68 +1,81 @@
-# Retry, Ordering, Saga & Consistency
+# Retry, Saga và đối soát: xử lý kết quả “chưa biết”
 
-## Quick Summary
+## Trong 30 giây
 
-Khi payment timeout, “gửi lại ngay” có thể charge hai lần vì provider đã nhận nhưng response chưa về. Retry tốt bắt đầu bằng việc biết outcome có thể đã xảy ra, rồi chỉ lặp lại phần an toàn. Saga giúp điều phối nhiều bước độc lập, không phải rollback database toàn cầu.
+- Timeout không có nghĩa thao tác thất bại; nó có thể đã xảy ra nhưng response chưa về.
+- Retry chỉ lặp phần an toàn, có idempotency key và retry budget.
+- Saga là workflow nhiều owner có state, timeout và đường phục hồi; không phải rollback ACID toàn hệ thống.
+- Compensation là một hành động nghiệp vụ mới; khi không thể bù, phải đối soát.
+- UI cần nói rõ `Pending` thay vì báo thành công hoặc thất bại bừa.
 
-## Terms to Know
+## Gặp ở đâu ngoài đời?
 
-- [[Retry budget]]: số lần/thời gian retry được phép trước khi dừng và báo lỗi.
-- [[Saga]]: workflow nhiều service với state, timeout và bước bù trừ hoặc đối soát.
-- [[Reconciliation]]: so sánh state nội bộ với nguồn có thẩm quyền để sửa lệch.
+Khách bấm thanh toán. Provider timeout sau khi có thể đã charge. Nếu Order gọi lại ngay, khách có thể bị trừ tiền hai lần. Nếu Order đánh dấu failed, hệ thống có thể bỏ quên khoản đã thu. Trạng thái đúng lúc này là “chưa biết”, không phải true/false.
 
-::: definition
-Eventual consistency là chấp nhận các phần hệ thống cập nhật lệch nhau trong một khoảng thời gian có kiểm soát, kèm cách hội tụ và thông báo cho người dùng.
+## Hiểu đơn giản trước
+
+Một workflow qua nhiều service không có nút undo chung. Mỗi bước có dữ liệu riêng và có thể hoàn tất ở thời điểm khác. Saga giữ trạng thái của cả hành trình: đang chờ payment, đã reserve kho, cần hoàn tiền hay cần đối chiếu. Mục tiêu là hội tụ về trạng thái nghiệp vụ đúng, không phải giả vờ mọi bước rollback cùng lúc.
+
+## Từ cần biết
+
+- [[Retry budget]] (giới hạn số lần/thời gian thử lại) — ngăn retry storm.
+- [[Saga]] (workflow nhiều owner có state) — điều phối bước và timeout.
+- [[Reconciliation]] (đối chiếu với nguồn có thẩm quyền) — xử lý outcome chưa biết.
+- **Compensation** (hành động bù nghiệp vụ) — ví dụ hoàn tiền, không phải xóa lịch sử charge.
+
+## Cách quyết định, từng bước
+
+1. Đặt state machine rõ: `PendingPayment`, `Paid`, `Failed`, `NeedsReconciliation`; mỗi transition có điều kiện hợp lệ.
+2. Gửi payment với idempotency key; ghi request ID và thời điểm trước khi gọi.
+3. Khi timeout, query provider hoặc chờ job đối soát thay vì charge lại mù.
+4. Retry chỉ lỗi tạm thời, với backoff+jitter và ngân sách; hết ngân sách thì chuyển state cho operator/reconciliation.
+5. Nếu kho đã reserve nhưng payment failed, release reservation như compensation; ghi audit trail thay vì xóa fact.
+
+## Chọn A hay B?
+
+| Chọn | Khi phù hợp | Đổi lại |
+|---|---|---|
+| Retry ngay | Operation idempotent, outcome biết chắc là chưa xảy ra | Có thể làm downstream quá tải |
+| Query/reconcile | Timeout ở external write, outcome chưa biết | Người dùng chờ trạng thái pending |
+| Compensation | Có hành động bù hợp lệ | Không luôn đảo ngược toàn bộ thế giới thật |
+| Manual review | Giá trị/rủi ro cao, evidence mâu thuẫn | Tốn vận hành nhưng an toàn |
+
+## Nếu có lỗi thì sao?
+
+Event payment cũ đến sau event mới. Consumer phải kiểm tra version/transition hiện tại; không để `Failed` cũ ghi đè `Paid` mới. Nếu workflow bị kẹt, job quét các state quá hạn, thu evidence từ provider và đưa vào queue xử lý có owner.
+
+::: production-trap
+Retry toàn bộ workflow sau một lỗi consumer có thể reserve kho, charge tiền hoặc gửi email lần hai. Retry đúng message/operation có ranh giới idempotent.
 :::
 
-## Tình huống phỏng vấn
+## Chứng minh mình làm đúng
 
-Order đã tạo, inventory reserve thành công nhưng payment provider timeout. Không thể kết luận payment fail. Nếu retry charge ngay, khách có thể trả tiền hai lần; nếu rollback tất cả, reservation có thể đã thành fact ở service khác.
+- Đếm state pending quá hạn, retry exhausted, mismatch provider và thời gian đối soát.
+- Test duplicate, out-of-order event, timeout-after-success và restart giữa các bước.
+- Có dashboard state machine và runbook cho từng state không hội tụ.
 
-## Mental model
+## Nói trong phỏng vấn
 
-Mỗi service có transaction riêng. Workflow xuyên service cần state machine: đang chờ gì, lỗi nào retry, khi nào bù trừ, ai xem được trạng thái và ai xử lý trường hợp kẹt. “Eventually” không phải lời hứa mơ hồ; nó phải có giới hạn thời gian và đường recovery.
+“Với payment timeout, em coi outcome là unknown chứ không retry charge ngay. Em lưu idempotency key và state pending, sau đó query hoặc reconciliation với provider. Workflow saga có transition, timeout và retry budget rõ; bước đã làm như reserve kho chỉ được bù bằng action nghiệp vụ hợp lệ. Em theo dõi pending quá hạn và mismatch để biết flow có hội tụ, thay vì hứa rollback distributed transaction.”
 
-## Retry đúng phạm vi
+## Interviewer thường hỏi tiếp
 
-Retry lỗi tạm thời như timeout/network với deadline, exponential backoff và jitter. Trước retry side effect, query outcome bằng stable ID nếu có thể. Không retry validation, authorization hoặc payload sai. Khi hết budget, lưu trạng thái cần xử lý thay vì bỏ mất request.
+### Khi nào dùng choreography, khi nào orchestration?
 
-## Ordering và stale message
+Choreography hợp flow nhỏ, ownership và quan hệ event rõ. Orchestration dễ quan sát khi workflow dài/nhiều nhánh; đổi lại có một coordinator cần owner.
 
-Broker chỉ thường giữ thứ tự trong một partition. Với `OrderId`, dùng version/sequence hoặc kiểm transition để message cũ không ghi đè state mới. Đừng dựa vào timestamp máy gửi; clock và delivery có thể lệch. Nếu phát hiện gap, giữ/pending event hoặc reconcile theo source of truth.
+### Compensation có luôn khả thi không?
 
-## Saga: orchestration hay choreography
+Không. Hàng đã giao hoặc giao dịch đã settlement có thể chỉ sửa bằng adjustment/audit hoặc manual review.
 
-Orchestration có một coordinator biết state và gửi command; dễ thấy workflow, timeout và audit hơn. Choreography để các service tự nghe event; hợp flow đơn giản nhưng khó biết toàn cảnh khi nhiều bước. Chọn cách nào cũng cần owner của workflow, ID correlation, idempotency, timeout và metric pending age.
+## Tự kiểm trước khi qua bài
 
-Compensation là action nghiệp vụ ngược, ví dụ release reservation; nó không xóa lịch sử hay luôn đảo được external effect. Khi không thể bù trừ, dùng reconciliation/exception workflow có người chịu trách nhiệm.
+- Timeout nào trong hệ thống của bạn là outcome chưa biết?
+- State nào phải hiện cho người dùng trong lúc đợi đối soát?
+- Ai sở hữu job xử lý saga kẹt?
 
-## Reconciliation là một phần của thiết kế
+## Nhớ một phút
 
-Đặt job/flow đối chiếu order/payment/inventory theo ID và control total (tổng số lượng hoặc tổng tiền đã biết để so lại). Mismatch phải vào queue có owner, evidence và thao tác an toàn. Đây là cách xử lý late message, bug cũ hoặc provider trả outcome muộn; không phải script chỉ chạy lúc sự cố.
-
-## Bẫy production
-
-- Retry vô hạn làm dependency quá tải và che lỗi dữ liệu.
-- Nói “rollback saga” nhưng payment/notification đã xảy ra ngoài hệ thống.
-- Tin thứ tự global và để message cũ ghi đè status.
-- Không đo pending saga age nên workflow kẹt nhiều ngày mới biết.
-
-## Mẫu trả lời Senior
-
-“Tôi model workflow bằng state rõ, retry có budget và chỉ retry operation idempotent. Với outcome chưa rõ, tôi query/reconcile trước khi tạo effect mới. Saga có owner, timeout và compensation thực sự; phần không bù được đi vào exception/reconciliation có audit.”
-
-## Câu hỏi ôn phỏng vấn
-
-### Khi nào retry trở thành nguy hiểm?
-
-Khi action có side effect và outcome chưa rõ, hoặc lỗi không tạm thời. Khi đó query/dedup/exception workflow an toàn hơn gửi lại mù.
-
-### Saga có rollback như database transaction không?
-
-Không. Các bước đã commit ở owner khác; compensation là business action mới, có thể thất bại hoặc không đảo hết tác động.
-
-## Final recall
-
-- Retry là policy có điều kiện, không phải vòng lặp vô hạn.
-- Ordering phải có scope và state cần chống event cũ.
-- Saga cần visibility, timeout và reconciliation.
+- Unknown outcome không được retry mù.
+- Saga quản lý hội tụ, không phải global rollback.
+- Retry có budget; lệch dữ liệu cần evidence và đối soát.

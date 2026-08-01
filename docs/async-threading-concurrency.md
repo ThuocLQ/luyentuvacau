@@ -1,79 +1,78 @@
-# Async, Threading & Concurrency
+# Async và concurrency: đừng vượt sức chịu của dependency
 
-## Quick Summary
+## Trong 30 giây
 
-Một endpoint gọi 2.000 API đối tác cùng lúc có thể làm chính nó chậm hơn: socket cạn, queue dài và retry chồng lên nhau. `async` không tạo thêm capacity; nó chỉ không giữ thread trong lúc đang chờ I/O.
+- `await` nhả thread khi app đang chờ I/O; nó không làm database, socket hay đối tác có thêm capacity.
+- Fan-out lớn cần **bounded concurrency** (giới hạn số việc chạy cùng lúc) theo dependency thực tế, không theo một con số đoán mò.
+- `CancellationToken` là yêu cầu dừng công việc; nó không đảo ngược payment/email đã xảy ra.
+- Việc không được mất qua restart phải được lưu bền trong job table hoặc broker; `Task.Run` từ request không phải durable queue.
 
-::: concept
-Nói đơn giản: `await` trả thread về cho server khi app đang chờ database hoặc network. Nhưng database và đối tác vẫn có giới hạn; phải chủ động giới hạn số việc chạy cùng lúc.
-:::
+## Gặp ở đâu ngoài đời?
+
+Endpoint đồng bộ 2.000 đơn hàng với đối tác. Code dùng `Task.WhenAll`, đối tác chậm, socket/connection pool đầy và các request sau xếp hàng. Team thêm retry cho mọi timeout, rồi cả ứng dụng và đối tác cùng quá tải.
+
+Mục tiêu không phải tạo thật nhiều task. Mục tiêu là hoàn thành công việc đúng, trong giới hạn mà dependency chịu được.
+
+## Hiểu đơn giản trước
+
+Với I/O như HTTP, database hay file, thread không cần ngồi chờ response. `await` cho thread quay lại ThreadPool để phục vụ việc khác; khi I/O xong, continuation sẽ được lên lịch chạy. Với CPU-bound work, CPU vẫn phải chạy code trên thread, nên mở thêm task không tạo thêm CPU.
+
+**Concurrency** là nhiều việc cùng tiến triển; **parallelism** là nhiều việc thật sự chạy đồng thời trên CPU. `Task.WhenAll` chờ một nhóm task đã được tạo, nhưng không tự giới hạn số HTTP call hay query đã khởi động.
+
+Trong ASP.NET Core hiện đại, `.Result`/`.Wait()` thường không bị deadlock kiểu SynchronizationContext như ASP.NET Framework cổ điển. Dù vậy chúng vẫn chặn ThreadPool thread khi I/O đang chờ; dưới tải, điều này làm queue tăng và throughput giảm.
 
 ## Terms to Know
 
-- [[ThreadPool starvation]]: thread bị chặn/bận khiến request mới phải chờ.
-- [[Bounded concurrency]]: chỉ chạy số việc mà dependency chịu được.
-- [[Backpressure]]: khi consumer đầy, producer phải chờ, bị từ chối hoặc lưu việc bền vững.
-- [[Durable queue]]: hàng đợi vẫn còn việc sau restart.
+- [[ThreadPool starvation]]: ThreadPool thiếu thread rảnh để chạy request hoặc continuation vì thread bị block/bận.
+- [[Bounded concurrency]]: chỉ cho phép một số việc đồng thời, dựa trên capacity DB/partner/CPU.
+- [[Backpressure]]: khi consumer đầy, producer phải chờ, bị từ chối hoặc lưu việc bền thay vì nhận vô hạn.
+- [[CancellationToken]]: tín hiệu yêu cầu dừng; code và dependency phải hỗ trợ nó mới phản hồi được.
 
-## Khi nào gặp
+## Cách quyết định, từng bước
 
-Code dùng `Task.WhenAll` trên danh sách lớn và có `.Result` để lấy kết quả. Khi đối tác chậm, thread bị block, connection pool cạn, các request sau xếp hàng. Thêm retry lúc này thường biến một lỗi chậm thành outage.
+1. Xác định work là I/O-bound hay CPU-bound và dependency nào là nút thắt: DB connection, partner rate limit, CPU, partition.
+2. Dùng async end-to-end cho I/O. Tránh `.Result`, `.Wait()` và gọi blocking API trong request path.
+3. Đặt limit ở nơi tạo work: `SemaphoreSlim`, bounded `Channel<T>` hoặc worker pool. Chọn limit từ load test, quota hoặc pool size; đo rồi điều chỉnh.
+4. Truyền cancellation vào HTTP, EF Core, delay và worker. Với deadline, phân biệt client hủy với timeout của dependency để log/metric đúng.
+5. Persist work cần sống qua restart. Worker phải idempotent (xử lý lại không tạo effect mới) và chỉ ack sau khi outcome cần thiết đã được lưu bền.
 
-## Mental model
+## Chọn A hay B?
 
-**I/O** là lúc app chờ network, database, file hoặc broker. `async`/`await` giúp thread không phải ngồi chờ I/O. Công việc CPU vẫn cần thread; chạy quá nhiều việc CPU vẫn làm ThreadPool bị đói.
+| Cách làm | Dùng khi | Được gì | Đổi lại / không dùng khi |
+|---|---|---|---|
+| `await` một I/O | một call có response cần ngay | không block thread | không tạo queue/capacity mới |
+| `Task.WhenAll` có bound | vài I/O độc lập, đã throttle | giảm thời gian chờ tổng | tạo hàng nghìn task vẫn tạo burst |
+| `SemaphoreSlim` | giới hạn resource trong một process | đơn giản, rõ ownership | không phối hợp limit giữa nhiều instance |
+| bounded `Channel<T>` | producer/consumer nội bộ, có thể chờ/từ chối | backpressure trong process | dữ liệu mất khi process chết nếu chưa persist |
+| broker/job table | email, billing, export, event không được mất | sống qua restart/scale-out | cần dedup, retry policy, DLQ/monitoring |
 
-**Concurrency** là nhiều việc cùng tiến triển. **Parallelism** là nhiều việc thật sự chạy cùng lúc. `Task.WhenAll` tạo concurrency nhưng không tự throttle. Vì vậy correctness phải đến từ giới hạn, cancellation và ownership của state.
+## Nếu có lỗi thì sao?
 
-## Cách xử lý theo thứ tự
+Timeout là **unknown outcome** với external write: đối tác có thể đã nhận command nhưng response chưa về. Không retry mù payment/email; dùng stable ID hoặc idempotency key, query/reconcile outcome trước khi tạo effect mới.
 
-1. Xác định dependency chịu được bao nhiêu concurrent request: DB connection, rate limit, CPU hoặc partition.
-2. Dùng `await` xuyên suốt I/O; không gọi `.Result` hoặc `.Wait()` trong request.
-3. Đặt giới hạn concurrency bằng `SemaphoreSlim`, bounded `Channel<T>` hoặc worker pool.
-4. Truyền `CancellationToken` đến HTTP, EF Core, delay và worker để request bị hủy không tiếp tục chiếm tài nguyên.
-5. Nếu việc không được mất khi restart, persist vào broker/job table; không dùng `Task.Run` trong HTTP request.
+`lock` của C# không thể chứa `await`; compiler sẽ chặn ngay. Nếu thật sự cần loại trừ bất đồng bộ trong một process, dùng `SemaphoreSlim.WaitAsync`/`Release` với `try/finally`. Dù vậy, đừng giữ semaphore trong lúc gọi I/O chậm nếu có thể thiết kế lại boundary. `DbContext` cũng không thread-safe; một context không nên chạy nhiều operation đồng thời.
 
-## Quyết định và trade-off
+## Chứng minh mình làm đúng
 
-| Cách làm | Phù hợp khi | Giới hạn |
-|---|---|---|
-| `Task` + `await` | một I/O độc lập | không tự tạo queue hay throttle |
-| `Task.WhenAll` | fan-out nhỏ, đã có bound | danh sách lớn tạo burst |
-| `SemaphoreSlim` | giới hạn resource trong một process | không điều phối nhiều instance |
-| Bounded `Channel<T>` | producer/consumer nội bộ | mất việc khi process chết nếu chưa persist |
-| Broker/job table | email, billing, export, event phải sống qua restart | consumer phải idempotent và có DLQ |
+Theo dõi queue depth/age, active worker, wait time của connection pool, downstream 429/5xx, timeout, retry exhausted, ThreadPool queue length và p95/p99. Load test cả dependency chậm, client cancel và worker restart. Limit đúng là limit giữ được SLO và không đẩy dependency qua quota, không phải limit cao nhất làm test local pass.
 
-## Bẫy production
+## Nói trong phỏng vấn
 
-::: production-trap
-`Task.WhenAll` trên hàng nghìn item không phải throttling. Timeout hàng loạt rồi retry có thể bắn chết downstream.
-:::
+“`async` giúp server không giữ thread trong lúc chờ I/O, nhưng DB và partner vẫn có capacity hữu hạn. Với fan-out, em tìm quota/pool và đặt bounded concurrency tại nơi tạo work, đồng thời truyền cancellation. Nếu work cần sống qua restart, em persist vào queue và handler idempotent vì delivery có thể lặp. Em nhìn queue age, connection wait, timeout và downstream error để điều chỉnh limit.”
 
-- `Task.Run` từ request mất việc khi process restart và có thể dùng scoped service đã dispose.
-- Không giữ `lock` qua `await`; nếu cần phối hợp async, dùng primitive phù hợp và ownership rõ.
-- `DbContext` không thread-safe: một context chỉ chạy một operation tại một thời điểm.
-- Retry chỉ dành cho lỗi transient và operation có idempotency boundary.
+## Interviewer thường hỏi tiếp
 
-## Kiểm chứng ở production
+- `Task.WhenAll` có throttle không? Bạn chọn limit 20 thay vì 200 dựa vào signal nào?
+- Nếu client hủy request sau khi partner đã nhận command thì trạng thái nghiệp vụ và retry thế nào?
 
-Theo dõi queue depth/age, active workers, timeout, downstream 429/5xx, retry exhaustion, ThreadPool queue length, thời gian chờ connection pool, p95/p99. Load test cả trường hợp dependency chậm và worker restart.
+## Tự kiểm trước khi qua bài
 
-## Mẫu trả lời 45 giây
+- Tôi có phân biệt I/O-bound với CPU-bound và concurrency với parallelism không?
+- Limit của tôi bảo vệ dependency nào, và metric nào báo limit sai?
+- Work nào trong hệ thống phải sống sau restart?
 
-“`async` giúp không chặn thread khi chờ I/O, nhưng không làm DB hay đối tác có thêm năng lực. Với fan-out lớn, em lấy limit từ dependency, đặt bounded concurrency và truyền cancellation. Việc cần sống qua restart được persist vào queue; handler phải idempotent vì delivery có thể lặp. Em theo dõi queue age, timeout và retry exhaustion để biết giới hạn đã đúng chưa.”
+## Nhớ một phút
 
-## Câu hỏi phỏng vấn
-
-### Vì sao `.Result` hoặc `.Wait()` nguy hiểm trong ASP.NET Core?
-
-**Trả lời ngắn:** Chúng chặn thread trong lúc I/O đang chờ. Khi tải tăng, ThreadPool thiếu thread để chạy request và continuation, nên throughput giảm và latency tăng.
-
-**Follow-up:** Khi nào sync-over-async chấp nhận được? Bạn giới hạn fan-out thế nào?
-
-**Red flags:** “async luôn tạo thread”; “cứ tăng ThreadPool là xong”.
-
-## Final recall
-
-- `async` giải phóng thread, không tăng capacity downstream.
-- Giới hạn concurrency theo tài nguyên thật và có backpressure khi đầy.
-- Durable work cần persist, idempotency và retry có ngân sách.
+- Async giải phóng thread, không tăng capacity downstream.
+- Fan-out cần bound và backpressure; retry có điều kiện/budget.
+- Cancellation không đảo external side effect; durable work cần persistence và idempotency.

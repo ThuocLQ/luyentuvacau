@@ -1,50 +1,67 @@
-# Câu chuyện dự án và Mock Interview
+# Kể câu chuyện dự án ở vòng Senior
 
-## Quick Summary
+## Trong 30 giây
 
-Một story tốt không phải danh sách công nghệ. Nó nói rõ vấn đề, phần bạn sở hữu, thay đổi đã làm, kết quả có bằng chứng và điều bạn học được.
+- Story tốt kể một quyết định thật: vấn đề, phần bạn sở hữu, cơ chế, trade-off và evidence.
+- Đừng nhận công của cả team hoặc bịa con số; nói scope và cách phối hợp rõ ràng.
+- Với incident: ổn định trước, giữ evidence, tìm nguyên nhân, rồi thêm guard có owner.
+- Kết bằng điều bạn sẽ làm khác đi lần sau.
+
+## Gặp ở đâu ngoài đời?
+
+Interviewer hỏi “Kể một incident bạn xử lý.” Nếu bạn trả lời “team em tối ưu database” thì họ không biết bạn đã quan sát gì, quyết định gì và kết quả được kiểm chứng ra sao. Một story rõ giúp họ đánh giá ownership (phần bạn chịu trách nhiệm), không phải trí nhớ công nghệ.
+
+## Hiểu đơn giản trước
+
+Story Senior là một incident report ngắn bằng lời thường. Người nghe cần theo được: ai bị ảnh hưởng, bạn có quyền thay đổi gì, vì sao chọn cách đó, và điều gì chứng minh kết quả. Công thức hữu ích là **O-M-T-E-R**: Ownership, Mechanism, Trade-off, Evidence, Reflection.
 
 ## Terms to Know
 
-- [[Trade-off]]: điều được và rủi ro phải chấp nhận.
-- [[SLO]]: mục tiêu dịch vụ có thể đo, như p99 hoặc tỉ lệ lỗi.
+- [[SLO]] (mục tiêu mức dịch vụ): ngưỡng như p99 hoặc tỉ lệ lỗi gắn với trải nghiệm user.
+- [[Trade-off]] (điều được và cái giá): ví dụ rollback nhanh nhưng tạm mất tính năng mới.
+- [[Postmortem]] (bản phân tích sau incident): tài liệu học từ lỗi với action có owner, không phải tìm người để trách.
 
-## Bài toán interview thực tế
+## Cách quyết định, từng bước
 
-Interviewer có thể hỏi “kể một incident” để biết bạn có nhận ownership không. Đừng nhận công của cả team, cũng đừng đổ lỗi. Nói đúng phạm vi của mình và cách phối hợp.
+1. Chọn một case bạn thật sự tham gia và bỏ thông tin nhạy cảm. Mở đầu bằng impact: ai bị ảnh hưởng, trong bao lâu, nguy cơ gì.
+2. Nêu ownership: bạn làm trực tiếp phần nào, ai phê duyệt hoặc phối hợp phần nào.
+3. Mô tả evidence đã dẫn tới giả thuyết, rồi thay đổi nhỏ nhất để ổn định.
+4. Nêu trade-off và kết quả đo được; nếu không có số chính xác, nói evidence có thật thay vì ước lượng.
+5. Kết bằng guard chống tái diễn, owner và cách biết guard hoạt động.
 
-## Mental model: O-M-T-E-R
+## Chọn A hay B?
 
-- **Ownership:** bạn chịu trách nhiệm phần nào.
-- **Mechanism:** cơ chế hoặc quy trình đã đổi.
-- **Trade-off:** đổi lại điều gì.
-- **Evidence:** metric, trace, ticket hoặc phản hồi chứng minh kết quả.
-- **Reflection:** lần sau làm gì sớm hơn.
+| Tình huống | Ưu tiên | Không nên làm |
+|---|---|---|
+| Incident đang ảnh hưởng user | Rollback, tắt flag, giảm tải trước | Tranh luận root cause khi hệ thống còn cháy |
+| API p99 tăng | Trace/query plan và scope hẹp | Nói “tối ưu DB” không có cơ chế |
+| Duplicate order | Chặn effect mới, đối soát record | Retry/compensate mù khi outcome chưa rõ |
 
-## Story 1: p99 API tăng
+## Nếu có lỗi thì sao?
 
-Nêu endpoint nào chậm, người dùng bị ảnh hưởng ra sao và dữ liệu bạn xem. Ví dụ trace cho thấy N+1 query; bạn đổi sang projection/pagination, đo lại cùng tải và thêm slow-query alert. Đừng nói “tối ưu database” mà không có cơ chế.
+Kể cả rollback cũng có rủi ro: dữ liệu tạo bởi version mới có thể không đọc được ở version cũ. Vì vậy story tốt nói luôn guard: migration tương thích ngược, feature flag, hay runbook đối soát. Nếu chưa có guard ở lúc đó, nói điều bạn đã bổ sung sau incident.
 
-## Story 2: duplicate order/payment
+## Chứng minh mình làm đúng
 
-Nêu retry hoặc message trùng đã gây rủi ro gì. Giải pháp có thể là idempotency key, unique effect và reconcile. Nói rõ retry được phép ở đâu và bằng chứng nào quyết định không charge lại.
+Evidence có thể là trace trước/sau, query count, dashboard SLO, ticket đối soát hoặc test tái hiện lỗi. Nêu khoảng thời gian và scope nếu nhớ; “cải thiện nhiều” không đủ để người nghe kiểm tra quyết định.
 
-## Story 3: incident sau release
+## Nói trong phỏng vấn
 
-Nêu impact trước, việc ổn định như rollback/tắt flag, evidence đã giữ, rồi root cause và action phòng ngừa. Postmortem chỉ hữu ích khi có owner/hạn và thay đổi kiểm chứng được.
+“Một lần p99 của endpoint tìm đơn tăng sau release và ảnh hưởng người dùng giờ cao điểm. Em phụ trách API nên em rollback flag để ổn định, giữ trace và thấy một nhánh tạo N+1 query. Em chuyển sang projection có phân trang; đổi lại query phức tạp hơn, nên em thêm integration test query count và alert slow query. Sau đó p99 trở lại ngưỡng SLO trong cùng điều kiện tải.”
 
-## Mock follow-up
+## Interviewer thường hỏi tiếp
 
-- Nếu tải gấp mười, điều gì là bottleneck đầu tiên?
-- Nếu metric chưa cải thiện, bạn kiểm chứng giả thuyết nào tiếp?
-- Nếu teammate không đồng ý, bạn dùng evidence nào để quyết định?
+- Nếu metric không hồi phục sau rollback, giả thuyết tiếp theo của bạn là gì?
+- Teammate không đồng ý với giải pháp, bạn dùng evidence nào để quyết định?
 
-## Red flags
+## Tự kiểm trước khi qua bài
 
-- Chỉ kể việc team làm, không có ownership.
-- Bịa metric hoặc nói “đã tối ưu” không có bằng chứng.
-- Có root cause nhưng không có guard chống tái diễn.
+- Người nghe có phân biệt được việc tôi làm và việc team làm không?
+- Tôi có nói impact trước giải pháp không?
+- Guard sau incident có owner và cách kiểm chứng chưa?
 
-## Final recall
+## Nhớ một phút
 
-Vấn đề → ownership → cơ chế → trade-off → evidence → reflection.
+- Impact → ownership → mechanism → trade-off → evidence → reflection.
+- Ổn định trước, học sau.
+- Không bịa metric.
