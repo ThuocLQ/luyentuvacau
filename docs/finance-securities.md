@@ -1,74 +1,93 @@
-# Thiết kế backend cho tài chính và chứng khoán
+# Backend tài chính và chứng khoán: ưu tiên tính đúng và dấu vết kiểm tra
 
 ## Trong 30 giây
 
-- Lệnh gửi đi chưa chắc khớp; timeout là kết quả chưa biết, không phải thất bại để gửi lại.
-- Giữ intent, fact và ledger tách nhau để audit/đối soát được.
-- Không ghi đè lịch sử tài chính; correction là record mới có dấu vết.
-- Quyết định tiền, position và hạn mức phải dựa trên nguồn dữ liệu gốc, không dựa cache cũ.
+- Với sản phẩm có yêu cầu kiểm toán hoặc quy định, hệ thống cần giữ lịch sử sự kiện và trạng thái; ghi đè dễ làm mất dấu vết.
+- Lệnh đặt, khớp lệnh, số dư tiền/chứng khoán và thanh toán là các khái niệm khác nhau.
+- Một lệnh có thể khớp nhiều lần; yêu cầu hủy chỉ nhắm phần còn mở, nhưng có hiệu lực theo xác nhận và quy tắc của venue.
+- Mọi message từ sàn hoặc đối tác có thể đến trùng, muộn hoặc sai thứ tự.
+- Với luồng có nguồn ngoài như sàn hoặc ngân hàng, đối soát là bước vận hành cần thiết để phát hiện chênh lệch, không phải việc dọn dẹp tùy chọn.
 
 ## Gặp ở đâu ngoài đời?
 
-Khách đặt lệnh mua, hệ thống gửi sang venue (sàn/đối tác giao dịch) rồi timeout. Nếu API retry ngay, một lệnh có thể được gửi hai lần. Nếu bạn xóa order khi khách hủy, audit không còn cho thấy phần nào đã khớp. Đây là nơi một workflow web bình thường trở thành rủi ro tài chính.
-
-> Phạm vi bài này là mẫu thiết kế cho order/venue/execution. Nó không thay thế rule của sàn, policy kế toán, retention hay yêu cầu pháp lý; các rule đó phải được xác nhận với domain và compliance.
+Khách đặt mua 1.000 cổ phiếu. Sàn báo khớp 300, sau đó khách hủy. Một message khớp thêm 200 đến muộn. Nếu hệ thống coi “đã hủy” là xóa cả lệnh, số lượng sở hữu và tiền sẽ sai. Cần giữ từng execution (lần khớp) và tính phần còn mở từ các sự kiện đã xác nhận.
 
 ## Hiểu đơn giản trước
 
-Tách ba việc khác nhau. **Intent (ý định)** là yêu cầu đặt lệnh. **Fact (sự việc đã xảy ra)** là execution hoặc cancellation do venue xác nhận. **Ledger (sổ cái)** ghi biến động tài chính có thể kiểm toán. Intent có thể pending; fact không được sửa để câu chuyện trông đơn giản hơn; ledger correction thường là record mới theo policy/accounting model áp dụng.
+**Order** là ý định mua hoặc bán. **Execution/fill** là bằng chứng một phần lệnh đã thực sự khớp. **Settlement** là quá trình hoàn tất chuyển tiền và tài sản sau giao dịch.
 
-## Terms to Know
+Không nên chỉ giữ một con số `filledQuantity` rồi ghi đè. Hãy lưu từng execution có mã duy nhất, sau đó tính tổng đã khớp. Hủy lệnh đóng phần chưa khớp; nó không xóa các execution đã xảy ra.
 
-- [[Ledger]] (sổ cái): lịch sử biến động tài chính có thể audit.
-- [[Reconciliation]] (đối soát): so sánh dữ liệu nội bộ với venue/bank để tìm lệch và tạo correction có audit.
-- [[Idempotency boundary]] (ranh giới gọi lại không tạo thêm effect): chặn request/event cũ ghi thêm execution.
-- **Partial fill (khớp một phần)**: một phần lượng lệnh đã khớp; phần còn lại vẫn mở hoặc bị hủy sau đó.
-- **Unknown outcome (kết quả chưa biết)**: request đã gửi nhưng timeout nên chưa biết đối tác đã thực hiện hay chưa.
+Ledger (sổ cái) nên ghi các bút toán mới để điều chỉnh thay vì sửa mất bút toán cũ. Nhờ vậy hệ thống có thể giải thích số dư được tạo ra từ đâu.
+
+## Từ cần biết
+
+- **Order** (lệnh): yêu cầu mua hoặc bán với điều kiện cụ thể.
+- **Execution/fill** (lần khớp): phần giao dịch đã được sàn xác nhận.
+- **Open quantity** (khối lượng còn mở): phần lệnh chưa khớp và chưa hủy.
+- **Sơ đồ trạng thái**: danh sách trạng thái hợp lệ của lệnh và điều kiện để đi từ trạng thái này sang trạng thái khác.
+- **Settlement** (thanh toán giao dịch): hoàn tất chuyển tiền và chứng khoán giữa các bên.
+- **Ledger** (sổ cái): chuỗi bút toán làm căn cứ tính số dư và kiểm tra lịch sử.
+- **Reconciliation** (đối soát): so sánh dữ liệu nội bộ với sàn, ngân hàng hoặc đơn vị lưu ký.
 
 ## Cách quyết định, từng bước
 
-1. Tạo request identity và lưu intent `Pending` trước khi gọi venue. Identity này phải liên hệ được caller, payload và reference gửi đi.
-2. Khi venue trả fact, ghi transition có điều kiện và deduplicate theo execution identity. Unique constraint chỉ bảo vệ boundary database đó; consumer bên ngoài vẫn phải chịu duplicate.
-3. Nếu timeout, chuyển sang `Unknown`, query venue theo reference hoặc đưa vào reconciliation. Không tạo intent mới cho cùng ý định trước khi có evidence.
-4. Với partial fill, cập nhật lượng đã khớp và lượng còn mở theo transition hợp lệ. Hủy chỉ đóng phần mở; không xóa fact đã khớp.
-5. Ghi ledger/correction bằng record bất biến có audit actor/thời gian/reason. Phân quyền và kiểm tra tenant/account ở server.
+1. Vẽ sơ đồ trạng thái của Order và quy tắc chuyển trạng thái; không dùng một cờ `isDone` cho mọi kết quả.
+2. Lưu mỗi execution theo mã từ venue (sàn/đối tác). Unique constraint là luật database không cho hai dòng có cùng venue + execution ID, nên một fill đến lại không được ghi hai lần.
+3. Không dùng một công thức `open quantity` cho mọi venue. Tính phần còn mở theo quy tắc trạng thái, thời điểm có hiệu lực và thứ tự sequence do venue cung cấp; phải xử lý cả cancel/replace/fill đến muộn theo hợp đồng của venue đó.
+4. Ghi tiền và chứng khoán bằng bút toán có tham chiếu tới nghiệp vụ; sửa sai bằng bút toán đảo/điều chỉnh có lịch sử.
+5. Tách trạng thái giao dịch khỏi trạng thái settlement vì thời điểm và `data ownership` (nơi có quyền quyết định, ghi dữ liệu) khác nhau.
+6. Chạy đối soát định kỳ và theo sự kiện; chênh lệch phải có hàng xử lý, mức độ ưu tiên và người chịu trách nhiệm.
+7. Mọi thay đổi nhạy cảm cần audit: ai, lúc nào, dữ liệu trước/sau và lý do.
 
 ## Chọn A hay B?
 
-| Tình huống | Chọn | Không chọn vì |
+| Cách lưu | Hợp khi | Rủi ro |
 |---|---|---|
-| Venue timeout | Đối soát theo reference trước retry | Retry mù có thể tạo lệnh/charge trùng |
-| Cần lịch sử sửa sai | Append correction có audit | Update/xóa record làm mất bằng chứng |
-| Đọc portfolio nhanh | Cache cho hiển thị có timestamp | Cache stale quyết định buying power |
-| Event giao trùng | Consumer dedup và transition có điều kiện | Tin broker ‘exactly once’ cho toàn workflow |
+| Ghi đè số tổng | Dữ liệu không cần audit và có thể tái tạo dễ | Mất dấu vết, khó xử lý message muộn hoặc correction |
+| Lưu từng sự kiện/bút toán | Tiền, tài sản và lịch sử phải giải thích được | Nhiều dữ liệu hơn, cần projection (bản dữ liệu đọc nhanh) |
+| Tính số dư trực tiếp từ mọi event | Quy mô nhỏ hoặc dùng để kiểm tra | Chậm khi dữ liệu lớn |
+| Giữ snapshot/projection | Cần đọc nhanh | Phải chứng minh snapshot khớp với ledger nguồn |
 
 ## Nếu có lỗi thì sao?
 
-**Case unknown outcome:** venue có thể đã khớp nhưng callback chưa đến. Alert record `Unknown` quá tuổi. Operator dùng reference query venue, khóa hành động tạo rủi ro trên account nếu policy yêu cầu, chạy reconciliation và tạo correction; mọi bước để lại audit. Không dùng script trực tiếp sửa số dư không dấu vết.
+Nếu execution đến trùng, unique key theo venue + execution ID khiến lần ghi thứ hai không tạo thêm khối lượng. Nếu execution đến sau cancellation, không suy luận chỉ từ thứ tự message đến. Lưu message, sequence/thời điểm có hiệu lực của venue rồi áp dụng quy tắc venue để biết fill đó hợp lệ trước hay sau cancel; trường hợp không quyết được phải vào hàng đối soát.
 
-**Case event muộn:** cancellation có thể đến sau partial fill. State machine phải chấp nhận fact theo thứ tự business hợp lệ hoặc đưa conflict vào hàng xử lý; không suy luận “đến sau là sai” chỉ từ timestamp mạng.
+Nếu số dư nội bộ lệch với đối tác, không tự động “chỉnh cho bằng” mà không lưu lý do. Tạo case đối soát, giữ bằng chứng hai phía và dùng bút toán điều chỉnh được phê duyệt.
+
+::: warning
+Quy tắc thật về trạng thái lệnh, settlement, làm tròn, ngày giao dịch và báo cáo phụ thuộc thị trường, sản phẩm và quy định. Cần xác nhận với chuyên gia domain/compliance trước khi triển khai production.
+:::
 
 ## Chứng minh mình làm đúng
 
-Theo dõi số unknown outcome, duplicate bị chặn, latency callback, mismatch reconciliation, tuổi state pending và ledger imbalance theo phạm vi. Test integration cần có duplicate, timeout sau send, partial fill/cancel và restart worker. Với yêu cầu compliance cụ thể, xác nhận policy/retention với bộ phận pháp lý/compliance thay vì suy đoán từ pattern kỹ thuật.
+- Test partial fill, duplicate fill, fill đến muộn, cancel và correction.
+- Kiểm tra tổng debit và credit theo quy tắc ledger luôn cân bằng.
+- Có báo cáo chênh lệch và thời gian xử lý đối soát.
+- Có thể truy từ số dư về từng bút toán và nguồn sự kiện.
 
 ## Nói trong phỏng vấn
 
-“Với order trading, em không coi timeout là failed vì venue có thể đã nhận lệnh. Em lưu intent với reference, tách execution fact và ledger, rồi đối soát trước retry. Partial fill chỉ giảm open quantity; cancel không xóa phần đã khớp. Đổi lại workflow có pending/unknown và vận hành phức tạp hơn, nên em theo dõi record quá tuổi, mismatch và có runbook correction có audit.”
+“Em tách lệnh đặt khỏi lần khớp: lệnh là ý định mua hoặc bán, còn mỗi lần khớp là một việc đã xảy ra và có mã riêng. Yêu cầu hủy chỉ nhắm phần còn mở và có hiệu lực theo xác nhận của sàn. Tiền và tài sản được ghi vào sổ cái không mất lịch sử; sửa sai thì thêm bút toán điều chỉnh mới. Thông báo từ sàn có thể đến trùng hoặc đến muộn, nên database không cho cùng một mã lần khớp được ghi hai lần. Sau đó hệ thống áp dụng trạng thái theo thứ tự và thời điểm có hiệu lực mà sàn cung cấp, rồi đối chiếu dữ liệu với nguồn bên ngoài.”
 
 ## Interviewer thường hỏi tiếp
 
-- Khi nào bạn chặn khách đặt lệnh tiếp, và ai có quyền gỡ chặn?
-- Unique constraint trong DB bảo vệ được gì, còn callback/venue duplicate cần gì thêm?
+### Khi nào trả lại buying power (sức mua còn có thể dùng)?
+
+Phụ thuộc quy tắc sản phẩm và thị trường. Về mô hình, chỉ giải phóng phần đã hủy hoặc không còn bị giữ theo trạng thái được xác nhận; không lấy “order cancelled” để xóa cả phần đã khớp.
+
+### Vì sao cần cả ledger và đối soát?
+
+Ledger giữ lịch sử nội bộ có thể kiểm toán. Đối soát phát hiện khi dữ liệu nội bộ khác bằng chứng của hệ thống ngoài do message mất, mapping sai, correction hoặc lỗi vận hành.
 
 ## Tự kiểm trước khi qua bài
 
-- Tôi có tách intent, fact và ledger trong lời giải thích không?
-- Tôi xử lý timeout như unknown outcome chưa?
-- Mọi correction có audit và boundary rõ chưa?
+- Order, execution và settlement khác nhau ở điểm nào?
+- Message fill trùng bị chặn bởi khóa nào?
+- Khi hai nguồn lệch nhau, ai xử lý và lịch sử được giữ ra sao?
 
 ## Nhớ một phút
 
-- Timeout → đối soát, không retry mù.
-- Fact và ledger cần lịch sử bất biến.
-- Quyết định tiền dựa nguồn dữ liệu gốc.
+- Lệnh là ý định; execution là việc đã xảy ra.
+- Hủy không xóa phần đã khớp.
+- Tiền và tài sản cần lịch sử không mất dấu cùng quy trình đối soát.

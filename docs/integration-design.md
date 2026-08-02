@@ -1,87 +1,78 @@
-# Chọn REST, gRPC hay event theo việc người dùng cần biết
+# REST, gRPC và event: chọn cách hai phần hệ thống nói chuyện
 
 ## Trong 30 giây
 
-- Chọn cách giao tiếp từ câu hỏi: ai chờ kết quả, dữ liệu thuộc ai và lỗi nào chấp nhận được.
-- REST phù hợp public/client API; gRPC có thể phù hợp call nội bộ khi lợi ích contract sinh code hoặc streaming rõ; event hợp việc có thể hoàn thành sau.
-- Event không làm hệ thống “tự decouple”: consumer vẫn nhận trùng, nhận muộn và phải tự vận hành.
-- CQRS chỉ tách khi cách đọc thật sự khác cách ghi.
-- Mỗi đường giao tiếp phải có deadline hoặc trạng thái chờ, owner và cách biết nó hỏng.
+- Chọn cách giao tiếp từ điều bên gọi cần biết ngay, ai sở hữu dữ liệu và điều gì xảy ra khi bên nhận chậm hoặc lỗi.
+- REST là cách thiết kế API, thường dùng HTTP; nó hợp khi client cần gửi yêu cầu và nhận phản hồi rõ ràng. gRPC hợp với service nội bộ đã cùng quy ước dữ liệu và có lợi ích thật từ kiểu dữ liệu hoặc truyền dòng; nó không thay cho phân quyền hay xử lý lỗi.
+- Event phù hợp khi bên gửi chỉ cần ghi nhận “đã xảy ra việc này”, không cần bên nhận trả lời ngay.
+- Event có thể đến trễ hoặc đến lại. Bên nhận phải tự giữ dữ liệu của mình đúng.
 
 ## Gặp ở đâu ngoài đời?
 
-Checkout cần báo ngay order đã được nhận. Gửi email xác nhận có thể xong sau. Nếu API chờ Email Service trả lời, sự cố email sẽ làm khách không đặt hàng được. Nhưng nếu Payment cũng chỉ nhận event, UI không biết khách đã bị charge hay chưa.
+Sau khi khách đặt hàng, màn hình cần biết order có được tạo không. Kho cần giữ hàng, email cần gửi biên nhận và analytics muốn ghi số liệu. Nếu API chờ cả kho, email và analytics trả lời, một lỗi email có thể làm khách không đặt được order.
 
-Vậy Order nhận command đồng bộ để tạo order `Pending`; Payment có một boundary rõ để trả outcome; email nhận event sau khi order được tạo. Cùng một luồng có thể dùng nhiều kiểu giao tiếp, vì nhu cầu mỗi bước khác nhau.
+Order service nên trả kết quả tạo order cho màn hình. Sau đó nó có thể phát event để email và analytics làm việc riêng. Kho thì tùy luật: nếu phải xác nhận còn hàng trước khi nhận order, Order cần gọi kho đồng bộ hoặc thiết kế trạng thái `pending` (đang chờ xác nhận) rõ ràng.
 
 ## Hiểu đơn giản trước
 
-- Call **đồng bộ** nghĩa là người gọi chờ: nó phụ thuộc cả độ trễ lẫn khả năng sẵn sàng của bên nhận.
-- **Event** là thông báo “một fact đã xảy ra”; bên nhận xử lý lúc phù hợp, đổi lại dữ liệu có thể trễ.
-- **CQRS (tách đường ghi khỏi đường đọc)** chỉ cần khi dashboard/search cần dạng dữ liệu khác source để ra quyết định.
-- Không kiểu nào loại bỏ lỗi; nó chỉ dời lỗi sang chỗ khác.
+REST là một style thiết kế API, thường được triển khai qua HTTP; không phải HTTP API nào cũng tự là REST. Nó hợp với app web/mobile và API công khai khi contract tài nguyên, method và response rõ ràng.
+
+gRPC dùng contract có kiểu dữ liệu chặt hơn. Một RPC dạng unary là một lời gọi request/response; gRPC còn hỗ trợ client streaming, server streaming và hai chiều. Với mọi cuộc gọi trực tiếp, bên gọi vẫn cần quyết định có chờ kết quả ngay không và timeout/cancellation được xử lý ra sao.
+
+Event là thông báo một sự việc đã xảy ra, ví dụ `OrderCreated`. Bên gửi không đợi email hay analytics xong. Đổi lại, bên nhận có thể thấy dữ liệu muộn, nhận trùng hoặc bỏ lỡ nếu hệ thống phát event không bền.
 
 ## Từ cần biết
 
-- **REST** (HTTP resource dễ debug) — thường cho browser/public client.
-- **gRPC** (RPC có contract kiểu rõ) — hay dùng nội bộ khi streaming/overhead quan trọng.
-- [[Idempotency]] (gọi lại không tạo effect mới) — cần ở command/event boundary.
-- **CQRS** (ghi và đọc tối ưu theo mục đích khác nhau) — không phải mặc định cho CRUD.
+- **Synchronous call**: bên gọi chờ phản hồi ngay trong request hiện tại.
+- **Event**: bản ghi nói sự việc đã xảy ra; không phải câu lệnh bắt service khác phải làm gì.
+- **Contract version**: quy tắc để phiên bản cũ và mới hiểu dữ liệu của nhau trong lúc deploy.
+- **CQRS**: tách đường ghi dữ liệu và đường đọc khi hai nhu cầu này thật sự khác nhau; không phải yêu cầu mặc định cho mọi CRUD.
 
 ## Cách quyết định, từng bước
 
-1. **Xác định điểm trả lời cho người dùng.** Nếu cần outcome ngay, dùng REST/gRPC với deadline rõ; nếu chỉ nhận yêu cầu, trả trạng thái `Pending` thật.
-2. **Xác định owner.** API không được biến thành đường tắt để service khác ghi dữ liệu không thuộc mình.
-3. **Chọn baseline đơn giản.** REST trước cho public API; chỉ chọn gRPC khi contract nội bộ/streaming chứng minh lợi ích.
-4. **Chỉ đưa event cho side effect có thể trễ.** Ghi event qua outbox, đặt event ID/version, consumer idempotent và có DLQ.
-5. **Nói rõ freshness.** Read model CQRS phải cho biết dữ liệu có thể trễ bao lâu và người dùng làm gì lúc chưa cập nhật.
+1. Hỏi người dùng cần biết kết quả nào ngay. Nếu không có kết quả đó thì request có được coi là thành công không?
+2. Chọn phần chịu trách nhiệm dữ liệu. Service khác không được sửa trực tiếp database của phần đó chỉ vì đọc nhanh hơn.
+3. Dùng REST khi client đa dạng hoặc API cần dễ quan sát/debug. Dùng gRPC khi tất cả caller là nội bộ, tổ chức có cách quản lý proto và lợi ích thật từ streaming/contract có kiểu.
+4. Dùng event cho việc độc lập về thời gian, như gửi email hoặc cập nhật read model. Ghi event bền cùng thay đổi local nếu event không được mất.
+5. Thiết kế contract theo hướng thêm field mới trước, consumer bỏ qua field chưa biết nếu hợp lệ. Có version, correlation ID và thời hạn hỗ trợ rõ.
+6. Test timeout, event trùng, consumer chậm và phiên bản cũ/mới cùng chạy; đây là lỗi chính của integration, không phải chi tiết phụ.
 
 ## Chọn A hay B?
 
-| Chọn | Khi dùng | Được gì | Không dùng khi |
+| Lựa chọn | Nên dùng khi | Được gì | Đổi lại |
 |---|---|---|---|
-| REST | Browser/public API, cần debug/cache đơn giản | Contract dễ tiếp cận | Call nội bộ dày, streaming hoặc typed contract là nút thắt |
-| gRPC | Service nội bộ được kiểm soát, cần contract sinh code/streaming hoặc overhead đã đo là nút thắt | Contract chặt, payload gọn | Consumer là browser/public gateway chưa hỗ trợ tốt; deadline vẫn đặt theo SLO/dependency như REST |
-| Event | Nhiều phản ứng độc lập, không nằm critical path | Tách thời gian, hấp thụ burst | UI cần kết quả chắc ngay |
-| CQRS | Mẫu đọc khác hẳn mẫu ghi | Read model nhanh, rõ | CRUD đơn giản không có read pressure |
+| REST | web/mobile hoặc API nhiều client | contract HTTP quen thuộc, dễ quan sát | nếu request cần kết quả ngay, caller phải xử lý timeout |
+| gRPC | service nội bộ kiểm soát được contract | kiểu dữ liệu rõ, hỗ trợ streaming | cần quản lý proto, gateway và observability phù hợp |
+| Event | bên gửi không cần kết quả ngay | giảm phụ thuộc thời điểm | dữ liệu trễ, nhận trùng, cần replay/đối soát |
+| CQRS | đọc và ghi có mô hình/tải khác rõ rệt | tối ưu mỗi đường theo nhu cầu | thêm đồng bộ dữ liệu và độ phức tạp |
 
 ## Nếu có lỗi thì sao?
 
-Event `OrderCreated` có thể bị phát hai lần hoặc Email consumer chết giữa chừng. Email handler cần delivery ID/idempotency key; ack chỉ sau khi ghi outcome bền. Nếu payload sai vĩnh viễn, đưa DLQ kèm correlation ID và owner để sửa/replay. Không retry vô hạn rồi làm backlog che mất lỗi.
+Consumer email bị hỏng không được làm Order rollback nếu email là việc sau đó. Giữ event, retry có giới hạn và đưa event lỗi vào hàng đợi riêng. Khi email hoạt động lại, consumer xử lý tiếp bằng event ID để không gửi trùng.
 
-::: production-trap
-Trả `200 OK` sau khi chỉ đẩy command vào queue mà không nói rõ “đã nhận” hay “đã hoàn tất” làm client hiểu sai và retry sai.
-:::
+Ngược lại, nếu kho phải chặn bán vượt tồn, đừng phát event rồi trả “đã đặt thành công” khi chưa có quy tắc cho trạng thái chờ. Hoặc gọi kho để lấy quyết định trước, hoặc trả `pending` và nói rõ khi nào order được xác nhận.
 
 ## Chứng minh mình làm đúng
 
-- Có deadline, timeout/error budget cho call đồng bộ.
-- Có publish lag, consumer lag, duplicate và DLQ dashboard cho event.
-- Contract test theo version trước khi release producer/consumer.
-- Đo thời gian read model hội tụ và số lần UI thấy `Pending`.
+Contract test giữa producer và consumer, test event trùng/đến muộn, test timeout của call trực tiếp. Theo dõi thời gian phản hồi của call, độ trễ event, số message lỗi, version đang dùng và số order kẹt ở `pending`.
 
 ## Nói trong phỏng vấn
 
-“Em chọn giao tiếp theo critical path. Order cần phản hồi ngay nên API trả kết quả hoặc trạng thái pending rõ ràng với deadline; email là side effect nên nhận event qua outbox. Với event, em mặc định delivery có thể trùng và trễ, nên consumer có ID ổn định, retry có giới hạn và DLQ có owner. REST là baseline cho client; gRPC chỉ khi nội bộ có lợi ích contract hoặc streaming rõ. CQRS chỉ tách nếu dashboard cần model đọc khác source of truth.”
+“Em không chọn REST, gRPC hay event chỉ vì công nghệ đó mới. Em hỏi caller cần kết quả nào ngay và `data ownership` nằm ở đâu. REST hoặc gRPC phù hợp khi caller cần response trong request hiện tại; event phù hợp với việc có thể hoàn thành sau. Khi dùng event, em chuẩn bị cho eventual consistency, duplicate delivery và contract versioning. Nếu quyết định như giữ tồn kho phải có ngay, em gọi đồng bộ hoặc hiển thị trạng thái pending rõ ràng cho người dùng.”
 
 ## Interviewer thường hỏi tiếp
 
-### Khi nào event không phù hợp?
-
-Khi caller cần quyết định outcome ngay, hoặc chưa có owner cho retry, dedup, DLQ và trạng thái trễ. Event không thay thế contract nghiệp vụ.
-
-### CQRS có bắt buộc event sourcing không?
-
-Không. CQRS chỉ tách read/write. Event sourcing dùng event làm lịch sử chính và có chi phí model/replay riêng.
+- Khi nào event là lựa chọn sai dù hệ thống có broker?
+- Vì sao gRPC không tự làm service nhanh hoặc an toàn hơn?
 
 ## Tự kiểm trước khi qua bài
 
-- Bước nào trong checkout cần kết quả trước khi trả UI?
-- Nếu một event tới hai lần, effect nào bị nhân đôi nếu không có guard?
-- Read model của bạn trễ được bao lâu và UI nói gì trong lúc đó?
+- Caller cần câu trả lời nào ngay để tiếp tục?
+- Ai là owner của dữ liệu đang thay đổi?
+- Nếu bên nhận event chậm hoặc nhận trùng, kết quả có còn đúng không?
 
 ## Nhớ một phút
 
-- Sync để quyết định ngay; event cho việc có thể trễ.
-- Event cần ID, version, dedup và visibility.
-- CQRS là tối ưu có điều kiện, không phải nghi thức kiến trúc.
+- Call trực tiếp để lấy quyết định ngay; event để báo việc đã xảy ra.
+- Contract và lỗi mạng quan trọng hơn tên giao thức.
+- Dữ liệu đến sau phải có trạng thái và đường xử lý rõ.

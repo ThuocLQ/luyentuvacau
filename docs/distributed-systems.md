@@ -1,81 +1,93 @@
-# Outbox và idempotency: giữ đúng khi message bị trùng hoặc bị mất
+# Outbox và idempotency: làm sao để xử lý đúng khi message đến lại?
 
 ## Trong 30 giây
 
-- Ghi database và gửi message là hai việc khác nhau; app có thể chết giữa hai việc.
-- [[Transactional Outbox]] ghi thay đổi nghiệp vụ và ý định phát event trong cùng transaction local.
-- Delivery thực tế thường at-least-once: message có thể đến lại; effect phải được chặn trùng ở consumer.
-- Retry chỉ dành cho lỗi tạm thời, có giới hạn; message sai cần DLQ và owner.
-- Theo dõi outbox age, publish lag, consumer lag, duplicate và đối soát.
+- Một lần xử lý nghiệp vụ có thể phải vừa lưu database, vừa báo cho hệ thống khác. Hai việc này không tự động thành một giao dịch chung.
+- **Outbox** là bảng lưu “việc cần thông báo” cùng transaction *local* với dữ liệu nghiệp vụ trong cùng database.
+- Worker đọc outbox rồi gửi message. Vì worker có thể gửi lại, bên nhận phải xử lý trùng an toàn.
+- **Idempotency** nghĩa là cùng một yêu cầu nghiệp vụ được thực hiện lại nhưng không tạo thêm kết quả ngoài ý muốn.
+- Outbox giảm nguy cơ quên gửi thông báo; nó không hứa message chỉ đến đúng một lần.
 
 ## Gặp ở đâu ngoài đời?
 
-Order đã commit, rồi process mất mạng trước khi phát `OrderCreated`; kho không reserve. Nếu phát event trước rồi transaction rollback, kho lại reserve một order không tồn tại. Đây là dual-write gap: hai hệ thống không cùng một transaction.
+API tạo đơn hàng đã lưu Order thành công, nhưng ứng dụng tắt ngay trước khi gửi `OrderCreated`. Kho không biết để giữ hàng. Nếu ứng dụng gửi message trước rồi lưu Order thất bại, kho lại giữ hàng cho một đơn không tồn tại.
+
+Vấn đề nằm ở khoảng trống giữa hai lần ghi: một lần vào database của Order, một lần vào broker (hệ thống chuyển message).
 
 ## Hiểu đơn giản trước
 
-Database chỉ hứa giữ dữ liệu của chính nó. Broker hay payment provider là boundary khác. Outbox là “phiếu cần gửi” lưu cùng lúc với order. Worker gửi phiếu sau. Worker có thể chết sau khi gửi nhưng trước khi đánh dấu đã gửi, nên consumer phải coi event đến lại là bình thường.
+Outbox là một “phiếu nhắc việc” nằm trong cùng database với Order. Khi tạo Order, ứng dụng ghi luôn phiếu `cần phát OrderCreated` trong cùng transaction local. Hoặc cả hai cùng được lưu, hoặc cả hai cùng không được lưu. Transaction này **không** bao gồm broker hay consumer.
+
+Sau đó một worker gửi phiếu sang broker. Worker có thể gửi xong rồi chết trước khi đánh dấu phiếu đã gửi. Vì thế message có thể đến lần nữa. Bên nhận dùng `eventId` (mã duy nhất của event) hoặc mã nghiệp vụ duy nhất để nhận ra: “việc này tôi làm rồi”.
+
+Outbox bảo vệ **ý định gửi** đã được lưu. Idempotency bảo vệ **kết quả cuối** không bị nhân đôi. Hai cơ chế giải quyết hai nửa khác nhau của bài toán.
 
 ## Từ cần biết
 
-- [[Transactional Outbox]] (phiếu event lưu cùng transaction) — bảo vệ ý định phát event.
-- [[Idempotency]] (chạy lại không thêm effect) — bảo vệ consumer/API boundary.
-- [[Dead-letter queue]] (nơi cách ly message không tự khỏi) — cần owner và quy trình replay.
-- **At-least-once** (có thể giao lại) — không phải “chắc chắn chỉ một lần”.
+- **Transaction local** (giao dịch trong một database): các thay đổi cùng thành công hoặc cùng bị hủy.
+- **Broker** (trạm chuyển message): nhận message từ bên gửi và chuyển cho bên nhận.
+- **At-least-once** (có thể giao lại): tùy cách cấu hình giao nhận, xác nhận và lưu message của broker, cùng một message có thể được giao nhiều lần. Cần kiểm tra cam kết thật của broker đang dùng.
+- **DLQ – dead-letter queue**: nơi cách ly message lỗi không tự hết để team kiểm tra, sửa và replay.
+- **Reconciliation** (đối soát): so sánh dữ liệu giữa các bên để tìm và sửa chênh lệch.
 
 ## Cách quyết định, từng bước
 
-1. Trong transaction tạo Order, ghi outbox row gồm event ID, type, version, payload và correlation ID.
-2. Relay claim/lease row để nhiều relay không cùng xử lý; chỉ đánh dấu đã phát sau khi broker xác nhận publish. Crash sau confirmation nhưng trước khi đánh dấu vẫn được phép phát lại.
-3. Nếu effect là ghi database local, consumer lưu processed event ID hoặc unique business key trong cùng transaction với effect. Với HTTP/payment/email, local dedup không atomic với provider: dùng provider idempotency/reference rồi đối soát khi outcome chưa biết.
-4. Chỉ retry timeout/5xx có khả năng hồi phục; dùng backoff, jitter và retry budget.
-5. Message payload/schema sai vào DLQ; owner sửa rồi replay có kiểm soát.
+1. Xác định dữ liệu nào phải cùng đúng. Ví dụ: Order và phiếu outbox phải cùng được lưu.
+2. Trong một transaction, ghi Order và outbox row. Row nên có `eventId`, loại event, phiên bản nội dung, dữ liệu cần gửi và thời điểm tạo.
+3. Worker lấy các row chưa gửi, phát sang broker, rồi chỉ đánh dấu đã gửi khi broker xác nhận **đã nhận message**. Xác nhận này chưa có nghĩa consumer đã xử lý xong.
+4. Bên nhận lưu `eventId` đã xử lý trong cùng transaction với thay đổi của nó, hoặc dùng một khóa nghiệp vụ duy nhất.
+5. Với payment, email hay API ngoài, dùng `idempotency key` mà provider hỗ trợ. Nếu timeout tạo unknown outcome, tra cứu hoặc đối soát trước khi retry.
+6. Chỉ tự thử lại lỗi có khả năng hết, như mất mạng ngắn. Lỗi dữ liệu hoặc sai phiên bản cần đưa vào DLQ và có người chịu trách nhiệm.
 
 ## Chọn A hay B?
 
-| Chọn | Khi dùng | Đổi lại |
+| Cách | Hợp khi | Cái giá phải trả |
 |---|---|---|
-| Gọi sync | Cần outcome ngay | Timeout lan và phụ thuộc availability |
-| Outbox + event | Side effect có thể trễ/độc lập | Consumer trùng, lag, vận hành broker |
-| Saga | Nhiều owner, có state trung gian rõ | Cần timeout, compensation/reconciliation |
-| Không dùng event | Cùng owner và transaction local đủ | Ít tách thời gian hơn |
+| Gọi đồng bộ | Người dùng cần câu trả lời ngay | Hệ thống gọi bị phụ thuộc vào tốc độ và tình trạng của bên kia |
+| Outbox + message | Việc sau có thể hoàn thành trễ một chút | Phải xử lý message trùng, theo dõi hàng đợi và độ trễ |
+| Chỉ dùng transaction local | Mọi thay đổi nằm trong cùng database và cùng owner | Không giải quyết được việc gọi hệ thống ngoài |
 
 ## Nếu có lỗi thì sao?
 
-Publisher backlog tăng vì broker lỗi: không xóa outbox row. Báo alert theo age của row cũ nhất; giới hạn tốc độ phát để không làm database/broker quá tải. Nếu consumer đã ghi payment rồi crash, delivery sau phải bị dedupe bằng event ID hoặc payment reference, không charge lần nữa. Retention của processed-ID phải dài hơn cửa sổ replay và phù hợp vòng đời nghiệp vụ: xóa quá sớm cho phép event cũ tạo effect lại, giữ mãi thì tốn storage.
+Nếu broker ngừng hoạt động, các row outbox vẫn còn trong database. Khi broker hồi phục, worker gửi tiếp. Cần cảnh báo khi row cũ nhất nằm chờ quá lâu.
 
-::: production-trap
-“Broker bảo đảm exactly-once” không bảo vệ việc ghi database hoặc gọi API bên ngoài. Mỗi effect vẫn cần boundary idempotent của chính nó.
+Nếu bên nhận đã cập nhật dữ liệu rồi ứng dụng tắt trước khi xác nhận message, broker sẽ giao lại. `eventId` đã lưu giúp bên nhận bỏ qua lần xử lý thứ hai.
+
+Nếu gọi cổng thanh toán bị timeout, “không nhận được câu trả lời” chưa có nghĩa là “chưa trừ tiền”. Hãy tra cứu theo mã giao dịch trước khi thử charge lại.
+
+::: warning
+Không có một nhãn “exactly-once” nào tự bảo vệ toàn bộ chuỗi database → broker → API ngoài. Mỗi nơi tạo side effect phải có cách xử lý idempotent riêng.
 :::
 
 ## Chứng minh mình làm đúng
 
-- Dashboard outbox age, publish failure, consumer lag, DLQ và duplicate rejection.
-- Test crash ở ba điểm: trước commit, sau commit/trước publish, sau publish/trước ack.
-- Replay một event cũ để chứng minh effect không nhân đôi.
+- Thử cho ứng dụng dừng ở ba điểm: trước commit, sau commit nhưng trước khi gửi, và sau khi gửi nhưng trước khi đánh dấu.
+- Gửi lại cùng một `eventId` và kiểm tra dữ liệu chỉ thay đổi một lần.
+- Theo dõi tuổi của row outbox cũ nhất, số lần gửi lỗi, độ trễ consumer và số message trong DLQ.
+- Có màn hình hoặc quy trình để xem, sửa và phát lại message lỗi.
 
 ## Nói trong phỏng vấn
 
-“Em dùng outbox để order và ý định phát event cùng commit, nên không mất event vì crash giữa hai bước. Em không hứa exactly-once end-to-end: relay có thể phát lại, vì vậy event có ID/version và consumer dedupe trong transaction với effect. Retry chỉ cho lỗi tạm thời; payload lỗi vào DLQ có owner. Em theo dõi outbox age và consumer lag để biết dữ liệu đang chưa hội tụ.”
+“Em ghi business state và Outbox record trong cùng local transaction, nên sau khi commit luôn có dấu vết về event cần publish. Event có thể được redeliver, vì vậy consumer lưu event ID cùng kết quả xử lý để không tạo side effect lần hai. Với external API, em dùng `idempotency key` mà provider hiểu và đối soát khi timeout. Em không hứa exactly-once end-to-end; em bảo vệ riêng từng chỗ có thể tạo order, payment hoặc dữ liệu mới.”
 
 ## Interviewer thường hỏi tiếp
 
-### Outbox không giải quyết gì?
+### Outbox không giải quyết điều gì?
 
-Nó không làm external API hay consumer exactly-once; cũng không tự xử lý schema, ordering, retry hay đối soát.
+Nó không tự bảo đảm thứ tự message, không sửa message sai và không làm API bên ngoài trở thành idempotent. Nó chỉ bảo đảm: khi transaction nghiệp vụ đã commit, ý định phát message cũng đã được lưu.
 
-### Ordering cần ở mức nào?
+### Có cần giữ thứ tự mọi message không?
 
-Chỉ hứa theo key cần thiết, ví dụ `OrderId`. Thứ tự toàn hệ thống vừa đắt vừa thường không cần.
+Thường chỉ cần giữ thứ tự trong cùng một đối tượng, chẳng hạn các event của cùng `OrderId`. Ép toàn hệ thống có một thứ tự duy nhất rất tốn kém và ít khi cần.
 
 ## Tự kiểm trước khi qua bài
 
-- Process chết sau publish thì event được xử lý lại ra sao?
-- Unique key nào bảo vệ effect của consumer?
-- Alert nào cho bạn biết outbox đang kẹt?
+- Ứng dụng chết sau khi gửi nhưng trước khi đánh dấu thì điều gì xảy ra?
+- Khóa nào ngăn cùng một payment hoặc email được tạo hai lần?
+- Bạn biết outbox đang kẹt bằng tín hiệu nào?
 
 ## Nhớ một phút
 
-- Outbox bảo vệ commit local; idempotency bảo vệ từng effect.
-- Trùng và muộn là hành vi phải thiết kế, không phải sự cố hiếm.
-- DLQ chỉ hữu ích khi có owner và replay được.
+- Outbox giữ lại việc cần gửi cùng thay đổi local trong một database.
+- Idempotency ngăn kết quả bị làm hai lần.
+- Message đến trùng và đến muộn là chuyện bình thường phải thiết kế trước.

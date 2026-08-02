@@ -1,74 +1,76 @@
-# Thiết kế API và bảo mật: server phải giữ đúng dữ liệu khi client retry hoặc gửi input xấu
+# Thiết kế API và bảo mật: server phải tự giữ đúng dữ liệu
 
 ## Trong 30 giây
 
-- Validation kiểm dữ liệu; authentication biết ai gọi; authorization kiểm người đó được làm gì với **resource** nào. Ba việc không thay nhau.
-- Command có side effect và có thể bị retry cần stable operation identity; đó có thể là idempotency key, resource ID do client tạo hoặc unique business key, không nhất thiết mọi `POST` đều giống nhau.
-- Timeout với payment/external write là unknown outcome: hỏi lại hoặc đối soát trước khi gửi lại.
-- CORS không phải authentication/authorization. Tenant, ownership, rate limit và secret phải được kiểm ở server.
+- API phải tự kiểm dữ liệu, danh tính và quyền; giao diện web không phải lớp bảo vệ.
+- Request có thể được retry cần `idempotency key` ổn định để không tạo thêm side effect.
+- Timeout khi gọi payment hay đối tác không có nghĩa thao tác thất bại. Có thể phía bên kia đã làm xong.
+- CORS chỉ là quy tắc của trình duyệt, không phải đăng nhập hay phân quyền cho API.
 
 ## Gặp ở đâu ngoài đời?
 
-Khách bấm “Đặt hàng”, mạng timeout rồi app mobile gửi lại. Một user tenant A đổi `orderId` thành ID của tenant B. Một endpoint nhận JSON có field nội bộ mà frontend không hề hiển thị. Nếu server chỉ tin token hợp lệ hoặc chỉ validate model, hệ thống có thể tạo đơn trùng/lộ dữ liệu.
+Khách bấm thanh toán. Mạng chập chờn nên app mobile không nhận được phản hồi và gửi lại cùng thao tác. Nếu server tạo payment mới mỗi lần nhận request, khách có thể bị charge hai lần.
+
+Một user của công ty A đổi `orderId` trên URL thành ID của công ty B. Frontend không hề có nút để làm việc này, nhưng server vẫn phải chặn vì bất kỳ client nào cũng có thể tự gửi HTTP request.
 
 ## Hiểu đơn giản trước
 
-API contract nói client gửi gì, nhận outcome nào và được retry ra sao. **Validation** trả lời dữ liệu có đúng format/range không. **Authentication** xác thực caller. **Authorization** kiểm caller có quyền trên order/tenant cụ thể không. **Invariant** (quy tắc không được sai) bảo vệ state: ví dụ một request thanh toán không tạo hai payment attempt.
+**Validation** (kiểm dữ liệu) hỏi: số tiền có đúng định dạng và trong khoảng cho phép không? **Authentication** (xác thực) hỏi: ai đang gọi? **Authorization** (phân quyền) hỏi: người đó có được đọc hoặc sửa order này không? Ba câu hỏi khác nhau; làm tốt câu đầu không thay được hai câu sau.
 
-JWT hợp lệ chỉ chứng minh token qua kiểm tra chữ ký/claim theo cấu hình; nó không chứng minh caller sở hữu order đang xin đọc. Server lấy tenant/caller từ identity đã xác thực, scope query theo đó, rồi authorize trên resource. Không lấy `tenantId`, role hoặc price do client gửi làm nguồn quyết định.
+Với thao tác tạo side effect như charge tiền hoặc tạo order, server cần biết request retry có phải chính thao tác cũ không. **Idempotency** ở đây nghĩa là xử lý lại cùng request vẫn không tạo thêm payment hay order. Nó không có nghĩa mọi `POST` tự nhiên an toàn khi retry.
 
-## Terms to Know
+## Từ cần biết
 
-- [[Idempotency boundary]]: ranh giới nhận diện duplicate để cùng thao tác chạy lại không tạo effect mới.
-- [[Tenant isolation]]: tenant chỉ đọc/sửa state của mình; phải enforced ở server/data boundary.
-- **Request fingerprint**: phần canonical của request dùng để phát hiện cùng key nhưng payload khác.
-- **Unknown outcome**: timeout/lỗi mạng nhưng downstream có thể đã thực hiện effect.
+- **Resource**: dữ liệu cụ thể đang được tác động, ví dụ order `123`, không chỉ là route `/orders`.
+- [[Tenant isolation]]: dữ liệu của công ty này không được đọc hoặc sửa bởi công ty khác.
+- [[Idempotency boundary]]: ranh giới nơi server nhận diện một thao tác cũ để không tạo tác động lần nữa.
+- **Unknown outcome**: request bị timeout nhưng app chưa biết hệ thống bên ngoài đã tạo side effect hay chưa.
 
 ## Cách quyết định, từng bước
 
-1. Viết contract trước: resource/command, input/output DTO, status/outcome, pagination/sort, lỗi client có thể sửa và retry semantics. Không bind entity nội bộ trực tiếp từ JSON.
-2. Validate shape/range/business input ở boundary; invariant quan trọng được đặt gần source of truth bằng transaction/constraint/state transition có điều kiện.
-3. Authenticate token theo issuer, audience, signature/algorithm, expiry và key rotation theo identity provider của hệ thống. Không tự parse token rồi tin claim.
-4. Authorize theo resource/tenant trên server; query được scope theo tenant/caller trước khi trả dữ liệu. Chọn `404` hay `403` theo policy tránh lộ sự tồn tại resource, và áp dụng nhất quán.
-5. Với command retryable không naturally idempotent, lưu operation identity theo caller + operation, fingerprint, trạng thái và outcome bền. Cùng identity/cùng payload trả outcome cũ; cùng identity/payload khác trả conflict.
-6. Đặt rate limit/request-size/timeouts theo endpoint và tenant/caller để bảo vệ capacity. Log correlation ID/outcome, không log token, password hay payload nhạy cảm.
+1. Viết rõ API nhận gì, trả gì và client được gửi lại khi nào. Dùng DTO cho input thay vì bind thẳng entity database để client không tự ghi các field nội bộ.
+2. Validate format, range và điều kiện của request tại API. Quy tắc dữ liệu không được phép sai khi nhiều request cùng chạy, như “một payment attempt chỉ có một”, cần lớp chặn gần nguồn dữ liệu như unique constraint hoặc cập nhật có điều kiện.
+3. Kiểm token theo issuer, audience, chữ ký, hạn dùng và khoá của hệ thống cấp danh tính. Đừng tự đọc JWT rồi tin các claim chưa được xác minh.
+4. Lấy tenant và caller từ identity đã xác thực. Ngay trong query, chỉ lấy resource thuộc tenant đó; sau đó mới kiểm policy của resource.
+5. Với command có thể thử lại, lưu mã thao tác theo caller + loại thao tác, payload đã chuẩn hoá và trạng thái/kết quả bền. Cùng mã nhưng payload khác trả conflict. Nếu thao tác trước đã xong, có thể trả lại kết quả cũ; nếu nó còn chạy, quy ước API phải nói rõ trả `202` để poll, `409`, hoặc chờ có giới hạn — không được tạo tác động thứ hai.
+6. Đặt giới hạn kích thước request, timeout và rate limit theo endpoint. Log trace ID và outcome, nhưng không log token, mật khẩu hay dữ liệu nhạy cảm.
 
 ## Chọn A hay B?
 
-| Lựa chọn | Dùng khi | Được gì | Đổi lại / không dùng khi |
+| Lựa chọn | Nên dùng khi | Được gì | Không thay thế cho |
 |---|---|---|---|
-| `PUT` với resource ID ổn định | client biết identity và replace semantics phù hợp | retry có identity rõ | vẫn cần authorization, version/concurrency và contract rõ |
-| Idempotency key cho command | create/charge/send có thể retry | trả lại outcome cũ, chặn duplicate effect | cần TTL/retention, fingerprint và xử lý request đang chạy |
-| Unique business constraint | duplicate có invariant rõ trong một database | guard cuối cùng gần data | không tự dedup external effect/cả workflow |
-| Async `202 Accepted` + status | work dài, UI không cần xong ngay | giảm request timeout | UI phải hiểu pending/failed và có status/recovery |
+| `PUT` có resource ID ổn định | client đã có ID và thật sự thay thế resource | retry có identity rõ | kiểm quyền và xử lý update tranh chấp |
+| Idempotency key | create, charge hoặc send có thể bị retry | nhận ra thao tác cũ và tránh tạo side effect thứ hai | đối soát side effect ở hệ thống ngoài; policy cho request đang chạy |
+| Unique business constraint | luật trùng lặp nằm trong một database | database chặn kể cả nhiều app instance | toàn bộ workflow qua payment/broker |
+| `202 Accepted` + trang trạng thái | việc dài, không cần xong ngay | không giữ request quá lâu | màn hình pending/fail và đường khôi phục |
 
 ## Nếu có lỗi thì sao?
 
-Payment provider timeout sau khi đã nhận request không đồng nghĩa payment failed. Record operation ở boundary, query/reconcile bằng provider reference nếu có, rồi mới retry operation an toàn. Đừng giữ transaction database mở khi gọi HTTP: lock kéo dài nhưng vẫn không có transaction toàn cục với provider.
+Payment provider timeout sau khi app gửi request. Không được kết luận là payment failed, cũng không gửi lại ngay. Lưu trạng thái `pending`, dùng mã tham chiếu để hỏi payment provider; nếu chưa xác định được thì đưa vào luồng đối soát có người chịu trách nhiệm.
 
-CORS chỉ là policy browser cho phép script origin khác đọc response; caller ngoài browser không bị CORS chặn. CSRF, SSRF, mass assignment, token leak và tenant escape là threat khác, cần design/validation/authorization/egress policy riêng theo endpoint. Đừng hứa một middleware giải quyết mọi loại bảo mật.
+Đừng dùng CORS để “chặn hacker”. CORS chỉ khiến trình duyệt không cho script từ một origin đọc response. App mobile, service khác hoặc công cụ HTTP vẫn gọi API được, nên authentication và authorization luôn phải ở server.
 
 ## Chứng minh mình làm đúng
 
-Integration test: tenant A không đọc/sửa resource B; same idempotency identity replay đúng outcome; same identity/payload khác bị conflict; process crash giữa operation có recovery; token sai issuer/audience bị từ chối. Theo dõi auth failure theo route, duplicate suppression, conflict, unknown outcome age, rate-limit reject và không có sensitive fields trong log sample.
+Viết integration test để tenant A không đọc/sửa order của tenant B; cùng idempotency key và cùng payload sau khi hoàn tất trả kết quả theo contract; cùng key nhưng payload khác bị conflict; request thứ hai khi request đầu còn chạy không tạo side effect mới. Test crash ở giữa thao tác và test token sai issuer/audience. Theo dõi số request bị từ chối, request trùng bị chặn và các payment pending quá lâu.
 
 ## Nói trong phỏng vấn
 
-“Em tách validation, authentication, authorization và invariant. Token hợp lệ chưa đủ: query và policy đều scope theo tenant/resource ở server. Với command có thể retry và tạo side effect, em chọn stable operation identity, lưu fingerprint và outcome bền; replay cùng payload trả kết quả cũ, payload khác conflict. Timeout với provider là unknown outcome nên em query/reconcile trước retry. Em kiểm bằng integration test cross-tenant, replay/crash và metric duplicate/unknown outcome.”
+“Em tách ba việc: validate payload, authentication và authorization trên đúng đơn hàng. Token hợp lệ chưa chứng minh người dùng được xem mọi đơn, nên server chỉ query dữ liệu thuộc tenant và quyền của họ. Với thao tác có thể được retry, em lưu `idempotency key` cùng request fingerprint và kết quả xử lý để không tạo thêm order hoặc payment. Nếu payment request bị timeout, em coi đó là `unknown outcome` rồi tra cứu hoặc đối soát trước khi retry.”
 
 ## Interviewer thường hỏi tiếp
 
-- Idempotency record hết hạn lúc nào? Request đầu còn đang chạy thì request cùng key thứ hai nhận gì?
-- Khi nào `404` tốt hơn `403`, và quyết định đó có thể lộ thông tin gì?
+- Request đầu còn chạy thì request cùng idempotency key thứ hai nên nhận gì?
+- Khi nào trả `404` thay vì `403` để không lộ resource tồn tại?
 
 ## Tự kiểm trước khi qua bài
 
-- Caller, tenant và resource nào là nguồn quyết định ở server?
-- Command nào có thể retry; duplicate nào phải bị chặn ở boundary nào?
-- Timeout của external write có đường query/reconciliation chưa?
+- Server lấy tenant và quyền từ đâu?
+- Command nào có thể tạo side effect hai lần khi client retry?
+- Khi external call timeout, tôi biết kết quả bằng cách nào?
 
 ## Nhớ một phút
 
-- Contract và authorization bảo vệ resource; validation không thay authorization.
-- Stable identity + outcome bền làm retry an toàn hơn cache memory.
-- CORS không bảo vệ API khỏi caller; luôn xét threat cụ thể.
+- Validation, xác thực và phân quyền là ba việc riêng.
+- Retry an toàn cần nhận diện thao tác cũ và lưu kết quả.
+- CORS không phải hàng rào bảo vệ API.

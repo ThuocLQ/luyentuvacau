@@ -1,81 +1,76 @@
-# Background job bền vững: không mất việc, không làm trùng việc
+# Background job bền vững: giao đúng việc, làm lại không sai
 
 ## Trong 30 giây
 
-- `Task.Run` hay queue trong RAM không sống qua restart; việc quan trọng cần durable handoff.
-- Job handler phải idempotent vì broker có thể giao lại.
-- Ack/xóa job chỉ sau khi effect bền đã được ghi.
-- Retry có điều kiện, deadline và budget; timeout external write thường cần query outcome trước.
-- Bounded concurrency và circuit breaker bảo vệ dependency khi nó chậm.
+- Việc quan trọng không được chỉ nằm trong RAM. App restart là việc biến mất.
+- Hàng đợi có thể giao cùng một việc hơn một lần, nên handler phải biết lần này đã làm xong chưa.
+- Chỉ xác nhận đã xong sau khi kết quả cần giữ đã được lưu.
+- Retry chỉ hợp lý với lỗi có thể tự hết; quá tải thì phải giảm số việc chạy song song.
 
 ## Gặp ở đâu ngoài đời?
 
-API tạo invoice rồi chạy `Task.Run` để gửi email. App recycle ngay sau response: invoice có, email mất. Chuyển sang broker nhưng worker gửi email xong lại crash trước ack: lần giao lại gửi email lần hai. Hai lỗi khác nhau: mất việc và làm trùng việc.
+API tạo hoá đơn rồi trả `200`. Sau đó nó dùng `Task.Run` gửi email. Pod restart ngay sau response: hoá đơn đã có nhưng email không bao giờ được gửi.
+
+Team chuyển sang broker (hệ thống chuyển job). Worker gửi email xong thì crash trước khi báo broker là đã xử lý. Broker giao lại job, khách nhận hai email. Một lỗi là mất việc; lỗi kia là làm trùng việc. Cần xử lý cả hai.
 
 ## Hiểu đơn giản trước
 
-Một background job an toàn có ba điểm: giao việc bền, xử lý có thể lặp và xác nhận đúng lúc. Broker chỉ giữ job; nó không hiểu email/payment đã tạo effect gì. Handler cần một ID ổn định và nơi ghi outcome để lần chạy sau biết phải làm tiếp hay dừng.
+Một job đáng tin cần ba chỗ: nơi giao việc còn tồn tại sau restart, cách xử lý lại mà không tạo thêm hậu quả, và thời điểm xác nhận an toàn. Broker chỉ biết có message; nó không biết email hay payment ở hệ thống khác đã thành công chưa.
+
+**Handler chạy lại không tạo thêm hậu quả** (idempotent handler) thường dùng mã job hoặc mã nghiệp vụ để kiểm tra kết quả cũ. Đây không phải phép màu: nếu handler gọi dịch vụ ngoài, dịch vụ đó cũng cần mã tham chiếu hoặc cách tra cứu kết quả.
 
 ## Từ cần biết
 
-- [[Durable queue]] (hàng đợi sống qua restart) — nơi giao việc quan trọng.
-- [[Ack point]] (điểm xác nhận an toàn) — chỉ sau persistence/effect cần thiết.
-- [[Circuit breaker]] (tạm ngừng gọi dependency lỗi) — bảo vệ capacity, không che lỗi.
-- [[Backpressure]] (làm chậm/từ chối khi quá tải) — tốt hơn nhận vô hạn.
+- [[Durable queue]]: queue vẫn giữ job sau khi app hoặc worker restart.
+- **Ack**: lời xác nhận cho broker rằng worker đã xử lý message.
+- **DLQ**: hàng đợi giữ message lỗi không thể tự thử lại bình thường, để không làm nghẽn các job sau.
+- [[Backpressure]]: giảm tốc độ nhận hoặc chạy việc khi dịch vụ phụ thuộc đang quá tải.
 
 ## Cách quyết định, từng bước
 
-1. Request ghi business state và job/outbox trong transaction nếu job không được mất.
-2. Worker nhận job, dùng job ID/idempotency key để kiểm tra effect đã có chưa.
-3. Gọi dependency với timeout; phân loại lỗi tạm thời, lỗi vĩnh viễn và unknown outcome.
-4. Ghi outcome bền, rồi mới ack. Crash bất kỳ lúc nào phải chạy lại an toàn.
-5. Giới hạn concurrency theo capacity thật của database/partner; mở circuit khi partner liên tục lỗi.
+1. Xác định việc nào có thể mất và việc nào không. Dọn cache có thể chấp nhận mất; email hoá đơn hoặc đồng bộ đối tác thường không.
+2. Nếu không được mất, ghi trạng thái nghiệp vụ và bản ghi job/outbox trong cùng transaction database. App chết sau đó vẫn có bản ghi để worker nhận lại.
+3. Mỗi job có mã ổn định. Trước khi tạo hậu quả, handler kiểm tra hậu quả theo mã đó đã được ghi chưa.
+4. Gọi dịch vụ phụ thuộc với timeout. Lỗi như `429` hoặc mất kết nối có thể thử lại có giới hạn; dữ liệu gửi sai hoặc không có quyền thì chuyển DLQ kèm lý do.
+5. Lưu kết quả cần giữ, sau đó mới ack. Nếu crash sau ack mà trước khi lưu, job đã mất; nếu crash sau khi lưu mà trước ack, job có thể được giao lại nên handler cần idempotent.
+6. Giới hạn số job chạy đồng thời theo sức chịu của database hay partner, rồi xem queue age và lỗi `429` để điều chỉnh.
 
 ## Chọn A hay B?
 
-| Chọn | Khi dùng | Đổi lại |
-|---|---|---|
-| In-process `BackgroundService` | Việc có thể mất hoặc chỉ dọn dẹp nội bộ | Không durable qua crash/deploy |
-| Durable queue | Email, invoice, sync đối tác, workflow quan trọng | Cần broker, retry, DLQ, vận hành |
-| Retry | Lỗi tạm thời, effect idempotent | Có thể khuếch đại tải |
-| Reconcile | Outcome external write chưa biết | Trễ hơn nhưng tránh duplicate |
+| Lựa chọn | Nên dùng khi | Được gì | Đổi lại |
+|---|---|---|---|
+| `BackgroundService` trong app | polling hoặc việc có thể dựng lại từ dữ liệu bền | đơn giản, gần code ứng dụng | không tự làm job trong RAM sống qua restart |
+| Durable queue | email hoá đơn, sync đối tác, workflow không được mất | worker chết vẫn làm lại được | cần theo dõi retry, DLQ và tuổi job |
+| Retry | lỗi tạm thời và thao tác có `idempotency key` | tự hồi phục lỗi ngắn | retry mù có thể làm đối tác quá tải |
+| Đối soát | gọi ra ngoài bị timeout, tạo unknown outcome | tránh tạo side effect trùng | kết quả đến chậm, cần trạng thái pending |
 
 ## Nếu có lỗi thì sao?
 
-Partner trả timeout sau khi nhận yêu cầu. Không retry ngay nếu không biết partner đã làm chưa: query bằng idempotency key/reference, hoặc cho reconciliation job xử lý. Job payload sai thì vào DLQ kèm lỗi và owner; đừng để retry vô hạn chiếm hết worker.
+Partner timeout sau khi có thể đã nhận lệnh. Đừng gửi lại ngay. Worker ghi trạng thái “chưa biết”, hỏi partner bằng request ID; nếu vẫn không biết thì đưa vào job đối soát. Người dùng thấy `pending` thay vì thấy kết quả sai.
 
-::: production-trap
-Ack trước khi ghi outcome làm mất job khi process chết ngay sau ack. Ack sau outcome có thể giao lại; đó là lý do handler phải idempotent.
-:::
+Job có dữ liệu sai thì retry thêm không làm dữ liệu tự đúng. Đưa message vào DLQ, giữ correlation ID và lỗi, giao owner sửa dữ liệu hoặc code rồi mới replay có kiểm soát.
 
 ## Chứng minh mình làm đúng
 
-- Theo dõi queue depth, job age, success/failure, retry exhausted, DLQ và dependency latency.
-- Test restart trước/sau external call và trước/sau ack.
-- Cảnh báo khi concurrency chạm limit hoặc circuit mở quá lâu.
+Test worker chết: trước external call, sau external call và trước/sau ack. Trong production theo dõi số job đang chờ, job chờ quá lâu, retry cạn, DLQ, số job đang chạy và thời gian phản hồi của partner. Alert khi job quan trọng chờ quá giới hạn nghiệp vụ, không chỉ khi queue có message.
 
 ## Nói trong phỏng vấn
 
-“Em không dùng `Task.Run` cho việc không được mất. Em lưu job bền, handler có job ID để delivery lại không tạo effect trùng, và chỉ ack sau khi outcome đã ghi bền. Retry chỉ cho lỗi tạm thời có budget; với timeout ở external write em query hoặc đối soát trước. Em giới hạn concurrency theo partner và theo dõi job age, DLQ để biết người dùng đang chờ ở đâu.”
+“Với job không được mất, em dùng `durable handoff`: persist job và business state vào database hoặc message broker trước khi API báo nhận. Worker dùng job ID để xử lý idempotent và chỉ `ack` sau khi kết quả đã được lưu. Em chỉ retry lỗi tạm thời; external call bị timeout thì coi là unknown outcome và tra cứu trước. Em giới hạn concurrency theo capacity của đối tác, rồi theo dõi job age và DLQ để biết khách đang bị kẹt ở đâu.”
 
 ## Interviewer thường hỏi tiếp
 
-### BackgroundService có dùng được không?
-
-Có, cho polling/dọn dẹp có thể khôi phục từ state bền. Nó không tự biến hàng đợi memory thành durable job queue.
-
-### Tại sao không retry mọi exception?
-
-Validation, auth hoặc payload sai không tự khỏi; retry chỉ làm tắc queue. Cần phân loại và DLQ/manual handling.
+- Crash sau khi gọi partner nhưng trước ack khác gì crash sau ack?
+- Job nào trong hệ thống của bạn được phép bỏ khi quá tải, job nào không?
 
 ## Tự kiểm trước khi qua bài
 
-- Nếu worker chết ngay sau external call, lần sau biết outcome bằng gì?
-- Ack ở đâu và vì sao?
-- Capacity nào quyết định số job chạy song song?
+- App restart ở bất kỳ điểm nào thì job quan trọng còn ở đâu?
+- Khi job được giao lại, mã nào cho biết side effect cũ đã có hay chưa?
+- Lỗi nào retry được, lỗi nào phải chuyển cho người xử lý?
 
 ## Nhớ một phút
 
-- Durable handoff, idempotent handler, ack sau outcome.
-- Retry có điều kiện và giới hạn.
-- Khi quá tải, bảo vệ dependency trước.
+- Job quan trọng phải được giao ở nơi sống qua restart.
+- Lưu kết quả rồi mới ack; giao lại là bình thường.
+- Retry không thay cho việc biết kết quả của external call.

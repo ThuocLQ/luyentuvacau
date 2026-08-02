@@ -19,6 +19,7 @@ export interface QuizQuestion {
   id: string
   version: number
   type: QuizType
+  learningObjective: string
   topic: string
   difficulty: 'Senior' | 'Lead'
   relatedDoc: string

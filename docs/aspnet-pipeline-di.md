@@ -1,76 +1,76 @@
-# ASP.NET Core pipeline, DI và cấu hình: request đi qua đâu, object sống bao lâu?
+# ASP.NET Core pipeline, DI và cấu hình: để mỗi request đi đúng đường
 
 ## Trong 30 giây
 
-- Middleware chạy theo thứ tự; bước cần route, user hay policy phải đứng sau bước tạo dữ liệu đó.
-- `DbContext` thường scoped theo request và không thread-safe; singleton không được giữ nó hoặc state request.
-- Cấu hình là input production: bind, validate lúc startup và không log secret.
-- Sau proxy, chỉ tin forwarded headers từ proxy/network đã khai báo tin cậy.
+- Một request đi qua các **middleware** (những bước xử lý xếp thành hàng). Đặt sai thứ tự thì bước sau có thể thiếu dữ liệu cần dùng.
+- DI (cơ chế để ứng dụng tạo và quản lý object phụ thuộc) cần chọn đúng thời gian sống của object. `DbContext` thường chỉ nên sống trong một request hoặc một job.
+- Cấu hình production cũng là dữ liệu đầu vào. Cấu hình bắt buộc để app phục vụ cần được phát hiện sớm; cấu hình động còn cần validation, fallback và health signal khi nó được tải lại.
+- Header do proxy thêm chỉ đáng tin khi request thật sự đi qua proxy mà ta đã cho phép.
 
 ## Gặp ở đâu ngoài đời?
 
-`POST /orders` đôi lúc trả `403` dù token hợp lệ; background worker đôi lúc dùng `DbContext` đã dispose. Sau deploy qua reverse proxy, rate limit ghi IP giả vì app tin `X-Forwarded-For` do client tự gửi.
+Khách gửi `POST /orders`. Ứng dụng cần biết URL nào được gọi, người gọi là ai, người đó có quyền tạo order không, rồi mới chạy code tạo order. Nếu kiểm quyền trước khi nhận diện người gọi, request hợp lệ cũng có thể bị từ chối.
 
-Đây không phải ba lỗi rời rạc: pipeline quyết định request thấy gì, DI quyết định object còn sống tới đâu, và config/proxy quyết định app tin input nào.
+Ở một lỗi khác, worker lấy `DbContext` từ request cũ để xử lý tiếp. Request đã kết thúc nên object này đã bị dọn. Worker sẽ lỗi hoặc tệ hơn là dùng dữ liệu theo dõi từ việc khác.
 
 ## Hiểu đơn giản trước
 
-Middleware là các cổng request đi qua theo thứ tự. Exception handling nên bao phần cần bắt; routing chọn endpoint; authentication tạo identity; authorization đánh giá policy dựa trên identity/endpoint. Một middleware đặt trước dữ liệu nó cần sẽ làm sai hoặc không có tác dụng.
+Hãy coi pipeline như cổng vào sân bay. Mỗi cổng làm một việc và cổng sau được dùng kết quả của cổng trước. Ví dụ: xử lý lỗi bao quanh toàn bộ chuyến đi; routing chọn endpoint; authentication (xác thực danh tính) tạo thông tin người gọi; authorization (kiểm tra quyền trên việc cụ thể) mới dùng thông tin đó.
 
-DI lifetime là ownership theo thời gian: transient tạo mỗi lần resolve, scoped sống trong scope (web thường là request), singleton sống đến khi application dừng. Object sống lâu không được giữ object sống ngắn, vì nó có thể dùng state đã dispose hoặc lẫn state giữa request.
+DI không quyết định kiến trúc thay bạn. Nó chỉ là nơi tạo object và dọn object khi hết việc. **Lifetime** (thời gian sống) sai sẽ tạo lỗi: object sống lâu giữ object sống ngắn, hoặc nhiều request vô tình dùng chung state.
 
-## Terms to Know
+## Từ cần biết
 
-- [[Middleware]]: bước xử lý request/response, thứ tự là một phần correctness.
-- [[Dependency Injection]] (DI): container tạo dependency và quản lý lifetime.
-- **Scoped**: một instance trong request/scope; `DbContext` thường là scoped.
-- **Forwarded header**: header proxy thêm để nói scheme/IP gốc; client không đáng tin tự gửi nó.
+- [[Middleware]]: một bước nhận request, có thể làm việc trước và sau bước kế tiếp.
+- **Scoped**: một object dùng trong một scope; với web, scope thường là một request.
+- **Singleton**: một object dùng chung cho toàn bộ thời gian ứng dụng chạy. Nó phải không giữ state của từng request và phải an toàn khi nhiều luồng cùng gọi.
+- **Forwarded header**: header proxy thêm để báo IP hoặc giao thức gốc. Client có thể tự bịa header này nếu app tin tất cả mọi nơi.
 
 ## Cách quyết định, từng bước
 
-1. Vẽ requirement của từng middleware: có cần exception boundary, scheme/IP thật, route metadata, identity hay policy không.
-2. Đặt forwarded-header handling sớm và cấu hình known proxies/networks. Đặt exception handler đủ bao request path cần bắt.
-3. Với endpoint routing, bảo đảm routing trước middleware cần endpoint metadata; authentication trước authorization; rate limiting/endpoint middleware đặt theo policy của app và test route cụ thể.
-4. Đăng ký lifetime từ state/ownership: singleton chỉ giữ immutable/thread-safe state; scoped cho unit-of-work request; transient cho service nhẹ không giữ state.
-5. Worker singleton cần DB tạo scope cho từng job qua `IServiceScopeFactory`, hoặc dùng `IDbContextFactory` khi mỗi operation cần context ngắn. Không lưu scoped service để dùng sau request.
-6. Bind Options, validate field/range/URL bắt buộc ở startup (ví dụ `ValidateOnStart`), và readiness/health theo khả năng service phục vụ traffic chứ không tùy tiện phụ thuộc mọi service xa.
+1. Viết đường đi của một request quan trọng. Nó cần bắt lỗi ở đâu, cần URL nào, cần identity nào và cần policy nào?
+2. Đặt xử lý forwarded headers thật sớm, nhưng chỉ cho các proxy hoặc dải mạng đã cấu hình. Như vậy rate limit và audit mới không tin IP giả.
+3. Đặt routing trước các middleware cần metadata của endpoint. Đặt authentication trước authorization vì bước kiểm quyền cần biết người gọi là ai.
+4. Dùng scoped cho `DbContext` và các service mang state của request. Không chạy nhiều thao tác song song trên cùng `DbContext`, vì nó không được thiết kế để dùng đồng thời.
+5. Worker cần database thì tạo scope mới cho từng job bằng `IServiceScopeFactory`, hoặc tạo context ngắn bằng `IDbContextFactory`. Worker không được giữ service scoped từ request cũ.
+6. Bind cấu hình vào Options. Giá trị bắt buộc để app phục vụ thì kiểm tra lúc khởi động; cấu hình có thể đổi lúc chạy thì kiểm tra ở lần tải, giữ fallback hoặc hạ readiness theo policy. Không in secret ra log.
 
 ## Chọn A hay B?
 
-| Lựa chọn | Dùng khi | Được gì | Đổi lại / không dùng khi |
+| Lựa chọn | Nên dùng khi | Được gì | Cần nhớ |
 |---|---|---|---|
-| Scoped `DbContext` | một unit-of-work request/job | change tracking và transaction boundary rõ | không chạy nhiều operation concurrent trên cùng context |
-| `IDbContextFactory` | worker/operation độc lập, cần context ngắn | lifecycle rõ, tạo theo operation | vẫn phải dispose và không thay transaction design |
-| Singleton | config immutable, client thread-safe, cache có policy | ít allocation, shared resource | không giữ scoped/request state; phải thread-safe |
-| Options validate startup | config bắt buộc cho service chạy | fail sớm, deploy dễ điều tra | không log secret hoặc coi config runtime luôn bất biến |
+| Scoped `DbContext` | xử lý một request hoặc một job | ranh giới dữ liệu và dọn tài nguyên rõ | không chia sẻ cho các task chạy cùng lúc |
+| `IDbContextFactory` | worker xử lý nhiều việc độc lập | mỗi việc có context riêng | vẫn phải dispose và vẫn cần transaction đúng chỗ |
+| Singleton | cấu hình không đổi, HTTP client hoặc cache đã thread-safe | dùng chung tài nguyên hợp lý | không cầm `DbContext`, `HttpContext` hay state request |
+| Validate cấu hình lúc startup | app không thể phục vụ nếu thiếu cấu hình đó | fail sớm, dễ sửa deploy | không áp dụng máy móc cho config động; đừng đưa secret vào lỗi |
 
 ## Nếu có lỗi thì sao?
 
-Authorization trước authentication có thể đánh policy khi chưa có user. Singleton giữ `DbContext` có thể nổ sau dispose hoặc share tracked entity giữa request. Tin forwarded header từ mọi client cho phép giả IP/scheme, làm sai audit, redirect và rate limit.
+Giả sử proxy không nằm trong danh sách tin cậy nhưng app vẫn đọc `X-Forwarded-For`. Kẻ gọi trực tiếp có thể giả IP để vượt rate limit hoặc làm audit sai. Cách sửa không phải “tin header cẩn thận hơn”; app phải chỉ nhận header này từ proxy đã biết.
 
-Khi có lỗi, structured log cần route, status, trace ID và deployment version, không chứa token/header nhạy cảm. Test pipeline bằng request có/không token, tenant/quyền khác nhau và request đi qua proxy mô phỏng; unit test registration không thay được test thứ tự thật.
+Nếu singleton giữ `DbContext`, lỗi có thể xuất hiện sau khi request đã xong hoặc khi hai request dùng chung tracked entity. Hãy bỏ dependency đó khỏi singleton, tạo scope/context mới tại lúc xử lý và thêm test cho worker.
 
 ## Chứng minh mình làm đúng
 
-Tạo integration test cho thứ tự authn/authz, exception mapping, forwarded headers từ proxy tin cậy và client lạ. Trong production theo dõi 401/403 theo route, startup validation failure, scoped-service disposed error, health/readiness và config version không nhạy cảm. Khi deploy, canary route quan trọng trước khi mở toàn bộ traffic.
+Gửi integration test qua pipeline thật: request không token, token hợp lệ nhưng thiếu quyền, request qua proxy được phép và request giả forwarded header. Sau deploy, xem tỉ lệ `401`/`403` theo route, lỗi object đã dispose, readiness và version cấu hình không nhạy cảm.
 
 ## Nói trong phỏng vấn
 
-“Em xem middleware như dependency graph. Routing phải tạo endpoint trước middleware cần metadata; authentication tạo identity trước authorization. Về DI, singleton không giữ `DbContext` scoped vì lifetime và thread safety khác nhau; worker tạo scope/context cho từng job. Config được validate lúc startup, còn forwarded headers chỉ tin từ proxy đã cấu hình. Em xác nhận bằng integration test request thật và metric 401/403, startup/health sau deploy.”
+“Em coi chuỗi middleware là các bước chạy theo thứ tự: trước hết xác định người gọi, sau đó mới kiểm tra quyền. Thông tin do máy trung gian chuyển tiếp chỉ được tin khi máy đó đã được khai báo. Với cơ chế cấp dependency, em chọn vòng đời theo dữ liệu mà service giữ: `DbContext` dùng trong một lần gọi hoặc một công việc nền, còn service sống suốt ứng dụng chỉ giữ dữ liệu dùng chung an toàn. Cấu hình bắt buộc được kiểm tra sớm; cấu hình thay đổi khi đang chạy phải được kiểm tra lại, có giá trị dự phòng và tín hiệu báo lỗi.”
 
 ## Interviewer thường hỏi tiếp
 
-- Vì sao `DbContext` không nên dùng concurrent, và khi nào `IDbContextFactory` hợp lý?
-- Readiness và liveness khác nhau thế nào trong deployment của bạn?
+- Vì sao không nên để hai task cùng dùng một `DbContext`?
+- Khi nào health check nên báo app chưa sẵn sàng nhận traffic?
 
 ## Tự kiểm trước khi qua bài
 
-- Middleware của tôi đang cần identity/route trước hay sau bước nào?
-- Object nào sống lâu đang giữ state request/scoped?
-- App tin forwarded header/config nào, và ai được phép gửi chúng?
+- Middleware này cần dữ liệu do bước nào tạo ra?
+- Object nào của tôi đang sống lâu hơn state mà nó giữ?
+- App đang tin IP và giao thức gốc từ ai?
 
 ## Nhớ một phút
 
-- Pipeline order là correctness, không phải format.
-- Lifetime là ownership; singleton cần thread-safe và không giữ scoped state.
-- Validate config sớm, tin proxy/header theo allow-list.
+- Pipeline là thứ tự phụ thuộc, không phải thứ tự cho đẹp.
+- Object sống lâu không giữ object sống ngắn.
+- Tin cấu hình và forwarded header như dữ liệu đầu vào có thể sai.

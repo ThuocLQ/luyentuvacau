@@ -97,6 +97,7 @@ export default function QuizPage() {
       <p>Câu {position + 1} trong phiên{session.length > 1 ? ` · ${session.length} câu` : ''}</p>
     </div>
     <section className="quiz-question-card" aria-labelledby="quiz-question-title" ref={questionRef} tabIndex={-1}>
+      <p className="quiz-scenario"><strong>Mục tiêu của câu:</strong> {question.learningObjective}</p>
       {question.scenario && <p className="quiz-scenario">{question.scenario}</p>}
       <div className="quiz-context"><div><strong>Dữ kiện</strong><ul>{question.facts.map(item => <li key={item}>{item}</li>)}</ul></div><div><strong>Ràng buộc</strong><ul>{question.constraints.map(item => <li key={item}>{item}</li>)}</ul></div></div>
       <fieldset disabled={submitted}>
