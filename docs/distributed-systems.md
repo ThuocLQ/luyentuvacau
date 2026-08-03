@@ -47,7 +47,7 @@ Hai transaction trong flow thuộc hai database khác nhau. Broker nằm giữa 
 
 1. Xác định dữ liệu nào phải cùng đúng. Ví dụ: Order và phiếu outbox phải cùng được lưu.
 2. Trong một transaction, ghi Order và outbox row. Row nên có `eventId`, loại event, phiên bản nội dung, dữ liệu cần gửi và thời điểm tạo.
-3. Worker lấy các row chưa gửi, phát sang broker, rồi chỉ đánh dấu đã gửi khi broker xác nhận **đã nhận message**. Xác nhận này chưa có nghĩa consumer đã xử lý xong.
+3. Worker lấy các row chưa gửi rồi phát sang broker. Nếu client/broker hỗ trợ publisher confirm hoặc acknowledgement phù hợp, chỉ đánh dấu theo mốc confirm đã chọn trong delivery contract. Mốc đó chưa mặc định có nghĩa consumer đã xử lý xong.
 4. Bên nhận lưu `eventId` đã xử lý trong cùng transaction với thay đổi của nó, hoặc dùng một khóa nghiệp vụ duy nhất.
 5. Với payment, email hay API ngoài, dùng `idempotency key` mà provider hỗ trợ. Nếu timeout tạo unknown outcome, tra cứu hoặc đối soát trước khi retry.
 6. Chỉ tự thử lại lỗi có khả năng hết, như mất mạng ngắn. Lỗi dữ liệu hoặc sai phiên bản cần đưa vào DLQ và có người chịu trách nhiệm.

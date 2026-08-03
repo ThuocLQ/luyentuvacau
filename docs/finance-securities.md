@@ -47,7 +47,7 @@ Client
 - `Event ordering` thường chỉ cần đảm bảo trong scope của cùng order hoặc partition key đã chọn. Không mặc định toàn bộ event của hệ thống có một global order.
 - Duplicate event được chặn bằng event ID hoặc venue execution ID. Partial fill được persist thành từng execution; tổng filled quantity là projection từ các execution hợp lệ.
 - Cancellation là request đóng phần còn open. Nó không xóa execution đã xảy ra và chỉ có hiệu lực theo status/event mà venue trả về.
-- Order Processing Service sở hữu Order state và database của nó; Exchange Gateway sở hữu protocol mapping cùng connection state. Không để hai service cùng ghi trực tiếp một Order row.
+- Trong một thiết kế phổ biến, Order Processing Service có thể sở hữu Order state và database của nó; Exchange Gateway tập trung vào protocol mapping cùng connection state. Đây là một cách chia ownership để tránh hai service cùng ghi trực tiếp một Order row, không phải quy tắc bắt buộc cho mọi hệ thống.
 - Reconciliation so sánh Order/execution nội bộ với report hoặc status từ venue để phát hiện event mất, duplicate, mapping sai hoặc correction.
 
 Đây là flow generic để thảo luận ownership và failure. Delivery guarantee, field, state và cancellation rule cụ thể phải theo contract của broker, gateway và venue đang tích hợp.

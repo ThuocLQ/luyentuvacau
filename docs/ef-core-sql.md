@@ -107,7 +107,7 @@ Test tenant filter, page boundary, thứ tự sort và hai update đồng thời
 
 ## Follow-up
 
-- Vì sao no-tracking đôi khi tạo nhiều instance cho cùng một row liên quan?
+- `AsNoTracking()` khác `AsNoTrackingWithIdentityResolution()` thế nào khi cùng entity xuất hiện nhiều lần trong kết quả?
 - Split query đổi lợi ích join lớn lấy rủi ro gì?
 
 ## Self-check

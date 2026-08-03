@@ -39,9 +39,9 @@ API export vài trăm nghìn dòng. Lúc ít người dùng thì ổn, lúc nhi�
 4. Rà ownership: code tự mở stream/reader thì tự đóng; không dispose object do caller hoặc DI sở hữu.
 5. Nếu profiling cho thấy buffer hot, thử pool với `try/finally`, đo lại và test ownership.
 
-## Code: streaming trước, pooling sau
+## Code: stream dưới dạng NDJSON trước, pooling sau
 
-Ví dụ dưới đây chỉ giữ một batch trong memory. Method sở hữu `DbDataReader` nên dùng `await using`; stream `output` do caller truyền vào nên method không được dispose.
+Ví dụ minh họa dưới đây ghi mỗi row thành một JSON object trên một dòng, tức định dạng NDJSON/JSON Lines chứ không phải JSON array. Endpoint dùng contract này nên trả `Content-Type: application/x-ndjson`. Method sở hữu `DbDataReader` nên dùng `await using`; stream `output` do caller truyền vào nên method không được dispose.
 
 ```csharp
 private static readonly byte[] NewLine = [(byte)'\n'];

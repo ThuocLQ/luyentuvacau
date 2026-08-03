@@ -48,32 +48,30 @@ Với thao tác tạo side effect như charge tiền hoặc tạo order, server 
 
 ```csharp
 var fingerprint = HashPayload(request);
-await using var tx = await db.Database.BeginTransactionAsync(ct);
+var claim = await idempotency.TryClaimAsync(
+    callerId, "CreateOrder", idempotencyKey, fingerprint, ct);
 
-var record = await db.IdempotencyRecords.SingleOrDefaultAsync(
-    x => x.CallerId == callerId && x.Operation == "CreateOrder"
-         && x.Key == idempotencyKey, ct);
-
-if (record is not null)
+// TryClaimAsync insert record Pending dưới unique constraint.
+// Request thua race load lại record đã có, không được chạy CreateOrder.
+if (!claim.IsOwner)
 {
-    if (record.Fingerprint != fingerprint) return Results.Conflict();
-    if (record.Status == "Completed")
-        return Results.Content(record.ResponseJson, "application/json",
-            statusCode: record.StatusCode);
-    return Results.Accepted($"/operations/{record.Id}");
+    if (claim.Record.Fingerprint != fingerprint)
+        return Results.Conflict();
+    if (claim.Record.Status == "Completed")
+        return Results.Content(claim.Record.ResponseJson,
+            "application/json", statusCode: claim.Record.StatusCode);
+    return Results.Accepted($"/operations/{claim.Record.Id}");
 }
 
-record = IdempotencyRecord.Start(callerId, "CreateOrder",
-    idempotencyKey, fingerprint);
-db.Add(record);
+await using var tx = await db.Database.BeginTransactionAsync(ct);
 var response = CreateOrder(request, db);
-record.Complete(response);
+claim.Record.Complete(response);
 await db.SaveChangesAsync(ct);
 await tx.CommitAsync(ct);
 return Results.Ok(response);
 ```
 
-Database cần unique constraint trên `(CallerId, Operation, Key)` và code phải xử lý race khi hai request cùng insert. Ví dụ chỉ bao transaction local. Nếu operation gọi payment provider, truyền idempotency key mà provider hiểu, lưu trạng thái `pending` khi timeout và query status trước khi retry.
+`TryClaimAsync` là abstraction minh họa: bên trong phải dùng unique constraint trên `(CallerId, Operation, Key)` để chỉ một request tạo được record `Pending`; request thua race bắt unique violation rồi load lại record hiện có. Transaction quanh `CreateOrder` không tự ngăn được race ở bước claim. Ví dụ chỉ bao transaction local. Nếu operation gọi payment provider, truyền idempotency key mà provider hiểu, lưu trạng thái `Pending` khi timeout và query status trước khi retry.
 
 ## Nếu có lỗi thì sao?
 

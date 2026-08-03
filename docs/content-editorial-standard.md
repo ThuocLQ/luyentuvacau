@@ -107,3 +107,13 @@ Quiz là bài tập ra quyết định, không phải bài kiểm tra ai quen ja
 **Factual review:** kiểm tra đáp án tốt nhất thật sự được suy ra từ dữ kiện; kiểm tra ranh giới transaction/network, provider/version và mọi claim tuyệt đối. Nếu hai đáp án cùng đúng mà không có điều kiện phân biệt, câu bị block.
 
 **Learner red-team:** một reviewer đọc bối cảnh mà không xem bài gốc, nói lại được vấn đề bằng lời thường, giải thích vì sao từng lựa chọn chưa đúng và rút ra một câu nhớ. Bất kỳ câu nào khiến reviewer phải tra thuật ngữ để hiểu đề đều phải viết lại.
+
+### Checklist cân bằng ngôn ngữ cho quiz — review thủ công
+
+Không dùng thêm regex cứng để quyết định một câu có “quá nhiều tiếng Anh” hay không. Trước khi publish, reviewer đọc thành tiếng lần lượt `prompt`, `facts`, `constraints`, từng option và rationale, phần giải thích, `recall` và `follow-up`, rồi kiểm tra:
+
+- Câu có chủ ngữ, động từ và trật tự tự nhiên của tiếng Việt; term tiếng Anh chỉ giữ khi đó là tên khái niệm developer cần nhận diện.
+- Không mở câu bằng chuỗi động từ tiếng Anh như “persist, query, retry” nếu có thể viết “lưu..., sau đó query... trước khi retry”.
+- Không biến danh từ kỹ thuật thành cấu trúc gượng như “concurrency limit là 40 request”; hãy nói điều hệ thống cho phép, ví dụ “tối đa 40 request chạy đồng thời”.
+- Term mới được giải nghĩa ngay trong bối cảnh, nhưng không lặp bản dịch ở mọi field.
+- Reviewer có thể kể lại tình huống và đáp án bằng lời đời thường mà vẫn giữ đúng `idempotency key`, `unknown outcome`, Outbox, DLQ hoặc term cốt lõi khác.
