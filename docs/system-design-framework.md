@@ -1,6 +1,6 @@
-# Khung trả lời System Design: đi từ yêu cầu đến một thiết kế có lý do
+# System Design Framework
 
-## Trong 30 giây
+## Quick Summary
 
 - System Design không phải cuộc thi kể tên công nghệ. Mục tiêu là biến yêu cầu còn mơ hồ thành một hệ thống có thể giải thích và vận hành.
 - Bắt đầu bằng người dùng, luồng chính, quy mô và điều gì tuyệt đối không được sai.
@@ -8,11 +8,11 @@
 - Mỗi lựa chọn phải trả lời được: giải quyết vấn đề gì, đổi lại điều gì và hỏng thì xử lý ra sao.
 - Nói rõ giả định. Interviewer đánh giá cách bạn suy nghĩ nhiều hơn một sơ đồ “đúng duy nhất”.
 
-## Gặp ở đâu ngoài đời?
+## Problem Framing
 
 Đề bài chỉ nói: “Thiết kế hệ thống đặt hàng”. Nếu vẽ ngay mười microservice, ta vẫn chưa biết một ngày có bao nhiêu đơn, có được bán quá tồn kho không, thanh toán chậm thì người dùng thấy gì, hay dữ liệu cần giữ bao lâu.
 
-## Hiểu đơn giản trước
+## Mental Model: flow trước component
 
 Một thiết kế tốt trả lời được bốn câu:
 
@@ -21,9 +21,9 @@ Một thiết kế tốt trả lời được bốn câu:
 3. Dữ liệu đi qua những bước nào và ai sở hữu nó?
 4. Khi một bước chậm hoặc hỏng, hệ thống và người dùng sẽ thấy gì?
 
-Sau đó mới tính đến quy mô và công nghệ. Ví dụ, “không được trừ tiền hai lần” là yêu cầu nghiệp vụ; mã thao tác ổn định để lần gọi lại không tạo payment thứ hai là một cách thực hiện. Đừng đảo ngược hai thứ này.
+Sau đó mới tính đến quy mô và công nghệ. Ví dụ, “không được trừ tiền hai lần” là business invariant; idempotency key ổn định để request retry không tạo payment thứ hai là một cách thực hiện. Đừng đảo ngược hai thứ này.
 
-## Từ cần biết
+## Terms
 
 - **Functional requirement** (yêu cầu chức năng): người dùng cần làm được gì.
 - **SLO – service level objective** (mục tiêu chất lượng): mốc đo như 99,9% request thành công hoặc p95 dưới 300 ms.
@@ -42,7 +42,7 @@ Sau đó mới tính đến quy mô và công nghệ. Ví dụ, “không đư�
 6. Đi từng chỗ giao giữa các hệ thống bằng một ví dụ. Payment timeout thì Order ở `PaymentPending` (đang chờ xác minh), UI hiện “đang xác minh”, worker tra mã giao dịch rồi mới gửi lại khi an toàn. Sau đó mới tìm các điểm khác có thể chậm, trùng hoặc quá tải và chọn timeout, hàng đợi hay đối soát đúng nơi.
 7. Cuối cùng mới nói về cache, partition, scale-out, cách theo dõi và kế hoạch tăng trưởng.
 
-## Chọn A hay B?
+## Architecture Decision Matrix
 
 | Lựa chọn | Hợp khi | Đổi lại |
 |---|---|---|
@@ -51,24 +51,24 @@ Sau đó mới tính đến quy mô và công nghệ. Ví dụ, “không đư�
 | Một database | Cùng owner, cần transaction đơn giản | Khó scale hoặc tách ownership độc lập về sau |
 | Tách database/service | Có ranh giới và nhu cầu vận hành độc lập rõ | Mất transaction chung, tăng chi phí theo dõi và đối soát |
 
-## Nếu có lỗi thì sao?
+## Failure Walkthrough
 
 Với mỗi mũi tên trên sơ đồ, hỏi: timeout thì sao, gửi lại có trùng không, queue đầy thì sao, dữ liệu cũ bao lâu thì chấp nhận được? Chọn một hoặc hai failure mode quan trọng để đào sâu thay vì liệt kê mọi mẫu thiết kế.
 
 Ví dụ payment timeout: order ở trạng thái `PaymentPending`, người dùng được báo đang kiểm tra, worker tra cứu theo mã giao dịch và đối soát. Đây là thiết kế trải nghiệm cùng với thiết kế kỹ thuật.
 
-## Chứng minh mình làm đúng
+## Validation và Capacity Check
 
 - Mỗi yêu cầu quan trọng nối được tới một thành phần và một cách đo.
 - Ước lượng tải nhất quán với capacity được đề xuất.
 - Business invariant có nơi thực thi rõ: constraint, transaction, idempotency hoặc đối soát.
 - Có cách phát hiện hệ thống đang chậm, sai lệch hoặc mắc kẹt.
 
-## Nói trong phỏng vấn
+## Interview Answer
 
 “Em làm rõ luồng chính, quy mô, SLO và các quy tắc nghiệp vụ không được sai (`business invariant`) trước. Sau đó em vẽ đường đi của dữ liệu, chốt service nào có quyền ghi dữ liệu và chọn storage theo cách đọc/ghi thực tế. Cache hoặc queue chỉ được thêm khi có lý do. Ở mỗi `transaction boundary` — phạm vi có thể commit hoặc rollback cùng nhau — em nói rõ timeout đưa hệ thống vào trạng thái nào, có được retry không và idempotency key nào ngăn tạo side effect lần nữa. Cuối cùng em chỉ ra bottleneck đầu tiên và khi nào cần scale-out.”
 
-## Interviewer thường hỏi tiếp
+## Follow-up
 
 ### Cần ước lượng chính xác đến đâu?
 
@@ -78,13 +78,13 @@ Không cần đoán đúng từng request. Cần đủ để phân biệt 10 req
 
 Khi một yêu cầu cụ thể cần chúng: hấp thụ tải đỉnh, tách thời gian xử lý, phát cho nhiều consumer, hoặc giảm số lần đọc nguồn dữ liệu chậm. Nếu chưa nêu được vấn đề, chưa có cơ sở để thêm.
 
-## Tự kiểm trước khi qua bài
+## Self-check
 
 - Ba business invariant quan trọng nhất là gì?
 - Ai sở hữu trạng thái cuối ở mỗi bước?
 - Khi dependency timeout, người dùng thấy trạng thái nào?
 
-## Nhớ một phút
+## Final Recall
 
 - Yêu cầu và business invariant đi trước công nghệ.
 - Vẽ đường đi dữ liệu và chốt data ownership trước khi chia service.

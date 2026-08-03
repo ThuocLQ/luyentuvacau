@@ -10,6 +10,7 @@ Mục tiêu là viết giống cách một Backend .NET developer Việt Nam gi�
 4. Nếu bản dịch làm developer phải dịch ngược sang tiếng Anh mới nhận ra khái niệm, giữ term tiếng Anh.
 5. Một câu chỉ nên giới thiệu một hoặc hai term mới. Nhiều term thì tách câu hoặc dùng bullet.
 6. Tên API, type, protocol và pattern được giữ nguyên: `Task.WhenAll`, `CancellationToken`, `DbContext`, REST, gRPC, Outbox, Saga.
+7. Vocabulary đã chọn trong body phải được giữ nguyên ở Interview Answer, Follow-up, Quiz, Glossary và Final Recall. Không chuyển sang bản dịch gượng chỉ vì đang tóm tắt.
 
 ## Preferred terms
 
@@ -22,7 +23,7 @@ Mục tiêu là viết giống cách một Backend .NET developer Việt Nam gi�
 | claim | thông tin về danh tính nằm trong token | yêu cầu quyền |
 | tenant | công ty hoặc nhóm dữ liệu cần tách biệt | người thuê |
 | idempotency key | mã đại diện cho cùng một thao tác để retry không tạo side effect mới | khóa chống lặp |
-| request fingerprint | dấu vết rút gọn từ nội dung request để phát hiện cùng key nhưng khác payload | dấu nhận diện payload |
+| request fingerprint | hash hoặc canonical representation của payload để phát hiện cùng key nhưng khác request | dấu nhận diện payload |
 | side effect | thay đổi nghiệp vụ đã tạo ra, như charge tiền hoặc tạo order | hiệu ứng/tác dụng nghiệp vụ lặp dày |
 | unknown outcome | request đã timeout nhưng chưa biết hệ thống phía sau đã tạo side effect hay chưa | trạng thái chưa xác định kết quả của thao tác |
 | source of truth | nơi có quyền quyết định trạng thái cuối của dữ liệu | nguồn sự thật |
@@ -43,6 +44,17 @@ Mục tiêu là viết giống cách một Backend .NET developer Việt Nam gi�
 | transaction boundary | phạm vi thay đổi có thể commit hoặc rollback cùng nhau | biên giới giao dịch |
 | data ownership | nơi hoặc team có quyền quyết định và ghi dữ liệu | chủ sở hữu dữ liệu theo nghĩa con người |
 | event ordering | thứ tự event trong phạm vi key hoặc partition đã chọn | thứ tự toàn hệ thống |
+| operation ID / transaction reference | ID ổn định dùng để query lại trạng thái một operation | mã thao tác chung chung |
+| persist state/response | ghi state hoặc response vào database trước khi báo hoàn tất | trạng thái/kết quả bền |
+| recovery / reconciliation flow | flow query, đối soát hoặc xử lý thủ công khi kết quả chưa rõ | đường khôi phục |
+| audit trail | history ai hoặc system nào đổi state, lúc nào và vì sao | dấu vết kiểm tra |
+| GC / managed heap | GC quản lý object trên managed heap | bộ gom rác ở Interview Answer |
+| memory dump / retaining path | snapshot memory và đường reference đang giữ object sống | ảnh chụp bộ nhớ |
+| streaming / batch | đọc và xử lý dữ liệu theo stream hoặc từng batch | đọc dữ liệu từng phần hoặc theo lô khi đang nói term chuẩn |
+| `ArrayPool<T>` / buffer reuse | thuê và trả buffer để giảm allocation | tái sử dụng vùng nhớ |
+| consumer cuối cùng của buffer | phần code cuối cùng còn đọc hoặc ghi buffer | người dùng cuối cùng của buffer |
+| concurrency limit | số operation hoặc request được chạy cùng lúc | giới hạn song song |
+| downstream load | tải gửi xuống database, provider hoặc service phía sau | tải từ phía sau |
 
 ## Cách giới thiệu term
 

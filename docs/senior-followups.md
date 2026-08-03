@@ -1,6 +1,6 @@
-# Trả lời câu hỏi đào sâu ở vòng Senior
+# Senior Follow-up và Trade-off
 
-## Trong 30 giây
+## Quick Summary
 
 - Câu hỏi đào sâu kiểm tra điều kiện và giới hạn trong quyết định của bạn.
 - Tránh “X luôn tốt hơn Y”. Hãy nói X phù hợp vì dữ kiện nào.
@@ -8,11 +8,11 @@
 - Khi interviewer đổi dữ kiện, sẵn sàng đổi quyết định nếu tiêu chí đã đổi.
 - Không cần biết mọi thứ; cần phân biệt điều biết chắc, giả định và cách kiểm chứng.
 
-## Gặp ở đâu ngoài đời?
+## Follow-up Scenario
 
 Bạn đề xuất cache cho catalog vì khách đọc sản phẩm nhiều và chấp nhận tên/mô tả cũ trong 30 giây. Interviewer hỏi tiếp: “Giá checkout có được cũ không?”, “Cache chết có làm database sập không?”. Họ không phủ nhận cache; họ đang kiểm tra bạn có nhìn thấy toàn bộ vòng đời của lựa chọn hay không.
 
-## Hiểu đơn giản trước
+## Mental Model: constraint đổi thì answer đổi
 
 Câu hỏi “vì sao không chọn X?” thường cần bốn ý:
 
@@ -23,7 +23,7 @@ Câu hỏi “vì sao không chọn X?” thường cần bốn ý:
 
 Nếu chưa đủ dữ kiện, hỏi thêm hoặc nêu giả định. Đây không phải né câu hỏi; đó là cách tránh đưa ra kết luận tuyệt đối.
 
-## Từ cần biết
+## Terms
 
 - **Constraint** (ràng buộc): giới hạn phải chấp nhận, như ngân sách, thời gian phản hồi hoặc quy định.
 - **Trade-off** (đánh đổi): lợi ích và chi phí cùng xuất hiện khi chọn một phương án.
@@ -31,7 +31,7 @@ Nếu chưa đủ dữ kiện, hỏi thêm hoặc nêu giả định. Đây khô
 - **Blast radius** (phạm vi ảnh hưởng): số người dùng hoặc hệ thống bị tác động khi lỗi.
 - **Leading indicator** (tín hiệu báo sớm): số đo cho thấy vấn đề đang hình thành trước khi sự cố xảy ra.
 
-## Cách quyết định, từng bước
+## Follow-up Framework
 
 1. Nhắc lại ngắn dữ kiện quan trọng: tải, độ trễ, tính đúng, owner hoặc deadline.
 2. Nêu kết luận bằng một câu, không vòng vo.
@@ -40,7 +40,7 @@ Nếu chưa đủ dữ kiện, hỏi thêm hoặc nêu giả định. Đây khô
 5. Nói tín hiệu sẽ theo dõi sau khi triển khai.
 6. Chốt điều kiện khiến quyết định thay đổi.
 
-## Chọn A hay B?
+## Trade-off Table
 
 | Câu hỏi | Cách trả lời hữu ích |
 |---|---|
@@ -49,24 +49,24 @@ Nếu chưa đủ dữ kiện, hỏi thêm hoặc nêu giả định. Đây khô
 | “Vì sao không retry?” | Nói lỗi có tạm thời không, kết quả đã có thể xảy ra chưa và thao tác có chống trùng không |
 | “Nếu tải tăng 10 lần?” | Xác định nút thắt đầu tiên, cách đo và thay đổi nhỏ nhất cần làm |
 
-## Nếu có lỗi thì sao?
+## Common Failure Modes
 
 Nếu phát hiện giả định ban đầu sai, nói thẳng và cập nhật kết luận: “Với dữ kiện mới là…, em sẽ đổi sang… vì…”. Bám vào quyết định cũ chỉ để tỏ ra nhất quán là một dấu hiệu xấu.
 
 Nếu chưa từng trực tiếp vận hành giải pháp, phân biệt kinh nghiệm và suy luận: “Em chưa chạy mô hình này ở quy mô đó. Dựa trên cơ chế…, rủi ro em kiểm tra trước là…”.
 
-## Chứng minh mình làm đúng
+## Evidence trong câu trả lời
 
 - Câu trả lời có một điều kiện cụ thể, không chỉ có tên pattern.
 - Có ít nhất một rủi ro và một số đo sau triển khai.
 - Biết khi nào giải pháp không còn phù hợp.
 - Có thể nói ngắn lại trong 30 giây mà vẫn giữ logic chính.
 
-## Nói trong phỏng vấn
+## Answer mẫu
 
 “Với catalog được đọc nhiều, em cache tên và mô tả trong 30 giây để giảm số lần đọc database. Checkout vẫn đọc giá từ source of truth vì không chấp nhận giá cũ. Nếu cache lỗi, em giới hạn số request fallback về database và theo dõi tải. Nếu catalog phải cập nhật ngay, em sẽ bỏ cache này hoặc đổi chiến lược cache invalidation.”
 
-## Interviewer thường hỏi tiếp
+## Drill Questions
 
 ### Nếu interviewer không đồng ý thì sao?
 
@@ -76,13 +76,13 @@ Hỏi xem họ đang ưu tiên tiêu chí nào khác, rồi so sánh trên cùng
 
 Không. Chọn một hoặc hai đánh đổi có ảnh hưởng lớn nhất tới bài toán. Danh sách dài nhưng không gắn bối cảnh làm câu trả lời loãng.
 
-## Tự kiểm trước khi qua bài
+## Self-check
 
 - Dữ kiện nào đang quyết định lựa chọn?
 - Rủi ro lớn nhất còn lại là gì?
 - Tín hiệu nào sẽ khiến bạn đổi phương án?
 
-## Nhớ một phút
+## Final Recall
 
 - Điều kiện trước, lựa chọn sau.
 - Giải thích cơ chế, cái giá và cách đo.

@@ -8,24 +8,32 @@ Không viết kiểu “tổng quan về X”. Tiêu đề và phần mở đầ
 
 Bắt đầu bằng phương án nhỏ nhất vẫn giữ đúng dữ liệu và vận hành được. Chỉ thêm cache, queue, Outbox, CQRS, microservice, lock hoặc pool khi bài nêu rõ: vấn đề nào cần giải quyết, ai sở hữu, chi phí vận hành mới, lỗi mới và dấu hiệu cần theo dõi.
 
-## Format chuẩn của một bài
+## Editorial contract, không phải template cố định
 
-1. **Trong 30 giây** — 3–5 ý: vấn đề, quyết định, lý do, một điều không nên làm và cách nhận biết đang đúng. Đây là dữ liệu cho chế độ Ôn nhanh.
-2. **Gặp ở đâu ngoài đời?** — một tình huống có người dùng, triệu chứng, ràng buộc và hậu quả nếu làm sai.
-3. **Hiểu đơn giản trước** — giải thích theo chuỗi “chuyện gì xảy ra → vì sao → nếu bỏ qua thì hỏng gì”.
-4. **Từ cần biết** — 3–6 thuật ngữ thật sự cần cho case; giải thích ngắn ngay lần đầu xuất hiện.
-5. **Cách quyết định, từng bước** — mỗi bước phải có: làm gì, vì sao và kiểm tra bằng gì.
-6. **Chọn A hay B?** — bảng ngắn: điều kiện dùng, được gì, mất gì và khi nào không dùng.
-7. **Nếu có lỗi thì sao?** — ít nhất một đường lỗi thật: timeout, trùng lặp, race, rollback hay vận hành; nêu cách phát hiện và khôi phục.
-8. **Chứng minh mình làm đúng** — metric, log, trace, test, constraint hoặc runbook cụ thể.
-9. **Nói trong phỏng vấn** — 45–90 giây theo: kết luận → bối cảnh/invariant → cơ chế → đánh đổi → bằng chứng.
-10. **Interviewer thường hỏi tiếp** — hai câu đổi ràng buộc hoặc đào vào failure mode.
-11. **Tự kiểm trước khi qua bài** — ba câu không hiện đáp án ngay.
-12. **Nhớ một phút** — tối đa 3–5 ý theo: tình huống → quyết định → bẫy → bằng chứng.
+Mỗi bài phải có sáu vai trò nội dung, nhưng heading được đặt theo topic và loại bài:
 
-Các bài system design phải bổ sung: giả định/NFR, owner của dữ liệu, state/luồng chính, API hoặc contract tối thiểu, unknown outcome/retry/duplicate, trạng thái UI pending/fail, observability và reconciliation.
+- **Quick Summary:** vấn đề, decision chính và bẫy cần tránh.
+- **Terms:** chỉ giữ các term người học cần nhận diện khi interview; giải nghĩa ngay lần đầu.
+- **Mental Model:** cơ chế và boundary đủ để hiểu vì sao decision đúng.
+- **Practical Example:** scenario, code, flow, table hoặc worksheet tùy bài.
+- **Interview Answer:** câu trả lời 45–90 giây dùng cùng vocabulary với body.
+- **Final Recall:** tối đa 3–5 ý có thể nhớ độc lập.
 
-## Quy tắc câu chữ Việt-first
+Không bắt mọi bài đi qua cùng một chuỗi 12 heading. Chọn structure theo loại nội dung:
+
+| Loại bài | Structure nên ưu tiên |
+|---|---|
+| Runtime/Data | diagnostic workflow, code ngắn, decision table, evidence |
+| ASP.NET/API | request flow, boundary, code registration/contract, test matrix |
+| Distributed Systems | message flow, failure matrix, recovery/reconciliation |
+| System Design | framework, state/data flow, decision points, diagram |
+| Finance | lifecycle, ownership, state/event flow, audit trail |
+| Project Stories | worksheet, story skeleton, follow-up practice |
+| Question Bank | practice cards, answer rubric, review loop |
+
+Các bài system design vẫn phải bao phủ giả định/NFR, data ownership, state/flow, API hoặc contract tối thiểu, unknown outcome/retry/duplicate, trạng thái UI pending/fail, observability và reconciliation. Đây là coverage requirement, không phải danh sách heading bắt buộc.
+
+## Quy tắc câu chữ và terminology
 
 - Viết như đang giải thích cho dev có 1–3 năm kinh nghiệm: câu chủ động, một ý chính mỗi câu, một ý chính mỗi đoạn.
 - Dùng [terminology style guide](./terminology-style-guide.md) làm nguồn chuẩn cho preferred terms.

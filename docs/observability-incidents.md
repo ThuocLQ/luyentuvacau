@@ -1,25 +1,25 @@
-# Khi production lỗi: giảm ảnh hưởng trước, rồi tìm đúng nguyên nhân
+# Observability và Incident Response
 
-## Trong 30 giây
+## Quick Summary
 
 - Khi có incident (sự cố production), hỏi ai đang bị ảnh hưởng và giảm ảnh hưởng trước khi đoán nguyên nhân.
 - Metrics (chuỗi số theo thời gian) cho biết xu hướng; logs kể sự kiện; traces nối một request qua nhiều service. Mỗi loại trả lời một câu khác nhau.
 - Theo dõi phải gắn với người dùng và nghiệp vụ, không chỉ CPU hay số pod.
 - Log, metric và test không tự cứu hệ thống; chúng giúp đội có bằng chứng để chọn hành động đúng.
 
-## Gặp ở đâu ngoài đời?
+## Incident Scenario
 
 Sau khi canary (release cho một phần nhỏ traffic) checkout chậm gấp nhiều lần và tỉ lệ thanh toán thành công giảm ở một region (vùng chạy hệ thống). Team có thể đọc log hàng giờ để tìm nguyên nhân, nhưng khách đang không thanh toán được.
 
 Việc đầu tiên là dừng canary hoặc rollback nếu bản cũ vẫn tương thích. Khi payment success trở lại, giữ dashboard, trace và thông tin bản deploy để khi tình hình ổn hơn, team biết chính xác thay đổi nào liên quan.
 
-## Hiểu đơn giản trước
+## Mental Model: signal → impact → mitigation
 
 **Metric** là dãy số theo thời gian, ví dụ p99 (thời gian của nhóm request chậm nhất) hoặc tỉ lệ payment thành công. Nó cho biết vấn đề đang lớn hay nhỏ. **Log** là bản ghi một sự kiện, ví dụ validation fail hoặc lỗi database. **Trace** nối các bước của cùng một request để thấy thời gian đang chờ ở API, database hay payment provider.
 
 Ba thứ này cần có cùng correlation ID (mã nối các sự kiện của một hành trình). Không cần log mọi payload để có observability; log dữ liệu nhạy cảm còn tạo thêm sự cố bảo mật.
 
-## Từ cần biết
+## Terms
 
 - **SLO**: mức dịch vụ team cam kết, ví dụ tỉ lệ checkout thành công trong một khoảng thời gian.
 - **Canary**: chỉ đưa bản mới cho một phần nhỏ traffic trước khi mở rộng.
@@ -35,7 +35,7 @@ Ba thứ này cần có cùng correlation ID (mã nối các sự kiện của m
 5. Nêu giả thuyết có thể kiểm chứng, ví dụ release mới tạo query chậm. So version, query, DB wait và traffic trước/sau thay vì kết luận từ CPU trung bình.
 6. Sau khi khôi phục, viết lại timeline, nguyên nhân, việc phòng ngừa và test/alert cần bổ sung. Không đổ lỗi cho cá nhân.
 
-## Chọn A hay B?
+## Signal Decision Table
 
 | Lựa chọn | Nên dùng khi | Được gì | Cần tránh |
 |---|---|---|---|
@@ -44,7 +44,7 @@ Ba thứ này cần có cùng correlation ID (mã nối các sự kiện của m
 | Trace | request đi qua nhiều dependency | thấy chỗ chờ và đường gọi | tạo tag có quá nhiều giá trị riêng lẻ |
 | Rollback/canary stop | bản mới rõ ràng gây hại, bản cũ còn tương thích | giảm ảnh hưởng nhanh | rollback mù khi migration đã đổi nghĩa dữ liệu |
 
-## Nếu có lỗi thì sao?
+## Mitigation và Recovery
 
 Nếu migration đã thay đổi dữ liệu khiến app cũ không hiểu được, rollback image ngay có thể làm lỗi nặng hơn. Khi đó tắt feature hoặc làm hotfix tương thích để đi tiếp (roll-forward), đồng thời theo dõi sát. Kế hoạch rollback phải được xem cùng schema và config từ trước.
 
@@ -54,23 +54,23 @@ Alert chỉ dựa trên CPU có thể không báo khi API đang chờ database c
 
 Diễn tập một incident nhỏ: alert có chỉ đúng owner không, dashboard có phân biệt version/region không, trace có đi qua service quan trọng không và runbook có giúp người mới giảm ảnh hưởng được không. Theo dõi thời gian phát hiện, thời gian khôi phục, lỗi lặp lại và phần trăm request có trace liên tục.
 
-## Nói trong phỏng vấn
+## Interview Answer
 
 “Khi production có incident, em xác định blast radius qua error rate, latency và business outcome. Em giảm tác động bằng cách stop canary, tắt feature flag hoặc rollback về version còn tương thích rồi mới tìm root cause. Metric cho thấy xu hướng, trace chỉ ra request đang chờ ở đâu, còn log cung cấp chi tiết; cả ba dùng cùng correlation ID và không ghi secret. Sau incident, em thêm test, alert hoặc runbook dựa trên nguyên nhân đã có bằng chứng.”
 
-## Interviewer thường hỏi tiếp
+## Follow-up
 
 - p99 tốt hơn nhưng payment success giảm thì release có được coi là tốt không?
 - Khi nào không nên rollback ngay sau deploy?
 
-## Tự kiểm trước khi qua bài
+## Self-check
 
 - Tín hiệu nào cho biết khách đang bị ảnh hưởng thật?
 - Tôi có thể giảm ảnh hưởng trước khi biết root cause không?
 - Dashboard có tách được region, version và dependency đang chờ không?
 
-## Nhớ một phút
+## Final Recall
 
-- Ảnh hưởng người dùng trước, nguyên nhân sau.
-- Metric nhìn xu hướng, log xem sự kiện, trace nối hành trình.
+- Giảm blast radius trước, tìm root cause sau.
+- Metric nhìn xu hướng, log giữ chi tiết, trace nối đường đi request.
 - Rollback chỉ an toàn khi code, schema và config còn tương thích.
