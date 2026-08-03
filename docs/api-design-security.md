@@ -73,6 +73,8 @@ return Results.Ok(response);
 
 `TryClaimAsync` là abstraction minh họa: bên trong phải dùng unique constraint trên `(CallerId, Operation, Key)` để chỉ một request tạo được record `Pending`; request thua race bắt unique violation rồi load lại record hiện có. Transaction quanh `CreateOrder` không tự ngăn được race ở bước claim. Ví dụ chỉ bao transaction local. Nếu operation gọi payment provider, truyền idempotency key mà provider hiểu, lưu trạng thái `Pending` khi timeout và query status trước khi retry.
 
+Record `Pending` cũng cần timeout/lease hoặc recovery policy. Nếu process giữ claim chết trước khi business transaction hoàn tất, policy phải quy định khi nào worker khác được takeover, khi nào đánh dấu `Failed`, hoặc khi nào đưa operation vào reconciliation; không để request sau chờ vô hạn. Các field thường hữu ích là `LeaseExpiresAt`, `OwnerId`, `AttemptCount`, `UpdatedAt` và `LastError`; tên cụ thể tùy schema và delivery contract của hệ thống.
+
 ## Nếu có lỗi thì sao?
 
 Payment provider timeout sau khi app gửi request. Không được kết luận là payment failed, cũng không retry ngay. Persist trạng thái `pending`, dùng operation ID hoặc transaction reference để query payment provider; nếu vẫn chưa xác định được thì đưa vào reconciliation flow có owner rõ.
