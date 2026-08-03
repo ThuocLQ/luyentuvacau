@@ -1,10 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type RefObject } from 'react'
 
-export function useScrollSpy(selector: string, enabled = true) {
+interface ScrollSpyOptions {
+  selector: string
+  root?: RefObject<HTMLElement | null>
+  contentKey?: string
+  enabled?: boolean
+}
+
+export function useScrollSpy({ selector, root, contentKey, enabled = true }: ScrollSpyOptions) {
   const [activeId, setActiveId] = useState<string | null>(null)
   useEffect(() => {
-    if (!enabled) return
-    const headings = [...document.querySelectorAll<HTMLElement>(selector)]
+    if (!enabled) {
+      setActiveId(null)
+      return
+    }
+    const headings = [...(root?.current ?? document).querySelectorAll<HTMLElement>(selector)]
     if (!headings.length) return
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
@@ -12,6 +22,6 @@ export function useScrollSpy(selector: string, enabled = true) {
     }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .1, .6] })
     headings.forEach(heading => observer.observe(heading))
     return () => observer.disconnect()
-  }, [selector, enabled])
+  }, [selector, root, contentKey, enabled])
   return activeId
 }

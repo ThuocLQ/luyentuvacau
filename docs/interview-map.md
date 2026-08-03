@@ -1,36 +1,84 @@
-# Bản đồ ôn Senior Backend .NET
+# Bản đồ ôn phỏng vấn Senior Backend .NET
 
-## Quick Summary
+## Quick Start
 
-Đọc nhiều nhưng không nói được là chưa sẵn sàng phỏng vấn. Hãy chọn phần chưa giải thích được, tự trả lời thành tiếng, rồi ôn lại đúng lỗ hổng thay vì đọc lại toàn bộ.
+- Ôn theo lỗ hổng ảnh hưởng lớn, không đọc lần lượt từ bài 1 đến bài cuối.
+- Một chủ đề chỉ được coi là biết khi bạn giải thích được bằng lời thường, đưa ví dụ và nói được cái giá của lựa chọn.
+- Ưu tiên nền tảng chạy xuyên suốt: async, database, API/security, hệ thống phân tán và vận hành production.
+- Mỗi buổi nên có ba phần: học một ý, trả lời thành tiếng, rồi sửa câu trả lời.
+- Số bài đã đọc không quan trọng bằng khả năng xử lý một tình huống mới.
 
-## Terms to Know
+## Chọn lộ trình theo thời gian còn lại
 
-- [[SLO]]: tiêu chí đo “nhanh/ổn định”.
-- [[Trade-off]]: điều được và chi phí/rủi ro phải chấp nhận.
+Bạn còn một tuần nhưng tài liệu có hơn hai mươi bài. Đọc hết dễ tạo cảm giác quen mắt, đến lúc bị hỏi “vì sao” hoặc “hỏng thì sao” lại không nói được. Bản đồ này giúp chọn đúng phần cần luyện trước.
 
-## Diagnostic trước khi ôn
+## Bản đồ năng lực Senior Backend
 
-Tự trả lời một câu trong 60 giây. Nếu chỉ nêu keyword, đọc mental model. Nếu biết khái niệm nhưng không nói được failure/trade-off, đọc decision table và làm lại. Nếu nói được context → quyết định → bằng chứng, chuyển sang follow-up.
+Senior không chỉ nhớ API. Người phỏng vấn muốn thấy bạn nối được: vấn đề → cơ chế → quyết định → rủi ro → bằng chứng.
 
-## Lộ trình 30 phút
+Hãy tự chẩn đoán bằng một câu hỏi tình huống. Nếu trả lời được định nghĩa nhưng không giải thích được cơ chế hoặc failure mode, chủ đề đó vẫn đang yếu. Nếu nói được quyết định nhưng không có cách đo, câu trả lời chưa lên mức Senior.
 
-Ôn Async, EF/SQL và API/Outbox. Mỗi phần trả lời một câu: vì sao `.Result` nguy hiểm, query chậm đo ở đâu, retry payment an toàn thế nào. Kết thúc bằng hai câu nói thành tiếng.
+## Cách đọc ký hiệu
 
-## Lộ trình 60 phút
+- **Recall** (tự nhớ lại): trả lời khi không nhìn tài liệu.
+- **Trade-off** (đánh đổi): lợi ích nhận được và cái giá phải chịu khi chọn một phương án.
+- **Failure mode** (cách hệ thống hỏng): tình huống lỗi cụ thể và hậu quả của nó.
+- **Bằng chứng**: số đo, trace, query plan, test hoặc sự kiện chứng minh nhận định.
+- **Mock interview** (phỏng vấn thử): luyện trong thời gian và cách hỏi giống buổi thật.
 
-Core/runtime → request/data → distributed correctness → production. Mỗi chủ đề chỉ giữ một quyết định thật: giới hạn concurrency theo downstream, transaction giữ invariant nào, event duplicate được xử lý ở đâu, p99 tăng sau deploy làm gì trước.
+## Lộ trình 30/60/90 phút
 
-## Lộ trình 90 phút
+1. Làm một vòng quiz ngắn không xem tài liệu và ghi chủ đề khiến bạn phải đoán.
+2. Với mỗi chủ đề yếu, đọc phần “Hiểu đơn giản”, tự vẽ lại cơ chế và nói một ví dụ của chính bạn.
+3. Trả lời thành tiếng trong 60–90 giây theo khung: kết luận, cơ chế, đánh đổi, một lỗi có thể xảy ra và cách đo.
+4. Nghe lại và bỏ câu dài, thuật ngữ chưa giải thích hoặc tuyên bố “luôn luôn”.
+5. Luyện câu hỏi đào sâu: “Nếu tải tăng?”, “Nếu dependency timeout?”, “Vì sao không chọn cách khác?”.
+6. Trong lúc ôn, xen một câu chuyện dự án có số liệu thật và phần bạn trực tiếp sở hữu.
 
-Thêm một design flow và hai project story: một cải tiến, một incident. Sau mỗi phần ghi đúng lỗi cần ôn, ví dụ “chưa giải thích được idempotency record”, không ghi chung chung “ôn microservices”.
+## Chọn track ôn tập
 
-## Cách trả lời mặc định
+| Nếu bạn đang... | Làm trước |
+|---|---|
+| Không giải thích được khái niệm | Đọc bài nền và tự nói lại bằng ví dụ nhỏ |
+| Biết khái niệm nhưng trả lời lan man | Luyện câu 60–90 giây, kết luận trước |
+| Trả lời lý thuyết tốt nhưng thiếu thực tế | Gắn với incident hoặc quyết định trong dự án |
+| Sắp phỏng vấn trong 1–2 ngày | Ôn lỗi yếu nhất, mock và project story; không mở rộng thêm chủ đề |
 
-Nói context và điều không được sai; chọn giải pháp; nêu điều nó đánh đổi; cuối cùng nói metric/test/rollback chứng minh quyết định. Nếu chưa có kinh nghiệm trực tiếp, nêu giả định và cách sẽ kiểm chứng.
+## Khi kế hoạch ôn bị lệch
 
-## Final recall
+Nếu câu trả lời bị bí, đừng học thuộc nguyên đoạn mẫu. Ghi đúng điểm đứt: thiếu định nghĩa, không hiểu cơ chế, không có ví dụ hay không biết failure mode. Quay lại đúng phần đó rồi trả lời lại ngay.
 
-- Ưu tiên phần lưỡng lự, không ưu tiên phần quen.
-- Nói trước, xem đáp án sau.
-- Một câu tốt luôn có điều kiện, rủi ro và bằng chứng.
+Nếu chưa từng làm công nghệ được hỏi, nói rõ phạm vi kinh nghiệm và suy luận từ nguyên tắc đã biết. Không bịa số liệu hoặc nhận việc của team thành việc cá nhân.
+
+## Cách tự đo tiến bộ
+
+- Có thể giải thích một chủ đề cho người không cùng chuyên môn mà không mất ý chính.
+- Trả lời được câu “vì sao không chọn X?” bằng điều kiện cụ thể.
+- Mỗi câu có ít nhất một failure mode và một cách đo.
+- Sau một tuần, tỷ lệ câu phải đoán giảm và câu trả lời ngắn, rõ hơn.
+
+## Câu mở đầu buổi interview
+
+“Em thường nêu quyết định trước, rồi giải thích vì sao nó phù hợp với tình huống đang có. Em nói rõ điều kiện áp dụng, rủi ro còn lại và cách kiểm chứng bằng số liệu hoặc bài kiểm tra. Nếu thiếu dữ kiện, em sẽ hỏi thêm hoặc nói rõ giả định thay vì coi một giải pháp là đúng cho mọi trường hợp.”
+
+## Câu hỏi định hướng
+
+### Học sâu hay học rộng trước?
+
+Đạt mức tối thiểu ở các chủ đề nền trước, rồi đào sâu vào phần gần công việc và mô tả tuyển dụng. Một Senior backend không cần biết mọi thư viện nhưng phải giữ được tính đúng đắn, hiệu năng và khả năng vận hành ở các ranh giới chính.
+
+### Dùng quiz thế nào cho hiệu quả?
+
+Chọn đáp án trước khi xem giải thích. Sau đó nói lại vì sao từng phương án sai trong đúng bối cảnh. Cuối cùng đổi một dữ kiện và xem quyết định có thay đổi không.
+
+## Self-check
+
+- Ba chủ đề yếu nhất của bạn là gì và bằng chứng nào cho thấy điều đó?
+- Bạn có thể trả lời một câu trong 90 giây mà không đọc note không?
+- Project story nào chứng minh cách bạn xử lý rủi ro production?
+
+## Final Recall
+
+- Ôn theo lỗ hổng, không theo số trang.
+- Hiểu là nói lại được cơ chế và giới hạn bằng lời của mình.
+- Luyện trả lời thành tiếng mới biến kiến thức thành kỹ năng phỏng vấn.

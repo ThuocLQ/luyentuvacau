@@ -1,74 +1,76 @@
-# Observability, Testing & Production Incidents
+# Observability và Incident Response
 
 ## Quick Summary
 
-Khi checkout lỗi, log dài không tự cho biết khách nào bị ảnh hưởng hay deploy nào gây ra. Observability là khả năng trả lời từ dữ liệu: chuyện gì đang hỏng, hỏng ở đâu, từ khi nào và làm sao giảm tác động an toàn.
+- Khi có incident (sự cố production), hỏi ai đang bị ảnh hưởng và giảm ảnh hưởng trước khi đoán nguyên nhân.
+- Metrics (chuỗi số theo thời gian) cho biết xu hướng; logs kể sự kiện; traces nối một request qua nhiều service. Mỗi loại trả lời một câu khác nhau.
+- Theo dõi phải gắn với người dùng và nghiệp vụ, không chỉ CPU hay số pod.
+- Log, metric và test không tự cứu hệ thống; chúng giúp đội có bằng chứng để chọn hành động đúng.
 
-## Terms to Know
+## Incident Scenario
 
-- [[Metrics]]: số đo theo thời gian, ví dụ error rate và p99.
-- [[Tracing]]: đường đi của một request qua các service/dependency.
-- [[SLO]]: mục tiêu dịch vụ đo được mà người dùng cần.
+Sau khi canary (release cho một phần nhỏ traffic) checkout chậm gấp nhiều lần và tỉ lệ thanh toán thành công giảm ở một region (vùng chạy hệ thống). Team có thể đọc log hàng giờ để tìm nguyên nhân, nhưng khách đang không thanh toán được.
 
-::: production-trap
-Restart hàng loạt trước khi xem version, metric và trace có thể xóa bằng chứng rồi tạo thêm tải cold start (chi phí khởi động lại instance).
-:::
+Việc đầu tiên là dừng canary hoặc rollback nếu bản cũ vẫn tương thích. Khi payment success trở lại, giữ dashboard, trace và thông tin bản deploy để khi tình hình ổn hơn, team biết chính xác thay đổi nào liên quan.
 
-## Bài toán backend thực tế
+## Mental Model: signal → impact → mitigation
 
-Sau deploy, p99 tăng gấp đôi. Nếu team chỉ nhìn CPU, họ có thể bỏ lỡ query mới hoặc dependency timeout. Nếu rollback mọi thứ mà không ghi lại version/timeline, lỗi có thể quay lại ở lần sau. Cần ổn định người dùng trước, sau đó điều tra bằng evidence.
+**Metric** là dãy số theo thời gian, ví dụ p99 (thời gian của nhóm request chậm nhất) hoặc tỉ lệ payment thành công. Nó cho biết vấn đề đang lớn hay nhỏ. **Log** là bản ghi một sự kiện, ví dụ validation fail hoặc lỗi database. **Trace** nối các bước của cùng một request để thấy thời gian đang chờ ở API, database hay payment provider.
 
-## Mental model
+Ba thứ này cần có cùng correlation ID (mã nối các sự kiện của một hành trình). Không cần log mọi payload để có observability; log dữ liệu nhạy cảm còn tạo thêm sự cố bảo mật.
 
-Metrics cho biết “bao nhiêu và khi nào”, log có context chi tiết “đã xảy ra gì”, trace cho biết request chờ ở đâu. Không công cụ nào thay thế công cụ khác. Gắn correlation ID, version deploy, tenant/an toàn dữ liệu và outcome để nối chúng lại.
+## Terms
 
-## Invariants phải giữ
+- **SLO**: mức dịch vụ team cam kết, ví dụ tỉ lệ checkout thành công trong một khoảng thời gian.
+- **Canary**: chỉ đưa bản mới cho một phần nhỏ traffic trước khi mở rộng.
+- **Blast radius**: phạm vi người dùng hoặc chức năng bị ảnh hưởng bởi một thay đổi.
+- **Runbook**: hướng dẫn đã chuẩn bị cho một loại sự cố, gồm người làm, bước giảm ảnh hưởng và cách kiểm tra.
 
-Không log secret, token hay PII (dữ liệu nhận diện cá nhân); log phải có cấu trúc và retention phù hợp. Alert phải gắn user impact/SLO, không phải mỗi dòng exception. Test phải bảo vệ behavior quan trọng: authorization, idempotency, migration compatibility, retry và invariant dữ liệu.
+## Cách quyết định, từng bước
 
-## Cách ra quyết định
+1. Xác nhận triệu chứng bằng tín hiệu người dùng: payment success, error rate, p95/p99 và số request bị ảnh hưởng theo region/version.
+2. Giảm ảnh hưởng trong blast radius nhỏ nhất. Tắt feature, dừng canary hoặc rollback nếu schema và config vẫn cho bản cũ chạy an toàn.
+3. Đặt một người điều phối incident, ghi thời điểm và các quyết định. Người khác điều tra để không vừa sửa vừa mất dấu thay đổi.
+4. Dùng trace của request lỗi để tìm nơi chờ; dùng metric để biết khi nào bắt đầu và phạm vi; dùng log đã lọc để xem lỗi cụ thể.
+5. Nêu giả thuyết có thể kiểm chứng, ví dụ release mới tạo query chậm. So version, query, DB wait và traffic trước/sau thay vì kết luận từ CPU trung bình.
+6. Sau khi khôi phục, viết lại timeline, nguyên nhân, việc phòng ngừa và test/alert cần bổ sung. Không đổ lỗi cho cá nhân.
 
-Khi incident xảy ra:
+## Signal Decision Table
 
-1. Xác nhận impact: endpoint, region/tenant, error/latency, thời điểm bắt đầu.
-2. Ổn định: rollback, tắt feature flag, rate limit hoặc giảm traffic theo runbook ít rủi ro.
-3. Giữ evidence: deploy diff, dashboard, trace exemplar (một trace đại diện của request lỗi/chậm), queue/database saturation và thay đổi config.
-4. Cập nhật stakeholder bằng impact, mitigation và thời điểm cập nhật tiếp theo.
-5. Sau ổn định, tìm nguyên nhân và tạo action có owner, deadline, test/alert/runbook để ngăn lặp lại.
+| Lựa chọn | Nên dùng khi | Được gì | Cần tránh |
+|---|---|---|---|
+| Metric | cần biết xu hướng và mức ảnh hưởng | thấy regression theo thời gian/version | chỉ nhìn average rồi bỏ qua request chậm |
+| Log có cấu trúc | cần chi tiết một lỗi cụ thể | tìm theo trace ID, route, version | ghi token, mật khẩu, dữ liệu cá nhân |
+| Trace | request đi qua nhiều dependency | thấy chỗ chờ và đường gọi | tạo tag có quá nhiều giá trị riêng lẻ |
+| Rollback/canary stop | bản mới rõ ràng gây hại, bản cũ còn tương thích | giảm ảnh hưởng nhanh | rollback mù khi migration đã đổi nghĩa dữ liệu |
 
-Chọn rollback khi artifact cũ còn tương thích schema/state. Nếu migration đã đổi semantic dữ liệu, roll-forward hoặc feature flag có thể an toàn hơn.
+## Mitigation và Recovery
 
-## Production traps
+Nếu migration đã thay đổi dữ liệu khiến app cũ không hiểu được, rollback image ngay có thể làm lỗi nặng hơn. Khi đó tắt feature hoặc làm hotfix tương thích để đi tiếp (roll-forward), đồng thời theo dõi sát. Kế hoạch rollback phải được xem cùng schema và config từ trước.
 
-- Alert theo CPU nhưng không alert theo checkout fail/p99/SLO.
-- Log exception không có request ID, version hoặc business ID.
-- Test unit nhiều nhưng không có integration/contract test cho boundary quan trọng.
-- Postmortem kết thúc bằng “cẩn thận hơn” thay vì thay đổi kiểm chứng được.
+Alert chỉ dựa trên CPU có thể không báo khi API đang chờ database connection. Hãy alert theo SLO và triệu chứng người dùng, rồi dùng CPU/pool/wait làm tín hiệu chẩn đoán.
 
-## Kiểm chứng ở production
+## Chứng minh mình làm đúng
 
-Dashboard nên cho golden signals (bốn tín hiệu: latency, traffic, errors, saturation); cùng business signal như order created/paid, duplicate rejection, outbox age. Drill failure nhỏ có kiểm soát để kiểm runbook/alert. Sau deploy so sánh theo version/canary, không chỉ nhìn toàn hệ thống.
+Diễn tập một incident nhỏ: alert có chỉ đúng owner không, dashboard có phân biệt version/region không, trace có đi qua service quan trọng không và runbook có giúp người mới giảm ảnh hưởng được không. Theo dõi thời gian phát hiện, thời gian khôi phục, lỗi lặp lại và phần trăm request có trace liên tục.
 
-## Mẫu trả lời 30–45 giây
+## Interview Answer
 
-“Tôi dùng metrics để phát hiện tác động, trace để tìm request chờ ở đâu và structured log để có context. Khi p99 tăng sau deploy, tôi ổn định bằng rollback/flag nếu an toàn, giữ deploy diff và trace trước khi đào sâu. Alert gắn SLO; sau incident có action owner và test hoặc guardrail cụ thể.”
+“Khi production có incident, em xác định blast radius qua error rate, latency và business outcome. Em giảm tác động bằng cách stop canary, tắt feature flag hoặc rollback về version còn tương thích rồi mới tìm root cause. Metric cho thấy xu hướng, trace chỉ ra request đang chờ ở đâu, còn log cung cấp chi tiết; cả ba dùng cùng correlation ID và không ghi secret. Sau incident, em thêm test, alert hoặc runbook dựa trên nguyên nhân đã có bằng chứng.”
 
-## Mẫu trả lời Senior 2 phút
+## Follow-up
 
-Với checkout chậm sau deploy, tôi xác nhận phạm vi theo version/region rồi xem p99, error rate, saturation và trace của request chậm. Nếu change tương quan mạnh và rollback compatible, tôi rollback hoặc tắt flag để bảo vệ khách. Tôi không restart bừa. Sau khi ổn định, tôi so query/config/code diff, tái hiện bằng test và thêm canary guardrail/dashboard theo version. Nếu cần migration không rollback được, tôi roll-forward với phạm vi nhỏ và monitoring chặt.
+- p99 tốt hơn nhưng payment success giảm thì release có được coi là tốt không?
+- Khi nào không nên rollback ngay sau deploy?
 
-## Câu hỏi follow-up và red flags
+## Self-check
 
-### Bạn làm gì khi p99 tăng gấp đôi sau deploy?
+- Tín hiệu nào cho biết khách đang bị ảnh hưởng thật?
+- Tôi có thể giảm ảnh hưởng trước khi biết root cause không?
+- Dashboard có tách được region, version và dependency đang chờ không?
 
-Xác nhận impact, giảm tác động bằng đường thoát an toàn, giữ evidence theo version rồi mới khoanh nguyên nhân. Không kết luận CPU thấp nghĩa là hệ thống khỏe.
+## Final Recall
 
-### Metrics, logs và traces khác nhau thế nào?
-
-Metrics phát hiện xu hướng/alert, logs cho context chi tiết, traces nối latency qua boundary. Dùng cùng correlation/version để đi từ alert đến request cụ thể.
-
-## Final recall
-
-- Phát hiện impact bằng metric, điều tra bằng trace/log có context.
-- Ổn định người dùng trước khi tối ưu root cause.
-- Incident chỉ hoàn tất khi có guardrail kiểm chứng được.
+- Giảm blast radius trước, tìm root cause sau.
+- Metric nhìn xu hướng, log giữ chi tiết, trace nối đường đi request.
+- Rollback chỉ an toàn khi code, schema và config còn tương thích.

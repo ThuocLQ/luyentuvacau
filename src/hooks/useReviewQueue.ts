@@ -2,7 +2,7 @@ import { useLocalStorage } from './useLocalStorage'
 
 export interface ReviewItem {
   id: string
-  kind: 'cheatsheet' | 'question'
+  kind: 'cheatsheet' | 'question' | 'quiz'
   title: string
   relatedDoc: string
   rating?: 'confident' | 'hesitant' | 'missed'

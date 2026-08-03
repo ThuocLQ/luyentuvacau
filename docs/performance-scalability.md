@@ -1,66 +1,88 @@
-# Performance & Scalability
+# Performance và Scalability
 
 ## Quick Summary
 
-Một API chậm có thể đang chờ database, connection pool hoặc dependency, không nhất thiết thiếu CPU. Đo request chậm, queue và dependency trước; chỉ tối ưu phần đã chứng minh là nút thắt.
+- **Hiệu năng** trả lời một request nhanh đến đâu; **khả năng mở rộng** trả lời hệ thống giữ được mức phục vụ khi tải tăng hay không.
+- Một request chậm có thể đang đợi database, API ngoài, lock, connection pool (nhóm kết nối dùng chung) hoặc hàng đợi; CPU thấp không có nghĩa là hệ thống còn khỏe.
+- Đo theo từng chặng của request rồi sửa chỗ tạo ra phần lớn thời gian chờ.
+- p95/p99 (mốc của nhóm request chậm) cho biết trải nghiệm của nhóm request chậm; số trung bình có thể che mất vấn đề.
+- Scale-out chỉ giúp khi bottleneck có thể chia đều cho nhiều instance.
 
-## Terms to Know
+## Scenario: CPU thấp nhưng p99 cao
 
-- [[p99 latency]]: 1% request chậm nhất mất bao lâu; phản ánh trải nghiệm tệ nhất tốt hơn average.
-- [[Backpressure]]: giới hạn/điều tiết công việc khi hệ thống nhận nhiều hơn khả năng xử lý.
-- [[Cache-aside]]: đọc cache trước, miss thì đọc nguồn dữ liệu và ghi lại cache.
+Endpoint `/orders` có thời gian trung bình 180 ms nhưng p99 là 4 giây. CPU chỉ 25%, nên team định tăng số máy. Trace (đường đi của một request) cho thấy phần lớn request nhanh, còn một nhóm phải chờ connection tới database vì pool đã đầy. Thêm máy có thể mở thêm connection và làm database quá tải hơn.
 
-::: production-trap
-Scale out trước khi hiểu bottleneck có thể tăng kết nối, queue và chi phí nhưng không giảm latency.
-:::
+## Mental Model: latency budget và bottleneck
 
-## Tình huống phỏng vấn
+Thời gian của một request là tổng thời gian chạy và thời gian chờ. Máy có thể không bận tính toán nhưng request vẫn xếp hàng vì thiếu một tài nguyên khác.
 
-Sau release, p99 tăng từ 300 ms lên 4 giây nhưng CPU chỉ 30%. Trace cho thấy request chờ connection database; thêm instance tạo thêm kết nối nên tình hình còn xấu hơn. Cần tìm nơi chờ, không chỉ nhìn CPU trung bình.
+Hãy chia đường đi thành các đoạn: chờ vào ứng dụng, chạy code, lấy connection, chạy SQL, gọi dịch vụ ngoài và ghi response. Đoạn nào chiếm nhiều thời gian nhất mới là ứng viên cần sửa trước.
 
-## Mental model
+Tối ưu là một vòng lặp: đo → nêu giả thuyết → thay đổi một việc → đo lại. Không có số liệu trước và sau thì chưa thể biết thay đổi có giúp thật hay chỉ chuyển nút thắt sang nơi khác.
 
-Latency gồm thời gian làm việc và thời gian chờ. Khi tài nguyên gần đầy, queue tăng; request đến muộn chờ lâu nên p99 nổ trước average. Capacity là giới hạn của dependency chậm nhất: database, broker, pool hoặc external API.
+## Terms
 
-## Bắt đầu từ bằng chứng
+- **Latency** (độ trễ): thời gian hoàn thành một request.
+- **Throughput** (thông lượng): số việc hoàn thành trong một khoảng thời gian.
+- **Percentile p99**: 99% request nhanh hơn hoặc bằng mốc này; 1% còn lại chậm hơn.
+- **SLI**: con số đang đo, ví dụ tỷ lệ checkout thành công hoặc p99. **SLO**: mục tiêu team đặt cho SLI đó, ví dụ p99 checkout dưới 500 ms.
+- **Saturation** (bão hòa): một tài nguyên đã gần hết khả năng phục vụ, như connection pool kín.
+- **Backpressure** (hãm đầu vào): giảm hoặc từ chối việc mới để hệ thống không bị ngập.
 
-Chốt SLO và so sánh baseline trước/sau. Xem p50/p95/p99, error rate, throughput, saturation (tài nguyên gần cạn) của CPU/memory/pool/queue và trace của request chậm. Xác định query, lock, allocation, downstream call hay payload nào chiếm thời gian. Tối ưu một giả thuyết, rollout nhỏ, rồi đo lại.
+## Cách quyết định, từng bước
 
-## Đòn bẩy hiệu năng phổ biến
+1. Chốt điều người dùng đang thấy: endpoint nào, thời gian nào, p95/p99 và tỷ lệ lỗi ra sao.
+2. So sánh theo phiên bản deploy, vùng, tenant, loại request hoặc dependency để thu hẹp phạm vi.
+3. Dùng trace để tách thời gian ở ứng dụng, database, cache, API ngoài và hàng đợi.
+4. Kiểm tra mức bão hòa: CPU, bộ nhớ, thread pool, database connections, queue length và rate limit.
+5. Sửa nguyên nhân nhỏ nhất có tác động lớn nhất: query, giới hạn số call một request được bắn cùng lúc, cache dữ liệu phù hợp hoặc tăng capacity đúng tầng.
+6. Load test với mẫu request gần production, rồi so sánh cùng bộ chỉ số trước và sau.
+7. Đặt giới hạn đầu vào và timeout để khi quá tải hệ thống chậm có kiểm soát thay vì sập dây chuyền.
 
-Giảm công việc trước: chỉ lấy cột cần thiết, phân trang, batch thay vì N+1 call và stream dữ liệu lớn. Sau đó sửa query/index theo plan, giới hạn fan-out/concurrency, tái dùng connection đúng cách và chuyển work không cần trả ngay sang worker bền vững. Tối ưu code micro chỉ sau khi trace/profiler cho thấy nó đáng kể.
+## Chọn A hay B?
 
-## Cache là trade-off consistency
+| Phương án | Hợp khi | Không giúp khi |
+|---|---|---|
+| Tối ưu code/query | Trace chỉ ra một đoạn xử lý chiếm phần lớn thời gian | Nút thắt là giới hạn của dịch vụ ngoài |
+| Scale-out ứng dụng | CPU/app worker bão hòa và tải chia đều được | Database hoặc một lock chung đang là bottleneck |
+| Cache | Dữ liệu đọc nhiều, chấp nhận cũ trong thời gian rõ ràng | Dữ liệu phải mới tuyệt đối hoặc mỗi request tạo key riêng khiến cache khó trúng |
+| Giới hạn đồng thời | Phải bảo vệ database/API ngoài khỏi bị dồn việc | Được đặt quá thấp mà không đo nhu cầu thực tế |
 
-Cache tốt cho dữ liệu đọc nhiều, chấp nhận cũ trong một khoảng rõ ràng. Ví dụ catalog có thể stale 30 giây; giá checkout không nên chỉ tin cache. Đặt key có tenant/version, TTL và chiến lược invalidation. Chống cache stampede bằng request coalescing (nhiều request cùng chờ một lần refresh) hoặc giới hạn refresh, và có fallback khi cache down.
+## Overload và Backpressure
 
-## Scalability và backpressure
+Khi một dịch vụ ngoài chậm, request trong ứng dụng tích lại, dùng hết connection hoặc memory rồi kéo theo endpoint khác. Timeout cắt thời gian chờ; giới hạn đồng thời chặn số request đang bay; circuit breaker (tạm ngừng gọi dependency đang liên tục lỗi) giúp app không tiếp tục dồn tải vào chỗ đang hỏng.
 
-API stateless có thể scale ngang, nhưng database/write key hot không tự scale theo. Chọn partition key từ access pattern và đo hot tenant/key. Khi tải vượt capacity, dùng queue bounded, rate limit, shed work (chủ động bỏ việc ít quan trọng) hoặc trả `429/503` có hướng dẫn retry. Từ chối có kiểm soát tốt hơn nhận hết rồi timeout hàng loạt.
+Khi hàng đợi tăng liên tục, chỉ tăng consumer mà không kiểm tra database có thể làm nơi ghi cuối cùng nghẽn hơn. Cần so sánh tốc độ việc đi vào và tốc độ hoàn thành, rồi tăng capacity tại đúng chỗ.
 
-## Bẫy production
+## Load Test và Production Signals
 
-- Chỉ báo average latency nên bỏ lỡ nhóm người dùng chờ rất lâu.
-- Cache mọi thứ, kể cả balance/quota cần đúng ngay.
-- Tăng pool/thread không giới hạn làm downstream quá tải.
-- Benchmark local payload nhỏ rồi suy ra production.
+- Có biểu đồ request rate, error rate, p50/p95/p99 và saturation cùng một khoảng thời gian.
+- Trace cho thấy đoạn chờ chính giảm sau thay đổi.
+- Load test giữ nguyên workload và so sánh trước/sau.
+- Có ngưỡng cảnh báo sớm cho queue, pool và dependency latency.
 
-## Mẫu trả lời Senior
+## Interview Answer
 
-“Tôi không tối ưu theo cảm giác. Tôi xác định SLO, xem percentile, saturation và trace để phân biệt slow dependency với queueing. Tôi giảm work/query trước, cache chỉ khi stale an toàn, và đặt backpressure khi dependency chạm capacity. Mỗi thay đổi được canary (bật cho một phần nhỏ traffic trước) và so với baseline.”
+“Em bắt đầu từ SLO và metric hiện có để biết nhóm người dùng nào bị ảnh hưởng. Sau đó em xem trace để tách latency ở app, database và external dependency. CPU thấp không có nghĩa hệ thống không nghẽn, vì request có thể đang chờ connection pool hoặc lock. Em sửa bottleneck có bằng chứng, đo lại với cùng workload và thêm backpressure để hệ thống vẫn phục vụ có kiểm soát khi tải tăng.”
 
-## Câu hỏi ôn phỏng vấn
+## Follow-up
 
-### Vì sao p99 tăng mạnh dù average latency chỉ tăng nhẹ?
+### Vì sao p99 tăng mà số trung bình ít đổi?
 
-Một phần nhỏ request có thể bị queue/lock/downstream chậm. Khi gần saturation, các request đó chờ rất lâu nhưng average vẫn che mất chúng.
+Vì chỉ một nhóm nhỏ request bị chậm. Ví dụ 99 request mất 100 ms và một request mất 10 giây thì trung bình vẫn có vẻ chấp nhận được, nhưng người rơi vào nhóm chậm có trải nghiệm rất tệ.
 
-### Cache-aside có những failure mode nào?
+### Khi nào scale-out không giúp?
 
-Stale data, invalidation sai, stampede, cache down và key thiếu tenant. Mỗi cache cần freshness contract, fallback và metric hit/miss/latency.
+Khi mọi instance cùng chờ một tài nguyên chung như database, lock, partition nóng hoặc API bị giới hạn tốc độ. Thêm instance còn có thể tạo thêm cạnh tranh ở nút thắt đó.
 
-## Final recall
+## Self-check
 
-- Đo percentile, queue và dependency trước khi scale.
-- Giảm work thường hiệu quả hơn thêm máy.
-- Backpressure bảo vệ trải nghiệm khi không thể xử lý tất cả tải.
+- Request đang chạy hay đang chờ ở đâu?
+- Tài nguyên nào đã gần đầy?
+- Bạn sẽ dùng số liệu nào để chứng minh thay đổi có hiệu quả?
+
+## Final Recall
+
+- Chậm không đồng nghĩa với thiếu CPU.
+- Dùng trace để tìm đoạn request chờ lâu nhất, sửa đúng đoạn đó rồi đo lại.
+- Scale-out chỉ giúp khi bottleneck có thể chia đều cho nhiều instance.

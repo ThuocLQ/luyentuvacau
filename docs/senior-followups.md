@@ -1,40 +1,89 @@
-# Câu hỏi đào sâu và trade-off Senior
+# Senior Follow-up và Trade-off
 
 ## Quick Summary
 
-Follow-up thường đổi điều kiện: tải tăng, partner timeout hoặc dữ liệu cần chính xác hơn. Đừng đổi công nghệ ngay; nêu điều kiện mới, invariant bị ảnh hưởng và lý do quyết định phải đổi.
+- Câu hỏi đào sâu kiểm tra điều kiện và giới hạn trong quyết định của bạn.
+- Tránh “X luôn tốt hơn Y”. Hãy nói X phù hợp vì dữ kiện nào.
+- Một câu trả lời Senior nối được cơ chế với hậu quả production.
+- Khi interviewer đổi dữ kiện, sẵn sàng đổi quyết định nếu tiêu chí đã đổi.
+- Không cần biết mọi thứ; cần phân biệt điều biết chắc, giả định và cách kiểm chứng.
 
-## Terms to Know
+## Follow-up Scenario
 
-- [[Trade-off]]: lợi ích đổi lấy chi phí hay rủi ro cụ thể.
-- [[Failure mode]]: cách hệ thống có thể hỏng trong điều kiện đã nói.
+Bạn đề xuất cache cho catalog vì khách đọc sản phẩm nhiều và chấp nhận tên/mô tả cũ trong 30 giây. Interviewer hỏi tiếp: “Giá checkout có được cũ không?”, “Cache chết có làm database sập không?”. Họ không phủ nhận cache; họ đang kiểm tra bạn có nhìn thấy toàn bộ vòng đời của lựa chọn hay không.
 
-## Mục tiêu của follow-up
+## Mental Model: constraint đổi thì answer đổi
 
-Interviewer muốn biết bạn có áp dụng máy móc không. Câu trả lời tốt nói được “với tải hiện tại tôi chọn A; nếu B xảy ra, tôi đo C rồi chuyển sang D”.
+Câu hỏi “vì sao không chọn X?” thường cần bốn ý:
 
-## 1. Runtime, async và concurrency
+1. Dữ kiện đang quyết định lựa chọn.
+2. Cơ chế khiến phương án hiện tại phù hợp.
+3. Cái giá và rủi ro còn lại.
+4. Điều kiện nào sẽ khiến bạn đổi sang X.
 
-Nếu fan-out tăng, hỏi downstream chịu được bao nhiêu concurrent request. Bound concurrency theo capacity; `async` không tạo thêm capacity. Nếu work phải sống qua restart, dùng durable queue chứ không `Task.Run`.
+Nếu chưa đủ dữ kiện, hỏi thêm hoặc nêu giả định. Đây không phải né câu hỏi; đó là cách tránh đưa ra kết luận tuyệt đối.
 
-## 2. API, DI và security
+## Terms
 
-Nếu client retry sau timeout, idempotency record phải nhận ra caller, operation và payload. JWT hợp lệ chưa đủ: authorization còn kiểm resource và tenant.
+- **Constraint** (ràng buộc): giới hạn phải chấp nhận, như ngân sách, thời gian phản hồi hoặc quy định.
+- **Trade-off** (đánh đổi): lợi ích và chi phí cùng xuất hiện khi chọn một phương án.
+- **Reversibility** (khả năng đổi lại): mức dễ hay khó khi muốn đảo quyết định.
+- **Blast radius** (phạm vi ảnh hưởng): số người dùng hoặc hệ thống bị tác động khi lỗi.
+- **Leading indicator** (tín hiệu báo sớm): số đo cho thấy vấn đề đang hình thành trước khi sự cố xảy ra.
 
-## 3. Data correctness
+## Follow-up Framework
 
-Nếu hai request cùng update, unique constraint, transaction hoặc concurrency token giữ invariant. Đừng retry mù nếu operation có external side effect.
+1. Nhắc lại ngắn dữ kiện quan trọng: tải, độ trễ, tính đúng, owner hoặc deadline.
+2. Nêu kết luận bằng một câu, không vòng vo.
+3. Giải thích cơ chế: vì sao lựa chọn tạo ra kết quả mong muốn.
+4. Thừa nhận một cái giá thật và cách giảm rủi ro.
+5. Nói tín hiệu sẽ theo dõi sau khi triển khai.
+6. Chốt điều kiện khiến quyết định thay đổi.
 
-## 4. Architecture và integration
+## Trade-off Table
 
-Tách service khi ownership, team hoặc scale độc lập có bằng chứng. Sync call cần response ngay; event chấp nhận trễ nhưng cần consumer idempotent.
+| Câu hỏi | Cách trả lời hữu ích |
+|---|---|
+| “Vì sao không dùng microservice?” | Nói ranh giới/ownership chưa đủ rõ và chi phí phân tán; nêu tín hiệu khi nên tách |
+| “Vì sao không cache?” | Nói độ mới dữ liệu, hit rate dự kiến và cách cache miss tác động database |
+| “Vì sao không retry?” | Nói lỗi có tạm thời không, kết quả đã có thể xảy ra chưa và thao tác có chống trùng không |
+| “Nếu tải tăng 10 lần?” | Xác định nút thắt đầu tiên, cách đo và thay đổi nhỏ nhất cần làm |
 
-## 5. Cách tự chấm
+## Common Failure Modes
 
-Nghe lại câu trả lời: người khác có biết bạn chọn gì, không chọn gì, lỗi nào còn lại và signal nào báo sai không? Nếu không, câu vẫn là khẩu hiệu.
+Nếu phát hiện giả định ban đầu sai, nói thẳng và cập nhật kết luận: “Với dữ kiện mới là…, em sẽ đổi sang… vì…”. Bám vào quyết định cũ chỉ để tỏ ra nhất quán là một dấu hiệu xấu.
 
-## Final recall
+Nếu chưa từng trực tiếp vận hành giải pháp, phân biệt kinh nghiệm và suy luận: “Em chưa chạy mô hình này ở quy mô đó. Dựa trên cơ chế…, rủi ro em kiểm tra trước là…”.
 
-- Nêu assumption.
-- Nêu điều đổi khi constraint đổi.
-- Nêu evidence thay vì nói “tối ưu/an toàn”.
+## Evidence trong câu trả lời
+
+- Câu trả lời có một điều kiện cụ thể, không chỉ có tên pattern.
+- Có ít nhất một rủi ro và một số đo sau triển khai.
+- Biết khi nào giải pháp không còn phù hợp.
+- Có thể nói ngắn lại trong 30 giây mà vẫn giữ logic chính.
+
+## Answer mẫu
+
+“Với catalog được đọc nhiều, em cache tên và mô tả trong 30 giây để giảm số lần đọc database. Checkout vẫn đọc giá từ source of truth vì không chấp nhận giá cũ. Nếu cache lỗi, em giới hạn số request fallback về database và theo dõi tải. Nếu catalog phải cập nhật ngay, em sẽ bỏ cache này hoặc đổi chiến lược cache invalidation.”
+
+## Drill Questions
+
+### Nếu interviewer không đồng ý thì sao?
+
+Hỏi xem họ đang ưu tiên tiêu chí nào khác, rồi so sánh trên cùng tiêu chí. Có thể họ đang đưa thêm dữ kiện. Mục tiêu là làm rõ quyết định, không phải thắng tranh luận.
+
+### Có cần nêu mọi trade-off không?
+
+Không. Chọn một hoặc hai đánh đổi có ảnh hưởng lớn nhất tới bài toán. Danh sách dài nhưng không gắn bối cảnh làm câu trả lời loãng.
+
+## Self-check
+
+- Dữ kiện nào đang quyết định lựa chọn?
+- Rủi ro lớn nhất còn lại là gì?
+- Tín hiệu nào sẽ khiến bạn đổi phương án?
+
+## Final Recall
+
+- Điều kiện trước, lựa chọn sau.
+- Giải thích cơ chế, cái giá và cách đo.
+- Dữ kiện đổi thì quyết định được phép đổi.

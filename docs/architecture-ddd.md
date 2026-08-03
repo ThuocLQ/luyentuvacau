@@ -1,68 +1,76 @@
-# Modular Monolith, Microservices & DDD
+# Architecture, Modular Monolith và DDD
 
 ## Quick Summary
 
-Nếu một team còn cùng deploy, cùng database và cùng thay đổi nghiệp vụ, modular monolith thường an toàn hơn microservices. Tách service chỉ có ích khi có ownership, nhịp thay đổi hoặc nhu cầu scale độc lập rõ ràng.
+- Bắt đầu từ quy tắc nghiệp vụ và nhóm người cùng thay đổi dữ liệu, không bắt đầu từ tên công nghệ.
+- Modular monolith là một ứng dụng nhưng có ranh giới code rõ; nó thường là điểm bắt đầu tốt khi team chưa có lý do vận hành nhiều service.
+- Tách service khi ranh giới dữ liệu, tốc độ thay đổi hoặc cách vận hành thật sự khác nhau và team gánh được chi phí mới.
+- DDD giúp gọi đúng khái niệm và đặt luật gần dữ liệu sở hữu nó; không bắt buộc phải dùng mọi pattern DDD.
 
-## Terms to Know
+## Scenario: tách service quá sớm
 
-- [[Bounded context]]: phạm vi mà một từ và một rule nghiệp vụ có nghĩa nhất quán.
-- [[Data ownership]]: service/module chịu trách nhiệm ghi và bảo vệ dữ liệu của mình.
-- [[Modular monolith]]: một ứng dụng deploy cùng nhau nhưng chia module có ranh giới rõ.
+Một sản phẩm có Order, Payment và Email. Team định tách ba microservice vì nghe nói “dễ scale”. Nhưng một nút đặt hàng phải đổi cả order và payment trong cùng màn hình; team chưa có tracing, deploy độc lập hay người trực xử lý message lỗi.
 
-::: senior-signal
-Nêu bằng chứng khiến bạn tách service, thay vì nói microservices luôn scale tốt hơn.
-:::
+Nếu tách ngay, các lời gọi trong code trở thành gọi mạng, lỗi một phần xuất hiện và việc debug dài hơn. Trong khi đó, một ứng dụng duy nhất có module rõ ràng vẫn có thể giải quyết vấn đề hiện tại.
 
-## Bài toán backend thực tế
+## Mental Model: boundary đi trước deployment
 
-Ví dụ Order, Payment và Catalog dùng chung bảng và gọi lẫn nhau. Tách thành ba service ngay khiến một thay đổi checkout phải đi qua mạng, có timeout và dữ liệu chậm đồng bộ. Nếu chưa có owner/team độc lập, độ phức tạp tăng nhưng giá trị chưa tăng.
+**Modular monolith** là một chương trình deploy cùng nhau, nhưng code được chia theo nghiệp vụ và có ranh giới rõ. Đây là cách tổ chức, không tự chặn truy cập chéo. Team cần quy định module nào được gọi module nào và module nào được sửa dữ liệu nào, rồi kiểm bằng API nội bộ, package, schema và test. Vì cùng một process, một số luồng và transaction trong một database có thể đơn giản hơn; điều đó vẫn phụ thuộc cách dữ liệu được tổ chức.
 
-## Mental model
+**Microservice** là một chương trình deploy độc lập, thường sở hữu dữ liệu của mình. Nó chỉ đáng giá khi sự độc lập đó giải quyết một nhu cầu thật: ví dụ Payment có team riêng, nhịp release riêng hoặc tải rất khác Order. Đổi lại, network timeout, dữ liệu trễ, theo dõi và deploy đều khó hơn.
 
-Architecture là cách đặt ranh giới cho thay đổi và lỗi. Module tốt có API nội bộ rõ, không đọc trực tiếp database của module khác và có rule riêng. Khi ranh giới đủ ổn định, tách deployment sau sẽ ít đau hơn.
+## Terms
 
-## Invariants phải giữ
+- **Bounded context**: phần nghiệp vụ dùng cùng nghĩa của từ và cùng luật. Ví dụ “Order” trong bán hàng có thể khác “Order” ở kho.
+- **Aggregate**: nhóm dữ liệu có một điểm vào để giữ các luật phải đúng cùng nhau. Không phải cứ mỗi bảng là một aggregate.
+- **Phần chịu trách nhiệm dữ liệu** (ownership): module nào được thay đổi và bảo vệ dữ liệu đó.
+- **Quy ước giao tiếp** (contract): cách hai module thống nhất gọi nhau hoặc gửi event, gồm dữ liệu và phiên bản.
 
-Xác định dữ liệu nào phải đúng cùng lúc. Ví dụ tạo order và giữ tồn kho có thể cần một transaction khi còn chung owner. Nếu tách owner, phải chấp nhận trạng thái `Pending`, event/reconciliation và cách giải quyết khi một bước thất bại. Đừng giả vờ mạng có transaction giống database local.
+## Boundary Checklist
 
-## Cách ra quyết định
+1. Viết các luật không được sai và ai sở hữu chúng. Ví dụ Payment sở hữu trạng thái charge; Order không tự sửa payment row.
+2. Nhìn lịch sử thay đổi: phần nào thường đổi cùng nhau, phần nào có team, SLA hoặc tải khác hẳn?
+3. Đặt ranh giới module trước: API nội bộ, phần chịu trách nhiệm dữ liệu và cách kiểm tra phù hợp; test theo quy ước giao tiếp thay vì chỉ tin vào lời hứa.
+4. Giữ modular monolith nếu việc thay đổi cùng nhịp và transaction local giúp giảm rủi ro. Tách service chỉ khi lợi ích độc lập lớn hơn chi phí network, dữ liệu không đồng bộ, observability và on-call.
+5. Khi tách, chuyển quyền sửa dữ liệu theo từng bước. Không để hai service cùng ghi một bảng rồi gọi đó là độc lập.
+6. Sau mỗi lựa chọn, đo lead time, lỗi deploy, failure giữa service và số việc phải đối soát; kiến trúc phải giải quyết signal thật.
 
-Giữ modular monolith khi domain còn thay đổi nhanh, team nhỏ, transaction chung quan trọng hoặc không có tải độc lập. Tách service khi có boundary nghiệp vụ rõ, owner vận hành riêng, cần deploy/scale/cách ly lỗi riêng và có khả năng vận hành broker, tracing, contract version.
+## Architecture Decision Table
 
-DDD không bắt bạn tạo nhiều service. Nó giúp gọi đúng tên, gom rule liên quan và tránh module này sửa state của module khác. Bắt đầu bằng module, test ranh giới và event nội bộ; chỉ phân tán khi lợi ích lớn hơn chi phí mạng và vận hành.
+| Lựa chọn | Nên dùng khi | Được gì | Đổi lại |
+|---|---|---|---|
+| Modular monolith | domain còn đang học, thay đổi cùng nhau | ít lỗi mạng, debug và transaction local dễ | phải giữ ranh giới code nghiêm túc |
+| Microservice | ownership/team/release/tải thật sự độc lập | deploy và scale từng phần | thêm timeout, contract version, vận hành message và on-call |
+| Event giữa module | bên nhận không cần trả lời ngay | giảm phụ thuộc thời điểm | dữ liệu đến trễ, cần xử lý trùng và lỗi |
+| Gọi đồng bộ | cần kết quả ngay để quyết định request | flow dễ hiểu | phụ thuộc availability/latency của bên kia |
 
-## Production traps
+## Failure Modes khi chia sai boundary
 
-- Tách theo technical layer như “user service”, “database service” thay vì ownership nghiệp vụ.
-- Service nào cũng đọc database service khác, tạo distributed monolith.
-- Đồng bộ RPC dây chuyền trên checkout làm một dependency chậm kéo toàn flow chậm.
-- Không có owner cho event schema, retry, DLQ và reconciliation.
+Hai service cùng ghi số dư của một account. Khi một service retry hoặc deploy chậm, số dư có thể sai mà không biết ai sửa. Cách sửa là chọn một owner duy nhất, để service còn lại gọi contract hoặc nhận event; không giải quyết bằng thêm cache hay lock xuyên service.
 
-## Kiểm chứng ở production
+Nếu event không tới hoặc tới hai lần, bên nhận phải có mã event/business key để xử lý lại an toàn và có hàng đợi lỗi để đối soát. Tách service không tự tạo tính đúng dữ liệu.
 
-Theo dõi deploy dependency, lỗi cross-boundary, latency của call sync, backlog event và thời gian xử lý mismatch. Nếu một module luôn phải deploy cùng module khác, boundary có thể chưa đủ độc lập. Nếu service tách ra nhưng không có SLO/owner riêng, nó mới chỉ là chi phí.
+## Architecture Evidence
 
-## Mẫu trả lời 30–45 giây
+Review một thay đổi Order-to-Payment: module nào sửa gì, contract nào đổi và có rollback được không. Theo dõi lỗi contract, độ trễ event, công việc đối soát, thời gian khôi phục incident và số lần phải deploy nhiều service cho một thay đổi nhỏ.
 
-“Tôi bắt đầu bằng bounded context và data ownership. Với domain chưa ổn định, modular monolith giữ transaction và debug đơn giản. Tôi chỉ tách khi một boundary có owner, thay đổi hoặc tải độc lập rõ; khi đó thiết kế contract, idempotency, observability và reconciliation ngay từ đầu.”
+## Interview Answer
 
-## Mẫu trả lời Senior 2 phút
+“Em bắt đầu từ luật nghiệp vụ và phần nào có quyền quyết định từng loại dữ liệu. Nếu các phần vẫn thường xuyên thay đổi cùng nhau, em ưu tiên một ứng dụng được chia thành module rõ ràng để giữ việc gọi và giao dịch đơn giản. Em chỉ tách thành dịch vụ riêng khi đội ngũ, nhịp phát hành, tải hoặc yêu cầu dữ liệu thật sự độc lập, đồng thời chấp nhận chi phí của lỗi mạng và thông báo đến trùng. Khi tách, mỗi loại dữ liệu vẫn chỉ có một nơi quyết định và nội dung trao đổi phải tương thích giữa phiên bản cũ với mới.”
 
-Khi cần tách Payment, tôi chỉ rõ Payment sở hữu payment attempt và outcome; Order không ghi bảng payment. Order phát command/event với ID ổn định, Payment xử lý idempotent và trả trạng thái để Order hiển thị `Pending` khi cần. Tôi đo timeout, duplicate, backlog và reconciliation thay vì hứa consistency tức thì.
+## Follow-up
 
-## Câu hỏi follow-up và red flags
+- Dấu hiệu nào khiến bạn tách Payment khỏi Order thay vì giữ module nội bộ?
+- Hai module cần dữ liệu của nhau nhưng không được dùng chung database thì làm gì?
 
-### Khi nào không chọn microservices?
+## Self-check
 
-Khi boundary/team/scale độc lập chưa được chứng minh hoặc transaction chung quan trọng. Khi đó microservices thêm network failure, versioning và vận hành nhưng không giải quyết vấn đề thật.
+- Luật nào phải đúng cùng nhau và ai giữ luật đó?
+- Lợi ích tách service đang giải quyết vấn đề nào có thật?
+- Nếu network lỗi giữa hai phần, người dùng thấy trạng thái gì và ai xử lý?
 
-### Bounded context bảo vệ invariant thế nào?
+## Final Recall
 
-Nó chỉ rõ ai được thay đổi state và rule nào thuộc cùng mô hình. Invariant local đặt gần owner; invariant xuyên context cần workflow, trạng thái trung gian và reconciliation.
-
-## Final recall
-
-- Module trước, service sau.
-- Ownership rõ quan trọng hơn sơ đồ nhiều box.
-- Tách boundary phải đi kèm contract, recovery và vận hành.
+- Chia theo data ownership và business invariant trước.
+- Modular monolith có boundary rõ thường tốt hơn nhiều service mơ hồ.
+- Service độc lập luôn đi kèm chi phí dữ liệu và vận hành độc lập.

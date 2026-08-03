@@ -1,72 +1,91 @@
-# Khung System Design cho Backend
+# System Design Framework
 
 ## Quick Summary
 
-Đề bài “thiết kế đặt hàng” không bắt đầu bằng Kafka. Bắt đầu bằng việc một người dùng bấm đặt hàng: dữ liệu nào phải đúng, chờ bao lâu được và nếu payment timeout thì màn hình nói gì. Sau đó mới chọn thành phần nhỏ nhất đáp ứng được yêu cầu.
+- System Design không phải cuộc thi kể tên công nghệ. Mục tiêu là biến yêu cầu còn mơ hồ thành một hệ thống có thể giải thích và vận hành.
+- Bắt đầu bằng người dùng, luồng chính, quy mô và điều gì tuyệt đối không được sai.
+- Vẽ đường đi của dữ liệu trước, rồi mới chọn database, cache, queue (hàng đợi) hay broker (nơi chuyển message).
+- Mỗi lựa chọn phải trả lời được: giải quyết vấn đề gì, đổi lại điều gì và hỏng thì xử lý ra sao.
+- Nói rõ giả định. Interviewer đánh giá cách bạn suy nghĩ nhiều hơn một sơ đồ “đúng duy nhất”.
 
-## Terms to Know
+## Problem Framing
 
-- [[SLO]]: mục tiêu đo được, ví dụ p99 dưới 500 ms hoặc availability 99.9%.
-- [[Data ownership]]: service hoặc database nào được phép ghi dữ liệu đó.
-- [[Eventual consistency]]: các phần hệ thống cập nhật chậm hơn nhau trong khoảng chấp nhận được.
-- **Invariant (quy tắc không được sai)**: ví dụ một order chỉ được xác nhận một lần hoặc tồn kho không được âm.
-- **Source of truth (nguồn dữ liệu gốc)**: nơi ra quyết định cuối cùng, như database order; cache và search index chỉ là bản sao phục vụ đọc.
-- **Outbox**: bản ghi ý định phát event được lưu cùng transaction với dữ liệu nghiệp vụ để không mất event.
-- **DLQ**: nơi giữ message lỗi không nên retry mãi, để người vận hành kiểm tra và xử lý.
+Đề bài chỉ nói: “Thiết kế hệ thống đặt hàng”. Nếu vẽ ngay mười microservice, ta vẫn chưa biết một ngày có bao nhiêu đơn, có được bán quá tồn kho không, thanh toán chậm thì người dùng thấy gì, hay dữ liệu cần giữ bao lâu.
 
-::: senior-signal
-Nêu giả định trước: “Em giả định search có thể chậm vài giây, nhưng không được tạo order trùng.” Khi giả định đổi, hãy nói thiết kế đổi ở đâu.
-:::
+## Mental Model: flow trước component
 
-## Khi nào gặp
+Một thiết kế tốt trả lời được bốn câu:
 
-Gặp trong vòng design 30–60 phút: order, payment, file upload, notification hoặc search. Interviewer đánh giá cách bạn làm rõ yêu cầu và xử lý lỗi, không chỉ danh sách công nghệ.
+1. Hệ thống phục vụ ai và làm việc gì?
+2. Điều gì phải luôn đúng?
+3. Dữ liệu đi qua những bước nào và ai sở hữu nó?
+4. Khi một bước chậm hoặc hỏng, hệ thống và người dùng sẽ thấy gì?
 
-## Mental model
+Sau đó mới tính đến quy mô và công nghệ. Ví dụ, “không được trừ tiền hai lần” là business invariant; idempotency key ổn định để request retry không tạo payment thứ hai là một cách thực hiện. Đừng đảo ngược hai thứ này.
 
-Một thiết kế tốt trả lời ba việc: dữ liệu gốc ở đâu, thao tác nào không được sai, và khi lỗi thì khôi phục/đối soát thế nào. Cache, queue và service mới đều tăng điểm có thể lỗi; chỉ thêm khi giải quyết một nhu cầu cụ thể.
+## Terms
 
-## Khung trả lời theo trình tự
+- **Functional requirement** (yêu cầu chức năng): người dùng cần làm được gì.
+- **SLO – service level objective** (mục tiêu chất lượng): mốc đo như 99,9% request thành công hoặc p95 dưới 300 ms.
+- **Business invariant** (quy tắc nghiệp vụ không được sai): ví dụ tổng tiền trong ledger phải cân bằng.
+- **Source of truth** (nguồn dữ liệu được coi là chính): nơi có quyền quyết định trạng thái cuối.
+- **Data ownership** (quyền quyết định và ghi dữ liệu): ví dụ Order service là nơi duy nhất được đổi trạng thái đơn hàng.
+- **Bottleneck** (nút thắt): thành phần giới hạn năng lực của toàn luồng.
 
-### 1. Làm rõ yêu cầu và scope
+## Cách quyết định, từng bước
 
-Hỏi actor, thao tác chính, tải, độ trễ, dữ liệu nhạy cảm và điều không thể đảo ngược. Nếu chưa có số, nêu giả định và ảnh hưởng của nó.
+1. Hỏi actor, luồng chính, luồng ngoài phạm vi và trải nghiệm khi hệ thống chậm.
+2. Ước lượng đơn giản: request mỗi giây, kích thước dữ liệu, tỷ lệ đọc/ghi và đỉnh tải. Nói rõ giả định.
+3. Chốt 2–3 business invariant quan trọng nhất và mức nhất quán cần có.
+4. Vẽ luồng từ client đến nơi lưu dữ liệu và các hệ thống ngoài; ghi phần nào chịu trách nhiệm dữ liệu ở mỗi bước.
+5. Chọn mô hình dữ liệu và API dựa trên cách đọc/ghi, không dựa trên tên công nghệ đang nổi.
+6. Đi từng chỗ giao giữa các hệ thống bằng một ví dụ. Payment timeout thì Order ở `PaymentPending` (đang chờ xác minh), UI hiện “đang xác minh”, worker tra mã giao dịch rồi mới gửi lại khi an toàn. Sau đó mới tìm các điểm khác có thể chậm, trùng hoặc quá tải và chọn timeout, hàng đợi hay đối soát đúng nơi.
+7. Cuối cùng mới nói về cache, partition, scale-out, cách theo dõi và kế hoạch tăng trưởng.
 
-### 2. Chốt invariant và ownership
+## Architecture Decision Matrix
 
-Ví dụ: một order chỉ xác nhận một lần; tồn kho không âm. Đặt quy tắc gần dữ liệu bằng transaction, constraint hoặc state transition có điều kiện. Nói rõ ai ghi order, ai ghi payment.
-
-### 3. Vẽ baseline end-to-end
-
-Cho API stateless gọi source of truth trước. Chỉ đưa queue/worker vào việc không cần hoàn thành trong request, như gửi email. Baseline đơn giản dễ debug và rollback hơn.
-
-### 4. Chọn storage và scale
-
-Chọn theo access pattern: relational database cho transaction/constraint, object storage cho file, search index cho tìm kiếm. Cache chỉ dành cho đọc chấp nhận dữ liệu cũ; phải có key, TTL và fallback.
-
-### 5. Nói failure và vận hành
-
-Timeout không xác nhận thao tác chưa xảy ra. Nêu idempotency, retry có giới hạn, log/trace/metric, alert và reconciliation (đối soát) cho dữ liệu lệch.
-
-## Quyết định và trade-off
-
-| Chọn | Lợi ích | Cần chấp nhận |
+| Lựa chọn | Hợp khi | Đổi lại |
 |---|---|---|
-| Transaction local | Giữ invariant đơn giản | Chỉ trong một data owner |
-| Outbox + event | Không mất ý định phát event | Consumer có thể nhận trùng |
-| Cache-aside | Giảm tải đọc | Có stale data và invalidation |
-| Sync RPC | Có câu trả lời ngay | Phụ thuộc latency/availability |
-| Queue | Hấp thụ burst | Có backlog, retry, DLQ |
+| Xử lý đồng bộ | Người dùng cần kết quả ngay, chuỗi phụ thuộc ngắn | Lỗi và độ trễ truyền ngược về request |
+| Xử lý bất đồng bộ qua queue | Việc có thể hoàn thành sau, cần hấp thụ tải đỉnh | Có trạng thái chờ, message trùng và độ trễ hội tụ |
+| Một database | Cùng owner, cần transaction đơn giản | Khó scale hoặc tách ownership độc lập về sau |
+| Tách database/service | Có ranh giới và nhu cầu vận hành độc lập rõ | Mất transaction chung, tăng chi phí theo dõi và đối soát |
 
-## Bẫy production
+## Failure Walkthrough
 
-- Vẽ microservice trước khi biết ownership/team/tải.
-- Dùng search index để quyết định giá hoặc tồn kho cuối cùng.
-- Nói “exactly once” nhưng không có dedup/reconcile.
-- Không nêu metric hay cách rollback.
+Với mỗi mũi tên trên sơ đồ, hỏi: timeout thì sao, gửi lại có trùng không, queue đầy thì sao, dữ liệu cũ bao lâu thì chấp nhận được? Chọn một hoặc hai failure mode quan trọng để đào sâu thay vì liệt kê mọi mẫu thiết kế.
 
-## Final recall
+Ví dụ payment timeout: order ở trạng thái `PaymentPending`, người dùng được báo đang kiểm tra, worker tra cứu theo mã giao dịch và đối soát. Đây là thiết kế trải nghiệm cùng với thiết kế kỹ thuật.
 
-- User journey → invariant → baseline → failure → scale.
-- Nêu điều kiện khiến bạn đổi thiết kế.
-- Mỗi thành phần phải có lý do, owner và cách vận hành.
+## Validation và Capacity Check
+
+- Mỗi yêu cầu quan trọng nối được tới một thành phần và một cách đo.
+- Ước lượng tải nhất quán với capacity được đề xuất.
+- Business invariant có nơi thực thi rõ: constraint, transaction, idempotency hoặc đối soát.
+- Có cách phát hiện hệ thống đang chậm, sai lệch hoặc mắc kẹt.
+
+## Interview Answer
+
+“Em làm rõ luồng chính, quy mô, SLO và các quy tắc nghiệp vụ không được sai (`business invariant`) trước. Sau đó em vẽ đường đi của dữ liệu, chốt service nào có quyền ghi dữ liệu và chọn storage theo cách đọc/ghi thực tế. Cache hoặc queue chỉ được thêm khi có lý do. Ở mỗi `transaction boundary` — phạm vi có thể commit hoặc rollback cùng nhau — em nói rõ timeout đưa hệ thống vào trạng thái nào, có được retry không và idempotency key nào ngăn tạo side effect lần nữa. Cuối cùng em chỉ ra bottleneck đầu tiên và khi nào cần scale-out.”
+
+## Follow-up
+
+### Cần ước lượng chính xác đến đâu?
+
+Không cần đoán đúng từng request. Cần đủ để phân biệt 10 request/giây với 100.000 request/giây và phát hiện thiết kế vô lý. Nêu công thức, giả định và làm tròn để interviewer theo dõi được.
+
+### Khi nào mới nên thêm Kafka hoặc cache?
+
+Khi một yêu cầu cụ thể cần chúng: hấp thụ tải đỉnh, tách thời gian xử lý, phát cho nhiều consumer, hoặc giảm số lần đọc nguồn dữ liệu chậm. Nếu chưa nêu được vấn đề, chưa có cơ sở để thêm.
+
+## Self-check
+
+- Ba business invariant quan trọng nhất là gì?
+- Ai sở hữu trạng thái cuối ở mỗi bước?
+- Khi dependency timeout, người dùng thấy trạng thái nào?
+
+## Final Recall
+
+- Yêu cầu và business invariant đi trước công nghệ.
+- Vẽ đường đi dữ liệu và chốt data ownership trước khi chia service.
+- Mỗi lựa chọn cần có lý do, cái giá và cách xử lý khi hỏng.

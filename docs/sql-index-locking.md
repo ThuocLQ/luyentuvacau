@@ -1,68 +1,81 @@
-# SQL, Index, Transactions & Locking
+# SQL, Index, Transactions và Locking
 
 ## Quick Summary
 
-Một endpoint danh sách đơn hàng chậm không có nghĩa là “thiếu index”. Trước hết xem nó đọc bao nhiêu dòng, lọc/sắp xếp thế nào và có đang chờ transaction khác hay không. Index, transaction và retry chỉ đúng khi phục vụ một vấn đề đã đo được.
+- Index là một “mục lục” riêng do database duy trì để tìm hàng theo một hoặc vài giá trị. Nó không phải nút bấm làm mọi truy vấn nhanh hơn.
+- Constraint, câu lệnh cập nhật có điều kiện và transaction bảo vệ các loại quy tắc khác nhau.
+- Cách database đặt lock và cho phép các transaction nhìn thấy nhau phụ thuộc hệ quản trị, cấu hình và câu SQL đang chạy.
 
-## Terms to Know
+## Scenario: query chậm và tồn kho âm
 
-- [[Index]]: cấu trúc giúp database tìm ít dòng hơn.
-- [[Transaction]]: nhóm thay đổi cùng thành công hoặc cùng thất bại.
-- [[Deadlock]]: hai transaction chờ nhau giữ tài nguyên nên database phải hủy một bên.
+Trang đơn hàng lọc theo từng công ty, theo trạng thái rồi sắp xếp theo ngày tạo. Khi bảng lớn, trang chậm. Cùng lúc đó, hai nhân viên cùng bấm trừ tồn kho và số lượng có nguy cơ âm.
 
-::: production-trap
-Thêm index theo cảm giác có thể làm ghi dữ liệu chậm hơn và vẫn không sửa query sai.
-:::
+Đây là hai việc khác nhau. Index giúp database tìm danh sách nhanh hơn. Còn tồn kho không âm là quy tắc dữ liệu; nó cần một cách ghi an toàn.
 
-## Tình huống phỏng vấn
+## Mental Model: access path và write correctness
 
-Ví dụ trang lịch sử đơn hàng chậm sau khi dữ liệu tăng. Nếu API lấy cả bảng rồi mới lọc ở code, database phải đọc rất nhiều dữ liệu. Người dùng chờ lâu; khi tải tăng, các request chồng lên nhau và có thể gây blocking.
+**Bản chất.** Index là “mục lục” của bảng. Database lấy giá trị của một hay nhiều cột, sắp chúng vào một cấu trúc có thể tra cứu — thường là cây B-tree — rồi lưu kèm thông tin để tìm hàng tương ứng. Đây là dữ liệu phụ: khi bảng thay đổi, database cũng phải cập nhật index.
 
-## Mental model
+**Cơ chế.** Với câu SQL `WHERE TenantId = 7 ORDER BY CreatedAt DESC`, database có thể đi thẳng tới phần index của công ty số 7 rồi đọc theo thứ tự ngày đã có sẵn. Tuy vậy, bộ phận chọn cách chạy câu SQL (optimizer) vẫn có thể đọc cả bảng nếu cách đó ít tốn công hơn, chẳng hạn khi truy vấn cần gần như mọi hàng.
 
-Database cần giữ đúng dữ liệu trước, rồi mới nhanh. Unique constraint bảo vệ “một mã đơn chỉ có một lần”; transaction bảo vệ nhiều thay đổi phải đi cùng nhau. Index giúp tìm dữ liệu nhanh hơn, nhưng mỗi lần insert/update database cũng phải cập nhật index.
+**Phạm vi.** Cách tổ chức index, cột được lưu kèm và cách khóa dữ liệu khác nhau giữa SQL Server, PostgreSQL và các hệ quản trị khác. Vì vậy, hãy xem câu SQL và kế hoạch chạy thật của đúng hệ thống đang dùng, thay vì áp dụng một mẹo chung cho mọi database.
 
-## Invariant trước, cơ chế sau
+**Đừng hiểu nhầm.** Index không sửa được truy vấn lấy quá nhiều cột, nối bảng sai, sắp xếp không ổn định hoặc lấy hết dữ liệu về ứng dụng rồi mới chia trang. Riêng unique index hoặc luật `UNIQUE` còn có thể bảo vệ quy tắc không trùng, nên nó không chỉ phục vụ tốc độ.
 
-Hãy nêu quy tắc không được sai: không tạo hai payment cho cùng request, số lượng hàng không âm, trạng thái order không nhảy từ `Cancelled` sang `Paid`. Đặt quy tắc bằng constraint và điều kiện cập nhật trong database. Kiểm tra bằng `if` ở application có thể bị hai request chạy đồng thời vượt qua.
+**Ví dụ nhỏ.** Muốn “trong cùng một công ty không có hai đơn trùng mã”, đặt luật không trùng trên `(TenantId, OrderCode)`. Muốn “tồn kho không âm”, dùng câu lệnh chỉ trừ khi hàng vẫn còn đủ: `UPDATE ... SET Stock = Stock - @n WHERE Id = @id AND Stock >= @n`. Sau đó kiểm tra database có cập nhật được hàng nào không.
 
-## Index và execution plan
+## Terms
 
-Khi query chậm, lấy SQL thật và execution plan (kế hoạch database chọn để chạy query). Xem điều kiện lọc, join, sắp xếp, số dòng ước tính so với thực tế và logical reads. Sau đó sửa query shape: chỉ chọn cột cần dùng, phân trang theo key ổn định, tránh `Include`/join làm nhân bản dữ liệu.
+- **Index**: phần mục lục phụ giúp database tra cứu hoặc đọc theo một thứ tự có sẵn.
+- **Constraint** (quy tắc database kiểm tra khi ghi): ví dụ `UNIQUE` không cho trùng hoặc `CHECK` kiểm tra điều kiện.
+- **Transaction** (nhóm thay đổi commit hoặc rollback cùng nhau): ở đây chỉ bao được các thay đổi trong cùng database.
+- **Deadlock**: hai transaction giữ lock mà bên kia cần, nên chúng chờ nhau thành một vòng và database phải hủy một bên.
 
-Chỉ thêm composite index khi biết access pattern, ví dụ lọc theo `TenantId`, `Status` rồi sắp theo `CreatedAt`. Đo lại latency, reads và chi phí ghi sau deploy. Scan toàn bảng vẫn có thể đúng nếu báo cáo thực sự đọc phần lớn bảng.
+## Query và Transaction Workflow
 
-## Isolation, blocking và deadlock
+1. Viết quy tắc cần giữ: không trùng mã, tồn kho không âm, hay chỉ cần báo người dùng khi có người sửa trước.
+2. Đặt constraint ở nơi trực tiếp ghi dữ liệu, để mọi đường ghi đều phải tuân theo. Dùng `UNIQUE` để không cho trùng; dùng `CHECK` để kiểm tra điều kiện trên một hàng; dùng câu lệnh `UPDATE ... WHERE` hoặc version token để phát hiện hai người cùng sửa.
+3. Với truy vấn chậm, lấy câu SQL thật, tham số gần với production và kế hoạch chạy thật. Xem database đã đọc bao nhiêu hàng, nối và sắp xếp ở đâu, chờ ở đâu và cuối cùng trả về bao nhiêu hàng.
+4. Thiết kế index theo đúng cách truy vấn đang lọc và sắp xếp. Với index gồm nhiều cột, thứ tự cột rất quan trọng: index tốt cho truy vấn A có thể không giúp truy vấn B.
+5. Khi gặp deadlock, xem `deadlock graph`, rút ngắn transaction và cho các luồng update dữ liệu theo cùng một thứ tự. Chỉ retry phần ghi database khi biết việc chạy lại không tạo thêm side effect.
 
-Transaction dài giữ lock lâu: transaction khác phải chờ, nên latency tăng dù CPU thấp. Giữ transaction ngắn, không gọi HTTP/email bên trong transaction và truy cập bảng theo cùng thứ tự. Deadlock là vòng chờ; đọc deadlock graph để biết lock nào tạo vòng, rồi sửa thứ tự hoặc query/index.
+## Constraint và Index Decision Table
 
-## Retry đúng phạm vi
+| Lựa chọn | Dùng khi | Đổi lại |
+|---|---|---|
+| Luật `UNIQUE` | dữ liệu không được trùng theo một khóa | cần đổi lỗi trùng thành thông báo nghiệp vụ rõ ràng |
+| Luật `CHECK` | điều kiện chỉ cần nhìn dữ liệu trên cùng một hàng | không thay cho quy tắc cần nhìn nhiều hàng hoặc hệ thống bên ngoài |
+| Cập nhật kèm mã phiên bản | hai người có thể sửa cùng bản ghi và cần báo có xung đột | ứng dụng phải tải lại hoặc cho người dùng gộp thay đổi |
+| Cập nhật có điều kiện | chuyển trạng thái/tồn kho chỉ hợp lệ khi điều kiện còn đúng | cần xử lý trường hợp 0 hàng được cập nhật |
+| Index gồm nhiều cột | cách lọc và sắp xếp lặp lại, đã xem kế hoạch chạy | tốn dung lượng và làm thao tác thêm, sửa, xóa dữ liệu nặng hơn |
 
-Database có thể chọn một transaction làm “victim” khi deadlock. Chỉ retry operation database nhỏ, idempotent (chạy lại không tạo hiệu ứng mới), có giới hạn và jitter. Không retry cả payment/email trong transaction vì có thể đã gửi side effect trước khi lỗi.
+## Nếu có lỗi thì sao?
 
-## Bẫy production
+Deadlock không phải lý do để tăng timeout. Làm vậy chỉ khiến request chờ lâu hơn. Hãy xem deadlock graph để biết transaction nào đang giữ lock nào, sau đó thống nhất thứ tự update và bỏ những việc không cần thiết ra khỏi transaction. Đừng gọi HTTP hoặc gửi email bên trong transaction database, vì database không thể rollback việc đã xảy ra ở hệ thống bên ngoài.
 
-- Tăng timeout để che blocking thay vì tìm transaction/query giữ lock.
-- Dùng offset lớn cho bảng khổng lồ rồi ngạc nhiên khi trang cuối chậm.
-- Chỉ tin ORM log mà không xem SQL và plan thực tế.
-- Retry vô hạn khiến load tăng đúng lúc database đang nghẽn.
+Nếu câu lệnh không trừ được tồn kho, đó có thể là kết quả bình thường “hết hàng”, không nhất thiết là lỗi 500. Nếu mã phiên bản không còn khớp, báo rằng dữ liệu đã bị người khác sửa để người dùng chọn tải lại, gộp thay đổi hoặc dừng.
 
-## Mẫu trả lời Senior
+## Evidence cần lấy từ database
 
-“Tôi bắt đầu từ invariant và evidence. Với endpoint chậm, tôi xem SQL, plan, rows và waits; sửa query shape trước rồi mới thêm index theo filter/sort thực tế. Với deadlock, tôi đọc graph, rút transaction và chuẩn hóa lock order. Retry chỉ bao quanh database unit idempotent, không bao quanh external side effect.”
+Viết bài kiểm tra cho trường hợp hai giao dịch cùng mua món hàng cuối. Trước và sau khi sửa, so sánh kế hoạch chạy thật, lượng dữ liệu database phải đọc, nhóm truy vấn chậm, thời gian ghi và thời gian chờ khóa. Sau khi thêm index, kiểm tra cả thao tác ghi chứ không chỉ trang đọc.
 
-## Câu hỏi ôn phỏng vấn
+## Interview Answer
 
-### Xử lý deadlock trong cập nhật order hoặc payment thế nào?
+“Em tách hai việc: tìm dữ liệu nhanh và giữ dữ liệu luôn đúng. Index là cấu trúc phụ do database duy trì cho một cách filter hoặc sort cụ thể, nên em xem câu SQL và execution plan thật trước khi thêm. Các rule như không trùng mã hoặc tồn kho không âm được bảo vệ bằng constraint ngay tại database. Khi gặp deadlock, em xem deadlock graph, rút ngắn transaction và thống nhất thứ tự update. Em chỉ retry phần ghi khi biết chạy lại không tạo thêm side effect.”
 
-Đọc deadlock graph, giảm phạm vi/thời gian transaction, thống nhất thứ tự lock và kiểm tra index. Sau đó retry có giới hạn operation local đã idempotent.
+## Follow-up
 
-### Chọn isolation level bằng cách nào?
+- Vì sao index `(TenantId, CreatedAt)` không tự tối ưu tốt cho query chỉ lọc `CreatedAt`?
+- Khi nào `CHECK` chưa đủ để bảo vệ quy tắc nghiệp vụ?
 
-Chọn từ invariant và mức đọc cũ có thể chấp nhận, rồi kiểm bằng workload thật. Isolation mạnh hơn giảm anomaly nhưng có thể tăng blocking hoặc version-store cost.
+## Self-check
 
-## Final recall
+- Tôi đang giải quyết truy vấn chậm hay quy tắc dữ liệu bị phá vỡ?
+- Index này phục vụ SQL nào, và kế hoạch thực thi thực tế nói gì?
+- Nếu dữ liệu đã bị người khác sửa trước, người dùng nhận thông báo và lựa chọn nào?
 
-- Constraint/transaction bảo vệ correctness; index phục vụ access pattern.
-- Plan và số liệu quyết định index, không phải tên cột.
-- Transaction ngắn và retry đúng boundary giúp hệ thống hồi phục an toàn.
+## Final Recall
+
+- Index là mục lục do database duy trì; nó được chọn theo kế hoạch chạy, không phải phép màu.
+- Constraint giữ dữ liệu đúng; local transaction chỉ bao được thay đổi trong database đó.
+- Muốn sửa deadlock, hãy nhìn deadlock graph thật trước.

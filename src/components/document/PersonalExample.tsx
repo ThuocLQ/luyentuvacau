@@ -2,7 +2,7 @@ import { ChevronDown, Save } from 'lucide-react'
 import { useState } from 'react'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 
-const empty = 'Project:\nProblem:\nMy responsibility:\nDecision:\nTrade-off:\nResult:\nWhat I would improve:'
+const empty = 'Bối cảnh dự án:\nVấn đề cần giải quyết:\nVai trò của tôi:\nQuyết định đã chọn và lý do:\nĐánh đổi chấp nhận:\nKết quả đo được:\nNếu làm lại, tôi sẽ cải thiện:'
 export default function PersonalExample({ slug }: { slug: string }) {
   const [notes, setNotes] = useLocalStorage<Record<string, string>>('ltvc-personal-stories', {})
   const [open, setOpen] = useState(false)

@@ -1,38 +1,81 @@
-# Collections, LINQ & Exceptions
+# Collections, LINQ và Exceptions
 
 ## Quick Summary
 
-API danh sách chậm khi kéo cả triệu dòng về rồi mới lọc. Chọn collection theo cách truy cập; với LINQ, lọc và phân trang trước khi lấy dữ liệu về bộ nhớ; exception chỉ dành cho lỗi bất thường.
+- Collection là cách giữ dữ liệu trong bộ nhớ. Chọn theo thao tác chính, không chọn theo thói quen.
+- LINQ có thể là thao tác trên dữ liệu đang có trong memory, hoặc mô tả query để thành phần như EF Core dịch sang SQL. Hai việc này không giống nhau.
+- Không tìm thấy dữ liệu là kết quả có thể dự đoán; lỗi hạ tầng hoặc bug cần được ghi nhận và xử lý khác.
 
-## Terms to Know
+## Scenario: IQueryable chạy sai boundary
 
-- [[Query shape]]: filter, sort và cột response thực sự cần.
-- [[N+1 query]]: mỗi item lại tạo thêm một query.
+API lịch sử đơn hàng trả `IQueryable<Order>` (mô tả query chưa chạy) lên nhiều tầng. Một tầng khác thêm `Include` (yêu cầu lấy thêm relation), một tầng gọi `ToList()` rồi mới phân trang. Khi database lỗi timeout, tất cả bị catch và trả `400`.
 
-::: concept
-`IQueryable` là mô tả query để database chạy; `IEnumerable` là dữ liệu đang được duyệt trong app. Đừng để `IQueryable` đi qua nhiều tầng không ai kiểm soát.
-:::
+Hậu quả là query khó kiểm soát, tốn RAM và client nhận lỗi sai nghĩa. Cần tách “query chạy ở đâu” và “ai quyết định outcome HTTP”.
 
-## Mental model
+## Mental Model
 
-`List` phù hợp duyệt theo thứ tự; `Dictionary` tìm theo key; `HashSet` kiểm tra có/không và loại trùng. LINQ chỉ chạy khi enumerate hoặc gọi `ToList`; đó là execution boundary cần đặt sau filter, projection và page.
+**Bản chất.** `List<T>`, `Dictionary<TKey,TValue>` và `HashSet<T>` là các cấu trúc lưu object trong memory, tối ưu cho các thao tác khác nhau. `IEnumerable<T>` là cách lần lượt lấy phần tử; nó có thể là list có sẵn hoặc nguồn tạo dữ liệu dần.
 
-Ví dụ import 10.000 mã sản phẩm cần phát hiện mã trùng. Nếu mỗi mã lại quét cả `List`, thời gian tăng rất nhanh khi dữ liệu lớn. Dùng `HashSet<string>` để kiểm tra mã đã thấy; dùng `Dictionary<string, Product>` khi cần lấy luôn product theo mã. Chọn collection theo thao tác chính, không phải theo thói quen.
+**Cơ chế.** `IQueryable<T>` giữ một biểu thức query. Provider có thể dịch biểu thức đó sang SQL khi bị thực thi, ví dụ lúc gọi `ToListAsync`, `CountAsync` hoặc duyệt kết quả. Với `IEnumerable<T>`, các method LINQ sau đó thường chạy trong app trên dữ liệu đã lấy về.
 
-## LINQ và data boundary
+**Phạm vi.** Không phải mọi LINQ expression đều dịch được giống nhau trên mọi provider. Khi query vượt qua nhiều tầng, ai cũng có thể thêm filter/join hoặc vô tình thực thi nó; đây là lý do nên để use case sở hữu query shape.
 
-Một endpoint cần bắt đầu bằng tenant scope, filter, sort ổn định, chọn đúng DTO, phân trang rồi mới materialize. Không trả `IQueryable` khỏi use case vì caller có thể thêm query, bỏ filter hoặc kéo dữ liệu quá lớn.
+**Đừng hiểu nhầm.** `IEnumerable` không luôn đồng nghĩa “đã có hết trong RAM”; nó có thể lazy. `ToList()` không chỉ là syntax tiện: nó materialize, tức tạo toàn bộ object kết quả lúc đó.
 
-Với `GET /orders/123`, không tìm thấy order là outcome dự đoán được: use case trả `NotFound`, HTTP boundary đổi thành `404`. Ngược lại lỗi database hoặc bug mapping là lỗi bất ngờ: ghi log có context, trả lỗi an toàn và để alert phát hiện. Đừng catch mọi exception rồi trả `400`, vì client sẽ hiểu sai và có thể retry sai.
+**Ví dụ nhỏ.** Cần kiểm tra một mã đã thấy trong file import: dùng `HashSet<string>`. Cần lấy thông tin khách theo mã: dùng `Dictionary<string, Customer>`. Cần list order: scope tenant, filter, sort, chọn DTO, page rồi mới `ToListAsync`.
 
-## Bẫy production
+## Terms
 
-- `ToList()` trước filter/page gây tốn memory và OOM.
-- Loop gọi repository tạo N+1; batch theo key hoặc projection.
-- Catch mọi lỗi rồi trả `400` che bug và làm client retry sai.
+- **Materialize**: tạo object thực trong memory từ query/stream.
+- **Provider**: thành phần hiểu query và thực thi nó, ví dụ EF Core provider cho SQL Server.
+- **N+1 query**: lấy danh sách một lần rồi lại phát thêm query cho từng item.
+- **Expected outcome**: kết quả nghiệp vụ có thể đoán trước, như không tìm thấy order.
 
-## Final recall
+## Decision Workflow
 
-- Chọn collection theo access pattern.
-- Query phải có owner và boundary rõ.
-- Outcome dự đoán được trả result; lỗi bất ngờ map/log tại HTTP boundary.
+1. Xác định thao tác nóng: duyệt theo thứ tự, tìm theo key hay kiểm tra trùng. Chọn collection phù hợp.
+2. Với database, giữ query ở use case có quyền quyết định tenant, filter, sort, projection và page.
+3. Đánh dấu ranh giới materialization. Không lấy cả tập dữ liệu về app nếu database có thể filter/page trước.
+4. Đo số SQL command, số hàng và payload để tìm N+1 hoặc over-fetching.
+5. Trả result rõ cho not-found, validation hoặc conflict. Để exception bất ngờ đi qua error boundary có log và correlation ID.
+
+## Collection và Query Decision Table
+
+| Lựa chọn | Dùng khi | Đổi lại |
+|---|---|---|
+| `List<T>` | duyệt theo thứ tự, append, truy cập theo vị trí | tìm theo key lặp lại có thể chậm |
+| `Dictionary<TKey,TValue>` | cần lấy value bằng key | cần quy tắc key trùng rõ ràng |
+| `HashSet<T>` | chỉ cần biết đã có hay chưa | không giữ value theo key |
+| `IQueryable` trong use case | còn cần provider filter/project/page | không nên trả rộng qua nhiều boundary |
+| DTO đã materialize | đã chốt shape để trả ra ngoài | không thể compose thành SQL thêm |
+
+## Exception Boundary
+
+N+1 thường ẩn trong vòng lặp đọc navigation. Hãy nhìn command count và SQL trước, rồi mới chọn projection, batch hoặc `Include` có chủ đích. `Include` nhiều collection có thể làm số dòng join phình ra, không phải mặc định an toàn.
+
+Đừng dùng exception cho việc “không tìm thấy” nếu đó là outcome bình thường. Cũng đừng catch mọi exception thành `400`: timeout database, lỗi xác thực và bug lập trình không có cùng cách retry hay cùng mức cảnh báo.
+
+## Evidence và test
+
+Test tenant khác nhau, sort/page ở ranh giới và tập dữ liệu lớn. Theo dõi command/request, rows, payload, database latency và p95/p99. Test cả error mapping để client không nhận stack trace hay status sai.
+
+## Interview Answer
+
+“Em chọn cấu trúc dữ liệu theo cách cần tìm, thêm hoặc kiểm tra phần tử. Với database, `IQueryable` mới chỉ mô tả câu truy vấn; dữ liệu chỉ thực sự được lấy khi gọi lệnh như `ToListAsync`. Phần xử lý nghiệp vụ phải quyết định phạm vi công ty, điều kiện lọc, thứ tự, cột cần lấy và cách chia trang trước khi chạy SQL. Trường hợp không tìm thấy được trả thành kết quả rõ ràng; lỗi bất ngờ được ghi lại và đổi thành phản hồi phù hợp ở lớp API, không biến mọi lỗi thành mã 400.”
+
+## Follow-up
+
+- Khi nào `IEnumerable` vẫn có thể tạo dữ liệu chậm hoặc bị duyệt hai lần?
+- Vì sao không nên trả `IQueryable` từ API hay application boundary?
+
+## Self-check
+
+- Collection này phục vụ thao tác nào nhiều nhất?
+- Query thực thi và materialize ở đâu?
+- Lỗi nào là expected outcome, lỗi nào cần alert?
+
+## Final Recall
+
+- Collection theo cách truy cập.
+- Query có owner; materialize có thời điểm rõ.
+- Outcome bình thường và exception bất ngờ không đi cùng một đường.
