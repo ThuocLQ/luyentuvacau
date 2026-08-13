@@ -26,6 +26,32 @@ Internet → ALB → ECS/Fargate hoặc EKS (private subnet) → RDS
 
 Đây là một thiết kế phổ biến, không phải kiến trúc bắt buộc. ALB chỉ đưa traffic vào compute; database vẫn cần connection limit, backup/restore và migration tương thích. SQS giúp tách job khỏi request, nhưng worker vẫn phải idempotent vì message có thể được giao lại.
 
+## Networking: private không có nghĩa là tự an toàn
+
+```text
+VPC
+├─ Public subnet
+│  ├─ ALB nhận traffic từ Internet
+│  └─ NAT Gateway đi ra Internet cho private subnet
+├─ Private app subnet
+│  └─ ECS / EKS / EC2 chạy API và worker
+└─ Private data subnet
+   └─ RDS chỉ nhận kết nối từ app được phép
+```
+
+`Public subnet` có route table đi trực tiếp tới Internet Gateway. `Private subnet` không có đường vào trực tiếp từ Internet; workload trong đó đi ra Internet qua NAT Gateway nếu route table cho phép. Nếu app chỉ cần gọi AWS service như S3 hoặc SQS, VPC Endpoint có thể cho đường private tới service đó, giảm phụ thuộc NAT; endpoint không phải đường kết nối PostgreSQL/MySQL tới RDS instance.
+
+| Thành phần | Hiểu đơn giản | Câu hỏi khi debug |
+|---|---|---|
+| Route table | quyết định packet đi đâu | subnet private có route tới NAT hay network khác không? |
+| Internet Gateway | đường Internet hai chiều cho resource public | ALB/subnet public có route phù hợp không? |
+| NAT Gateway | cho private workload chủ động đi ra Internet | API private có cần gọi Internet thật hay chỉ cần VPC Endpoint? |
+| Security Group | firewall stateful ở resource | RDS có cho đúng source và port không? |
+| NACL | rule stateless ở subnet | custom NACL có chặn cả chiều về hoặc ephemeral port không? |
+| DNS / VPC Endpoint | resolve tên service và đường private tới AWS API | hostname đang resolve về đâu, endpoint private có bật DNS không? |
+
+Security Group và NACL bổ sung nhau, không thay thế nhau. Với app và RDS trong cùng VPC, app thường kết nối trực tiếp tới private RDS endpoint; kiểm tra DNS, port, Security Group và DB authentication/TLS trước. NAT hay VPC Endpoint chỉ được xét nếu dependency thật sự cần đi ra Internet hoặc gọi AWS API.
+
 ## Practical Example: chọn compute cho Order API
 
 | Lựa chọn | Phù hợp khi | Đổi lại |
@@ -40,7 +66,9 @@ Với Order API .NET chạy liên tục và worker xử lý file 40 phút, ECS +
 ## Identity và Secret: app gọi S3 không cần access key
 
 ```csharp
-var s3 = new AmazonS3Client(); // SDK lấy temporary credentials từ task role
+// Trong ECS/Fargate có task role,
+// AWS SDK resolve temporary credentials qua default credential chain.
+var s3 = new AmazonS3Client();
 await s3.PutObjectAsync(new PutObjectRequest
 {
     BucketName = bucketName,
@@ -61,7 +89,7 @@ Multi-AZ hỗ trợ availability trong một Region, nhưng không tự là reco
 
 - Workload chạy private subnet vẫn cần đúng security group, route egress và IAM least privilege.
 - CloudWatch có log/metric không thay application telemetry: request quan trọng vẫn cần correlation ID, dashboard và alert theo SLO.
-- RDS là source of truth cho giao dịch; cache không thay database. Theo dõi connection, slow query, backup age và restore drill.
+- Nếu kiến trúc chọn RDS làm transactional store, cache không được trở thành source of truth. Theo dõi connection, slow query, backup age và restore drill.
 - SQS/DLQ không tự chặn message trùng. Lưu operation ID, xử lý idempotent và có quy trình đọc/replay DLQ.
 
 ## Interview Answer
@@ -70,12 +98,12 @@ Multi-AZ hỗ trợ availability trong một Region, nhưng không tự là reco
 
 ## Follow-up
 
-- Private subnet nhưng app không gọi được AWS API: bạn kiểm tra route, NAT/VPC endpoint và IAM theo thứ tự nào?
+- Private subnet khác public subnet ở route table nào? Khi nào app dùng NAT Gateway, khi nào dùng VPC Endpoint?
 - SQS giao một message lần hai: tại sao DLQ chưa đủ để tránh gửi email trùng?
 - Khi nào RDS read replica không giải quyết vấn đề write latency?
 
 ## Final Recall
 
 - AWS managed không có nghĩa team hết trách nhiệm về IAM, data và app.
-- IAM role tốt hơn access key; private subnet vẫn cần network rule rõ ràng.
+- IAM role tốt hơn access key; private subnet cần route, DNS và network rule rõ ràng.
 - Multi-AZ, backup và DR là ba câu chuyện khác nhau; bắt đầu bằng RPO/RTO rồi diễn tập recovery.
