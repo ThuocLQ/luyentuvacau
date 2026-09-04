@@ -81,6 +81,18 @@ Payment provider timeout sau khi app gửi request. Không được kết luận
 
 Đừng dùng CORS để “chặn hacker”. CORS chỉ khiến trình duyệt không cho script từ một origin đọc response. App mobile, service khác hoặc công cụ HTTP vẫn gọi API được, nên authentication và authorization luôn phải ở server.
 
+## Identity cho API: JWT, OAuth/OIDC và cookie
+
+Đừng gọi mọi token là “JWT auth”. **OAuth 2.0** là cách một client nhận access token để gọi API; **OpenID Connect (OIDC)** bổ sung lớp đăng nhập/identity. JWT chỉ là một format token có thể được dùng trong các flow đó. API không nên tin JWT chỉ vì decode được payload: vẫn kiểm issuer, audience, signature, expiry và key rotation.
+
+| Bối cảnh | Cách nghĩ đúng | Bẫy hay gặp |
+|---|---|---|
+| Mobile hoặc service gọi API | access token có scope/audience rõ; API validate bearer token | dùng token của app A gọi nhầm API B |
+| Browser có backend riêng | cân nhắc BFF/cookie `HttpOnly`; xét CSRF khi browser tự gửi cookie | coi CORS là lớp bảo vệ thay CSRF/authz |
+| Quyền trên một order | policy + kiểm resource/tenant trong server query | chỉ kiểm role chung hoặc ẩn nút trên UI |
+| Key/signing secret đổi | chọn issuer hỗ trợ key rotation và cache key theo policy | hard-code secret hoặc token sống quá lâu không có revoke/rotation plan |
+
+Rate limit và authorization cũng khác nhau: rate limit bảo vệ capacity hoặc chống abuse; nó không chứng minh caller có quyền. Khi cần audit, log subject/client ID, route, outcome và correlation ID — không log bearer token hay raw payload nhạy cảm.
 ## Test Matrix
 
 Viết integration test để tenant A không đọc/sửa order của tenant B; cùng idempotency key và cùng payload sau khi hoàn tất trả kết quả theo contract; cùng key nhưng payload khác bị conflict; request thứ hai khi request đầu còn chạy không tạo side effect mới. Test crash ở giữa thao tác và test token sai issuer/audience. Theo dõi số request bị từ chối, request trùng bị chặn và các payment pending quá lâu.
