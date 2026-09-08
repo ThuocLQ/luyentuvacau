@@ -51,6 +51,12 @@ export const glossary: GlossaryTerm[] = [
   ['pending-state', 'Pending state', 'State cho biết chưa thể kết luận side effect bên ngoài đã xảy ra hay chưa.', 'Query theo transaction reference hoặc reconciliation, có timeout vận hành; không tự coi request timeout là thất bại.', 'consistency-saga'],
   ['deduplication', 'Deduplication', 'Lưu event ID hoặc business key để message cũ không tạo thêm side effect.', 'Persist processed-event record trong cùng local transaction với thay đổi mà consumer tạo ra.', 'distributed-systems'],
   ['trade-off', 'Trade-off', 'Điều được và cái giá phải trả khi chọn một giải pháp.', 'Câu trả lời Senior cần nêu điều kiện làm lựa chọn đổi khác, không coi một pattern là luôn đúng.', 'senior-followups'],
+  ['websocket', 'WebSocket', 'Kết nối hai chiều được giữ lâu giữa client và server.', 'WebSocket là transport, không tự có user targeting, reconnect hoặc delivery guarantee. SignalR thường ưu tiên nó khi môi trường hỗ trợ.', 'realtime-signalr'],
+  ['signalr-hub', 'SignalR Hub', 'Endpoint SignalR để client và server gọi method của nhau.', 'Hub chỉ là boundary giao tiếp và được tạo theo invocation; business workflow nên ở application service/worker, còn gửi message ngoài Hub dùng IHubContext.', 'realtime-signalr'],
+  ['signalr-group', 'SignalR group', 'Nhãn route message tới một nhóm connection SignalR.', 'Group không phải quyền truy cập bền: server phải kiểm authorization trước khi join, và client cần rejoin/resync sau reconnect hoặc restart.', 'realtime-signalr'],
+  ['backplane', 'Backplane', 'Kênh giúp nhiều instance SignalR chuyển message tới connection nằm ở instance khác.', 'Redis backplane và Azure SignalR Service giải quyết routing khi scale-out; chúng không thay source of truth hay durable event flow.', 'realtime-signalr'],
+  ['solid', 'SOLID', 'Nhóm nguyên tắc giúp giữ contract rõ và thay đổi code cục bộ hơn.', 'SOLID không bắt buộc mỗi class có interface. Đặt abstraction ở boundary biến động có evidence; code nội bộ ổn định có thể giữ concrete.', 'solid-design'],
+  ['liskov-substitution', 'Liskov Substitution Principle (LSP)', 'Implementation phải giữ được hành vi mà caller đã tin từ contract.', 'Nếu một implementation chỉ có thể ném NotSupportedException cho method bắt buộc, hãy tách capability hoặc thiết kế contract khác.', 'solid-design'],
 ].map(([id, term, shortDefinition, explanation, doc]) => ({ id, term, shortDefinition, explanation, relatedDocs: [doc] }))
 
 export const glossaryById = new Map(glossary.map(term => [term.id, term]))
