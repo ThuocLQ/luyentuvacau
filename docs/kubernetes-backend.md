@@ -71,14 +71,14 @@ HPA có thể tạo thêm Pod `Pending` nếu node không còn capacity. Node au
 
 ## Graceful Shutdown: Pod bị dừng khi đang có việc
 
-Pod không “biến mất” ngay khi rollout hoặc node drain. Kubernetes bắt đầu termination grace period; nếu có `preStop` thì hook này chạy trước `SIGTERM`. App phải tự xử lý việc đang làm, không trông chờ một `sleep` cố định cứu mọi request.
+Pod không “biến mất” ngay khi rollout hoặc node drain. Termination bắt đầu quá trình đưa endpoint về terminating/not-ready và routing cần thời gian hội tụ; vì vậy không giả định traffic mới dừng tức thì. Nếu có `preStop`, hook chạy trước `SIGTERM`, nhưng `preStop sleep` không phải cách chữa chung. App vẫn phải xử lý race với request đang bay hoặc connection còn mở.
 
 ```text
-Pod termination bắt đầu
-  → Pod bị rút khỏi luồng nhận traffic mới
+Termination bắt đầu
+  → Pod / Endpoint chuyển sang terminating hoặc not-ready
+  → routing bắt đầu hội tụ để ngừng traffic mới (không giả định ngay lập tức bằng 0)
   → preStop (nếu có) → SIGTERM tới process
-  → app dừng nhận HTTP request / không pull message mới
-  → drain request hoặc hoàn tất/release work đang chạy
+  → app dừng nhận work mới, drain request/work đang bay
   → persist kết quả → ack ở đúng boundary
   → process exit trước terminationGracePeriodSeconds
 ```

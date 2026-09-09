@@ -1,4 +1,6 @@
 export type InterviewWeight = 'Critical' | 'High' | 'Medium' | 'Specialized'
+export type InterviewFrequency = 'AlmostAlways' | 'Common' | 'RoleDependent' | 'Specialized'
+export type ExpectedDepth = 'Foundation' | 'Strong' | 'Deep'
 export type ContentStatus = 'Draft' | 'Review' | 'Complete'
 
 export interface CheatsheetMeta {
@@ -10,6 +12,8 @@ export interface CheatsheetMeta {
   readingMinutes: number
   tags: string[]
   interviewWeight: InterviewWeight
+  interviewFrequency: InterviewFrequency
+  expectedDepth: ExpectedDepth
   status: ContentStatus
   content?: string
 }

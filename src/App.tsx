@@ -8,6 +8,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import GlossaryPage from './pages/GlossaryPage'
 import QuizHubPage from './pages/QuizHubPage'
 import QuizPage from './pages/QuizPage'
+import CodingPracticePage from './pages/CodingPracticePage'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: 'quiz', element: <QuizHubPage /> },
       { path: 'quiz/play', element: <QuizPage /> },
       { path: 'review', element: <ReviewPage /> },
+      { path: 'coding-practice', element: <CodingPracticePage /> },
       { path: 'glossary', element: <GlossaryPage /> },
       { path: '*', element: <NotFoundPage /> }
     ]

@@ -1,21 +1,22 @@
-import { useLocalStorage } from './useLocalStorage'
+import { useMemo } from 'react'
+import { useReviewProgress } from './useReviewProgress'
+import type { ReviewItemKind, ReviewRating } from '../lib/review'
 
 export interface ReviewItem {
   id: string
-  kind: 'cheatsheet' | 'question' | 'quiz'
+  kind: ReviewItemKind
   title: string
   relatedDoc: string
-  rating?: 'confident' | 'hesitant' | 'missed'
+  rating?: ReviewRating
   updatedAt: string
+  nextDueAt: string
 }
 
+/** Compatibility adapter: all practice types now persist in one review model. */
 export function useReviewQueue() {
-  const [items, setItems] = useLocalStorage<ReviewItem[]>('ltvc-review-queue', [], (value): value is ReviewItem[] => Array.isArray(value) && value.every(item => typeof item === 'object' && item !== null && typeof item.id === 'string' && typeof item.relatedDoc === 'string'))
-  const isQueued = (id: string) => items.some(item => item.id === id)
-  const addOrUpdate = (item: Omit<ReviewItem, 'updatedAt'>) => setItems(current => {
-    const next = { ...item, updatedAt: new Date().toISOString() }
-    return current.some(entry => entry.id === item.id) ? current.map(entry => entry.id === item.id ? next : entry) : [...current, next]
-  })
-  const remove = (id: string) => setItems(current => current.filter(item => item.id !== id))
+  const { progress, record, remove } = useReviewProgress()
+  const items = useMemo(() => progress.map(item => ({ id: item.id, kind: item.kind, title: item.title ?? item.id, relatedDoc: item.relatedDoc ?? '', rating: item.lastRating, updatedAt: item.lastReviewedAt, nextDueAt: item.nextDueAt })), [progress])
+  const isQueued = (id: string) => progress.some(item => item.id === id)
+  const addOrUpdate = (item: Omit<ReviewItem, 'updatedAt' | 'nextDueAt'>) => record({ id: item.id, kind: item.kind, title: item.title, relatedDoc: item.relatedDoc }, item.rating ?? 'hesitant')
   return { items, isQueued, addOrUpdate, remove }
 }

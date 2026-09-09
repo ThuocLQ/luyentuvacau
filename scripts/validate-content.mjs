@@ -48,6 +48,18 @@ const terminologyWarnings = terminologySources.flatMap(file => {
 })
 if (terminologyWarnings.length) styleWarnings.push(`awkward translations: ${terminologyWarnings.join(', ')}`)
 
+const registryEntries = [...registry.matchAll(/\{ slug: '([^']+)'[^\n]*?order: (\d+)[^\n]*?content: (\w+)/g)]
+  .map(match => ({ slug: match[1], order: Number(match[2]), contentImport: match[3] }))
+const duplicateValues = values => values.filter((value, index) => values.indexOf(value) !== index)
+const duplicateSlugs = duplicateValues(registryEntries.map(entry => entry.slug))
+if (duplicateSlugs.length) throw new Error(`Duplicate document slugs: ${[...new Set(duplicateSlugs)].join(', ')}`)
+const duplicateOrders = duplicateValues(registryEntries.map(entry => entry.order))
+if (duplicateOrders.length) throw new Error(`Duplicate document orders: ${[...new Set(duplicateOrders)].join(', ')}`)
+const missingContentMetadata = registryEntries.filter(entry => !importedContent.has(entry.contentImport))
+if (missingContentMetadata.length) throw new Error(`Document content imports missing metadata: ${missingContentMetadata.map(entry => entry.slug).join(', ')}`)
+const questionIds = [...registry.matchAll(/\{ id: '([^']+)'[^\n]*?relatedDoc: '/g)].map(match => match[1])
+const duplicateQuestionIds = duplicateValues(questionIds)
+if (duplicateQuestionIds.length) throw new Error(`Duplicate interview question IDs: ${[...new Set(duplicateQuestionIds)].join(', ')}`)
 const contentSlugs = [...registry.matchAll(/\{ slug: '([^']+)'[^\n]*content:/g)].map(match => match[1])
 const practicedSlugs = new Set([...registry.matchAll(/relatedDoc: '([^']+)'/g)].map(match => match[1]))
 const withoutPractice = contentSlugs.filter(slug => !practicedSlugs.has(slug))

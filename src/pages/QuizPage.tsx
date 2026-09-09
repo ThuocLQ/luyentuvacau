@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { quizQuestions } from '../data/quizzes'
 import { useQuizProgress } from '../hooks/useQuizProgress'
-import { useReviewQueue } from '../hooks/useReviewQueue'
 
 type Certainty = 'confident' | 'hesitant' | 'missed'
 const SESSION_SIZE = 5
@@ -20,7 +19,6 @@ function stableOptionOrder<T extends { id: string }>(items: readonly T[], seed: 
 export default function QuizPage() {
   const [searchParams] = useSearchParams()
   const { dueQuestionIds, recordOutcome } = useQuizProgress()
-  const { addOrUpdate, remove } = useReviewQueue()
   const feedbackRef = useRef<HTMLHeadingElement>(null)
   const questionRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState(0)
@@ -81,8 +79,6 @@ export default function QuizPage() {
     if (!question || rated) return
     const outcome = isCorrect ? certainty : 'missed'
     recordOutcome(question.id, outcome)
-    if (outcome === 'confident') remove(`quiz:${question.id}`)
-    else addOrUpdate({ id: `quiz:${question.id}`, kind: 'quiz', title: question.prompt, relatedDoc: question.relatedDoc, rating: outcome })
     setRated(true)
     if (isLastQuestion) return
     continueSession()

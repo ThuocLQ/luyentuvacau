@@ -17,7 +17,15 @@ Việc đầu tiên là dừng canary hoặc rollback nếu bản cũ vẫn tư�
 
 **Metric** là dãy số theo thời gian, ví dụ p99 (thời gian của nhóm request chậm nhất) hoặc tỉ lệ payment thành công. Nó cho biết vấn đề đang lớn hay nhỏ. **Log** là bản ghi một sự kiện, ví dụ validation fail hoặc lỗi database. **Trace** nối các bước của cùng một request để thấy thời gian đang chờ ở API, database hay payment provider.
 
-Ba thứ này cần có cùng correlation ID (mã nối các sự kiện của một hành trình). Không cần log mọi payload để có observability; log dữ liệu nhạy cảm còn tạo thêm sự cố bảo mật.
+Logs và traces có thể correlate trực tiếp bằng `TraceId`/`SpanId`. Metric thì khác: dimension của metric phải có số giá trị bị giới hạn, như `service`, `route`, `status`, `region` hoặc `version`. Không đưa `customerId`, `orderId`, `requestId` hay `TraceId` vào metric label cho từng request, vì số series sẽ tăng rất nhanh và làm telemetry chậm/đắt/khó dùng. Khi một metric bất thường cần đi tới trace cụ thể, dùng exemplar hoặc trace-link do telemetry backend hỗ trợ.
+
+```text
+Request
+├── Trace → TraceId / SpanId
+├── Structured logs → TraceId / SpanId
+└── Metrics → route, status, service, region, version (low-cardinality)
+                 └── exemplar / trace link khi cần drill-down
+```
 
 ## Terms
 
@@ -39,7 +47,7 @@ Ba thứ này cần có cùng correlation ID (mã nối các sự kiện của m
 
 | Lựa chọn | Nên dùng khi | Được gì | Cần tránh |
 |---|---|---|---|
-| Metric | cần biết xu hướng và mức ảnh hưởng | thấy regression theo thời gian/version | chỉ nhìn average rồi bỏ qua request chậm |
+| Metric | cần biết xu hướng và mức ảnh hưởng | thấy regression theo thời gian/version | gắn `OrderId` hoặc `TraceId` vào label, làm cardinality bùng nổ |
 | Log có cấu trúc | cần chi tiết một lỗi cụ thể | tìm theo trace ID, route, version | ghi token, mật khẩu, dữ liệu cá nhân |
 | Trace | request đi qua nhiều dependency | thấy chỗ chờ và đường gọi | tạo tag có quá nhiều giá trị riêng lẻ |
 | Rollback/canary stop | bản mới rõ ràng gây hại, bản cũ còn tương thích | giảm ảnh hưởng nhanh | rollback mù khi migration đã đổi nghĩa dữ liệu |
@@ -56,12 +64,13 @@ Diễn tập một incident nhỏ: alert có chỉ đúng owner không, dashboar
 
 ## Interview Answer
 
-“Khi production có incident, em xác định blast radius qua error rate, latency và business outcome. Em giảm tác động bằng cách stop canary, tắt feature flag hoặc rollback về version còn tương thích rồi mới tìm root cause. Metric cho thấy xu hướng, trace chỉ ra request đang chờ ở đâu, còn log cung cấp chi tiết; cả ba dùng cùng correlation ID và không ghi secret. Sau incident, em thêm test, alert hoặc runbook dựa trên nguyên nhân đã có bằng chứng.”
+“Khi production có incident, em xác định blast radius qua error rate, latency và business outcome. Em giảm tác động bằng cách stop canary, tắt feature flag hoặc rollback về version còn tương thích rồi mới tìm root cause. Metric cho thấy xu hướng bằng dimension low-cardinality; trace chỉ ra request đang chờ ở đâu; structured log mang `TraceId`/`SpanId` để mở đúng trace. Nếu cần đi từ metric sang trace, em dùng exemplar hoặc trace-link của telemetry backend, không gắn request ID vào metric label. Sau incident, em thêm test, alert hoặc runbook dựa trên nguyên nhân đã có bằng chứng.”
 
 ## Follow-up
 
 - p99 tốt hơn nhưng payment success giảm thì release có được coi là tốt không?
 - Khi nào không nên rollback ngay sau deploy?
+- Vì sao không đưa `OrderId` hoặc `TraceId` vào metric labels?
 
 ## Self-check
 
