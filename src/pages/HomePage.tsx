@@ -9,7 +9,7 @@ import { formatReviewReason, type ReviewProgress } from '../lib/review'
 function resolveReviewItem(item: ReviewProgress) {
   if (item.kind === 'quiz') {
     const quiz = quizQuestions.find(question => `quiz:${question.id}` === item.id)
-    return quiz ? { title: quiz.prompt, to: `/quiz/play?topic=${encodeURIComponent(quiz.topic)}` } : null
+    return quiz ? { title: quiz.prompt, to: `/quiz/play?question=${quiz.id}` } : null
   }
   if (item.kind === 'question') {
     const question = questions.find(question => `question:${question.id}` === item.id)
@@ -33,7 +33,7 @@ export default function HomePage() {
   const due = dueItems.map(item => ({ item, resolved: resolveReviewItem(item) })).filter((entry): entry is { item: ReviewProgress, resolved: NonNullable<ReturnType<typeof resolveReviewItem>> } => Boolean(entry.resolved))
   const weak = progress.filter(item => item.lastRating !== 'confident').map(item => ({ item, resolved: resolveReviewItem(item) })).filter((entry): entry is { item: ReviewProgress, resolved: NonNullable<ReturnType<typeof resolveReviewItem>> } => Boolean(entry.resolved))
   const almostAlways = completeDocs.filter(doc => doc.interviewFrequency === 'AlmostAlways' && !completed.includes(doc.slug))
-  const recommendations = [...due, ...weak.filter(entry => !due.some(dueEntry => dueEntry.item.id === entry.item.id))].slice(0, 3)
+  const recommendations = due.slice(0, 3)
   const fallback = almostAlways[0] ?? completeDocs.find(doc => !completed.includes(doc.slug)) ?? completeDocs[0]
 
   return <div className="home-page cheatsheet-home">

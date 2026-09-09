@@ -28,12 +28,13 @@ export default function QuizPage() {
   const [rated, setRated] = useState(false)
   const topic = searchParams.get('topic') ?? 'Tất cả'
   const dueMode = searchParams.get('mode') === 'due'
+  const directQuestionId = searchParams.get('question')
 
   const sourceQuestions = useMemo(() => {
-    return dueMode
-      ? quizQuestions.filter(question => dueQuestionIds.includes(question.id))
-      : quizQuestions.filter(question => topic === 'Tất cả' || question.topic === topic)
-  }, [dueMode, dueQuestionIds, topic])
+    if (directQuestionId) return quizQuestions.filter(question => question.id === directQuestionId)
+    if (dueMode) return dueQuestionIds.map(id => quizQuestions.find(question => question.id === id)).filter((question): question is (typeof quizQuestions)[number] => Boolean(question))
+    return quizQuestions.filter(question => topic === 'Tất cả' || question.topic === topic)
+  }, [directQuestionId, dueMode, dueQuestionIds, topic])
   const [sessionIds, setSessionIds] = useState<string[]>(() => sourceQuestions.slice(0, SESSION_SIZE).map(question => question.id))
   const session = useMemo(() => sessionIds.map(id => quizQuestions.find(question => question.id === id)).filter((question): question is typeof quizQuestions[number] => Boolean(question)), [sessionIds])
   const question = session[position]
@@ -51,7 +52,7 @@ export default function QuizPage() {
   // A quiz session stays stable after a rating changes the review queue.
   // It is rebuilt only when the user explicitly changes its route/filter.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topic, dueMode])
+  }, [topic, dueMode, directQuestionId])
 
   useEffect(() => {
     if (!submitted) return

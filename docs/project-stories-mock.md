@@ -80,30 +80,6 @@ Nói đúng ranh giới: bạn đã đề xuất, phân tích, triển khai hay 
 
 ## Final Recall
 
-- Kể quyết định và bằng chứng, không kể toàn bộ dự án.
-- Phân biệt rõ “em” và “team”.
-- Kết thúc ở phòng ngừa và bài học, không chỉ ở lúc hết lỗi.
-## Prompt bank: Behavioral và Senior Ownership
-
-Dùng cùng khung cho mọi prompt: **Context → ownership → decision → alternative → evidence → result → reflection**. Không cố kể “thành công tuyệt đối”; interviewer thường đánh giá cách bạn suy nghĩ, phối hợp và sửa sai.
-
-| Prompt | Điều interviewer muốn nghe |
-|---|---|
-| Production incident | Bạn giảm ảnh hưởng, điều phối, tìm evidence và phòng ngừa lặp lại thế nào? |
-| Technical decision | Điều kiện, alternative, trade-off và cách kiểm chứng quyết định. |
-| Disagreement với teammate | Bạn làm rõ mục tiêu và dữ kiện, không thắng bằng chức danh. |
-| Push back requirement | Bạn nêu rủi ro/chi phí, đề xuất option an toàn hơn và giữ ownership outcome. |
-| Mistake / bad decision | Điều gì bạn bỏ sót, tác động thật, cách khôi phục và guardrail mới. |
-| Missed deadline | Bạn báo sớm, re-scope, bảo vệ quality boundary và rút kinh nghiệm planning. |
-| Technical debt | Vì sao debt đáng trả lúc này, blast radius và evidence để ưu tiên. |
-| Mentoring | Bạn giúp người khác tự ra quyết định tốt hơn, không chỉ làm hộ. |
-| Code review conflict | Bạn nói về contract/risk/evidence thay vì tranh luận gu code. |
-| Ambiguous requirement | Câu hỏi làm rõ, assumption đã ghi lại và cách validate với stakeholder. |
-| Cross-team dependency | Ownership boundary, SLA/contract/escalation và fallback. |
-| Performance improvement | Baseline, bottleneck được chứng minh, trade-off và business outcome. |
-
-## Final Recall
-
 - Behavioral Senior vẫn cần mechanism và evidence, không chỉ STAR chung chung.
 - Nói rõ phần bạn sở hữu; không nhận công cả team.
 - Reflection tốt nhất là thay đổi guardrail/process cụ thể ở lần sau.

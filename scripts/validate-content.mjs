@@ -61,6 +61,10 @@ const questionIds = [...registry.matchAll(/\{ id: '([^']+)'[^\n]*?relatedDoc: '/
 const duplicateQuestionIds = duplicateValues(questionIds)
 if (duplicateQuestionIds.length) throw new Error(`Duplicate interview question IDs: ${[...new Set(duplicateQuestionIds)].join(', ')}`)
 const contentSlugs = [...registry.matchAll(/\{ slug: '([^']+)'[^\n]*content:/g)].map(match => match[1])
+const oralQuestionSource = registry.split('export const questions:')[1] ?? ''
+const oralDocRefs = [...oralQuestionSource.matchAll(/relatedDoc: '([^']+)'/g)].map(match => match[1])
+const unknownOralDocs = oralDocRefs.filter(slug => !contentSlugs.includes(slug))
+if (unknownOralDocs.length) throw new Error(`Interview questions reference unknown docs: ${[...new Set(unknownOralDocs)].join(', ')}`)
 const practicedSlugs = new Set([...registry.matchAll(/relatedDoc: '([^']+)'/g)].map(match => match[1]))
 const withoutPractice = contentSlugs.filter(slug => !practicedSlugs.has(slug))
 if (withoutPractice.length) styleWarnings.push(`cheatsheets without linked practice: ${withoutPractice.join(', ')}`)

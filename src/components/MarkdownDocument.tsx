@@ -6,13 +6,12 @@ import PersonalExample from './document/PersonalExample'
 import TermTooltip from './TermTooltip'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { useReviewQueue } from '../hooks/useReviewQueue'
+import { useReviewProgress } from '../hooks/useReviewProgress'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 import type { CheatsheetMeta } from '../types/content'
 import { completeDocs } from '../data/docs'
 
 interface Props { doc: CheatsheetMeta & { content: string } }
-const weightLabel = { Critical: 'Trọng yếu', High: 'Quan trọng', Medium: 'Bổ trợ', Specialized: 'Chuyên ngành' }
 const statusLabel = { Draft: 'Bản nháp', Review: 'Đang rà soát', Complete: 'Hoàn chỉnh' }
 const quickHeadings = /^(quick summary|trong 30 giây|nhớ một phút|terms to know|tóm tắt nhanh|bài toán backend thực tế|khi nào gặp|tình huống phỏng vấn|must remember|những điều phải nhớ|invariants phải giữ|so sánh nhanh|quick comparison|.*câu trả lời.*|.*mẫu trả lời.*|final recall|tự kiểm)$/i
 
@@ -33,7 +32,7 @@ export default function MarkdownDocument({ doc }: Props) {
   const [termId, setTermId] = useState<string | null>(null)
   const [completed, setCompleted] = useLocalStorage<string[]>('ltvc-completed', [])
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>('ltvc-bookmarks', [])
-  const { isQueued, addOrUpdate, remove } = useReviewQueue()
+  const { find, pin, record, remove } = useReviewProgress()
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
   const rendered = useMemo(() => mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered, [fullRendered, mode])
   const activeHeading = useScrollSpy({
@@ -43,7 +42,8 @@ export default function MarkdownDocument({ doc }: Props) {
   })
   const isCompleted = completed.includes(doc.slug)
   const isBookmarked = bookmarks.includes(doc.slug)
-  const needsReviewForDoc = isQueued(`cheatsheet:${doc.slug}`)
+  const reviewItem = find(`cheatsheet:${doc.slug}`)
+  const needsReviewForDoc = Boolean(reviewItem)
   const currentIndex = completeDocs.findIndex(item => item.slug === doc.slug)
   const previousDoc = completeDocs[currentIndex - 1]
   const nextDoc = completeDocs[currentIndex + 1]
@@ -100,9 +100,10 @@ export default function MarkdownDocument({ doc }: Props) {
       <header className="document-hero compact-document-hero">
         <div className="breadcrumb"><Link to="/">Thư viện</Link><span>/</span><span>{doc.section}</span><span>/</span><span>Bài {currentIndex + 1} / {completeDocs.length}</span></div>
         <h1>{doc.title}</h1><p>{doc.description}</p>
-        <div className="document-meta-row"><span className="weight-badge">{weightLabel[doc.interviewWeight]}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
-        <div className="document-actions"><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button><button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => needsReviewForDoc ? remove(`cheatsheet:${doc.slug}`) : addOrUpdate({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {needsReviewForDoc ? 'Đang ôn lại' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
+        <div className="document-meta-row"><span className="weight-badge">{doc.interviewFrequency === 'AlmostAlways' ? 'Almost always' : doc.interviewFrequency === 'RoleDependent' ? 'Role dependent' : doc.interviewFrequency}</span><span className="weight-badge">{doc.expectedDepth}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
+        <div className="document-actions"><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button><button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => reviewItem?.manualPin ? remove(`cheatsheet:${doc.slug}`) : pin({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {reviewItem?.manualPin ? 'Bỏ ghim ôn' : needsReviewForDoc ? 'Đã có lịch ôn' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
       </header>
+      {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
       {mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
       <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />
       <PersonalExample slug={doc.slug} />
