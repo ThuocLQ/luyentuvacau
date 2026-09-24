@@ -66,10 +66,10 @@ const oralDocRefs = [...oralQuestionSource.matchAll(/relatedDoc: '([^']+)'/g)].m
 const unknownOralDocs = oralDocRefs.filter(slug => !contentSlugs.includes(slug))
 if (unknownOralDocs.length) throw new Error(`Interview questions reference unknown docs: ${[...new Set(unknownOralDocs)].join(', ')}`)
 const practicedSlugs = new Set([...registry.matchAll(/relatedDoc: '([^']+)'/g)].map(match => match[1]))
-const withoutPractice = contentSlugs.filter(slug => !practicedSlugs.has(slug))
+const withoutPractice = contentSlugs.filter(slug => !practicedSlugs.has(slug) && !slug.startsWith('learning-') && !slug.endsWith('-standard'))
 if (withoutPractice.length) styleWarnings.push(`cheatsheets without linked practice: ${withoutPractice.join(', ')}`)
 
-const directiveTypes = new Set(['concept', 'definition', 'must-remember', 'example', 'note', 'warning', 'production-trap', 'senior-signal', 'interview-answer', 'comparison', 'final-recall'])
+const directiveTypes = new Set(['concept', 'definition', 'must-remember', 'example', 'note', 'warning', 'production-trap', 'senior-signal', 'interview-answer', 'comparison', 'final-recall', 'learning-goal', 'hands-on', 'break-it', 'debug', 'explain', 'transfer', 'recall'])
 const directiveErrors = visit('docs').filter(file => file.endsWith('.md')).flatMap(file => [...readFileSync(file, 'utf8').matchAll(/^:::(.*?)$/gm)].map(match => ({ file, type: match[1].trim() })).filter(item => item.type && !directiveTypes.has(item.type)))
 if (directiveErrors.length) throw new Error(`Invalid semantic directive: ${directiveErrors.map(item => `${item.file} (${item.type})`).join(', ')}`)
 const malformedDirectives = visit('docs').filter(file => file.endsWith('.md')).flatMap(file => {
@@ -79,6 +79,14 @@ const malformedDirectives = visit('docs').filter(file => file.endsWith('.md')).f
   return markerCount % 2 || empty ? [file] : []
 })
 if (malformedDirectives.length) throw new Error(`Empty or unclosed semantic directive in: ${malformedDirectives.join(', ')}`)
+
+const learningFiles = visit('docs/learning').filter(file => file.endsWith('.md'))
+const learningSections = ['Engineering Problem', 'Learning Goal', 'Mental Model', 'Hands-on', 'Break It', 'Explain It', 'Transfer Challenge', 'Recall Questions']
+const incompleteLearningLessons = learningFiles.filter(file => {
+  const source = readFileSync(file, 'utf8')
+  return learningSections.some(section => !source.includes(`## ${section}`))
+})
+if (incompleteLearningLessons.length) styleWarnings.push(`learning lessons missing a recommended loop section: ${incompleteLearningLessons.join(', ')}`)
 
 const glossarySource = readFileSync('src/data/glossary.ts', 'utf8')
 const glossaryIds = [...glossarySource.matchAll(/^\s*\['([^']+)'/gm)].map(match => match[1])

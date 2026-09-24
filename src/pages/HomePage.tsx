@@ -1,50 +1,31 @@
-import { ArrowRight, CheckCircle2, CircleHelp, Clock3, RotateCcw, ShieldAlert } from 'lucide-react'
+import { ArrowRight, BookOpen, CheckCircle2, CircleHelp, Languages, RotateCcw } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { completeDocs, docs, questions, sections } from '../data/docs'
-import { quizQuestions } from '../data/quizzes'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { curriculumModules, englishLevelLabels, techLevelLabels, type EnglishLevel, type LearningStatus, type TechLevel } from '../data/curriculum'
+import { useLearningProgress } from '../hooks/useLearningProgress'
 import { useReviewProgress } from '../hooks/useReviewProgress'
-import { formatReviewReason, type ReviewProgress } from '../lib/review'
 
-function resolveReviewItem(item: ReviewProgress) {
-  if (item.kind === 'quiz') {
-    const quiz = quizQuestions.find(question => `quiz:${question.id}` === item.id)
-    return quiz ? { title: quiz.prompt, to: `/quiz/play?question=${quiz.id}` } : null
-  }
-  if (item.kind === 'question') {
-    const question = questions.find(question => `question:${question.id}` === item.id)
-    return question ? { title: question.question, to: `/interview?question=${question.id}` } : null
-  }
-  const doc = completeDocs.find(doc => `cheatsheet:${doc.slug}` === item.id)
-  return doc ? { title: doc.title, to: `/docs/${doc.slug}` } : null
-}
-
-const coverageGroups = [
-  { label: 'Core Backend', slugs: ['runtime-memory', 'async-concurrency', 'collections-linq', 'solid-design', 'aspnet-pipeline', 'api-security', 'ef-sql', 'sql-index-locking', 'testing-strategy'] },
-  { label: 'Production', slugs: ['background-resilience', 'cache-redis', 'performance-scale', 'observability-incidents', 'docker-cicd', 'distributed-systems', 'system-design-framework'] },
-  { label: 'Distributed', slugs: ['architecture', 'integration-design', 'consistency-saga', 'event-driven-contracts', 'kafka-rabbitmq', 'realtime-signalr'] },
-  { label: 'Cloud', slugs: ['modern-dotnet-versioning', 'kubernetes-backend', 'aws-backend'] },
-  { label: 'Specialized', slugs: ['event-sourcing-cqrs', 'eks-security', 'finance-securities'] },
-]
+const statusLabels: Record<LearningStatus, string> = { 'not-started': 'Chưa bắt đầu', learning: 'Đang học', solid: 'Khá vững' }
 
 export default function HomePage() {
-  const [completed] = useLocalStorage<string[]>('ltvc-completed', [])
-  const { progress, dueItems } = useReviewProgress()
-  const due = dueItems.map(item => ({ item, resolved: resolveReviewItem(item) })).filter((entry): entry is { item: ReviewProgress, resolved: NonNullable<ReturnType<typeof resolveReviewItem>> } => Boolean(entry.resolved))
-  const weak = progress.filter(item => item.lastRating !== 'confident').map(item => ({ item, resolved: resolveReviewItem(item) })).filter((entry): entry is { item: ReviewProgress, resolved: NonNullable<ReturnType<typeof resolveReviewItem>> } => Boolean(entry.resolved))
-  const almostAlways = completeDocs.filter(doc => doc.interviewFrequency === 'AlmostAlways' && !completed.includes(doc.slug))
-  const recommendations = due.slice(0, 3)
-  const fallback = almostAlways[0] ?? completeDocs.find(doc => !completed.includes(doc.slug)) ?? completeDocs[0]
+  const { currentModule, get, update } = useLearningProgress()
+  const { dueItems } = useReviewProgress()
+  const current = get(currentModule.id)
+  const next = currentModule.suggestedLesson ?? curriculumModules.find(module => module.suggestedLesson)?.suggestedLesson
+  const solidCount = curriculumModules.filter(module => get(module.id).status === 'solid').length
 
-  return <div className="home-page cheatsheet-home">
-    <section className="home-hero"><div className="hero-copy"><div className="eyebrow">Interview prep dashboard</div><h1>Hôm nay nên ôn gì?</h1><p>Ưu tiên item đến hạn và phần bạn từng chưa chắc. Nếu chưa có lịch ôn, bắt đầu bằng nền tảng xuất hiện gần như mọi vòng Senior Backend .NET.</p><div className="home-actions"><Link className="primary-button" to={recommendations[0]?.resolved.to ?? `/docs/${fallback.slug}`}><RotateCcw size={17} /> {recommendations[0] ? 'Ôn item đến hạn' : `Bắt đầu: ${fallback.title.replace(/^\d+\. /, '')}`}</Link></div></div><div className="hero-progress"><strong>{due.length}</strong><span>nội dung đến hạn</span><p>{completed.length}/{completeDocs.length} cheatsheet đã đánh dấu hoàn thành. Đây là coverage học tập, không phải xác suất pass interview.</p></div></section>
+  return <div className="home-page learning-dashboard">
+    <section className="home-hero">
+      <div className="hero-copy"><div className="eyebrow">Engineering learning hub</div><h1>Học để làm, debug và reasoning.</h1><p>Suggested pace: approximately 12 weeks. Progress by mastery, not calendar. Mỗi module chỉ là hướng đi; mức độ tự đánh giá quyết định bước tiếp theo.</p><div className="home-actions">{next && <Link className="primary-button" to={`/docs/${next.slug}`}><BookOpen size={17} /> Mở: {next.title} <ArrowRight size={17} /></Link>}<Link className="secondary-button" to="/library">Mở Library</Link></div></div>
+      <div className="hero-progress"><strong>{dueItems.length}</strong><span>nội dung đến hạn</span><p>{solidCount}/{curriculumModules.length} module tự đánh giá khá vững. Đây không phải điểm readiness.</p></div>
+    </section>
 
-    <section className="library-section"><div className="section-heading"><div><span>Today</span><h2>Ôn theo lý do rõ ràng</h2></div></div>{recommendations.length ? <div className="doc-grid">{recommendations.map(({ item, resolved }) => <Link key={item.id} className="doc-card" to={resolved.to}><div className="doc-card-top"><span className="category-chip">{item.kind === 'quiz' ? 'Quiz' : item.kind === 'question' ? 'Luyện nói' : 'Cheatsheet'}</span><span>{formatReviewReason(item)}</span></div><h3>{resolved.title}</h3><p>{item.lastRating === 'missed' ? 'Bạn từng chưa giải thích chắc. Hãy làm lại trước khi xem gợi ý.' : item.lastRating === 'hesitant' ? 'Bạn đã hiểu một phần; hãy đổi constraint và tự trả lời lại.' : 'Đã đến lịch nhắc lại để kiểm tra recall.'}</p><div className="doc-card-action">Ôn ngay <ArrowRight size={16} /></div></Link>)}</div> : <section className="study-tip"><CheckCircle2 size={18} /><div><p><strong>Chưa có item đến hạn.</strong> Bắt đầu một Tier A, sau đó tự đánh giá quiz hoặc oral để dashboard có tín hiệu ưu tiên.</p><Link className="primary-button" to={`/docs/${fallback.slug}`}>Mở {fallback.title}</Link></div></section>}</section>
+    <section className="learning-now" aria-labelledby="learning-now-title"><div><span className="mini-label">Current module</span><h2 id="learning-now-title">{String(currentModule.number).padStart(2, '0')}. {currentModule.title}</h2><p>{currentModule.principle}</p></div><div className="mastery-controls"><label>Tech mastery<select value={current.techLevel} onChange={event => update(currentModule.id, { techLevel: Number(event.target.value) as TechLevel })}>{([1, 2, 3, 4] as TechLevel[]).map(level => <option key={level} value={level}>{techLevelLabels[level]}</option>)}</select></label><label>English mastery<select value={current.englishLevel} onChange={event => update(currentModule.id, { englishLevel: Number(event.target.value) as EnglishLevel })}>{([1, 2, 3, 4] as EnglishLevel[]).map(level => <option key={level} value={level}>{englishLevelLabels[level]}</option>)}</select></label><label>Trạng thái<select value={current.status} onChange={event => update(currentModule.id, { status: event.target.value as LearningStatus })}>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label></div></section>
 
-    <section className="quick-start-grid"><div className="goal-card"><div className="goal-icon"><ShieldAlert size={20} /></div><div><span className="mini-label">Weak areas</span><h2>Chỗ cần củng cố</h2></div><p>{weak.length ? `${weak.length} item đang có rating missed/hesitant. Ưu tiên chúng trước khi mở thêm topic mới.` : 'Chưa có dữ liệu weakness. Sau mỗi quiz hoặc oral, hãy rating thật để nhận gợi ý đúng.'}</p><Link className="secondary-button" to="/review"><RotateCcw size={17} /> Xem due for review</Link></div><div className="goal-card"><div className="goal-icon"><CircleHelp size={20} /></div><div><span className="mini-label">Frequency × depth</span><h2>Độ ưu tiên interview</h2></div><p><strong>Almost always</strong> cần recall chắc; <strong>Role dependent</strong> ưu tiên theo JD. Nhãn depth nói interviewer mong bạn sâu đến đâu, không phải độ khó của bài.</p><Link className="secondary-button" to="/docs/interview-map">Xem bản đồ ôn</Link></div></section>
+    <section className="quick-start-grid"><Link className="continue-card" to={next ? `/docs/${next.slug}` : '/library'}><div><span className="continue-icon"><BookOpen size={17} /></span><span className="category-chip">Next lesson</span></div><h2>{next?.title ?? 'Chọn một lesson'}</h2><p>Đi theo problem → visual → do → break → debug → explain → transfer → recall.</p><span className="continue-link">Bắt đầu learning loop <ArrowRight size={16} /></span></Link><div className="goal-card"><div className="goal-icon"><Languages size={20} /></div><div><span className="mini-label">Target mastery</span><h2>Tách kỹ thuật và English</h2></div><p>Tech: hiểu → áp dụng → debug → trade-off. English: đọc hiểu → trả lời ngắn → giải thích → thảo luận. Hai mức này không gộp thành một điểm.</p><Link className="secondary-button" to="/interview">Luyện nói</Link></div></section>
 
-    <section className="library-section"><div className="section-heading"><div><span>Coverage</span><h2>Coverage theo nhóm năng lực</h2></div></div><div className="doc-grid">{coverageGroups.map(group => { const groupDocs = docs.filter(doc => group.slugs.includes(doc.slug)); const done = groupDocs.filter(doc => completed.includes(doc.slug)).length; const percent = groupDocs.length ? Math.round(done / groupDocs.length * 100) : 0; return <article className="doc-card" key={group.label}><div className="doc-card-top"><span className="category-chip">{percent}% coverage</span><span>{done}/{groupDocs.length} đã học</span></div><h3>{group.label}</h3><p>Heuristic dựa trên cheatsheet đã đánh dấu hoàn thành; dùng để chọn phần tiếp theo, không phải readiness score tuyệt đối.</p></article> })}</div></section>
+    <section className="learning-path-section"><div className="inline-heading"><div><span className="mini-label">Suggested track</span><h2>12 module, không phải deadline 12 tuần</h2></div><p>Đi tiếp khi bạn có bằng chứng mình hiểu và xử lý được failure; không cần hoàn thành theo lịch.</p></div><div className="module-grid">{curriculumModules.map(module => { const progress = get(module.id); return <article className={`module-card ${module.id === currentModule.id ? 'is-current' : ''}`} key={module.id}><span>{String(module.number).padStart(2, '0')}</span><strong>{module.title}</strong><small>{module.principle}</small><em>{statusLabels[progress.status]} · L{progress.techLevel} / E{progress.englishLevel}</em>{module.suggestedLesson && <Link to={`/docs/${module.suggestedLesson.slug}`}>Mở lesson <ArrowRight size={14} /></Link>}</article> })}</div></section>
 
-    {sections.map(section => { const items = docs.filter(doc => doc.section === section && doc.content); if (!items.length) return null; return <section className="library-section" key={section}><div className="section-heading"><div><span>{section}</span><h2>{section}</h2></div></div><div className="doc-grid">{items.map(doc => <Link key={doc.slug} className="doc-card" to={`/docs/${doc.slug}`}><div className="doc-card-top"><span className="category-chip">{doc.interviewFrequency === 'AlmostAlways' ? 'Almost always' : doc.interviewFrequency === 'RoleDependent' ? 'Role dependent' : doc.interviewFrequency}</span><span><Clock3 size={14} /> {doc.expectedDepth}</span></div><h3>{doc.title}</h3><p>{doc.description}</p><div className="doc-card-action">Mở cheatsheet <ArrowRight size={16} /></div></Link>)}</div></section> })}
+    <section className="learning-actions"><div><RotateCcw size={20} /><div><strong>{dueItems.length ? `${dueItems.length} nội dung cần recall` : 'Chưa có nội dung đến hạn'}</strong><p>Review queue vẫn dùng scheduler hiện có; dashboard không suy mastery từ việc cuộn trang.</p></div></div>{dueItems.length ? <Link className="primary-button" to="/review">Ôn lại</Link> : <Link className="secondary-button" to="/quiz"><CircleHelp size={17} /> Làm quiz tình huống</Link>}</section>
+    <section className="study-tip"><CheckCircle2 size={18} /><div><p><strong>Chuẩn học tập.</strong> Nội dung tham chiếu được biên tập theo <Link to="/docs/engineering-learning-standard">Engineering Learning Standard</Link> và <Link to="/docs/content-editorial-standard">Content Editorial Standard</Link>. Learning Lab chỉ là pilot: ưu tiên chất lượng vòng học hơn số lesson.</p></div></section>
   </div>
 }

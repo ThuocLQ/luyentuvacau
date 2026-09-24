@@ -31,11 +31,21 @@ import designScenarios from '../../docs/design-scenarios.md?raw'
 import coreQuestionBank from '../../docs/core-question-bank.md?raw'
 import seniorFollowups from '../../docs/senior-followups.md?raw'
 import projectStories from '../../docs/project-stories-mock.md?raw'
+import learningIndexPlan from '../../docs/learning/index-execution-plan.md?raw'
+import learningRaceCondition from '../../docs/learning/race-condition.md?raw'
+import learningOutboxIdempotency from '../../docs/learning/outbox-idempotency.md?raw'
+import engineeringLearningStandard from '../../docs/engineering-learning-standard.md?raw'
+import editorialStandard from '../../docs/content-editorial-standard.md?raw'
 import type { CheatsheetMeta, InterviewQuestion } from '../types/content'
 
-export const sections = ['Lộ trình ôn', 'Nền tảng .NET', 'ASP.NET Core', 'Dữ liệu', 'Kiến trúc', 'Hệ phân tán', 'Vận hành production', 'DevOps và Cloud', 'Thiết kế hệ thống', 'Luyện phỏng vấn', 'Chuyên ngành']
+export const sections = ['Learning Lab', 'Lộ trình ôn', 'Nền tảng .NET', 'ASP.NET Core', 'Dữ liệu', 'Kiến trúc', 'Hệ phân tán', 'Vận hành production', 'DevOps và Cloud', 'Thiết kế hệ thống', 'Luyện phỏng vấn', 'Chuyên ngành']
 
 export const docs: CheatsheetMeta[] = [
+  { slug: 'engineering-learning-standard', title: 'Engineering Learning Standard', section: 'Lộ trình ôn', order: -5, readingMinutes: 6, tags: ['Learning', 'Mastery'], interviewFrequency: 'Specialized', expectedDepth: 'Foundation', status: 'Complete', description: 'Chuẩn thiết kế vòng học: hiểu, làm, debug, reasoning và communicate.', content: engineeringLearningStandard },
+  { slug: 'content-editorial-standard', title: 'Content Editorial Standard', section: 'Lộ trình ôn', order: -4, readingMinutes: 5, tags: ['Editorial', 'Writing'], interviewFrequency: 'Specialized', expectedDepth: 'Foundation', status: 'Complete', description: 'Chuẩn viết nội dung: rõ, chính xác, tự nhiên và có context.', content: editorialStandard },
+  { slug: 'learning-index-execution-plan', title: 'Learning Lab: Database Index & Execution Plan', section: 'Learning Lab', order: -3, readingMinutes: 75, tags: ['Lab', 'Index', 'Execution plan'], interviewFrequency: 'AlmostAlways', expectedDepth: 'Deep', status: 'Complete', description: 'Problem → plan evidence → index trade-off → transfer case.', content: learningIndexPlan },
+  { slug: 'learning-race-condition', title: 'Learning Lab: Race Condition & Concurrency', section: 'Learning Lab', order: -2, readingMinutes: 70, tags: ['Lab', 'Race condition', 'Concurrency'], interviewFrequency: 'AlmostAlways', expectedDepth: 'Deep', status: 'Complete', description: 'Nhìn thấy race, làm reproduction và kiểm tra scope của lock.', content: learningRaceCondition },
+  { slug: 'learning-outbox-idempotency', title: 'Learning Lab: Outbox & Idempotency', section: 'Learning Lab', order: -1, readingMinutes: 80, tags: ['Lab', 'Outbox', 'Idempotency'], interviewFrequency: 'Common', expectedDepth: 'Deep', status: 'Complete', description: 'Crash trace, duplicate delivery, external side effect và reconciliation.', content: learningOutboxIdempotency },
   { slug: 'interview-map', title: '00. Bản đồ ôn phỏng vấn Senior .NET', section: 'Lộ trình ôn', order: 0, readingMinutes: 8, tags: ['Lộ trình', 'Senior'], interviewFrequency: 'AlmostAlways', expectedDepth: 'Foundation', status: 'Complete', description: 'Lộ trình từ 30 phút đến 7 ngày, tự chẩn đoán và cách chọn track ôn tập.', content: interviewMap },
   { slug: 'runtime-memory', title: '01. C# Runtime, GC và Memory', section: 'Nền tảng .NET', order: 1, readingMinutes: 9, tags: ['GC', 'Memory', 'CLR'], interviewFrequency: 'Common', expectedDepth: 'Strong', status: 'Complete', description: 'Allocation, managed heap, memory dump, disposal, streaming và buffer ownership.', content: runtime },
   { slug: 'async-concurrency', title: '02. Async, Threading và Concurrency', section: 'Nền tảng .NET', order: 2, readingMinutes: 10, tags: ['async', 'ThreadPool', 'Concurrency'], interviewFrequency: 'AlmostAlways', expectedDepth: 'Deep', status: 'Complete', description: 'I/O async, cancellation, ThreadPool và bounded concurrency theo downstream capacity.', content: asyncConcurrency },

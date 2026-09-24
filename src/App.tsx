@@ -9,6 +9,7 @@ import GlossaryPage from './pages/GlossaryPage'
 import QuizHubPage from './pages/QuizHubPage'
 import QuizPage from './pages/QuizPage'
 import CodingPracticePage from './pages/CodingPracticePage'
+import LibraryPage from './pages/LibraryPage'
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: 'library', element: <LibraryPage /> },
       { path: 'docs/:slug', element: <DocPage /> },
       { path: 'interview', element: <InterviewPage /> },
       { path: 'quiz', element: <QuizHubPage /> },

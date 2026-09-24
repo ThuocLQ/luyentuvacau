@@ -9,7 +9,7 @@ marked.setOptions({
 export function renderMarkdown(source: string): string {
   const renderer = new Renderer()
   renderer.html = () => ''
-  const directives = source.replace(/^:::(concept|definition|must-remember|example|note|warning|production-trap|senior-signal|interview-answer|comparison|final-recall)\s*\n([\s\S]*?)^:::\s*$/gm, (_, type: string, body: string) => `> [!${type}]\n> ${body.trim().replace(/\n/g, '\n> ')}`)
+  const directives = source.replace(/^:::(concept|definition|must-remember|example|note|warning|production-trap|senior-signal|interview-answer|comparison|final-recall|learning-goal|hands-on|break-it|debug|explain|transfer|recall)\s*\n([\s\S]*?)^:::\s*$/gm, (_, type: string, body: string) => `> [!${type}]\n> ${body.trim().replace(/\n/g, '\n> ')}`)
   return marked.parse(directives, { renderer }) as string
 }
 
