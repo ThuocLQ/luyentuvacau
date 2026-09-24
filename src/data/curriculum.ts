@@ -9,28 +9,39 @@ export interface LessonProgress {
   lastStudiedAt?: string
 }
 
-export interface CurriculumModule {
+export interface LearningDomain {
   id: string
-  number: number
   title: string
-  principle: string
-  suggestedLesson?: { title: string; slug: string; kind: 'learning' | 'reference' }
+  principles: string
+  status: 'active' | 'planned'
 }
 
-export const curriculumModules: CurriculumModule[] = [
-  { id: 'database-internals', number: 1, title: 'Database Internals', principle: 'Persistence · access path', suggestedLesson: { title: 'Index & Execution Plan learning pilot', slug: 'learning-index-execution-plan', kind: 'learning' } },
-  { id: 'indexing-execution-plan', number: 2, title: 'Indexing & Execution Plan', principle: 'Selectivity · optimizer', suggestedLesson: { title: 'Index & Execution Plan learning pilot', slug: 'learning-index-execution-plan', kind: 'learning' } },
-  { id: 'transaction-isolation', number: 3, title: 'Transaction & Isolation', principle: 'Correctness · visibility', suggestedLesson: { title: 'SQL, index, transaction và locking', slug: 'sql-index-locking', kind: 'reference' } },
-  { id: 'concurrency', number: 4, title: 'Concurrency', principle: 'Shared state · atomicity', suggestedLesson: { title: 'Race Condition & Concurrency learning pilot', slug: 'learning-race-condition', kind: 'learning' } },
-  { id: 'runtime-memory', number: 5, title: '.NET Runtime & Memory', principle: 'Allocation · lifetime', suggestedLesson: { title: 'C# Runtime, GC và Memory', slug: 'runtime-memory', kind: 'reference' } },
-  { id: 'networking-http', number: 6, title: 'Networking & HTTP', principle: 'Latency · boundary', suggestedLesson: { title: 'API Design, Authorization và Idempotency', slug: 'api-security', kind: 'reference' } },
-  { id: 'security', number: 7, title: 'Security', principle: 'Identity · authorization', suggestedLesson: { title: 'API Design, Authorization và Idempotency', slug: 'api-security', kind: 'reference' } },
-  { id: 'caching-reliability', number: 8, title: 'Caching & Reliability', principle: 'Freshness · failure', suggestedLesson: { title: 'Cache và Redis', slug: 'cache-redis', kind: 'reference' } },
-  { id: 'messaging-fundamentals', number: 9, title: 'Messaging Fundamentals', principle: 'Delivery · ownership', suggestedLesson: { title: 'Messaging, idempotency và Outbox', slug: 'distributed-systems', kind: 'reference' } },
-  { id: 'kafka-deep-dive', number: 10, title: 'Kafka Deep Dive', principle: 'Ordering · replay', suggestedLesson: { title: 'Kafka và RabbitMQ', slug: 'kafka-rabbitmq', kind: 'reference' } },
-  { id: 'consistency-idempotency', number: 11, title: 'Consistency & Idempotency', principle: 'Duplicate · recovery', suggestedLesson: { title: 'Outbox & Idempotency learning pilot', slug: 'learning-outbox-idempotency', kind: 'learning' } },
-  { id: 'system-design-reasoning', number: 12, title: 'System Design Reasoning', principle: 'Trade-off · evidence', suggestedLesson: { title: 'Khung System Design', slug: 'system-design-framework', kind: 'reference' } },
+export interface LearningLessonMeta {
+  slug: string
+  domainId: string
+  title: string
+  status: 'pilot' | 'available' | 'planned'
+  targetTechLevel: TechLevel
+  targetEnglishLevel: EnglishLevel
+  prerequisites?: string[]
+  recommendedNext?: string[]
+}
+
+export const learningDomains: LearningDomain[] = [
+  { id: 'data-consistency', title: 'Data & Consistency', principles: 'Persistence · query execution · correctness', status: 'active' },
+  { id: 'runtime-concurrency', title: 'Runtime & Concurrency', principles: 'Execution · memory · shared state', status: 'active' },
+  { id: 'service-network', title: 'Service & Network', principles: 'Communication · boundary · latency', status: 'planned' },
+  { id: 'distributed-systems', title: 'Distributed Systems', principles: 'Delivery · consistency · recovery', status: 'active' },
+  { id: 'production-engineering', title: 'Production Engineering', principles: 'Observe · operate · recover', status: 'planned' },
+  { id: 'architecture-reasoning', title: 'Architecture & Reasoning', principles: 'Ownership · trade-off · changeability', status: 'planned' },
 ]
 
+export const learningLessons: LearningLessonMeta[] = [
+  { slug: 'learning-index-execution-plan', domainId: 'data-consistency', title: 'Index & Execution Plan', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, recommendedNext: ['learning-race-condition'] },
+  { slug: 'learning-race-condition', domainId: 'runtime-concurrency', title: 'Race Condition & Concurrency', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, recommendedNext: ['learning-outbox-idempotency'] },
+  { slug: 'learning-outbox-idempotency', domainId: 'distributed-systems', title: 'Outbox & Idempotency', status: 'pilot', targetTechLevel: 4, targetEnglishLevel: 3 },
+]
+
+export const findLearningLesson = (slug: string) => learningLessons.find(lesson => lesson.slug === slug)
 export const techLevelLabels: Record<TechLevel, string> = { 1: 'L1 · Understand', 2: 'L2 · Apply', 3: 'L3 · Debug', 4: 'L4 · Reason / Trade-off' }
 export const englishLevelLabels: Record<EnglishLevel, string> = { 1: 'E1 · Read / Understand', 2: 'E2 · Short Answer', 3: 'E3 · Explain 2–3 minutes', 4: 'E4 · Technical Discussion' }

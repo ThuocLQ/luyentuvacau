@@ -1,12 +1,17 @@
-import { useMemo } from 'react'
-import { curriculumModules, type LessonProgress } from '../data/curriculum'
+import { useEffect } from 'react'
+import { learningLessons, type LessonProgress } from '../data/curriculum'
 import { useLocalStorage } from './useLocalStorage'
 
-type ProgressByModule = Record<string, LessonProgress>
+type ProgressByLesson = Record<string, LessonProgress>
 const KEY = 'ltvc-learning-progress-v1'
-const initial: ProgressByModule = {}
+const initial: ProgressByLesson = {}
+const legacyModuleToLesson: Record<string, string> = {
+  'indexing-execution-plan': 'learning-index-execution-plan',
+  concurrency: 'learning-race-condition',
+  'consistency-idempotency': 'learning-outbox-idempotency',
+}
 
-function isProgress(value: unknown): value is ProgressByModule {
+function isProgress(value: unknown): value is ProgressByLesson {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
   return Object.values(value as Record<string, unknown>).every(item => {
     if (!item || typeof item !== 'object') return false
@@ -18,9 +23,19 @@ function isProgress(value: unknown): value is ProgressByModule {
 }
 
 export function useLearningProgress() {
-  const [progress, setProgress] = useLocalStorage<ProgressByModule>(KEY, initial, isProgress)
-  const currentModule = useMemo(() => curriculumModules.find(module => progress[module.id]?.status !== 'solid') ?? curriculumModules.at(-1)!, [progress])
-  const get = (moduleId: string): LessonProgress => progress[moduleId] ?? { techLevel: 1, englishLevel: 1, status: 'not-started' }
-  const update = (moduleId: string, patch: Partial<Pick<LessonProgress, 'techLevel' | 'englishLevel' | 'status'>>) => setProgress(current => ({ ...current, [moduleId]: { ...get(moduleId), ...patch, lastStudiedAt: new Date().toISOString() } }))
-  return { progress, currentModule, get, update }
+  const [progress, setProgress] = useLocalStorage<ProgressByLesson>(KEY, initial, isProgress)
+  useEffect(() => {
+    setProgress(current => {
+      let changed = false
+      const next = { ...current }
+      for (const [legacyId, lessonSlug] of Object.entries(legacyModuleToLesson)) {
+        if (current[legacyId] && !next[lessonSlug]) { next[lessonSlug] = current[legacyId]; changed = true }
+      }
+      return changed ? next : current
+    })
+  }, [setProgress])
+  const get = (lessonSlug: string): LessonProgress => progress[lessonSlug] ?? { techLevel: 1, englishLevel: 1, status: 'not-started' }
+  const update = (lessonSlug: string, patch: Partial<Pick<LessonProgress, 'techLevel' | 'englishLevel' | 'status'>>) => setProgress(current => ({ ...current, [lessonSlug]: { ...(current[lessonSlug] ?? { techLevel: 1, englishLevel: 1, status: 'not-started' }), ...patch, lastStudiedAt: new Date().toISOString() } }))
+  const currentLesson = learningLessons.find(lesson => (progress[lesson.slug]?.status ?? 'not-started') !== 'solid') ?? learningLessons[0]
+  return { progress, currentLesson, get, update }
 }

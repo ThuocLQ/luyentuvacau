@@ -1,6 +1,7 @@
 export type InterviewFrequency = 'AlmostAlways' | 'Common' | 'RoleDependent' | 'Specialized'
 export type ExpectedDepth = 'Foundation' | 'Strong' | 'Deep'
 export type ContentStatus = 'Draft' | 'Review' | 'Complete'
+export type ContentKind = 'learning' | 'reference' | 'standard' | 'interview'
 
 export interface CheatsheetMeta {
   slug: string
@@ -13,6 +14,7 @@ export interface CheatsheetMeta {
   interviewFrequency: InterviewFrequency
   expectedDepth: ExpectedDepth
   status: ContentStatus
+  contentKind?: ContentKind
   content?: string
 }
 
