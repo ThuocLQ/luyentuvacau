@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import DocumentToc from './document/DocumentToc'
 import PersonalExample from './document/PersonalExample'
 import LearningMasteryPanel from './document/LearningMasteryPanel'
+import IndexGoldenLesson from './learning/index/IndexGoldenLesson'
 import TermTooltip from './TermTooltip'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -39,8 +40,14 @@ export default function MarkdownDocument({ doc }: Props) {
   const isLearning = contentKind === 'learning'
   const learningLesson = isLearning ? findLearningLesson(doc.slug) : undefined
   const learningDomain = learningLesson ? learningDomains.find(domain => domain.id === learningLesson.domainId) : undefined
+  const indexParts = useMemo(() => doc.slug === 'learning-index-execution-plan' ? doc.content.split(/\r?\n\{\{INDEX_VISUAL:([a-z]+)\}\}\r?\n/) : null, [doc.content, doc.slug])
+  const indexPartRenderings = useMemo(() => indexParts?.map((part, index) => index % 2 === 0 ? enhanceHtml(renderMarkdown(part)) : null) ?? null, [indexParts])
+  const indexRendered = useMemo(() => indexPartRenderings ? {
+    html: indexPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).map(part => part.html).join(''),
+    toc: indexPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).flatMap(part => part.toc),
+  } : null, [indexPartRenderings])
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
-  const rendered = useMemo(() => !isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered, [fullRendered, isLearning, mode])
+  const rendered = useMemo(() => indexRendered ?? (!isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered), [fullRendered, indexRendered, isLearning, mode])
   const activeHeading = useScrollSpy({
     selector: 'h2, h3',
     root: articleRef,
@@ -111,8 +118,7 @@ export default function MarkdownDocument({ doc }: Props) {
       </header>
       {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
       {!isLearning && mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
-      <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />
-      <PersonalExample slug={doc.slug} />
+      {indexParts && indexPartRenderings ? <article ref={articleRef} className="markdown-body">{indexParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: indexPartRenderings[index]?.html ?? '' }} /> : <IndexGoldenLesson key={`visual-${index}`} stage={part as 'scan' | 'btree' | 'composite' | 'plan'} />)}</article> : <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />}      <PersonalExample slug={doc.slug} />
       {learningLesson && <LearningMasteryPanel lessonSlug={learningLesson.slug} />}
       {learningLesson ? <nav className="doc-pagination learning-pagination" aria-label="Điều hướng Learning Lab"><Link className="secondary-button" to="/"><ArrowLeft size={17} /> Back to Roadmap</Link><Link className="secondary-button" to={`/docs/${learningLesson.referenceSlug}`}>Reference</Link><Link className="secondary-button" to={learningLesson.quizPath}>Quiz</Link><Link className="primary-button" to={learningLesson.interviewPath}>Interview <ArrowRight size={17} /></Link></nav> : <nav className="doc-pagination" aria-label="Điều hướng cheatsheet">{previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}{nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Luyện phỏng vấn <ArrowRight size={17} /></Link>}</nav>}
     </section>

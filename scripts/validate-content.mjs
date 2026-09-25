@@ -81,13 +81,15 @@ const malformedDirectives = visit('docs').filter(file => file.endsWith('.md')).f
 if (malformedDirectives.length) throw new Error(`Empty or unclosed semantic directive in: ${malformedDirectives.join(', ')}`)
 
 const learningFiles = visit('docs/learning').filter(file => file.endsWith('.md'))
-const learningSections = ['Engineering Problem', 'Learning Goal', 'Mental Model', 'Hands-on', 'Break It', 'Explain It', 'Transfer Challenge', 'Recall Questions']
+const learningFlows = [
+  ['Engineering Problem', 'Learning Goal', 'Mental Model', 'Hands-on', 'Break It', 'Explain It', 'Transfer Challenge', 'Recall Questions'],
+  ['Trước khi bắt đầu', 'Một vấn đề thật', 'Lab PostgreSQL', 'Khi plan ngược', 'Transfer challenge', 'Explain it back', 'Final recall'],
+]
 const incompleteLearningLessons = learningFiles.filter(file => {
   const source = readFileSync(file, 'utf8')
-  return learningSections.some(section => !source.includes(`## ${section}`))
+  return !learningFlows.some(flow => flow.every(section => source.includes(`## ${section}`)))
 })
-if (incompleteLearningLessons.length) styleWarnings.push(`learning lessons missing a recommended loop section: ${incompleteLearningLessons.join(', ')}`)
-
+if (incompleteLearningLessons.length) styleWarnings.push(`learning lessons missing a recommended learning flow: ${incompleteLearningLessons.join(', ')}`)
 const glossarySource = readFileSync('src/data/glossary.ts', 'utf8')
 const glossaryIds = [...glossarySource.matchAll(/^\s*\['([^']+)'/gm)].map(match => match[1])
 const duplicateGlossaryIds = glossaryIds.filter((id, index) => glossaryIds.indexOf(id) !== index)
