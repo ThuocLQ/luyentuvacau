@@ -22,6 +22,20 @@ function isProgress(value: unknown): value is ProgressByLesson {
   })
 }
 
+export function selectCurrentLesson(progress: ProgressByLesson) {
+  const inProgress = learningLessons
+    .filter(lesson => progress[lesson.slug]?.status === 'learning')
+    .sort((left, right) => (Date.parse(progress[right.slug]?.lastStudiedAt ?? '') || 0) - (Date.parse(progress[left.slug]?.lastStudiedAt ?? '') || 0))
+
+  if (inProgress[0]) return inProgress[0]
+
+  return learningLessons.find(lesson => lesson.status !== 'planned' && (progress[lesson.slug]?.status ?? 'not-started') !== 'solid')
+    ?? learningLessons
+      .slice()
+      .sort((left, right) => (Date.parse(progress[right.slug]?.lastStudiedAt ?? '') || 0) - (Date.parse(progress[left.slug]?.lastStudiedAt ?? '') || 0))[0]
+    ?? learningLessons[0]
+}
+
 export function useLearningProgress() {
   const [progress, setProgress] = useLocalStorage<ProgressByLesson>(KEY, initial, isProgress)
   useEffect(() => {
@@ -36,6 +50,6 @@ export function useLearningProgress() {
   }, [setProgress])
   const get = (lessonSlug: string): LessonProgress => progress[lessonSlug] ?? { techLevel: 1, englishLevel: 1, status: 'not-started' }
   const update = (lessonSlug: string, patch: Partial<Pick<LessonProgress, 'techLevel' | 'englishLevel' | 'status'>>) => setProgress(current => ({ ...current, [lessonSlug]: { ...(current[lessonSlug] ?? { techLevel: 1, englishLevel: 1, status: 'not-started' }), ...patch, lastStudiedAt: new Date().toISOString() } }))
-  const currentLesson = learningLessons.find(lesson => (progress[lesson.slug]?.status ?? 'not-started') !== 'solid') ?? learningLessons[0]
+  const currentLesson = selectCurrentLesson(progress)
   return { progress, currentLesson, get, update }
 }

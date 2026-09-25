@@ -45,18 +45,16 @@ Trước index, plan có thể scan nhiều row rồi sort. Sau index phù hợp
 
 **Prerequisite:** Docker Desktop chạy được, cổng `5432` chưa bị dùng; dùng `psql` local hoặc SQL client kết nối `postgresql://postgres:postgres@localhost:5432/quannet_lab`.
 
-```bash
-docker run --name quannet-postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=quannet_lab \
-  -p 5432:5432 \
-  -d postgres:17
+```powershell
+# Windows PowerShell: một dòng để tránh lỗi continuation ký tự \.
+docker run --name quannet-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=quannet_lab -p 5432:5432 -d postgres:17
 
-# Chờ container healthy, rồi mở psql từ chính container:
+# Chờ đến khi database sẵn sàng rồi mở psql từ chính container.
+docker exec quannet-postgres pg_isready -U postgres -d quannet_lab
 docker exec -it quannet-postgres psql -U postgres -d quannet_lab
 ```
 
-PostgreSQL 17 image dùng major tag cố định để lab lặp lại được. Khi kết thúc: `docker stop quannet-postgres`; chỉ dùng `docker rm -f quannet-postgres` khi muốn bỏ toàn bộ lab data.
+`postgres:17` là major tag của Docker Official Image tại thời điểm biên tập; patch version phía dưới tag này có thể đổi theo thời gian. Khi kết thúc, dùng `docker stop quannet-postgres`. Chỉ dùng `docker rm -f quannet-postgres` khi muốn xóa toàn bộ container và lab data.
 
 ### 1. Tạo schema và dataset laptop-friendly
 
@@ -75,14 +73,27 @@ CREATE TABLE orders (
 INSERT INTO orders (tenant_id, customer_id, status, created_at, total)
 SELECT
   ((g - 1) % 200) + 1,
-  ((g - 1) % 50000) + 1,
-  CASE WHEN g % 20 = 0 THEN 'Pending' WHEN g % 5 = 0 THEN 'Shipped' ELSE 'Paid' END,
-  now() - (g * interval '1 second'),
+  ((g * 37) % 50000) + 1,
+  CASE
+    WHEN ((g / 200) % 20) = 0 THEN 'Pending'
+    WHEN ((g / 200) % 5) = 0 THEN 'Shipped'
+    ELSE 'Paid'
+  END,
+  now() - ((g * 53 % 300000) * interval '1 second'),
   (g % 5000)::numeric / 10
 FROM generate_series(1, 300000) AS g;
 
 ANALYZE orders;
+
+-- Verify that one tenant contains several statuses before the experiment.
+SELECT tenant_id, status, count(*)
+FROM orders
+WHERE tenant_id = 42
+GROUP BY tenant_id, status
+ORDER BY status;
 ```
+
+`tenant_id`, `customer_id`, `status` và `created_at` được tạo từ các biểu thức deterministic khác nhau. Vì vậy tenant 42 vẫn có nhiều `status`; experiment A mới chủ động làm distribution của tenant này lệch sang `Paid`.
 
 ### 2. Baseline: predict, run, record
 
@@ -124,11 +135,19 @@ Column order khớp **equality filters** trước (`tenant_id`, `status`), rồi
 
 ## Break It A: poor selectivity
 
-Dự đoán trước: nếu gần như toàn bộ tenant 42 là `Paid`, planner có còn chọn index không?
+Flow: ghi lại distribution ban đầu → dự đoán → update toàn bộ tenant 42 thành `Paid` → `ANALYZE` → chạy lại cùng query và so evidence.
+
+Sau update, predicate `status = 'Paid'` không còn giảm candidate range bên trong tenant 42. Đây là thay đổi distribution có chủ đích, nhưng không hứa planner phải đổi sang plan nào.
 
 ```sql
 UPDATE orders SET status = 'Paid' WHERE tenant_id = 42;
 ANALYZE orders;
+
+SELECT tenant_id, status, count(*)
+FROM orders
+WHERE tenant_id = 42
+GROUP BY tenant_id, status;
+
 EXPLAIN (ANALYZE, BUFFERS)
 SELECT id, created_at, total
 FROM orders

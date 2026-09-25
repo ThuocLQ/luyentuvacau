@@ -10,8 +10,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useReviewProgress } from '../hooks/useReviewProgress'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 import type { CheatsheetMeta } from '../types/content'
-import { completeDocs } from '../data/docs'
-import { findLearningLesson } from '../data/curriculum'
+import { completeDocs, getContentKind } from '../data/docs'
+import { findLearningLesson, learningDomains } from '../data/curriculum'
 
 interface Props { doc: CheatsheetMeta & { content: string } }
 const statusLabel = { Draft: 'Bản nháp', Review: 'Đang rà soát', Complete: 'Hoàn chỉnh' }
@@ -35,8 +35,10 @@ export default function MarkdownDocument({ doc }: Props) {
   const [completed, setCompleted] = useLocalStorage<string[]>('ltvc-completed', [])
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>('ltvc-bookmarks', [])
   const { find, pin, record, remove } = useReviewProgress()
-  const isLearning = doc.contentKind === 'learning'
+  const contentKind = getContentKind(doc)
+  const isLearning = contentKind === 'learning'
   const learningLesson = isLearning ? findLearningLesson(doc.slug) : undefined
+  const learningDomain = learningLesson ? learningDomains.find(domain => domain.id === learningLesson.domainId) : undefined
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
   const rendered = useMemo(() => !isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered, [fullRendered, isLearning, mode])
   const activeHeading = useScrollSpy({
@@ -102,9 +104,9 @@ export default function MarkdownDocument({ doc }: Props) {
     <div className="reading-progress"><span style={{ width: `${readingProgress}%` }} /></div>
     <section className="document-main">
       <header className="document-hero compact-document-hero">
-        <div className="breadcrumb">{isLearning ? <><Link to="/">Roadmap</Link><span>/</span><span>Learning Lab</span><span>/</span><span>{doc.title}</span></> : <><Link to="/library">Library</Link><span>/</span><span>{doc.section}</span><span>/</span><span>{doc.title}</span></>}</div>
+        <div className="breadcrumb">{isLearning ? <><Link to="/">Roadmap</Link><span>/</span><span>{learningDomain?.title ?? 'Learning Lab'}</span><span>/</span><span>{doc.title}</span></> : <><Link to="/library">Library</Link><span>/</span><span>{doc.section}</span><span>/</span><span>{doc.title}</span></>}</div>
         <h1>{doc.title}</h1><p>{doc.description}</p>
-        <div className="document-meta-row"><span className="weight-badge">{doc.interviewFrequency === 'AlmostAlways' ? 'Almost always' : doc.interviewFrequency === 'RoleDependent' ? 'Role dependent' : doc.interviewFrequency}</span><span className="weight-badge">{doc.expectedDepth}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
+        <div className="document-meta-row"><span className="weight-badge">{contentKind === 'learning' ? 'Learning lab' : contentKind === 'standard' ? 'Standard' : contentKind === 'interview' ? 'Interview practice' : 'Reference'}</span><span className="weight-badge">{doc.interviewFrequency === 'AlmostAlways' ? 'Almost always' : doc.interviewFrequency === 'RoleDependent' ? 'Role dependent' : doc.interviewFrequency}</span><span className="weight-badge">{doc.expectedDepth}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
         <div className="document-actions">{!isLearning && <><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button></>}<button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => reviewItem?.manualPin ? remove(`cheatsheet:${doc.slug}`) : pin({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {reviewItem?.manualPin ? 'Bỏ ghim ôn' : needsReviewForDoc ? 'Đã có lịch ôn' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
       </header>
       {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
@@ -112,7 +114,7 @@ export default function MarkdownDocument({ doc }: Props) {
       <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />
       <PersonalExample slug={doc.slug} />
       {learningLesson && <LearningMasteryPanel lessonSlug={learningLesson.slug} />}
-      <nav className="doc-pagination" aria-label="Điều hướng cheatsheet">{previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}{nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Luyện phỏng vấn <ArrowRight size={17} /></Link>}</nav>
+      {learningLesson ? <nav className="doc-pagination learning-pagination" aria-label="Điều hướng Learning Lab"><Link className="secondary-button" to="/"><ArrowLeft size={17} /> Back to Roadmap</Link><Link className="secondary-button" to={`/docs/${learningLesson.referenceSlug}`}>Reference</Link><Link className="secondary-button" to={learningLesson.quizPath}>Quiz</Link><Link className="primary-button" to={learningLesson.interviewPath}>Interview <ArrowRight size={17} /></Link></nav> : <nav className="doc-pagination" aria-label="Điều hướng cheatsheet">{previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}{nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Luyện phỏng vấn <ArrowRight size={17} /></Link>}</nav>}
     </section>
     <DocumentToc items={rendered.toc.filter(item => item.level > 1)} activeId={activeHeading} onNavigate={navigateToHeading} />
     {readingProgress > 18 && <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })} aria-label="Lên đầu bài"><ChevronUp size={18} /></button>}

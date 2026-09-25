@@ -24,7 +24,9 @@ export interface LearningLessonMeta {
   targetTechLevel: TechLevel
   targetEnglishLevel: EnglishLevel
   prerequisites?: string[]
-  recommendedNext?: string[]
+  referenceSlug: string
+  quizPath: string
+  interviewPath: string
 }
 
 export const learningDomains: LearningDomain[] = [
@@ -33,13 +35,13 @@ export const learningDomains: LearningDomain[] = [
   { id: 'service-network', title: 'Service & Network', principles: 'Communication · boundary · latency', status: 'planned' },
   { id: 'distributed-systems', title: 'Distributed Systems', principles: 'Delivery · consistency · recovery', status: 'active' },
   { id: 'production-engineering', title: 'Production Engineering', principles: 'Observe · operate · recover', status: 'planned' },
-  { id: 'architecture-reasoning', title: 'Architecture & Reasoning', principles: 'Ownership · trade-off · changeability', status: 'planned' },
+  { id: 'architecture-reasoning', title: 'Architecture & Engineering Reasoning', principles: 'Ownership · trade-off · changeability', status: 'planned' },
 ]
 
 export const learningLessons: LearningLessonMeta[] = [
-  { slug: 'learning-index-execution-plan', domainId: 'data-consistency', title: 'Index & Execution Plan', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, recommendedNext: ['learning-race-condition'] },
-  { slug: 'learning-race-condition', domainId: 'runtime-concurrency', title: 'Race Condition & Concurrency', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, recommendedNext: ['learning-outbox-idempotency'] },
-  { slug: 'learning-outbox-idempotency', domainId: 'distributed-systems', title: 'Outbox & Idempotency', status: 'pilot', targetTechLevel: 4, targetEnglishLevel: 3 },
+  { slug: 'learning-index-execution-plan', domainId: 'data-consistency', title: 'Index & Execution Plan', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, referenceSlug: 'sql-index-locking', quizPath: '/quiz?topic=SQL%20v%C3%A0%20EF%20Core', interviewPath: '/interview?question=sql-lost-update' },
+  { slug: 'learning-race-condition', domainId: 'runtime-concurrency', title: 'Race Condition & Concurrency', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, referenceSlug: 'async-concurrency', quizPath: '/quiz?topic=Async%20v%C3%A0%20Concurrency', interviewPath: '/interview?question=async-fanout' },
+  { slug: 'learning-outbox-idempotency', domainId: 'distributed-systems', title: 'Outbox & Idempotency', status: 'pilot', targetTechLevel: 4, targetEnglishLevel: 3, referenceSlug: 'distributed-systems', quizPath: '/quiz?topic=Messaging', interviewPath: '/interview?question=idempotency-key' },
 ]
 
 export const findLearningLesson = (slug: string) => learningLessons.find(lesson => lesson.slug === slug)

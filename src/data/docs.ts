@@ -36,7 +36,7 @@ import learningRaceCondition from '../../docs/learning/race-condition.md?raw'
 import learningOutboxIdempotency from '../../docs/learning/outbox-idempotency.md?raw'
 import engineeringLearningStandard from '../../docs/engineering-learning-standard.md?raw'
 import editorialStandard from '../../docs/content-editorial-standard.md?raw'
-import type { CheatsheetMeta, InterviewQuestion } from '../types/content'
+import type { CheatsheetMeta, ContentKind, InterviewQuestion } from '../types/content'
 
 export const sections = ['Learning Lab', 'Lộ trình ôn', 'Nền tảng .NET', 'ASP.NET Core', 'Dữ liệu', 'Kiến trúc', 'Hệ phân tán', 'Vận hành production', 'DevOps và Cloud', 'Thiết kế hệ thống', 'Luyện phỏng vấn', 'Chuyên ngành']
 
@@ -84,6 +84,7 @@ export const docs: CheatsheetMeta[] = [
 export const completeDocs = docs.filter(doc => doc.content)
 export const findDoc = (slug?: string) => docs.find(doc => doc.slug === slug)
 export const findCompleteDoc = (slug?: string) => completeDocs.find(doc => doc.slug === slug)
+export const getContentKind = (doc: CheatsheetMeta): ContentKind => doc.contentKind ?? 'reference'
 
 export const questions: InterviewQuestion[] = [
   { id: 'interview-roadmap', topic: 'Lộ trình ôn', difficulty: 'Senior', relatedDoc: 'interview-map', question: 'Bạn có 60 phút trước vòng Senior Backend .NET: chọn thứ tự ôn như thế nào?', shortAnswer: 'Bắt đầu bằng tự chẩn đoán, ưu tiên các chủ đề critical yếu nhất, rồi luyện hai câu trả lời nói thành tiếng và một project story. Mục tiêu là trả lời có cấu trúc, không phải đọc hết tài liệu.', followUps: ['Bạn bỏ qua phần nào khi thiếu thời gian?', 'Bạn đo mức sẵn sàng bằng gì?'], redFlags: ['Cố đọc hết mọi chủ đề', 'Không luyện trả lời thành tiếng'] },
