@@ -22,7 +22,7 @@ Table scan không phải lỗi. Với table nhỏ, hoặc query cần phần l�
 
 {{INDEX_VISUAL:scan}}
 
-Visual là mô hình toy: counter nói số row/page đã **consider**, **eliminate** và **return**. Đây không có nghĩa production query luôn đọc đúng một row hay đúng một page; mục tiêu là thấy phần work nào Index có thể giảm.
+Visual là mô hình toy: counter nói row/candidate work đã **consider**, **eliminate** và **return**. Nó không đo page hay I/O production; mục tiêu là thấy phần work nào Index có thể giảm.
 
 ## Index là access path, không phải nút tăng tốc
 
@@ -83,7 +83,7 @@ Planner dùng **statistics**: bản tóm tắt distribution dữ liệu, đượ
 
 {{INDEX_VISUAL:planner}}
 
-Visual này đi theo chain `predicate → selectivity → estimated rows → candidate plan`. Hãy đổi distribution để thấy cùng một Index có thể được planner đánh giá khác. Khi estimate và actual lệch lớn, đó là hypothesis cần điều tra statistics/correlation/data shape, chưa phải kết luận “planner sai”.
+Visual này tách hai câu hỏi: selectivity là predicate giữ lại bao nhiêu data; estimate accuracy là planner đoán row count gần actual đến đâu. Chỉ sau đó mới dùng estimate để so cost/candidate plan. Khi estimate và actual lệch lớn, đó là hypothesis cần điều tra statistics/correlation/data shape, chưa phải kết luận “planner sai”.
 
 ## Execution plan: đọc theo data flow
 
@@ -92,7 +92,7 @@ Visual này đi theo chain `predicate → selectivity → estimated rows → can
 Đừng đọc mọi field một lúc. Đọc theo thứ tự:
 
 1. **Scan:** `Seq Scan` là đọc table lần lượt; `Index Scan` đi từ Index tới candidate range.
-2. **Điều kiện:** `Index Cond` là điều kiện dùng để vào range; `Filter` là điều kiện kiểm sau khi row đã tới node.
+2. **Điều kiện:** `Index Cond` và `Filter` là qualifier/evidence nằm trên scan node: `Index Cond` dùng để vào range; `Filter` kiểm sau khi row đã tới scan node. Chúng không phải plan node độc lập.
 3. **Rows:** estimate là dự đoán; actual là quan sát. Mismatch là điểm bắt đầu debug.
 4. **Sort:** xuất hiện khi access path chưa cho output đúng thứ tự.
 5. **Buffers:** page/buffer database đã chạm; diễn giải cùng scan type và rows.

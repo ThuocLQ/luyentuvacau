@@ -1,8 +1,12 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import MarkdownDocument from './MarkdownDocument'
 import IndexGoldenLesson from './learning/index/IndexGoldenLesson'
+import TableScanVsIndexVisual from './learning/index/TableScanVsIndexVisual'
+import CompositeIndexVisual from './learning/index/CompositeIndexVisual'
+import PlannerEstimateVisual from './learning/index/PlannerEstimateVisual'
+import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
 
@@ -26,12 +30,51 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/42 thuộc root branch nào/)).toBeInTheDocument()
   })
 
-  it('switches Index composite query shape and plan mode', () => {
-    render(<><IndexGoldenLesson stage="composite" /><IndexGoldenLesson stage="plan" /></>)
-    fireEvent.click(screen.getByRole('button', { name: 'created_at only' }))
-    expect(screen.getByText(/Missing leading key/)).toBeInTheDocument()
+  it('teaches scan qualifiers as metadata instead of execution-plan nodes', () => {
+    render(<ExecutionPlanFlowVisual />)
+    expect(screen.getByTestId('scan-node')).toHaveTextContent('Seq Scan on orders')
+    expect(screen.getByText(/Filter: tenant_id = 42/)).toBeInTheDocument()
+    const baselineOperators = screen.getByRole('list', { name: 'baseline plan operators' })
+    expect(within(baselineOperators).getByText('Sort')).toBeInTheDocument()
+    expect(within(baselineOperators).getByText('Limit 20')).toBeInTheDocument()
+    expect(within(baselineOperators).queryByText(/Filter:/)).not.toBeInTheDocument()
+
     fireEvent.click(screen.getByRole('button', { name: 'After Index' }))
-    expect(screen.getByText('Index Cond tenant/status')).toBeInTheDocument()
+    expect(screen.getByTestId('scan-node')).toHaveTextContent('Index Scan on orders')
+    expect(screen.getByText(/Index Cond: tenant_id = 42/)).toBeInTheDocument()
+    const indexedOperators = screen.getByRole('list', { name: 'index plan operators' })
+    expect(within(indexedOperators).getByText('Limit 20')).toBeInTheDocument()
+    expect(within(indexedOperators).queryByText(/Index Cond:/)).not.toBeInTheDocument()
+  })
+
+  it('separates selectivity from cardinality-estimate accuracy', () => {
+    render(<PlannerEstimateVisual />)
+    fireEvent.click(screen.getByRole('button', { name: 'Paid = 82%' }))
+    expect(screen.getByText(/illustrative estimate 810,000 rows/)).toBeInTheDocument()
+    expect(screen.queryByText(/estimate 4,000 rows/)).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Estimate accuracy' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Bad estimate' }))
+    expect(screen.getByText('4,000 rows')).toBeInTheDocument()
+    expect(screen.getByText('82,000 rows')).toBeInTheDocument()
+  })
+
+  it('keeps the table-scan visual focused on candidate work, not page I/O', () => {
+    render(<TableScanVsIndexVisual />)
+    expect(screen.queryByText(/Page considered/)).not.toBeInTheDocument()
+    expect(screen.getByText('Rows considered')).toBeInTheDocument()
+    expect(screen.getByText('Candidate rows')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Index theo tenant' }))
+    expect(screen.getByText('Rows considered')).toBeInTheDocument()
+  })
+
+  it('shows the equal-prefix composite range contiguously and explains missing leading keys', () => {
+    render(<CompositeIndexVisual />)
+    const selectedRows = screen.getAllByTestId('paid-range')
+    expect(selectedRows).toHaveLength(3)
+    expect(selectedRows.map(row => row.dataset.rangeIndex)).toEqual(['1', '2', '3'])
+    fireEvent.click(screen.getByRole('button', { name: 'created_at only' }))
+    expect(screen.getByText(/key này được sắp toàn cục theo tenant trước/)).toBeInTheDocument()
   })
 
   it('traces, predicts and resets the Race interleaving with a visible invariant', () => {
