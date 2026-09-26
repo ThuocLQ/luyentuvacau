@@ -203,7 +203,252 @@ If it is necessary, teach enough of it before using it as a dependency.
 
 ---
 
-## 8. Vocabulary load budget
+## 8. Zero-Friction Vocabulary Rule
+
+A learner should not need to leave the lesson and search the web merely to understand the next sentence.
+
+Unknown vocabulary is a **learning-flow blocker**, not a minor editorial issue.
+
+For every unfamiliar term, use the smallest teaching treatment that lets the learner continue safely.
+
+### Level 1 — Inline explanation
+
+Use when one short sentence is enough.
+
+Example:
+
+```text
+overhead
+= phần chi phí phát sinh thêm để một mechanism hoạt động,
+ngoài phần work chính mà ta thật sự muốn thực hiện.
+```
+
+Then reconnect the word to the current topic:
+
+```text
+Index write overhead
+= ngoài việc ghi row chính,
+database còn phải duy trì thêm index structure.
+```
+
+The learner should not need to open another page.
+
+### Level 2 — Inline explanation + Glossary
+
+Use when the term:
+
+- is common in engineering;
+- will recur across lessons;
+- benefits from a stable short definition.
+
+At first use:
+
+1. explain it naturally in the lesson;
+2. optionally mark it with the project glossary syntax such as `[[overhead]]`;
+3. continue the lesson without requiring the glossary popup.
+
+The glossary reinforces the term; it does not unlock the paragraph.
+
+### Level 3 — Mini-concept before continuing
+
+If a term cannot be understood safely in one or two sentences because it has its own mechanism, dependency chain, trade-off or failure mode, do not hide it behind a tooltip.
+
+Pause the main lesson and teach the needed concept first.
+
+Possible examples, depending on the prerequisite boundary:
+
+```text
+contention
+backpressure
+MVCC
+eventual consistency
+serialization
+idempotency
+```
+
+A tooltip is not a substitute for correct dependency order.
+
+---
+
+## 9. Vocabulary Escalation Rule
+
+When a new term appears, decide its treatment explicitly:
+
+```text
+Can the learner understand it safely in one sentence?
+→ explain inline
+
+Will the term recur and matter later?
+→ inline explanation + glossary support
+
+Does understanding it require its own mechanism?
+→ teach a mini-concept before continuing
+```
+
+Do not send the learner into a research rabbit hole for ordinary vocabulary.
+
+External research should be for:
+
+```text
+"I want to go deeper."
+```
+
+not:
+
+```text
+"I cannot understand the next sentence without Google."
+```
+
+### Preserve useful industry language
+
+Do not solve vocabulary friction by translating every technical term into unnatural Vietnamese.
+
+Prefer:
+
+```text
+technical term
++ short Vietnamese meaning
++ concrete local example
+```
+
+Example:
+
+```text
+throughput
+= lượng work hệ thống xử lý được trong một khoảng thời gian.
+
+Ví dụ:
+500 requests/second is a throughput measurement.
+```
+
+The learner should recognize the term later in documentation, logs, code review and interviews.
+
+---
+
+## 10. Glossary Is Support, Not Dependency
+
+The lesson must remain understandable without opening glossary popovers.
+
+The glossary exists to:
+
+- reinforce a short definition;
+- preserve common industry terminology;
+- provide one compact example;
+- support later recall;
+- let the learner quickly revisit a term across lessons.
+
+The glossary must not:
+
+- contain essential reasoning missing from the lesson;
+- replace Concept Origin;
+- hide a missing prerequisite;
+- become a dumping ground for full lessons;
+- force repeated popup navigation during normal reading.
+
+### First-use rule still wins
+
+Even when a term has a glossary entry, its first meaningful use in a lesson must contain enough context for the learner to continue.
+
+Bad:
+
+```text
+Index has write [[overhead]].
+```
+
+if the learner has never met the word.
+
+Better:
+
+```text
+Index has write [[overhead]] — tức database phải làm thêm work
+để cập nhật index ngoài việc ghi row chính.
+```
+
+After that, `overhead` may be used normally.
+
+---
+
+## 11. Vocabulary Friction Audit
+
+Before freezing a lesson, read it using only the declared prerequisite boundary.
+
+Mark any word or phrase likely to trigger:
+
+> “Tôi phải Google từ này trước thì mới hiểu được câu tiếp theo.”
+
+For each marked term:
+
+```text
+unnecessary?
+→ remove it
+
+simple meaning?
+→ explain inline
+
+common recurring engineering term?
+→ inline + glossary
+
+mechanism-heavy concept?
+→ teach it before continuing
+```
+
+Audit both obvious technical terms and “ordinary engineer vocabulary” that experts often forget beginners may not know.
+
+Typical examples:
+
+```text
+overhead
+workload
+latency
+throughput
+predicate
+distribution
+contention
+invariant
+serialization
+idempotency
+consistency
+backpressure
+cardinality
+selectivity
+buffer
+partition
+payload
+metadata
+```
+
+This list is illustrative, not a glossary quota.
+
+### Success criterion
+
+Vocabulary should preserve the learner's reasoning flow:
+
+```text
+read
+→ understand enough
+→ continue reasoning
+```
+
+not:
+
+```text
+read
+→ stop
+→ search web
+→ read unrelated material
+→ return later
+→ reconstruct the original context
+```
+
+The goal is not to explain every English word.
+
+The goal is:
+
+> **No vocabulary should interrupt the learner's reasoning merely because the author assumed it was obvious.**
+
+---
+
+## 12. Vocabulary load budget
 
 Prefer one new major idea at a time.
 
@@ -232,7 +477,7 @@ If a paragraph requires 5–7 unfamiliar terms, the dependency order is probably
 
 ---
 
-## 9. Abstraction ladder
+## 13. Abstraction ladder
 
 For difficult topics:
 
@@ -251,7 +496,7 @@ Technical depth is not removed; it is placed after the mental model.
 
 ---
 
-## 10. Example progression
+## 14. Example progression
 
 Prefer:
 
@@ -289,7 +534,7 @@ Only generalize after the learner has seen a concrete mechanism.
 
 ---
 
-## 11. Toy → Realistic → Production
+## 15. Toy → Realistic → Production
 
 Use three scales intentionally.
 
@@ -319,7 +564,7 @@ Do not start with production complexity.
 
 ---
 
-## 12. Metrics must have an origin
+## 16. Metrics must have an origin
 
 Do not use production metrics as decoration.
 
@@ -360,7 +605,7 @@ Do not imply one metric replaces all others.
 
 ---
 
-## 13. Neighbor Concept rule
+## 17. Neighbor Concept rule
 
 When concepts belong to the same decision space, teach enough comparison to place the current concept correctly.
 
@@ -392,7 +637,7 @@ Then compare only what helps answer it.
 
 ---
 
-## 14. Keep abstractions distinct
+## 18. Keep abstractions distinct
 
 Do not collapse a broad abstraction into one implementation.
 
@@ -422,7 +667,7 @@ If the lesson focuses on one implementation, say so explicitly.
 
 ---
 
-## 15. Visuals are mechanism tools
+## 19. Visuals are mechanism tools
 
 Visuals are not decoration.
 
@@ -454,7 +699,7 @@ Choose the simplest medium that makes the mechanism visible.
 
 ---
 
-## 16. Progressive visual disclosure
+## 20. Progressive visual disclosure
 
 For multi-step mechanisms:
 
@@ -478,7 +723,7 @@ If animation is used:
 
 ---
 
-## 17. Visual ↔ evidence mapping
+## 21. Visual ↔ evidence mapping
 
 A simplified visual must connect to real evidence.
 
@@ -518,7 +763,7 @@ Label simplifications clearly. Do not present a teaching visual as a byte-level/
 
 ---
 
-## 18. Geometry represents data; prose explains data
+## 22. Geometry represents data; prose explains data
 
 Do not force long text into geometry.
 
@@ -549,7 +794,7 @@ Rules:
 
 ---
 
-## 19. Accessibility baseline
+## 23. Accessibility baseline
 
 Interactive learning UI must:
 
@@ -569,7 +814,7 @@ meaning > visual cleverness
 
 ---
 
-## 20. Mechanism-specific components
+## 24. Mechanism-specific components
 
 Learning visuals may live under:
 
@@ -591,7 +836,7 @@ Do not build abstraction infrastructure unless multiple real lessons prove the n
 
 ---
 
-## 21. Lab standard
+## 25. Lab standard
 
 A lab is not a list of commands.
 
@@ -612,7 +857,7 @@ The learner should know **what to look at and why** before running the command.
 
 ---
 
-## 22. Result Before Conclusion
+## 26. Result Before Conclusion
 
 Teach:
 
@@ -629,7 +874,7 @@ Do not state the conclusion first and make the lab merely confirm it.
 
 ---
 
-## 23. Isolate the learning question
+## 27. Isolate the learning question
 
 When possible, design each experiment to expose one main mechanism.
 
@@ -647,7 +892,7 @@ The rule is not “change one syntax token.” The rule is:
 
 ---
 
-## 24. Multiple-valid-outcomes rule
+## 28. Multiple-valid-outcomes rule
 
 Runtime/database/distributed experiments may have more than one valid result depending on:
 
@@ -671,7 +916,7 @@ Do not force the learner to obtain one exact output unless the experiment delibe
 
 ---
 
-## 25. Failure is first-class
+## 29. Failure is first-class
 
 Important lessons should include a meaningful failure or broken assumption.
 
@@ -690,7 +935,7 @@ Failure should expose the mechanism, not exist merely for drama.
 
 ---
 
-## 26. Debugging loop
+## 30. Debugging loop
 
 Use:
 
@@ -714,7 +959,7 @@ But the learner must then state:
 
 ---
 
-## 27. Why Chain
+## 31. Why Chain
 
 A deep explanation should connect:
 
@@ -730,7 +975,7 @@ Do not confuse depth with jargon count.
 
 ---
 
-## 28. Production story standard
+## 32. Production story standard
 
 A production scenario should include only useful realism.
 
@@ -754,7 +999,7 @@ Production complexity must come after the foundational mechanism.
 
 ---
 
-## 29. Trade-off standard
+## 33. Trade-off standard
 
 Do not teach a mechanism as “best practice” without context.
 
@@ -769,7 +1014,7 @@ For a recommendation, explain:
 
 ---
 
-## 30. Tool-after-problem
+## 34. Tool-after-problem
 
 Do not start from a tool.
 
@@ -792,7 +1037,7 @@ Tools are answers to problems, not the curriculum axis.
 
 ---
 
-## 31. Transfer challenge
+## 35. Transfer challenge
 
 Transfer must change a meaningful condition.
 
@@ -808,7 +1053,7 @@ Do not ask the learner to repeat the worked example with renamed variables.
 
 ---
 
-## 32. Explain it back
+## 36. Explain it back
 
 After understanding and practice:
 
@@ -820,7 +1065,7 @@ Technical English must not introduce new technical content.
 
 ---
 
-## 33. Technical and English mastery stay separate
+## 37. Technical and English mastery stay separate
 
 ### Technical mastery
 
@@ -844,7 +1089,7 @@ Do not merge these into one score.
 
 ---
 
-## 34. Recall standard
+## 38. Recall standard
 
 Final recall should test:
 
@@ -860,7 +1105,7 @@ Avoid recall questions that only ask for definitions.
 
 ---
 
-## 35. Research-backed authoring is mandatory for major lessons
+## 39. Research-backed authoring is mandatory for major lessons
 
 A Golden Lesson must not be authored only from model memory.
 
@@ -882,7 +1127,7 @@ original QuanNet synthesis
 
 ---
 
-## 36. Source roles
+## 40. Source roles
 
 Use sources for different jobs.
 
@@ -907,7 +1152,7 @@ Do not ask one source to do everything.
 
 ---
 
-## 37. Source hierarchy for factual claims
+## 41. Source hierarchy for factual claims
 
 Prefer:
 
@@ -925,7 +1170,7 @@ A teaching source may explain better than docs, but important facts should still
 
 ---
 
-## 38. Version-sensitive research
+## 42. Version-sensitive research
 
 For version-sensitive topics such as:
 
@@ -946,7 +1191,7 @@ Newer behavior may be noted as a boundary, not silently mixed into the lab.
 
 ---
 
-## 39. Video research rule
+## 43. Video research rule
 
 Video is especially useful for mechanisms that are hard to see:
 
@@ -972,7 +1217,7 @@ Do not choose by view count or SEO title.
 
 ---
 
-## 40. Teaching-pattern extraction
+## 44. Teaching-pattern extraction
 
 When researching an educator, extract:
 
@@ -988,7 +1233,7 @@ Do not copy their structure mechanically.
 
 ---
 
-## 41. Originality and copyright rule
+## 45. Originality and copyright rule
 
 Do not copy or closely reproduce:
 
@@ -1011,7 +1256,7 @@ QuanNet must synthesize original:
 
 ---
 
-## 42. Source map requirement
+## 46. Source map requirement
 
 A major Golden Lesson should maintain an author-facing source map, normally around 3–8 strong sources.
 
@@ -1031,7 +1276,7 @@ Source maps are authoring traceability, not required learner reading.
 
 ---
 
-## 43. Research stop condition
+## 47. Research stop condition
 
 Stop researching when:
 
@@ -1046,7 +1291,7 @@ More citations do not automatically improve the lesson.
 
 ---
 
-## 44. Further Learning
+## 48. Further Learning
 
 Further Learning is optional reinforcement.
 
@@ -1069,7 +1314,7 @@ Do not require Further Learning for core comprehension.
 
 ---
 
-## 45. Learner-first terminology audit
+## 49. Learner-first terminology audit
 
 Before freeze, scan the lesson as if the learner knows only the declared prerequisites.
 
@@ -1087,7 +1332,7 @@ If yes, fix the dependency flow or remove the term.
 
 ---
 
-## 46. “Could a beginner ask why?” audit
+## 50. “Could a beginner ask why?” audit
 
 For every major statement, ask:
 
@@ -1102,7 +1347,7 @@ If the lesson cannot answer near that point:
 
 ---
 
-## 47. Learner friction audit
+## 51. Learner friction audit
 
 Review specifically for:
 
@@ -1118,7 +1363,7 @@ Review specifically for:
 
 ---
 
-## 48. UI authoring rules
+## 52. UI authoring rules
 
 Learning UI must stay clean, compact and readable.
 
@@ -1138,7 +1383,7 @@ Semantic blocks should help scanning, not compete with the lesson.
 
 ---
 
-## 49. Markdown vs custom components
+## 53. Markdown vs custom components
 
 Use Markdown for narrative, code, tables and semantic blocks.
 
@@ -1154,7 +1399,7 @@ Do not convert normal prose into React components.
 
 ---
 
-## 50. Validation before freeze
+## 54. Validation before freeze
 
 Before considering a lesson technically complete, run relevant project validation, including the project's canonical commands such as:
 
@@ -1175,7 +1420,7 @@ Check desktop and mobile behavior.
 
 ---
 
-## 51. Freeze criteria
+## 55. Freeze criteria
 
 A lesson is not frozen merely because:
 
@@ -1212,7 +1457,7 @@ The learner can explain it back without reading definitions.
 
 ---
 
-## 52. Human study is the final acceptance gate
+## 56. Human study is the final acceptance gate
 
 AI review is not the final proof of teaching quality.
 
@@ -1234,7 +1479,7 @@ Do not enter endless AI polishing loops.
 
 ---
 
-## 53. Anti-patterns
+## 57. Anti-patterns
 
 Avoid:
 
@@ -1259,7 +1504,7 @@ Avoid:
 
 ---
 
-## 54. QuanNet canonical quality test
+## 58. QuanNet canonical quality test
 
 For every major concept, the learner should be able to answer:
 
@@ -1280,7 +1525,7 @@ If the learner can only recite a definition, the lesson is not finished.
 
 ---
 
-## 55. Final principle
+## 59. Final principle
 
 QuanNet should make the learner think:
 

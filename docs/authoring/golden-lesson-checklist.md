@@ -37,14 +37,20 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] Use tiny inspectable examples before generalization.
 - [ ] Move production complexity after the foundational mechanism.
 
-## D. Terminology
+## D. Terminology & vocabulary friction
 
 - [ ] No cold acronyms.
 - [ ] No undefined metrics.
 - [ ] No hidden prerequisite terms.
+- [ ] I can read the section without Googling a word merely to understand the next sentence.
+- [ ] A simple new term is explained inline at first meaningful use.
+- [ ] A recurring engineering term has glossary support when that adds value.
+- [ ] The lesson still makes sense without opening the glossary popup.
+- [ ] A mechanism-heavy term is taught as a mini-concept instead of being hidden in a tooltip.
 - [ ] Neighboring concepts are compared only around a real decision.
 - [ ] Low-value jargon is removed rather than merely defined.
 - [ ] Technical terms used in industry are preserved where useful.
+- [ ] English terminology is paired with concise Vietnamese meaning/examples when needed, rather than awkwardly translated away.
 
 ## E. Visuals
 
@@ -125,6 +131,7 @@ A lesson may be technically frozen when:
 - [ ] boundary/trade-off is clear;
 - [ ] transfer is meaningful;
 - [ ] no major unexplained terms remain;
+- [ ] no ordinary vocabulary forces a web search just to continue reading;
 - [ ] UI is readable.
 
 Technical freeze is not the final pedagogy proof.
@@ -135,7 +142,7 @@ After freeze:
 
 - [ ] learner studies the lesson from the beginning;
 - [ ] records where understanding breaks;
-- [ ] records unexplained/premature terms;
+- [ ] records unexplained/premature terms and vocabulary that caused a search detour;
 - [ ] records visuals that do not help;
 - [ ] records confusing lab outcomes;
 - [ ] records sections that feel too compressed or too verbose.
