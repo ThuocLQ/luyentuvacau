@@ -140,3 +140,26 @@ Một Golden Lesson đạt khi learner có thể nêu vấn đề thật, mô t�
 ## 10. UI scope
 
 QuanNet là learning dashboard nhẹ: roadmap, lesson tiếp theo, self-assessment và review. Không thêm gamification/analytics nếu chúng không làm learning loop tốt hơn.
+## 11. Prerequisite boundary and self-contained lessons
+
+Mỗi major lesson phải nói learner cần biết gì trước khi bắt đầu. Nếu một term/concept không nằm trong prerequisite boundary, lesson phải dạy nó theo Concept Origin flow, hoặc chủ ý link sang prerequisite phù hợp; không được silently depend on it.
+
+Core lesson phải self-contained: external article/video chỉ là reinforcement, không phải bước bắt buộc để hiểu mechanism, lab, decision boundary hay recall. Further Learning luôn nói rõ source hữu ích cho việc gì và chỉ giữ vài nguồn mạnh thay vì dump URL.
+
+## 12. Progressive visual disclosure, evidence and accessibility
+
+Với mechanism nhiều bước, visual ưu tiên `Predict → Reveal/Next → Observe → Explain`; không dump toàn bộ state ngay từ đầu. Mỗi visual vô hình phải nối mental model với observable evidence, ví dụ: toy eliminated rows ↔ `Rows Removed by Filter`; index range condition ↔ `Index Cond`; ordered output ↔ `Sort`; estimate ↔ actual rows; page/buffer model ↔ `BUFFERS`.
+
+Visual phải usable không cần hover: control touch-friendly và keyboard-accessible khi có interaction; có text alternative hữu ích; reduced-motion vẫn hiểu được mechanism; không có ý nghĩa nào chỉ dựa vào animation hoặc màu. Horizontal scroll chỉ intentional cho table/timeline/tree/flow rộng, và không được làm rộng toàn trang.
+
+## 13. Experiment interpretation guardrails
+
+Database/runtime lab có thể cho nhiều outcome hợp lệ theo version, cache, planner strategy, data và environment. Dạy `prediction → run → observe → interpret`, không hứa một output exact.
+
+Giữ explicit loop: baseline → thay đúng một biến → chạy lại → so evidence → interpret → conclude. Không kết luận trước evidence, và không dùng một field đơn lẻ ngoài context của operator/plan.
+
+## 14. Research stop condition and originality
+
+Research dừng khi core mechanism đã được verify, misconception chính đã biết, đã tìm được teaching representation mạnh, lab có thể kiểm chứng mechanism và production trade-off đủ grounded. Không browse vô hạn chỉ để tăng citation count.
+
+Không copy transcript, translated-transcript structure, source prose, diagram, screenshot hay near-identical animation. QuanNet tổng hợp thành narrative, example, visual và lab nguyên bản; source map giữ traceability cho author, không biến thành dependency của learner.

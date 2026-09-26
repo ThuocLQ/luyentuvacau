@@ -9,6 +9,7 @@ import PlannerEstimateVisual from './learning/index/PlannerEstimateVisual'
 import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
+import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
 
 vi.mock('../hooks/useReviewProgress', () => ({ useReviewProgress: () => ({ find: () => undefined, pin: vi.fn(), record: vi.fn(), remove: vi.fn() }) }))
 vi.mock('../hooks/useScrollSpy', () => ({ useScrollSpy: () => null }))
@@ -121,6 +122,35 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
   })
 
+  it('keeps Index as the broad idea and B-tree as the PostgreSQL 17 strategy', () => {
+    expect(indexLesson).toContain('Index là khái niệm rộng')
+    expect(indexLesson).toContain('**B-tree** là chiến lược Index cụ thể')
+    expect(indexLesson).toContain('PostgreSQL 17, `CREATE INDEX` mặc định tạo B-tree')
+  })
+
+  it('maps the scan visual to PostgreSQL evidence without treating emitted rows as examined rows', () => {
+    expect(indexLesson).toContain('`Rows Removed by Filter`')
+    expect(indexLesson).toContain('actual rows mà scan node emit')
+    expect(indexLesson).toContain('`actual rows` là output của scan node sau filtering')
+  })
+
+  it('removes the Limit confounder when the lab isolates estimate accuracy', () => {
+    const estimateExperiment = indexLesson.split('### Experiment 3')[1].split('### Experiment 4')[0]
+    const estimateSql = estimateExperiment.match(/```sql\n([\s\S]*?)```/)?.[1] ?? ''
+    expect(estimateSql).toContain('SELECT id')
+    expect(estimateExperiment).toContain('bỏ `LIMIT` và `ORDER BY`')
+    expect(estimateSql).not.toContain('LIMIT')
+    expect(estimateSql).not.toContain('ORDER BY')
+  })
+
+  it('introduces buffers before BUFFERS evidence and p95 only in the production story', () => {
+    const productionStory = indexLesson.indexOf('## Production story')
+    const beforeProduction = indexLesson.slice(0, productionStory)
+    expect(indexLesson.indexOf('shared buffers')).toBeLessThan(indexLesson.indexOf('### Experiment 3'))
+    expect(beforeProduction).not.toContain('p95')
+    expect(indexLesson).toContain('100 ms, 110 ms, 120 ms')
+    expect(indexLesson).toContain('youtube.com/watch?v=YZSHpDn7GP4')
+  })
   it('keeps the source map internal rather than exposing a dead learner link', () => {
     expect(raceLesson).not.toContain('/docs/research/race-condition-source-map')
   })
