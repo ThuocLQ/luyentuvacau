@@ -11,7 +11,8 @@
     "test": "vitest run",
     "validate": "npm run validate:content",
     "validate:content": "node scripts/validate-content.mjs",
-    "check": "npm run validate:content && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
+    "validate:css": "node scripts/validate-css-tokens.mjs",
+    "check": "npm run validate:content && npm run validate:css && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.4.1",
