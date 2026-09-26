@@ -1,4 +1,4 @@
-# QuanNet Engineering Learning Standard v2.2
+# QuanNet Engineering Learning Standard v2.3
 
 ## 1. Product goal
 
@@ -104,3 +104,51 @@ Index & Execution Plan là benchmark về độ sâu, không phải template hea
 ## 9. UI scope
 
 QuanNet là learning dashboard nhẹ: roadmap, lesson tiếp theo, self-assessment và review. Không thêm gamification/analytics phức tạp nếu chúng không cải thiện learning loop.
+## 10. Research-backed authoring
+
+Golden Learning Labs không được author chỉ từ model memory. Trước khi viết hoặc rewrite, author phải thực hiện research có mục đích học tập:
+
+```text
+Primary / official technical sources
++ high-quality engineering material
++ selected video or teaching material when a visual mechanism matters
++ realistic cases
+→ cross-check
+→ original QuanNet synthesis
+```
+
+Nguồn chính thức ưu tiên cho fact/semantics; maintainer/vendor material và nguồn engineering mạnh giúp giải thích production; video là teaching/visual reference, không mặc định là source-of-truth.
+
+Source hierarchy mặc định cho factual correctness:
+
+```text
+official specification / documentation
+→ maintainer or vendor engineering material
+→ strong independent technical material
+→ experienced technical educator
+→ community discussion
+```
+
+Đây không phải ranking mù: docs có thể khó dạy, teaching source có thể đơn giản hóa. QuanNet phải cross-check fact quan trọng bằng primary source. Với .NET, PostgreSQL, Kubernetes, AWS và framework/library API, ghi version/date khi behavior phụ thuộc version. Đánh giá video theo technical credibility, mechanism depth, clarity, visual quality, observable example, production relevance, freshness khi version-sensitive và mức khớp với nguồn chính thức. Không chọn chỉ vì view/title/SEO.
+
+Một major lesson thường cần ít nhất một primary source và một teaching-oriented source. Dùng thêm nguồn khi claim khó, version-sensitive hoặc contested. Khi nguồn khác nhau, kiểm tra version, workload, definition và abstraction level; nếu chưa đủ evidence, ghi uncertainty thay vì chọn một bên im lặng.
+
+### Originality and scope
+
+Không copy/translate transcript, article prose, diagram, screenshot hoặc animation của nguồn. Research cung cấp fact, misconception, teaching pattern và failure idea. QuanNet phải tạo narrative tiếng Việt, example, SVG/interaction, lab và transfer case nguyên bản. Không dump research vào lesson; chỉ giữ concept cần cho learning outcome.
+
+### Fact, model and engineering judgment
+
+- **Fact:** behavior có docs/spec/evidence hỗ trợ; ghi version/boundary khi quan trọng.
+- **Simplified mental model:** được phép để dạy mechanism, nhưng label khi không phải layout/implementation chính xác.
+- **Engineering judgment:** phụ thuộc context; nêu constraint, trade-off và evidence có thể đổi decision.
+
+### Research workflow and traceability
+
+Trước authoring, ghi internal/source note gồm: learning question, primary facts, common misconceptions, concept dependencies, visual pattern, realistic example, failure case, trade-off, potential outdated claim và sources. Dừng research khi mechanism đã được verify, misconception/teaching representation rõ, lab và production trade-off có evidence.
+
+Mỗi Golden Lesson có source map ngắn (khoảng 3–8 nguồn tốt): source, type, điều đã verify/học, và QuanNet sử dụng thế nào. Có thể có `Further Learning`, nhưng nêu rõ learner sẽ học thêm gì; core lesson phải self-contained. Chỉ thêm video timestamp khi đã kiểm tra trực tiếp, không suy đoán timestamp.
+
+### Research acceptance
+
+Trước publish, xác nhận research đã cải thiện ít nhất một trong: correctness, visual, example, failure/debug case hoặc production reasoning. Citation count không phải quality metric. Golden Lesson vẫn phải thỏa acceptance ở phần 8: hiểu → trace → evidence → lab → debug → trade-off → transfer → explain → recall.

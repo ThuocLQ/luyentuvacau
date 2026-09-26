@@ -5,6 +5,7 @@ import DocumentToc from './document/DocumentToc'
 import PersonalExample from './document/PersonalExample'
 import LearningMasteryPanel from './document/LearningMasteryPanel'
 import IndexGoldenLesson from './learning/index/IndexGoldenLesson'
+import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import TermTooltip from './TermTooltip'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -40,7 +41,8 @@ export default function MarkdownDocument({ doc }: Props) {
   const isLearning = contentKind === 'learning'
   const learningLesson = isLearning ? findLearningLesson(doc.slug) : undefined
   const learningDomain = learningLesson ? learningDomains.find(domain => domain.id === learningLesson.domainId) : undefined
-  const indexParts = useMemo(() => doc.slug === 'learning-index-execution-plan' ? doc.content.split(/\r?\n\{\{INDEX_VISUAL:([a-z]+)\}\}\r?\n/) : null, [doc.content, doc.slug])
+  const lessonParts = useMemo(() => ['learning-index-execution-plan', 'learning-race-condition'].includes(doc.slug) ? doc.content.split(/\r?\n\{\{(?:INDEX|RACE)_VISUAL:([a-z]+)\}\}\r?\n/) : null, [doc.content, doc.slug])
+  const indexParts = lessonParts
   const indexPartRenderings = useMemo(() => indexParts?.map((part, index) => index % 2 === 0 ? enhanceHtml(renderMarkdown(part)) : null) ?? null, [indexParts])
   const indexRendered = useMemo(() => indexPartRenderings ? {
     html: indexPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).map(part => part.html).join(''),
@@ -118,7 +120,7 @@ export default function MarkdownDocument({ doc }: Props) {
       </header>
       {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
       {!isLearning && mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
-      {indexParts && indexPartRenderings ? <article ref={articleRef} className="markdown-body">{indexParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: indexPartRenderings[index]?.html ?? '' }} /> : <IndexGoldenLesson key={`visual-${index}`} stage={part as 'scan' | 'btree' | 'composite' | 'planner' | 'plan'} />)}</article>
+      {indexParts && indexPartRenderings ? <article ref={articleRef} className="markdown-body">{indexParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: indexPartRenderings[index]?.html ?? '' }} /> : doc.slug === 'learning-index-execution-plan' ? <IndexGoldenLesson key={`visual-${index}`} stage={part as 'scan' | 'btree' | 'composite' | 'planner' | 'plan'} /> : <RaceGoldenLesson key={`visual-${index}`} stage={part as 'interleaving' | 'protection' | 'boundary'} />)}</article>
       : <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />}
       <PersonalExample slug={doc.slug} />
       {learningLesson && <LearningMasteryPanel lessonSlug={learningLesson.slug} />}
