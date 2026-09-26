@@ -74,7 +74,8 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.queryByText(/Page considered/)).not.toBeInTheDocument()
     expect(screen.getByText('Rows considered')).toBeInTheDocument()
     expect(screen.getByText('Candidate rows')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Index theo tenant' }))
+    expect(screen.queryByRole('button', { name: 'Index theo tenant' })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Shortcut theo tenant' }))
     expect(screen.getByText('Rows considered')).toBeInTheDocument()
   })
 
@@ -137,8 +138,8 @@ describe('Golden Learning Lab visuals', () => {
   it('removes the Limit confounder when the lab isolates estimate accuracy', () => {
     const estimateExperiment = indexLesson.split('### Experiment 3')[1].split('### Experiment 4')[0]
     const estimateSql = estimateExperiment.match(/```sql\n([\s\S]*?)```/)?.[1] ?? ''
-    expect(estimateSql).toContain('SELECT id')
-    expect(estimateExperiment).toContain('bỏ `LIMIT` và `ORDER BY`')
+    expect(estimateSql).toContain('SELECT id, created_at, total')
+    expect(estimateExperiment).toContain('cô lập một câu hỏi duy nhất')
     expect(estimateSql).not.toContain('LIMIT')
     expect(estimateSql).not.toContain('ORDER BY')
   })
@@ -150,6 +151,17 @@ describe('Golden Learning Lab visuals', () => {
     expect(beforeProduction).not.toContain('p95')
     expect(indexLesson).toContain('100 ms, 110 ms, 120 ms')
     expect(indexLesson).toContain('youtube.com/watch?v=YZSHpDn7GP4')
+  })
+  it('keeps ordered lookup as B-tree-specific in the final recall and summary', () => {
+    const finalRecall = indexLesson.split('## Final recall')[1]
+    expect(finalRecall).toContain('B-tree index trong bài này dùng property nào')
+    expect(finalRecall).toContain('B-tree index trong bài này dùng key có thứ tự')
+  })
+
+  it('uses p95 as a percentile threshold rather than claiming average always hides tail latency', () => {
+    const productionStory = indexLesson.split('## Production story')[1].split('## Trade-off')[0]
+    expect(productionStory).toContain('average duy nhất không mô tả được toàn bộ distribution')
+    expect(productionStory).toContain('95% request hoàn thành không chậm hơn mốc nào')
   })
   it('keeps the source map internal rather than exposing a dead learner link', () => {
     expect(raceLesson).not.toContain('/docs/research/race-condition-source-map')

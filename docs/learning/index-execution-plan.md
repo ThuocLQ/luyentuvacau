@@ -258,11 +258,11 @@ LIMIT 20;
 
 **Question:** planner dự đoán số row có gần số row scan node thực sự produce không?
 
-Query ở Experiment 2 giữ `ORDER BY ... LIMIT 20` vì đó là API shape thật. Nhưng `Limit` có thể làm operator bên dưới dừng sớm. Để chỉ đo một câu hỏi là estimate có chính xác không, ta tạm bỏ `LIMIT` và `ORDER BY`: đổi một biến tại một thời điểm.
+Query ở Experiment 2 giữ `ORDER BY ... LIMIT 20` vì đó là API shape thật. Nhưng `Limit` có thể làm operator bên dưới dừng sớm. Ở experiment này, ta chủ động đơn giản hóa query để cô lập một câu hỏi duy nhất: planner estimate có gần actual rows không? Ta tạm bỏ `ORDER BY` và `LIMIT` vì chúng có thể đưa sorting/early-stop behavior vào cùng một experiment.
 
 ```sql
 EXPLAIN (ANALYZE, BUFFERS)
-SELECT id
+SELECT id, created_at, total
 FROM orders
 WHERE tenant_id = 42 AND status = 'Paid';
 ```
@@ -297,7 +297,7 @@ Sắp response time từ nhanh tới chậm, **percentile** trả lời: “bao 
 | phần đuôi rất chậm ra sao? | `p99` |
 | có request chậm nhất bất thường không? | max |
 
-Không metric nào thay metric khác. Production case chọn `p95` vì muốn thấy trải nghiệm của phần lớn request, đồng thời không để average che mất tail. `p95` không mô tả “5% chậm nhất” chi tiết ra sao; nó chỉ nói xấp xỉ 95% observations ở hoặc dưới threshold đó.
+Không metric nào thay metric khác. Production case dùng `p95` vì một average duy nhất không mô tả được toàn bộ distribution. `p95` trả lời một câu khác: khoảng 95% request hoàn thành không chậm hơn mốc nào? Nó không mô tả “5% chậm nhất” chi tiết ra sao; nó chỉ nói xấp xỉ 95% observations ở hoặc dưới threshold đó.
 
 **Symptom:** Orders API trả 20 row; `p95` tăng từ 80 ms lên 1.8 s. `p95` ở đây nghĩa là xấp xỉ 95% request không chậm hơn mốc đo được. Đây là symptom, chưa phải kết luận “cần Redis”.
 
@@ -320,7 +320,7 @@ Nếu bị kẹt, đừng quay về định nghĩa. Hỏi lại: *cách đơn gi
 ## Final recall
 
 1. Vì sao scan vẫn là lựa chọn hợp lý trong vài query?
-2. Index tạo shortcut bằng property nào?
+2. B-tree index trong bài này dùng property nào để giảm vùng dữ liệu phải tìm?
 3. B-tree giải quyết giới hạn nào của danh sách key lớn có thứ tự?
 4. Vì sao composite index phải đọc theo tuple order?
 5. Planner cần estimate trước khi chạy query để làm gì?
@@ -328,7 +328,7 @@ Nếu bị kẹt, đừng quay về định nghĩa. Hỏi lại: *cách đơn gi
 7. Vì sao production case chọn p95 thay vì chỉ nhìn average?
 
 :::final-recall
-Index không hứa “nhanh hơn”. Nó đưa database tới vùng candidate bằng key có thứ tự. B-tree giúp loại range trên dữ liệu lớn; composite index theo thứ tự tuple; planner chọn giữa các access path nhờ estimate/statistics; `EXPLAIN` biến quyết định đó thành evidence; write/storage cost quyết định có nên giữ index hay không.
+Index không hứa “nhanh hơn”. B-tree index trong bài này dùng key có thứ tự và nhiều tầng routing để đưa database tới vùng candidate phù hợp hơn. Composite index theo thứ tự tuple; planner chọn giữa các access path nhờ estimate/statistics; `EXPLAIN` biến quyết định đó thành evidence; write/storage cost quyết định có nên giữ index hay không.
 :::
 
 ## Further learning
