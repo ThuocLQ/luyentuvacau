@@ -58,7 +58,7 @@ Phần phải không bị interleave sai được gọi là **critical section**
 
 {{RACE_VISUAL:protection}}
 
-Với một process, `lock` cho mutual exclusion: một execution giữ cùng lock object, execution khác phải chờ đến khi release. Đây là reason A hoàn tất check/write trước khi B đọc giá trị mới. `lock` không “làm class thread-safe” một cách thần kỳ; nó bảo vệ **vùng state mà mọi caller liên quan thực sự đi qua cùng lock**.
+Với một process, `lock` cho mutual exclusion: một execution giữ cùng lock object, execution khác phải chờ đến khi release. Đây là reason A hoàn tất check/write trước khi B đọc giá trị mới. `lock` không “làm class thread-safe” một cách thần kỳ; nó bảo vệ sự hợp tác giữa các code path thực sự dùng cùng `_balanceGate`, chứ không đặt một khóa toàn cục hoặc permanent lên dữ liệu balance.
 
 ```csharp
 private readonly object _balanceGate = new(); // C#/.NET version-neutral sample
@@ -98,7 +98,7 @@ Nhưng `Interlocked.Increment` không tự bảo vệ invariant “chỉ rút kh
 ## Hands-on Lab
 
 :::hands-on
-Đây là **local simulation**: console app chạy trên máy bạn, không dùng production database. Barrier/delay trong experiment chỉ là teaching instrumentation để tạo interleaving có kiểm soát; không phải cách debug production chính.
+Đây là **local simulation**: console app chạy trên máy bạn, không dùng production database. `Barrier` và `ManualResetEventSlim` trong lab chỉ là teaching instrumentation để tạo interleaving có kiểm soát; không phải cách debug production chính.
 :::
 
 Tạo console app:
@@ -108,36 +108,77 @@ dotnet new console -n RaceLab
 cd RaceLab
 ```
 
-Thay `Program.cs` bằng code sau rồi chạy `dotnet run`.
+Thay `Program.cs` bằng code sau rồi chạy `dotnet run`. Ba phần chạy độc lập trong cùng một file, nên không cần tự thay `Task` hay sửa lại `Barrier`.
 
 ```csharp
 using System.Threading;
 
-var balance = 100;
-var start = new Barrier(2);
-var release = new Barrier(2);
-
-Task<bool> UnsafeWithdraw(int amount) => Task.Run(() =>
+// 1. Sequential baseline
+var sequentialBalance = 100;
+bool SequentialWithdraw(int amount)
 {
-    var current = balance;       // READ
-    start.SignalAndWait();       // cả hai đã đọc cùng snapshot
-    var allowed = current >= amount; // CHECK
-    release.SignalAndWait();     // teaching gate, cho WRITE xen kẽ
-    if (allowed) balance = current - amount; // WRITE
-    return allowed;
-});
+    if (sequentialBalance < amount) return false;
+    sequentialBalance -= amount;
+    return true;
+}
+var sequentialResults = new[] { SequentialWithdraw(80), SequentialWithdraw(30) };
+Console.WriteLine($"sequential: approvedCount={sequentialResults.Count(x => x)}, approvedAmount=80, finalBalance={sequentialBalance}");
 
-var results = await Task.WhenAll(UnsafeWithdraw(80), UnsafeWithdraw(30));
-Console.WriteLine($"approved={results.Count(x => x)}, balance={balance}");
+// 2. Controlled unsafe reproduction: both calls read 100 before either writes.
+var unsafeBalance = 100;
+using var bothRead = new Barrier(2);
+using var releaseWrite = new Barrier(2);
+Task<WithdrawalResult> UnsafeWithdraw(int amount) => Task.Run(() =>
+{
+    var current = unsafeBalance; // READ
+    bothRead.SignalAndWait();
+    var approved = current >= amount; // CHECK
+    releaseWrite.SignalAndWait();
+    if (approved) unsafeBalance = current - amount; // WRITE from a stale snapshot
+    return new WithdrawalResult(approved, approved ? amount : 0);
+});
+var unsafeResults = await Task.WhenAll(UnsafeWithdraw(80), UnsafeWithdraw(30));
+Console.WriteLine($"unsafe: approvedCount={unsafeResults.Count(x => x.Approved)}, approvedAmount={unsafeResults.Sum(x => x.ApprovedAmount)}, finalBalance={unsafeBalance}");
+
+// 3. Controlled protected version: A owns the same gate before B can enter it.
+var protectedBalance = 100;
+var gate = new object();
+using var firstOwnsGate = new ManualResetEventSlim(false);
+using var releaseFirst = new ManualResetEventSlim(false);
+WithdrawalResult SafeWithdrawInsideGate(int amount)
+{
+    if (protectedBalance < amount) return new(false, 0);
+    protectedBalance -= amount;
+    return new(true, amount);
+}
+var first = Task.Run(() =>
+{
+    lock (gate)
+    {
+        firstOwnsGate.Set();
+        releaseFirst.Wait();
+        return SafeWithdrawInsideGate(80);
+    }
+});
+firstOwnsGate.Wait();
+var second = Task.Run(() =>
+{
+    lock (gate) return SafeWithdrawInsideGate(30);
+});
+releaseFirst.Set();
+var protectedResults = await Task.WhenAll(first, second);
+Console.WriteLine($"protected: approvedCount={protectedResults.Count(x => x.Approved)}, approvedAmount={protectedResults.Sum(x => x.ApprovedAmount)}, finalBalance={protectedBalance}");
+
+record WithdrawalResult(bool Approved, int ApprovedAmount);
 ```
 
 ### Experiment 1 — sequential baseline
 
 **Question:** nếu gọi withdraw 80 rồi withdraw 30 theo thứ tự, output nào giữ invariant?
 
-**Predict:** chỉ một success, balance 20.
-**Run:** thay hai `Task` bằng hai method call tuần tự.
-**Inspect:** số operation thành công và balance cuối.
+**Predict:** chỉ một success, `approvedAmount=80`, `finalBalance=20`.
+**Run:** đọc dòng `sequential` của chương trình, không thay đổi code.
+**Inspect:** `approvedCount`, `approvedAmount`, `finalBalance`.
 **Observation / Why:** B đọc state sau write của A. Không có interleaving vào logical operation.
 **Learn:** sequential success chưa chứng minh code concurrent-safe; nó chỉ là baseline cho invariant.
 
@@ -145,19 +186,19 @@ Console.WriteLine($"approved={results.Count(x => x)}, balance={balance}");
 
 **Question:** code có thể accept bao nhiêu withdrawal khi cả hai cùng đọc 100?
 
-**Predict:** cả hai `true`, dù final balance có thể là 20 hoặc 70 tùy execution order.
-**Run:** chạy code Barrier ở trên.
-**Inspect:** `approved=2` và `balance`.
-**Observation:** final balance không nhất thiết tái hiện giống nhau; approved total 110 mới là evidence invariant violation.
-**Why:** current là local snapshot; `WRITE` sau không biết request khác đã thay đổi state.
+**Predict:** cả hai được approve, `approvedAmount=110`; `finalBalance` có thể là 20 hoặc 70 vì write cuối dùng snapshot cũ.
+**Run:** đọc dòng `unsafe`; hai `Barrier` đã buộc cả hai call hoàn tất READ trước khi WRITE.
+**Inspect:** `approvedCount=2`, `approvedAmount=110`, `finalBalance`.
+**Observation:** approved total 110 là evidence invariant violation, dù final balance có thể trông “hợp lý”.
+**Why:** `current` là local snapshot; WRITE sau không biết request khác đã thay đổi state.
 **Learn:** “chạy một lần không lỗi” không phải proof of thread safety. Reasoning phải bao phủ interleaving được phép.
 
 ### Experiment 3 — reproduce có kiểm soát
 
 **Question:** tại sao không chỉ chạy 1.000 lần rồi chờ bug?
 
-**Predict:** Barrier làm cả hai READ trước CHECK/WRITE nên failure mechanism xuất hiện có chủ đích.
-**Run:** giữ hai `Barrier` và log `current`, `amount`, result.
+**Predict:** `Barrier` làm cả hai READ trước CHECK/WRITE nên failure mechanism xuất hiện có chủ đích.
+**Run:** giữ hai `Barrier` trong block `unsafe` và thêm log `current`, `amount`, result nếu muốn quan sát.
 **Inspect:** hai `current=100`, hai accepted result.
 **Why:** timing gate là evidence aid trong lab; nó không phải production fix.
 **Learn:** debug race bằng candidate timeline, boundary và evidence, không bằng random `Thread.Sleep`.
@@ -166,45 +207,22 @@ Console.WriteLine($"approved={results.Count(x => x)}, balance={balance}");
 
 **Question:** nếu toàn bộ check/update đi qua một shared `lock`, B sẽ thấy gì?
 
-```csharp
-var gate = new object();
-var balance = 100;
-bool SafeWithdraw(int amount)
-{
-    lock (gate)
-    {
-        if (balance < amount) return false;
-        balance -= amount;
-        return true;
-    }
-}
+**Run:** đọc dòng `protected`. `firstOwnsGate` chỉ làm demo reproducible: A đã giữ gate trước khi B thử vào. Nó không phải một phần của production solution.
+**Inspect:** `approvedCount=1`, `approvedAmount=80`, `finalBalance=20`.
+**Why:** B chỉ vào critical section sau khi A release chính **cùng một** gate, rồi đọc 20.
+**Learn:** lock placement phải cover read/check/write của invariant, không chỉ final assignment.
 
-var results = await Task.WhenAll(
-    Task.Run(() => SafeWithdraw(80)),
-    Task.Run(() => SafeWithdraw(30)));
-Console.WriteLine($"approved={results.Count(x => x)}, balance={balance}");
-```
+### Optional observation — contention và scope (không phải experiment chạy sẵn)
 
-**Inspect:** một `true`, balance 20.
-**Why:** B only enters the critical section after A releases the same gate, then reads 20.
-**Learn:** lock placement must cover the invariant’s read/check/write boundary, not just the final assignment.
-
-### Experiment 5 — observe contention and scope
-
-**Question:** cost mới của protection là gì?
-
-**Run:** trong `SafeWithdraw`, đo thời gian wait trước khi vào lock (chỉ trong lab) và tăng số concurrent call.
-**Inspect:** throughput/wait time, nhưng đừng kết luận từ laptop benchmark nhỏ.
-**Learn:** correctness trước; sau đó đo contention để chọn granularity. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant.
-
+Sau khi correctness đã được chứng minh, bạn có thể đo thời gian chờ trước `lock` trong một benchmark riêng và tăng số concurrent call. Dùng kết quả đó để cân nhắc granularity; đừng kết luận từ laptop benchmark nhỏ. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant.
 ## Debug from evidence
 
 Khi production có duplicate reservation, missing update hoặc final count bất thường, dùng loop này:
 
-1. **Observation:** record final value, successful operation count, operation/correlation ID và instance ID.
+1. **Observation:** ghi lại final value, successful operation count, operation ID (mã nhận diện một lần xử lý) và instance ID.
 2. **Shared state + invariant:** state nào bị cùng đọc/ghi; rule nào bị vỡ?
 3. **Hypothesis:** viết một candidate interleaving như A read → B read → A/B check → writes.
-4. **Evidence:** log structured theo operation, database affected-row count/version, trace timeline; thread/task ID chỉ thêm khi thực sự giúp phân biệt work.
+4. **Evidence:** structured log theo operation, số row update thực tế và version concurrency (nếu flow có dùng), trace timeline; thread/task ID chỉ thêm khi thực sự giúp phân biệt work.
 5. **Experiment:** reproduce trong test/local simulation bằng controllable gate; không lấy random sleep làm primary technique.
 6. **Fix boundary:** bảo vệ đúng source of truth, rồi viết regression test cho invariant.
 
@@ -223,18 +241,18 @@ WHERE sku = 'A-1' AND quantity > 0
 RETURNING quantity;
 ```
 
-**Evidence:** affected row/`RETURNING` nói request nào giữ item. Nhưng đây không tự bảo vệ external side effect sau update: nếu còn payment/reservation cross-system, cần state/recovery design riêng.
+**Evidence:** số row được update và `RETURNING` cho biết request nào giữ item. Nhưng đây không tự bảo vệ external side effect sau update: nếu còn payment/reservation cross-system, cần state/recovery design riêng.
 
 ## Production case: inventory = 1, checkout chạy nhiều instance
 
 **Symptom:** hai checkout cùng báo success cho SKU chỉ còn 1.
 **Known facts:** app có 4 instance; mỗi instance có local `lock`; database log cho hai order.
 **Invariant:** không accept quá 1 reservation.
-**Unknown:** state nào là source of truth, SQL update condition/version có tồn tại không, payment đã charge chưa, duplicate có tới từ retry hay interleaving?
+**Unknown:** state nào là source of truth, SQL update condition hoặc version concurrency (nếu dùng optimistic concurrency) có tồn tại không, payment đã charge chưa, duplicate có tới từ retry hay interleaving?
 **Candidate interleaving:** request A/B vào instance khác nhau; gate A/gate B không phối hợp; cả hai đọc availability cũ.
-**Evidence:** query affected-row count, order/reservation rows, instance/correlation IDs, provider operation IDs.
+**Evidence:** query số row update thực tế, order/reservation rows, instance ID và provider operation ID.
 **Correctness boundary:** đặt reservation rule ở database transaction/concurrency boundary; local lock chỉ có thể giảm contention trong từng process.
-**Trade-off:** conditional update giữ invariant sát data nhưng caller phải xử lý 0 row/conflict; serializing rộng hơn có thể giảm throughput; external side effect cần idempotency/recovery riêng.
+**Trade-off:** conditional update giữ invariant sát data nhưng caller phải xử lý 0 row/conflict; serializing rộng hơn có thể giảm throughput; external side effect cần state và recovery flow riêng.
 
 Không chọn “use lock” trước khi biết state sống ở đâu. Không chọn distributed lock chỉ vì app scale-out.
 
@@ -246,7 +264,7 @@ Không chọn “use lock” trước khi biết state sống ở đâu. Không 
 | READ/CHECK/WRITE trên in-memory state | Mọi caller có dùng cùng gate/process không? | `lock` ngắn, đúng scope |
 | Tối đa 5 I/O call đang chạy | Đây là capacity limit, không phải invariant state? | `SemaphoreSlim` / bounded concurrency |
 | Inventory/order ở database | Source of truth có thể atomically enforce rule không? | conditional update, transaction, optimistic concurrency |
-| Nhiều system/external side effect | Điều gì atomic, điều gì unknown outcome? | idempotency, state machine, reconciliation theo case |
+| Nhiều system/external side effect | Điều gì atomic, điều gì unknown outcome? | idempotency (retry không lặp side effect), state machine, reconciliation theo case |
 
 ## Transfer Challenge
 
@@ -259,7 +277,7 @@ Trước khi xem model, trả lời:
 - invariant nào cần giữ?
 - bạn thiếu evidence gì, evidence đó ảnh hưởng decision nào và sẽ kiểm ở đâu?
 
-Checklist: có coupon usage record/unique rule hay chưa; retry/idempotency có thể tạo duplicate không; affected-row count/constraint violation cho evidence gì; external discount side effect cần recovery gì.
+Checklist: có coupon usage record/unique rule hay chưa; retry có thể gửi lại request và tạo duplicate không; số row update/constraint violation cho evidence gì; external discount side effect cần recovery gì.
 
 Model direction: local lock không đủ qua 4 instance. Nếu database sở hữu “một coupon chỉ dùng một lần”, unique/conditional database operation là candidate gần rule hơn. Nhưng cần biết transaction boundary và retry behavior trước khi kết luận final design.
 
@@ -269,7 +287,7 @@ Model direction: local lock không đủ qua 4 instance. Nếu database sở h�
 
 Sau khi tự nói, check xem bạn có đủ: shared mutable state, invariant, local snapshot, interleaving, non-atomic logical operation, critical section/correctness boundary và evidence.
 
-Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi correctness của shared state phụ thuộc vào thứ tự execution không được kiểm soát. Với balance 100, A và B cùng READ 100 rồi cùng CHECK nên đều được accept; các WRITE sau dùng snapshot cũ, tổng withdrawal đã vượt invariant. Trong một process, em có thể dùng cùng `lock` cho cả read/check/write. Nếu state ở database hoặc có nhiều instance, local lock không phối hợp được; em đặt rule ở database boundary và nhìn affected rows/version để verify.”
+Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi correctness của shared state phụ thuộc vào thứ tự execution không được kiểm soát. Với balance 100, A và B cùng READ 100 rồi cùng CHECK nên đều được accept; các WRITE sau dùng snapshot cũ, tổng withdrawal đã vượt invariant. Trong một process, em có thể dùng cùng `lock` cho cả read/check/write. Nếu state ở database hoặc có nhiều instance, local lock không phối hợp được; em đặt rule ở database boundary và kiểm tra số row update thực tế và version concurrency (nếu flow dùng) để verify.”
 
 **Technical English:** `shared mutable state`, `race condition`, `interleaving`, `atomic operation`, `critical section`, `mutual exclusion`, `contention`, `process-local lock`.
 
@@ -291,7 +309,6 @@ Tóm tắt: trace state trước, đặt tên race sau; bảo vệ invariant ch�
 - [Official `Interlocked` reference](https://learn.microsoft.com/en-us/dotnet/api/system.threading.interlocked) — phạm vi atomic update đơn giản.
 - [TAP with async/await](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/task-asynchronous-programming-model) — hiểu `await` không đồng nghĩa tạo thread.
 - [Visual race-condition explanation](https://www.youtube.com/watch?v=zMzo0xcS37o) — reinforcement cho interleaving/critical section; technical claims trong QuanNet đã cross-check bằng official docs.
-- [Source map for this lesson](/docs/research/race-condition-source-map) — traceability cho author/reviewer, không phải prerequisite.
 
 ## Continue
 

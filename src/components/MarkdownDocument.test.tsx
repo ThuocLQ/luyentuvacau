@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import MarkdownDocument from './MarkdownDocument'
 import IndexGoldenLesson from './learning/index/IndexGoldenLesson'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
+import raceLesson from '../../docs/learning/race-condition.md?raw'
 
 vi.mock('../hooks/useReviewProgress', () => ({ useReviewProgress: () => ({ find: () => undefined, pin: vi.fn(), record: vi.fn(), remove: vi.fn() }) }))
 vi.mock('../hooks/useScrollSpy', () => ({ useScrollSpy: () => null }))
@@ -39,6 +40,7 @@ describe('Golden Learning Lab visuals', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(screen.getByText(/Cả A và B đều đọc 100/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
     fireEvent.click(screen.getByLabelText(/Cả hai có thể được chấp nhận/))
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
@@ -59,6 +61,16 @@ describe('Golden Learning Lab visuals', () => {
     render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'learning-race-condition', title: 'Race', contentKind: 'learning', content: `# Test\n\n{{RACE_VISUAL:interleaving}}\n\n{{RACE_VISUAL:protection}}\n\n{{RACE_VISUAL:boundary}}\n\n## Sau visual` }} /></MemoryRouter>)
     expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
+  })
+
+  it('renders a Learning document without a registered visual normally', () => {
+    render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'learning-no-visual', title: 'No visual', contentKind: 'learning', content: '# No visual\n\nNội dung học vẫn hiển thị.' }} /></MemoryRouter>)
+    expect(screen.getByText('Nội dung học vẫn hiển thị.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
+  })
+
+  it('keeps the source map internal rather than exposing a dead learner link', () => {
+    expect(raceLesson).not.toContain('/docs/research/race-condition-source-map')
   })
 
   it('keeps Quick mode available for reference Markdown', () => {
