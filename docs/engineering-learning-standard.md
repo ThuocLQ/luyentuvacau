@@ -1,154 +1,142 @@
-# QuanNet Engineering Learning Standard v2.3
+# QuanNet Engineering Learning Standard v2.4
 
 ## 1. Product goal
 
-QuanNet giúp Backend .NET developer Việt Nam **hiểu cơ chế, tự kiểm chứng, debug, giải thích và chuyển kiến thức sang tình huống mới**. Một lesson không được xem là hoàn thành chỉ vì người học đã đọc hết hoặc trả lời đúng một câu hỏi.
+QuanNet giúp Backend .NET developer Việt Nam **hiểu cơ chế, tự kiểm chứng, debug, giải thích và chuyển kiến thức sang tình huống mới**. Một lesson chưa hoàn thành chỉ vì learner đã đọc hết hoặc trả lời đúng một câu.
 
-**Mastery > Calendar.** Tiến độ và streak chỉ là tín hiệu phụ. Dấu hiệu học chắc là người học mô tả được mechanism, dự đoán được outcome, dùng evidence để sửa giả thuyết, và nêu được trade-off trong context mới.
+**Mastery > Calendar.** Tiến độ và streak là tín hiệu phụ. Dấu hiệu học chắc là learner mô tả được mechanism, dự đoán outcome, dùng evidence để sửa giả thuyết, và nêu trade-off trong context mới.
 
-## 2. Depth before brevity
+Nguyên tắc nền tảng của v2.4: **Concept Origin Before Definition**. Learner cần hiểu vì sao con người phải tạo ra concept trước khi nhớ tên của nó.
 
-Viết ngắn chỉ tốt khi người học đã có mental model. Với topic mới, ưu tiên giải thích đủ sâu rồi mới nén thành recall. Không dùng một slogan để thay cho quan hệ nguyên nhân–kết quả.
+## 2. Concept origin and name-it-late
 
-Mỗi lesson công bố rõ prerequisite boundary: người học cần biết gì, và không cần biết gì. Không đưa một concept mới vào câu giải thích khi nó chưa được định nghĩa hoặc chưa có chỗ để người học quan sát nó.
+Không mở một concept quan trọng bằng định nghĩa. Xây nhu cầu theo thứ tự:
 
-Ở lần đầu xuất hiện:
+```text
+question / problem
+→ simplest approach
+→ what it can do
+→ where it breaks
+→ new property we need
+→ intuitive solution
+→ technical name
+→ short definition
+→ mechanism and evidence
+```
 
-- giữ thuật ngữ chuẩn của ngành khi đó là cách developer dùng thật;
-- định nghĩa ngắn bằng tiếng Việt tự nhiên;
-- nói concept đó giải quyết vấn đề nào và nó liên hệ với concept ngay trước ra sao;
-- chỉ dùng song ngữ khi nó giúp nhận diện thuật ngữ trong tài liệu, log hoặc phỏng vấn.
+First-use của một concept khó phải trả lời: vấn đề gì đang có, cách đơn giản là gì, nó thiếu gì, ý tưởng trực giác nào giải quyết chỗ thiếu đó, rồi mới gọi tên thuật ngữ. Dùng một ví dụ nhỏ trước khi tổng quát hóa.
 
-Kiểm soát **vocabulary load**: một đoạn không mở quá nhiều thuật ngữ mới. Kiểm soát **concept dependency**: planner chỉ xuất hiện sau access path; estimate chỉ xuất hiện khi đã có “dự đoán trước khi chạy”; buffer chỉ xuất hiện sau page/buffer mental model.
+`Name it late`: nói “database cần chọn đường lấy dữ liệu ít work hơn” trước khi nói `planner`; nói “bước này dự kiến trả ra bao nhiêu row” trước khi nói `cardinality estimate`. Không trì hoãn tên nếu tên đó cần để đọc evidence, nhưng không dùng tên như điểm bắt đầu.
 
-## 3. Teaching sequence
+## 3. Dependency, vocabulary and abstraction
 
-Mặc định dùng progression **Toy → Realistic → Production**:
+Concept dependency gồm cả **motivation dependency**: learner không chỉ biết A trước B, mà còn biết A tồn tại để giải quyết vấn đề gì trước khi A dùng để giải thích B.
 
-1. Toy model cô lập một mechanism với dữ liệu nhỏ.
-2. Realistic example thêm query shape, failure hoặc data distribution gần công việc thật.
-3. Production case thêm symptom, evidence, unknowns, risk, rollout và recovery.
+Mỗi learning step ngắn ưu tiên một ý mới. Nếu một đoạn phải mang 5–7 thuật ngữ chưa giải thích, dependency order đang sai. Ở lần đầu xuất hiện, giữ thuật ngữ ngành khi developer dùng thật, giải thích ngắn bằng tiếng Việt tự nhiên, nối nó với câu hỏi trước đó và chỉ dùng song ngữ khi có ích cho log, docs hoặc interview.
 
-Áp dụng progressive disclosure. Người học thấy một lớp quyết định trước; chi tiết tiếp theo chỉ mở khi nó trả lời câu hỏi đang có. Không dump một execution plan, bảng metric hoặc architecture diagram ngay đầu bài.
+Với concept khó, đi theo abstraction ladder:
 
-Một giải thích sâu phải có **Why Chain**: điều gì xảy ra → tại sao mechanism đó tạo outcome → dấu hiệu nào quan sát được → khi assumption thay đổi thì kết luận nào đổi. Định nghĩa không có mechanism và evidence chưa đủ.
+```text
+concrete problem → intuitive/physical picture → simple mechanism
+→ technical abstraction → real evidence
+```
 
-## 4. Visuals are teaching, not decoration
+Không cắt technical depth; đặt nó sau mental model, theo thứ tự intuition → mechanism → evidence → nuance.
 
-Visual chỉ tồn tại khi nó dạy một mechanism, một quality attribute hoặc một execution trace mà prose đơn thuần khó làm rõ.
+## 4. Metrics and neighboring concepts
 
-Visual tốt cần có:
+Không đưa acronym hoặc metric như `p95`, `p99`, `SLO`, `RPS`, `TTL`, `GC` vào bài như prerequisite ngầm. Trước metric quan trọng, lesson phải cho biết:
 
-- input/query hoặc state ban đầu;
-- prediction trước khi reveal khi phù hợp;
-- từng bước chuyển state, phần bị loại/chọn và lý do;
-- control learner-driven: Reset, Previous, Next; không autoplay;
-- reduced-motion support và mobile-readable layout;
-- mapping từ visual sang evidence thật: plan, log, metric, query output hoặc test.
+- câu hỏi nào đang cần trả lời;
+- thứ gì được đo và đơn vị/ý nghĩa thực tế;
+- cách nhìn đơn giản nào có thể dùng trước;
+- vì sao cách đó chưa đủ;
+- metric này cho thêm điều gì;
+- metric gần nó khác nhau thế nào.
 
-Dùng SVG khi cần biểu diễn cấu trúc/đường đi thật (tree, graph, flow). Không dùng một chuỗi card hoặc box thay cho cơ chế cần học. Không xây generic diagram engine nếu một visual tập trung giải quyết đúng một lesson sẽ rõ và dễ bảo trì hơn.
+Metric origin rule: không dùng metric để trang trí production story. Ví dụ latency bắt đầu từ “user chờ response bao lâu?”, sau đó mới đặt average, p50, p95, p99 và max cạnh nhau theo câu hỏi chúng trả lời. Nếu metric không đổi decision, bỏ nó.
 
-## 5. Labs must teach
+Neighbor concept rule: khi có những lựa chọn cùng problem space, đặt đủ ngữ cảnh để learner biết chúng cùng giải quyết gì, khác ở đâu và khi nào concept chính hữu ích hơn. Comparison chỉ xuất hiện sau một decision question, không phải một bảng để học thuộc.
 
-Lab là **local simulation** hoặc sandbox trừ khi được live-verified rõ ràng. Lab không phải checklist lệnh chạy.
+## 5. Teaching sequence and visuals
 
-Mỗi experiment có flow:
+Mặc định dùng **Toy → Realistic → Production**:
 
-1. **Question** — đang kiểm tra hypothesis nào?
-2. **Predict** — learner dự đoán mechanism/outcome trước.
-3. **Run** — lệnh nhỏ, deterministic khi có thể.
-4. **Inspect** — chỉ rõ output, field, metric hay log cần nhìn.
-5. **Interpret** — outcome nói gì và không nói gì.
-6. **Why** — nối evidence về mental model.
-7. **Learn** — rule quyết định có điều kiện.
+1. Toy cô lập mechanism bằng số nhỏ.
+2. Realistic thêm query shape, failure hoặc data distribution gần công việc thật.
+3. Production thêm symptom, evidence, unknown, risk và trade-off.
 
-Nhiều outcome có thể hợp lệ theo version, cache, cost model và dữ liệu. Dạy `result before conclusion`: ghi observation trước, rồi mới tạo hypothesis. Có ít nhất một Break It / debug flow khi failure là phần quan trọng: observation → hypothesis → evidence → experiment → conclusion/recovery.
+Giải thích sâu phải có Why Chain: điều gì xảy ra → vì sao mechanism tạo outcome → evidence nào quan sát được → assumption nào đổi thì kết luận nào đổi.
 
-## 6. Senior layer
+Visual chỉ tồn tại khi nó trả lời một learning question chính. Nó cần input/state ban đầu, prediction trước reveal khi phù hợp, từng bước state chuyển đổi, learner-driven control và mapping sang evidence thật. Dùng SVG khi cần thể hiện structure/path thật; không làm generic diagram engine khi visual tập trung rõ hơn.
 
-Senior content không phải thêm acronym. Nó phải làm rõ decision boundary:
+**Geometry represents data. Prose explains data.** Không nhét prose vào narrow bar, circle, tiny node hay percentage-width shape. Không dùng long vertical semantic label, `nowrap` cho prose trong geometry động, hoặc decoration chồng lên content. Ở mọi breakpoint, meaning quan trọng hơn layout cleverness; horizontal scroll chỉ dùng chủ ý cho table, timeline, tree hoặc flow rộng.
 
-- symptom và known facts;
-- điều còn unknown;
-- các hypothesis cạnh tranh;
-- evidence phân biệt chúng;
-- decision, trade-off, blast radius, rollout/canary/rollback hoặc reconciliation khi phù hợp.
+## 6. Labs and production reasoning
 
-Không gọi một giải pháp là best practice nếu chưa nêu workload, correctness requirement, ownership và failure mode. Anti-pattern phải có lý do cơ chế, không chỉ ghi “không nên”.
+Lab là **local simulation** hoặc sandbox trừ khi đã `live-verified`. Lab không phải checklist lệnh. Mỗi experiment đi theo:
 
-Transfer case cho phép câu trả lời “chưa đủ thông tin”. Bài mẫu phải chỉ ra cần thêm dữ kiện nào, vì dữ kiện đó ảnh hưởng decision nào, và sẽ lấy evidence ở đâu.
+1. Question;
+2. Predict;
+3. Run;
+4. Inspect;
+5. Interpret;
+6. Why;
+7. Learn.
+
+Dạy result before conclusion. Nếu version, cache, cost model hay data có thể tạo nhiều outcome, ghi rõ boundary. Khi failure quan trọng, thêm break/debug flow: observation → hypothesis → evidence → experiment → conclusion/recovery.
+
+Senior layer làm rõ decision boundary: symptom, known facts, unknown, hypothesis cạnh tranh, evidence phân biệt, decision, trade-off và blast radius/rollout/recovery khi phù hợp. Không gọi giải pháp là best practice nếu chưa nói workload, correctness requirement, ownership và failure mode.
 
 ## 7. Explain, recall and assessment
 
-`Explain it back` luôn yêu cầu learner tự trả lời trước. Sau đó mới hiện checklist, rồi model answer ngắn, chính xác bằng tiếng Việt tự nhiên và technical English vừa đủ.
+`Explain it back` bắt learner tự trả lời trước, sau đó mới có checklist và model answer ngắn. Final Recall hỏi câu cụ thể, không phải bản rút gọn của bài.
 
-`Final Recall` hỏi câu cụ thể trước khi đưa summary. Recall không được là bản sao ngắn hơn của cả lesson.
+Quiz và interview follow-up dùng cùng terminology với lesson; phải có context, constraint, evidence và rationale. Không dùng English-heavy hoặc jargon để làm khó learner.
 
-Quiz và interview follow-up dùng cùng terminology với lesson. Câu hỏi cần context, constraints, evidence và rationale; không dùng English-heavy hoặc thuật ngữ để làm khó người học.
+## 8. Research-backed authoring
 
-## 8. Golden Lesson acceptance criteria
-
-Một Golden Lesson đạt khi người học có thể:
-
-- nêu vấn đề thật mà concept giải quyết;
-- mô tả mechanism bằng ngôn ngữ của mình;
-- dự đoán và đọc một visual/execution trace;
-- chạy hoặc diễn giải lab evidence;
-- debug ít nhất một assumption sai;
-- cân nhắc production trade-off và unknown;
-- giải thích ngắn gọn trong interview;
-- transfer sang case lạ mà không overclaim.
-
-Index & Execution Plan là benchmark về độ sâu, không phải template heading hay visual bắt buộc cho mọi bài. Runtime/Data có thể dùng decision table và code; Distributed Systems dùng message flow/failure matrix; System Design dùng framework/diagram; Finance dùng lifecycle/state flow; Project Stories dùng worksheet; Question Bank dùng practice cards. Consistency là cùng learning standard, không phải tất cả trang giống nhau.
-
-## 9. UI scope
-
-QuanNet là learning dashboard nhẹ: roadmap, lesson tiếp theo, self-assessment và review. Không thêm gamification/analytics phức tạp nếu chúng không cải thiện learning loop.
-## 10. Research-backed authoring
-
-Golden Learning Labs không được author chỉ từ model memory. Trước khi viết hoặc rewrite, author phải thực hiện research có mục đích học tập:
+Golden lesson không được viết chỉ từ model memory. Dùng source roles tách biệt:
 
 ```text
-Primary / official technical sources
-+ high-quality engineering material
-+ selected video or teaching material when a visual mechanism matters
-+ realistic cases
-→ cross-check
-→ original QuanNet synthesis
+official docs/spec → factual correctness
+strong article/book/site → conceptual explanation
+selected video → visual/temporal teaching
+engineering case → production boundary/failure
 ```
 
-Nguồn chính thức ưu tiên cho fact/semantics; maintainer/vendor material và nguồn engineering mạnh giúp giải thích production; video là teaching/visual reference, không mặc định là source-of-truth.
+Source hierarchy mặc định cho factual correctness là: official specification/documentation → maintainer/vendor engineering material → strong independent technical material → experienced educator → community discussion. Đây không phải ranking mù: docs có thể khó dạy và teaching source có thể đơn giản hóa; fact quan trọng vẫn phải cross-check bằng primary source. Khi source khác nhau, kiểm version, workload, definition và abstraction level; nếu evidence chưa đủ, ghi uncertainty thay vì chọn im lặng.
 
-Source hierarchy mặc định cho factual correctness:
+Trước authoring, ghi source map 3–8 nguồn tốt: source, type, fact/concept đã xác minh, teaching insight và cách QuanNet dùng. Với video, đánh giá credibility, mechanism depth, clarity, visual quality, production relevance và freshness; không chọn theo views/title. Với .NET, PostgreSQL, Kubernetes, AWS và framework/library API, ghi version/date khi behavior phụ thuộc version.
 
-```text
-official specification / documentation
-→ maintainer or vendor engineering material
-→ strong independent technical material
-→ experienced technical educator
-→ community discussion
-```
+Research phải cải thiện pedagogy, không chỉ content: educator bắt đầu từ problem nào, tạo need cho concept ra sao, trì hoãn terminology tới đâu, ví dụ đầu tiên nhỏ thế nào, visual nào làm mechanism click, alternative/misconception nào được xử lý.
 
-Đây không phải ranking mù: docs có thể khó dạy, teaching source có thể đơn giản hóa. QuanNet phải cross-check fact quan trọng bằng primary source. Với .NET, PostgreSQL, Kubernetes, AWS và framework/library API, ghi version/date khi behavior phụ thuộc version. Đánh giá video theo technical credibility, mechanism depth, clarity, visual quality, observable example, production relevance, freshness khi version-sensitive và mức khớp với nguồn chính thức. Không chọn chỉ vì view/title/SEO.
+Không copy/translate transcript, prose, diagram, screenshot hay animation. Research chỉ cung cấp fact, misconception, teaching pattern và failure idea; lesson vẫn phải là narrative, example, SVG/interaction, lab và transfer case nguyên bản. Sau research: trích teaching insight → rebuild dependency map → tạo narrative/example/visual nguyên bản → cross-check fact.
 
-Một major lesson thường cần ít nhất một primary source và một teaching-oriented source. Dùng thêm nguồn khi claim khó, version-sensitive hoặc contested. Khi nguồn khác nhau, kiểm tra version, workload, definition và abstraction level; nếu chưa đủ evidence, ghi uncertainty thay vì chọn một bên im lặng.
+Phân biệt rõ: **Fact** có docs/spec/evidence hỗ trợ; **simplified mental model** được phép để dạy nhưng phải label khi không phải implementation chính xác; **engineering judgment** phụ thuộc context nên phải nêu constraint, trade-off và evidence có thể đổi decision. Với claim phụ thuộc version/workload, nêu boundary hoặc uncertainty.
 
-### Originality and scope
+## 9. Learner-first review and acceptance
 
-Không copy/translate transcript, article prose, diagram, screenshot hoặc animation của nguồn. Research cung cấp fact, misconception, teaching pattern và failure idea. QuanNet phải tạo narrative tiếng Việt, example, SVG/interaction, lab và transfer case nguyên bản. Không dump research vào lesson; chỉ giữ concept cần cho learning outcome.
+Trước khi freeze, reviewer đọc như learner mới và liên tục hỏi:
 
-### Fact, model and engineering judgment
+- Term này từ đâu ra? Nó giải quyết vấn đề gì?
+- Cách đơn giản trước đó là gì, và nó thiếu ở đâu?
+- Ví dụ có đủ nhỏ để nhìn bằng mắt không?
+- Concept này nối với đoạn trước thế nào?
+- Tôi có phải Google để tiếp tục không?
 
-- **Fact:** behavior có docs/spec/evidence hỗ trợ; ghi version/boundary khi quan trọng.
-- **Simplified mental model:** được phép để dạy mechanism, nhưng label khi không phải layout/implementation chính xác.
-- **Engineering judgment:** phụ thuộc context; nêu constraint, trade-off và evidence có thể đổi decision.
+Với mỗi concept chính, learner phải trả lời được:
 
-### Research workflow and traceability
+1. Vấn đề nào làm nó cần tồn tại?
+2. Cách đơn giản trước nó là gì?
+3. Cách cũ thiếu gì?
+4. Nó thay mechanism thế nào?
+5. Concept gần nó là gì và boundary ra sao?
+6. Khi nào không dùng?
+7. Evidence nào cho thấy nó đang hoạt động?
 
-Trước authoring, ghi internal/source note gồm: learning question, primary facts, common misconceptions, concept dependencies, visual pattern, realistic example, failure case, trade-off, potential outdated claim và sources. Dừng research khi mechanism đã được verify, misconception/teaching representation rõ, lab và production trade-off có evidence.
+Một Golden Lesson đạt khi learner có thể nêu vấn đề thật, mô tả mechanism, dự đoán visual/trace, đọc lab evidence, debug assumption sai, cân nhắc production trade-off, transfer sang case lạ, giải thích trong interview và recall sau đó. Index là benchmark về causal depth, không phải template heading/visual bắt buộc cho mọi topic.
 
-Mỗi Golden Lesson có source map ngắn (khoảng 3–8 nguồn tốt): source, type, điều đã verify/học, và QuanNet sử dụng thế nào. Có thể có `Further Learning`, nhưng nêu rõ learner sẽ học thêm gì; core lesson phải self-contained. Chỉ thêm video timestamp khi đã kiểm tra trực tiếp, không suy đoán timestamp.
+## 10. UI scope
 
-### Research acceptance
-
-Trước publish, xác nhận research đã cải thiện ít nhất một trong: correctness, visual, example, failure/debug case hoặc production reasoning. Citation count không phải quality metric. Golden Lesson vẫn phải thỏa acceptance ở phần 8: hiểu → trace → evidence → lab → debug → trade-off → transfer → explain → recall.
+QuanNet là learning dashboard nhẹ: roadmap, lesson tiếp theo, self-assessment và review. Không thêm gamification/analytics nếu chúng không làm learning loop tốt hơn.

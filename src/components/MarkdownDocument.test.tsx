@@ -48,17 +48,26 @@ describe('Golden Learning Lab visuals', () => {
   })
 
   it('separates selectivity from cardinality-estimate accuracy', () => {
-    render(<PlannerEstimateVisual />)
+    const { container } = render(<PlannerEstimateVisual />)
     fireEvent.click(screen.getByRole('button', { name: 'Paid = 82%' }))
-    expect(screen.getByText(/illustrative estimate 810,000 rows/)).toBeInTheDocument()
+    expect(screen.getByText('Planner estimate (minh họa)')).toBeInTheDocument()
+    expect(screen.getByText('810,000 rows')).toBeInTheDocument()
     expect(screen.queryByText(/estimate 4,000 rows/)).not.toBeInTheDocument()
+    expect(container.querySelector('.estimate-track')?.textContent).toBe('')
 
     fireEvent.click(screen.getByRole('button', { name: 'Estimate accuracy' }))
     fireEvent.click(screen.getByRole('button', { name: 'Bad estimate' }))
-    expect(screen.getByText('4,000 rows')).toBeInTheDocument()
-    expect(screen.getByText('82,000 rows')).toBeInTheDocument()
+    expect(screen.getAllByText('4,000 rows')).toHaveLength(2)
+    expect(screen.getAllByText('82,000 rows')).toHaveLength(2)
   })
 
+  it('uses a horizontal semantic label chip rather than vertical body text', () => {
+    render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'semantic-chip', title: 'Semantic chip', content: '# Test\n\n:::learning-goal\nĐây là mục tiêu học.\n:::' }} /></MemoryRouter>)
+    const block = document.querySelector('.semantic-block')
+    expect(block).toHaveAttribute('data-label', 'learning goal')
+    expect(block).toHaveClass('semantic-label-horizontal')
+    expect(block).not.toHaveClass('semantic-label-vertical')
+  })
   it('keeps the table-scan visual focused on candidate work, not page I/O', () => {
     render(<TableScanVsIndexVisual />)
     expect(screen.queryByText(/Page considered/)).not.toBeInTheDocument()

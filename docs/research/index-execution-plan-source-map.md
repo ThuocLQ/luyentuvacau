@@ -1,0 +1,16 @@
+# Index & Execution Plan Learning Lab — Source Map
+
+Research date: 2026-09-26. Đây là traceability cho author, không phải route learner phải đọc trước lesson.
+
+| Source | Type | Fact / concept đã xác minh | Teaching insight | QuanNet dùng như thế nào |
+|---|---|---|---|---|
+| [PostgreSQL: B-Tree Indexes](https://www.postgresql.org/docs/17/btree.html) | Primary documentation | PostgreSQL B-tree là multi-way balanced tree; key có thứ tự; internal page dẫn xuống, leaf chứa entry trỏ tới table row. | Cấu trúc chỉ đáng giới thiệu sau khi learner đã thấy cần loại range; không cần dạy byte layout. | Cross-check mental model “ordered range → nhiều tầng routing → leaf candidate”; visual giữ disclaimer là mô hình đơn giản hóa. |
+| [PostgreSQL: Multicolumn Indexes](https://www.postgresql.org/docs/18/indexes-multicolumn.html) | Primary documentation | B-tree multicolumn hiệu quả nhất khi condition ràng buộc leading column; equality ở leading columns giới hạn vùng index scan. | Bắt đầu bằng một query nhiều điều kiện, rồi để key order xuất hiện như câu trả lời. | Query tenant/status/order → tuple ordering → composite index; không dùng “left-most prefix” như câu thần chú. |
+| [PostgreSQL: Using EXPLAIN](https://www.postgresql.org/docs/18/using-explain.html) | Primary documentation | EXPLAIN hiển thị plan; ANALYZE chạy query để cho actual rows/time; BUFFERS là thông tin page/buffer activity, cần đọc trong context. | Plan nên được đọc sau khi learner hiểu database đang chọn giữa các đường lấy dữ liệu. | Progression EXPLAIN → EXPLAIN ANALYZE → BUFFERS; giữ Filter/Index Cond là metadata của scan node. |
+| [PostgreSQL: ANALYZE](https://www.postgresql.org/docs/19/sql-analyze.html) | Primary documentation | ANALYZE thu thập statistics để planner ước lượng; với table lớn nó dựa trên sample nên vẫn có thể lệch. | Statistics chỉ có ý nghĩa sau câu hỏi “làm sao đoán work trước khi chạy?”. | Planner → expected rows → statistics → selectivity; mismatch là hypothesis điều tra, không phải kết luận planner hỏng. |
+| [B+ Trees Explained — I Know Database](https://www.iknowdatabase.com/articles/b-plus-trees-explained) | Teaching article | Dùng scan toàn bộ đối lập với ordered lookup để tạo trực giác về index/tree. Facts cấu trúc đã được cross-check với PostgreSQL docs. | Mở bằng work của scan và số nhỏ, rồi tăng quy mô trước khi gọi tên tree. | Causal opening 12 → 1,000 → 1,000,000 rows; không copy prose hoặc diagram. |
+| [PostgreSQL Indexes and B-Trees / EXPLAIN](https://www.youtube.com/watch?v=YZSHpDn7GP4) | Teaching video | Video đặt B-tree và EXPLAIN trong chuỗi index → plan, không dùng làm source-of-truth. | Trình tự visual “câu hỏi lookup → route qua range → xem plan” giúp tránh dump EXPLAIN syntax đầu bài. | Kiểm tra teaching sequence cho visual QuanNet gốc; không dùng transcript, screenshot, timestamp hay animation. |
+
+## Claims intentionally kept out
+
+Lesson không mở rộng sang BRIN/GIN/GiST, partial/expression/covering index, VACUUM/HOT internals, B+ tree on-disk implementation, planner source code hoặc monitoring course. Chúng không cần để learner hiểu causal chain của Index, planner và EXPLAIN cơ bản.
