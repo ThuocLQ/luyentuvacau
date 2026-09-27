@@ -55,7 +55,7 @@ Một **access path** là đường database dùng để lấy row. `Seq Scan` l
 
 Quay lại 12 row trong visual. So sánh hai đường: quét table xét cả 12 row; shortcut theo tenant đi thẳng tới nhóm tenant 42, nhưng vẫn phải kiểm `status`. Visual chỉ đếm work trên row, không giả lập page hay I/O production.
 
-Khi làm lab PostgreSQL, hãy nối toy với evidence như sau: `Rows considered` gần với các row mà Seq Scan phải xét; `Eliminated` gần với `Rows Removed by Filter`; `Returned` gần với actual rows mà scan node emit. Đây là mapping để học cơ chế, không phải mô hình byte-level của executor và chỉ nên dùng theo ngữ cảnh Seq Scan có `Filter` này.
+Khi làm lab PostgreSQL, hãy nối toy với evidence như sau: `Rows considered` gần với các row mà Seq Scan phải xét; `Eliminated` gần với `Rows Removed by Filter`; `Returned` gần với actual rows mà scan node trả ra sau `Filter`. Đây là mapping để học cơ chế, không phải mô hình byte-level của executor và chỉ nên dùng theo ngữ cảnh Seq Scan có `Filter` này.
 
 :::must-remember
 Index không phải nút “làm query nhanh”. Nó đổi câu hỏi từ “đọc mọi row?” thành “có thể đi gần đúng vùng row cần tìm không?”, đổi lại database phải duy trì thêm cấu trúc đó khi dữ liệu thay đổi.
@@ -155,7 +155,7 @@ Nhưng planner biết 820 hay 1 bằng cách nào khi chưa chạy query? Nó d�
 
 Visual tách hai câu hỏi để không bị lẫn:
 
-1. `Paid = 82%` hay `Paid = 0.1%` — predicate giữ lại bao nhiêu row? Đó là selectivity.
+1. `Paid = 82%` hay `Paid = 0.1%` — điều kiện lọc giữ lại bao nhiêu row? Đó là selectivity.
 2. 4,000 row dự đoán nhưng 82,000 row thực tế — planner đoán gần đúng đến đâu? Đó là estimate accuracy.
 
 Label và số nằm ngoài bar; bar chỉ biểu diễn độ lớn tương đối. Khi estimate/actual lệch, bắt đầu bằng giả thuyết về statistics và xem data/parameter thực tế có khác **giả định (assumption)** của planner không; chưa vội kết luận index hay planner sai.
@@ -166,7 +166,7 @@ Ta đã có câu hỏi đúng: *database đã chọn access path nào, và vì s
 
 Khi cần biết điều gì thực sự xảy ra, dùng `EXPLAIN ANALYZE`: database chạy query và trả thêm actual rows/timing.
 
-Trước khi thêm `BUFFERS`, hãy hỏi vì sao database cần buffer. Database đọc dữ liệu theo page. Nếu page vừa được dùng, PostgreSQL muốn lấy lại từ shared memory thay vì lại yêu cầu dữ liệu từ các tầng storage thấp hơn. Simplified mental model là: `storage → page → shared buffers → query operator`.
+Trước khi thêm `BUFFERS`, hãy hỏi vì sao database cần buffer. Database đọc dữ liệu theo page. Nếu page vừa được dùng, PostgreSQL muốn lấy lại từ shared memory thay vì lại yêu cầu dữ liệu từ các tầng storage thấp hơn. Simplified mental model là: `storage → page → shared buffers → bước xử lý của query`.
 
 Vì vậy `BUFFERS` là evidence về page/buffer activity: `shared hit` nghĩa page cần dùng đã có trong PostgreSQL shared buffers; `shared read` nghĩa PostgreSQL phải nạp page vào shared buffers. `shared read` không đồng nghĩa chắc chắn với một physical disk seek, vì OS/filesystem cache cũng có thể tham gia. Đọc buffer numbers cùng scan type và row count; chúng không tự kết luận plan tốt hay xấu.
 
@@ -178,7 +178,7 @@ Một execution plan gồm các bước. PostgreSQL hiển thị mỗi bước n
 2. **Điều kiện ở scan:** `Index Cond` là điều kiện dùng để đi vào range của Index; `Filter` là điều kiện còn kiểm khi row đã tới scan. Chúng là metadata/evidence gắn với scan node, không phải operator riêng.
 3. **Thứ tự:** có `Sort` không? Nếu có, output từ access path chưa tự đúng thứ tự cần trả.
 4. **Ước lượng và thực tế:** estimate khác actual rows bao xa?
-5. **Đến cuối mới đọc thêm:** `BUFFERS`, rồi time, luôn đặt cạnh plan shape và workload.
+5. **Đến cuối mới đọc thêm:** `BUFFERS`, rồi time, luôn đặt cạnh plan shape và **workload** — kiểu và lượng công việc thật hệ thống đang xử lý.
 
 {{INDEX_VISUAL:plan}}
 
@@ -235,9 +235,9 @@ ORDER BY created_at DESC, id DESC
 LIMIT 20;
 ```
 
-**Inspect:** theo đúng thứ tự: (1) `Seq Scan`; (2) `Filter`; (3) `Rows Removed by Filter`; (4) actual rows mà scan node emit; (5) `Sort`; (6) `Limit`.
+**Inspect:** theo đúng thứ tự: (1) `Seq Scan`; (2) `Filter`; (3) `Rows Removed by Filter`; (4) actual rows mà scan node trả ra; (5) `Sort`; (6) `Limit`.
 
-Với Seq Scan có `Filter` trong experiment này, có thể đọc gần đúng: row scan đã xét ≈ row scan emit + `Rows Removed by Filter`. Đây không phải công thức chung cho mọi operator. `actual rows` là output của scan node sau filtering, nên một mình nó không nói scan đã xét bao nhiêu row. **Interpret:** outcome có thể khác theo máy; mô tả evidence rồi mới kết luận, không săn một plan “đúng duy nhất”.
+Với Seq Scan có `Filter` trong experiment này, có thể đọc gần đúng: row scan đã xét ≈ số row scan node trả ra sau `Filter` + `Rows Removed by Filter`. Đây không phải công thức chung cho mọi operator. `actual rows` là output của scan node sau filtering, nên một mình nó không nói scan đã xét bao nhiêu row. **Interpret:** outcome có thể khác theo máy; mô tả evidence rồi mới kết luận, không săn một plan “đúng duy nhất”.
 
 ### Experiment 2 — thêm đúng thứ tự tuple
 

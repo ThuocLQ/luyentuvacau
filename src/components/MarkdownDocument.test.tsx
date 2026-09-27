@@ -11,6 +11,7 @@ import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import OutboxGoldenLesson from './learning/outbox/OutboxGoldenLesson'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
 import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
+import outboxLesson from '../../docs/learning/outbox-idempotency.md?raw'
 
 vi.mock('../hooks/useReviewProgress', () => ({ useReviewProgress: () => ({ find: () => undefined, pin: vi.fn(), record: vi.fn(), remove: vi.fn() }) }))
 vi.mock('../hooks/useScrollSpy', () => ({ useScrollSpy: () => null }))
@@ -104,12 +105,26 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/Approved 0 \/ 100/)).toBeInTheDocument()
   })
 
-  it('reveals Outbox durable state and duplicate-safe restart reasoning', () => {
+  it('makes duplicate delivery and one local Reservation observable', () => {
     render(<OutboxGoldenLesson stage="crash" />)
     fireEvent.click(screen.getByLabelText('Sau publish'))
-    fireEvent.click(screen.getByRole('button', { name: 'Reveal surviving state' }))
-    expect(screen.getByLabelText('surviving durable state')).toHaveTextContent('#E17 Pending')
-    expect(screen.getByText(/publish lại là an toàn hơn bỏ mất event/)).toBeInTheDocument()
+    fireEvent.click(screen.getByLabelText('2 lần'))
+    fireEvent.click(screen.getByRole('button', { name: 'Reveal state' }))
+    const state = screen.getByLabelText('state after crash')
+    expect(state).toHaveTextContent('#E17 Pending')
+    expect(state).toHaveTextContent('Broker deliveries')
+    expect(state).toHaveTextContent('1')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Restart relay' }))
+    expect(state).toHaveTextContent('2')
+    fireEvent.click(screen.getByRole('button', { name: 'Deliver duplicate to consumer' }))
+    expect(state).toHaveTextContent('ProcessedEvent')
+    expect(state).toHaveTextContent('#E17')
+    expect(state).toHaveTextContent('Reservation count')
+    expect(state).toHaveTextContent('1')
+    fireEvent.click(screen.getByRole('button', { name: 'Deliver same event again' }))
+    expect(state).toHaveTextContent('Reservation count')
+    expect(state).toHaveTextContent('1')
   })
   it('switches Race protection and multi-instance boundary modes', () => {
     render(<><RaceGoldenLesson stage="protection" /><RaceGoldenLesson stage="boundary" /></>)
@@ -137,12 +152,26 @@ describe('Golden Learning Lab visuals', () => {
     expect(indexLesson).toContain('PostgreSQL 17, `CREATE INDEX` mặc định tạo B-tree')
   })
 
-  it('maps the scan visual to PostgreSQL evidence without treating emitted rows as examined rows', () => {
+  it('keeps scan evidence natural without treating returned rows as examined rows', () => {
     expect(indexLesson).toContain('`Rows Removed by Filter`')
-    expect(indexLesson).toContain('actual rows mà scan node emit')
+    expect(indexLesson).toContain('actual rows mà scan node trả ra')
+    expect(indexLesson).not.toContain('scan node emit')
+    expect(indexLesson).not.toContain('row scan emit')
     expect(indexLesson).toContain('`actual rows` là output của scan node sau filtering')
   })
 
+  it('explains workload at its first lesson use and keeps Race heading learner-first', () => {
+    const firstWorkload = indexLesson.indexOf('workload')
+    expect(indexLesson.slice(Math.max(0, firstWorkload - 80), firstWorkload + 120)).toContain('kiểu và lượng công việc thật hệ thống đang xử lý')
+    expect(raceLesson).toContain('Optional observation — tranh cùng lock và phạm vi')
+    expect(raceLesson).not.toContain('Optional observation — contention và scope')
+  })
+
+  it('keeps Outbox wording broker-neutral and honest about unqueryable email', () => {
+    expect(outboxLesson).not.toContain('at-least-once delivery')
+    expect(outboxLesson).toContain('Delivery guarantee cụ thể vẫn phụ thuộc broker/client confirm/ack contract')
+    expect(outboxLesson).toContain('không thể đồng thời guarantee **không mất** và **không trùng** email')
+  })
   it('removes the Limit confounder when the lab isolates estimate accuracy', () => {
     const estimateExperiment = indexLesson.split('### Experiment 3')[1].split('### Experiment 4')[0]
     const estimateSql = estimateExperiment.match(/```sql\n([\s\S]*?)```/)?.[1] ?? ''

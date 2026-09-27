@@ -107,7 +107,7 @@ catch (DbUpdateException ex) when (IsUniqueViolation(ex))
 
 **Run:** trong visual, chọn `Sau DB commit`, bật reveal.
 
-**Inspect:** `Order`, `Outbox`, `Broker message`, `Processed event`.
+**Inspect:** `Order`, `Outbox`, `Broker deliveries`, `ProcessedEvent`, `Reservation count`.
 
 **Observation:** chỉ Order và Outbox còn. Relay có thể đọc `Pending` và publish sau restart.
 
@@ -117,19 +117,19 @@ catch (DbUpdateException ex) when (IsUniqueViolation(ex))
 
 ### Experiment 2 — publish rồi chết
 
-**Question:** relay publish xong rồi chết trước khi persist mốc `Sent`; restart có được quyền publish lại không?
+**Question:** relay publish xong rồi chết trước khi persist mốc `Sent`; restart có được phép thử publish lại không, và local Reservation có bị nhân đôi không?
 
-**Predict:** có. Database còn `Pending`, còn broker có thể đã có `#E17`.
+**Predict:** chọn `Sau publish`, rồi chọn dự đoán `1 lần` hoặc `2 lần` trước reveal.
 
-**Run:** chọn `Sau publish`, reveal restart.
+**Run:** bấm `Reveal state`. Visual cho `Broker deliveries = 1`, `Outbox = #E17 Pending`, `ProcessedEvent = Không có`, `Reservation count = 0`. Bấm `Restart relay`, sau đó bấm `Deliver duplicate to consumer`; cuối cùng bấm `Deliver same event again`.
 
-**Inspect:** số lần broker nhận `#E17`, và consumer có tạo Reservation một hay hai lần.
+**Inspect:** sau restart, `Broker deliveries = 2`; sau lần consume đầu, `ProcessedEvent = #E17` và `Reservation count = 1`; sau lần duplicate tiếp theo, hai state local này vẫn không đổi.
 
-**Observation:** delivery có thể lặp; state `ProcessedEvent(#E17) + Reservation` chỉ commit một lần.
+**Observation:** publish/delivery có thể lặp, nhưng local business effect trong simulation chỉ xảy ra một lần.
 
-**Interpret / Why:** relay không có bằng chứng durable cho publish trước crash. Consumer đặt duplicate check cùng business change để retry không nhân side effect local.
+**Interpret / Why:** relay không có bằng chứng durable cho publish trước crash nên retry publish là một lựa chọn an toàn để tránh bỏ mất intent. Consumer đặt event identity cùng business change trong local transaction, nên cùng event không nhân Reservation.
 
-**Learn:** Outbox + idempotent consumer hướng tới *at-least-once delivery, single local business effect*; không phải lời hứa end-to-end exactly-once.
+**Learn:** thiết kế này chấp nhận publish/delivery có thể lặp khi retry. Consumer dùng event identity để cùng event không nhân business effect local. Delivery guarantee cụ thể vẫn phụ thuộc broker/client confirm/ack contract; Outbox không tự tạo exactly-once end-to-end.
 
 ### Experiment 3 — external provider timeout
 
@@ -148,9 +148,9 @@ provider response → timeout ở client ✗
 
 **Observation:** có một **unknown outcome**: external side effect có thể đã xảy ra, nhưng app chưa thể kết luận.
 
-**Interpret / Why:** retry mù có thể charge hai lần. Persist `Pending`, query provider theo `operation ID` hoặc idempotency contract trước; nếu chưa kết luận được, đưa vào reconciliation — job đối chiếu state của mình với nguồn bên ngoài — hay manual recovery.
+**Interpret / Why:** retry mù có thể charge hai lần. Khi provider có status query, callback hoặc idempotency contract, persist `Pending` rồi query bằng `operation ID` trước khi quyết định retry. Khi có hai nguồn state để đối chiếu, reconciliation là job so sánh state của mình với nguồn bên ngoài có thẩm quyền. Nếu provider không có status/query/callback/evidence, outcome có thể vẫn không kết luận được.
 
-**Learn:** timeout không đồng nghĩa thất bại. Idempotency boundary phải nằm ở nơi thực sự tạo side effect.
+**Learn:** timeout không đồng nghĩa thất bại. Idempotency boundary phải nằm ở nơi thực sự tạo side effect; không có external evidence thì không thể hứa retry an toàn.
 
 ## Debug và production reasoning
 
@@ -164,7 +164,7 @@ provider response → timeout ở client ✗
 
 **Evidence:** outbox `CreatedAt/UpdatedAt/AttemptCount/LastError`, event ID, broker delivery metadata, `ProcessedEvent`, Reservation, provider `operation ID`, reconciliation report. Nếu client/broker hỗ trợ publisher confirm hoặc acknowledgement phù hợp, chỉ đánh dấu delivery theo mốc confirm đã chọn trong delivery contract — không coi mọi broker có cùng semantics.
 
-**Decision boundary:** retry relay theo retry policy có giới hạn; consumer phải duplicate-safe; external side effect có status/recovery policy. Đo tuổi outbox `Pending`, publish failures và reconciliation mismatch để biết thiết kế có đang hoạt động.
+**Decision boundary:** retry relay theo retry policy có giới hạn; consumer phải duplicate-safe; external side effect chỉ có status/recovery policy đáng tin khi provider contract cho evidence. Đo tuổi outbox `Pending`, publish failures và — khi có nguồn ngoài để đối chiếu — reconciliation mismatch để biết thiết kế có đang hoạt động.
 
 **Trade-off:** outbox thêm table, relay latency và vận hành retry/cleanup. Đổi lại, Order không bị mất intent to notify giữa database commit và process crash. Ordering cũng phải được định nghĩa theo scope cần thiết (ví dụ per Order), không suy ra global order chỉ từ việc có Outbox.
 
@@ -179,7 +179,12 @@ Trước khi xem hướng trả lời, nêu rõ:
 - support cần xem evidence nào;
 - recovery policy nào trung thực với user.
 
-Model direction: bạn có thể lưu outbox/attempt và tránh gửi lại cùng event trong local consumer transaction. Nhưng không thể biết chắc email đã tới provider sau timeout. Cần lưu operation/correlation ID nếu provider trả, hiển thị trạng thái phù hợp, giới hạn retry và có manual/reconciliation flow; đừng gọi đó là exactly-once.
+Model direction: local state vẫn có thể giữ event identity, attempt history, `Pending`/`Uncertain`, retry budget, timestamp/error và evidence cho operator. Nhưng nó không chứng minh email đã được provider gửi.
+
+- Mark `Processed` rồi crash trước khi gửi email: email có thể bị mất.
+- Gửi email rồi crash trước khi mark `Processed`: retry có thể gửi trùng.
+
+Không có provider idempotency key, status query, callback hay nguồn ngoài có thẩm quyền thì không thể đồng thời guarantee **không mất** và **không trùng** email. Chọn policy theo business cost: retry thì chấp nhận rủi ro trùng; không retry thì chấp nhận rủi ro mất; manual handling chỉ hữu ích khi còn evidence để người vận hành kiểm. Không gọi đó là reconciliation nếu không có nguồn ngoài để đối chiếu, và không gọi đó là exactly-once.
 
 ## Explain it back
 
@@ -199,7 +204,7 @@ Trong 60–120 giây, nói theo chuỗi: hai writes độc lập → cả hai th
 6. Evidence nào giúp phân biệt timeout với external side effect chưa xảy ra?
 
 :::final-recall
-Outbox không làm hai hệ thống thành một transaction. Nó giữ `business state + intent to publish` cùng local transaction. Relay có thể publish lại sau crash, nên consumer phải idempotent tại boundary tạo side effect. Khi side effect nằm ở external provider và outcome chưa rõ, persist state rồi query/reconcile trước retry.
+Outbox không làm hai hệ thống thành một transaction. Nó giữ `business state + intent to publish` cùng local transaction. Publish/delivery có thể lặp tùy broker/client contract, nên consumer phải idempotent tại boundary tạo side effect local. Với external provider, chỉ query/reconcile trước retry khi có operation identity và nguồn evidence; nếu không, design phải nói rõ rủi ro mất hoặc trùng.
 :::
 
 ## Further learning

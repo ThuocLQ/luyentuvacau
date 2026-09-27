@@ -212,7 +212,7 @@ record WithdrawalResult(bool Approved, int ApprovedAmount);
 **Why:** B chỉ vào critical section sau khi A release chính **cùng một** gate, rồi đọc 20.
 **Learn:** lock placement phải cover read/check/write của invariant, không chỉ final assignment.
 
-### Optional observation — contention và scope (không phải experiment chạy sẵn)
+### Optional observation — tranh cùng lock và phạm vi (không phải experiment chạy sẵn)
 
 Sau khi correctness đã được chứng minh, bạn có thể đo thời gian chờ trước `lock` trong một benchmark riêng và tăng số concurrent call. Dùng kết quả đó để cân nhắc **granularity** (phạm vi lock rộng hay hẹp); đừng kết luận từ laptop benchmark nhỏ. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant. Thời gian chờ khi nhiều operation tranh cùng lock được gọi là **contention**.
 ## Debug from evidence

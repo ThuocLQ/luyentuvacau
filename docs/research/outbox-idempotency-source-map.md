@@ -38,6 +38,7 @@ create Order + notify Inventory
 - `AnyAsync` followed by insert is not enough when two consumers race; uniqueness must be enforced by the database.
 - Idempotent consumer handling protects the local side effect it encloses, not an unrelated payment/email provider.
 - A timeout can leave the caller without an outcome even when the provider acted.
+- Without provider idempotency/status/callback or another authoritative source, local state cannot prove an external email side effect was sent exactly once.
 
 ## Version / workload boundaries
 
@@ -45,6 +46,7 @@ create Order + notify Inventory
 - The EF Core snippet is illustrative; actual transaction/retry behavior depends on provider and configured execution strategy.
 - Unique-violation detection is provider-specific. The invariant is one database-enforced event identity.
 - Ordering is not global by default; define scope such as per Order only when the business flow needs it.
+- The local visual deliberately demonstrates a controlled publish-retry and local dedupe sequence; it does not assert a universal broker delivery guarantee.
 
 ## Claims intentionally kept out
 
@@ -55,6 +57,7 @@ List topics intentionally excluded so the lesson does not become an encyclopedia
 - CDC/log-tailing implementation details.
 - Full Saga/compensation design.
 - Payment-provider-specific status or idempotency contracts.
+- A guarantee that an unqueryable external provider both receives an action once and never loses it.
 
 ## Originality note
 
