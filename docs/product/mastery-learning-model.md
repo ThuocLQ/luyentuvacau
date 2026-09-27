@@ -39,7 +39,7 @@ These are two independent state axes, not one mutually exclusive enum. The learn
 | LOCKED | Required prerequisite competence is not yet demonstrated. | At least one required prerequisite is unsatisfied. | Curiosity content, glossary, references and optional learning must not be hidden. |
 | AVAILABLE | The learner may begin required progression work. | The lesson is published/available and all required prerequisites are satisfied. | The learner has understood the lesson. |
 | IN_PROGRESS | The learner has started a meaningful progression attempt. | A gate attempt or explicitly tracked learning activity exists. | Mere page open, scroll or elapsed time alone. |
-| PASSED | Current mandatory gates provide enough evidence to safely unlock declared dependents. | Active gate policy is satisfied for the active content/gate versions. | Durable recall, transfer or complete senior mastery. |
+| PASSED | Historical record that the learner satisfied the policy used for this pass. | Mandatory gates of one coherent evaluated policy were satisfied. | Automatic satisfaction of every future prerequisite policy, durable recall, transfer or complete senior mastery. |
 
 ### Retention/mastery status
 
@@ -74,7 +74,7 @@ weak delayed recall
 → already unlocked dependents stay available
 ```
 
-Only a material correctness or prerequisite change may explicitly request revalidation. That action must be visible to the learner, preserve historical evidence and explain exactly what changed and which new evidence is needed. It is not a silent deletion or a blanket reset.
+Only explicit material version, correctness or prerequisite compatibility policy may request revalidation. That action must be visible to the learner, preserve historical evidence and explain exactly what changed and which new evidence is needed. It is not a silent deletion or a blanket reset. Weak ordinary recall never requests revalidation.
 
 ## Existing capability scales remain canonical
 
@@ -133,29 +133,57 @@ progression_status = PASSED
 
 The 3/7/21 timings are product defaults for human study, not immutable scientific constants. Weak later evidence can move `retention_status` from `MASTERED` back to `RETAINING`, lower mastery confidence and schedule the smallest useful remediation; it never changes `progression_status = PASSED` or erases a pass.
 
-## Version and history semantics
+## Version, historical pass and active prerequisite semantics
 
-Every meaningful learner attempt must eventually be attributable to:
+Every meaningful learner evaluation must eventually be attributable to:
 
 ```text
 content_id
 content_version
+gate_policy_id
+gate_policy_version
 gate_id
 gate_version
 ```
 
+`gate_version` is the version of one individual gate definition/evaluator. `gate_policy_version` is the version of the complete required/supporting gate set that defines PASS for a lesson.
+
+```text
+Index Foundation — Policy v3
+├── Prediction Gate v2
+├── Lab Evidence Gate v4
+├── Debug Gate v1
+└── Explain-back Gate v3
+```
+
+### Historical pass vs active prerequisite invariant
+
+Historical `PASSED` is not the same as active prerequisite satisfaction. A learner's historical PASS is never deleted merely because content or prerequisite policy changes. A historical PASS satisfies an active prerequisite only when compatible pass evidence exists, or when any explicitly required revalidation has been satisfied.
+
+Conceptually:
+
+```text
+prerequisite_satisfied(user, dependency)
+= compatible pass evidence exists
+  OR required revalidation has been satisfied
+```
+
+Do not model this by silently changing `PASSED → LOCKED`. `PASSED` remains visible historical progression truth. When revalidation is required, historical attempts and the historical pass remain; the active dependency may be unsatisfied, newly gated progression may wait, and the learner must see exactly what requires revalidation. Previously learned and reference content must not disappear.
+
 ### Version compatibility invariant
 
-A learner PASS must be evaluated against one coherent gate-policy version, or an explicitly declared compatibility mapping between versions. The system must not silently combine incompatible evidence such as Gate A and Gate B from policy v1 with Gate C from policy v2 and call the result “PASS v2”.
+A learner PASS must be evaluated against one coherent gate-policy version, or an explicitly declared compatibility mapping between versions. The system must not silently infer policy compatibility from matching gate IDs.
 
-Each attempt retains its original `content_id`, `content_version`, `gate_id` and `gate_version`. When a new version is published, compatible old evidence may carry forward only through an explicit compatibility decision. Incompatible evidence remains historical evidence but cannot silently satisfy the new policy. Historical attempts are never deleted.
+For example, Policy v1 may have A ✓ and B ✓ while Policy v2 has C ✓. Those individual gate results cannot become `PASS v2` unless a compatibility mapping explicitly declares how v1 evidence satisfies the required policy-v2 requirements.
+
+Each evaluation retains its original `content_id`, `content_version`, `gate_policy_id`, `gate_policy_version`, `gate_id` and `gate_version`. When a new version is published, compatible old evidence may carry forward only through an explicit compatibility decision. Incompatible evidence remains historical evidence but cannot silently satisfy the new active policy. Historical attempts are never deleted.
 
 | Change class | Meaning | Effect on history and progression |
 |---|---|---|
-| Editorial-compatible | Typo, formatting or wording that does not alter what evidence means. | Keep history and evidence compatible. |
-| Learning-compatible clarification | Explanation improves without changing the required capability. | Keep history; optionally invite review. |
-| Material capability change | Gate or required capability meaning changes. | Preserve history; declare compatibility explicitly or require visible new evidence. |
-| Breaking prerequisite/correctness change | A prior assumption or required foundation is materially wrong/insufficient. | Preserve history; explicitly request scoped revalidation with rationale and an explicit compatibility decision. |
+| Editorial-compatible | Typo, formatting or wording that does not alter what evidence means. | Keep history; old evidence remains compatible with the active prerequisite. |
+| Learning-compatible clarification | Explanation improves without changing the required capability. | Keep history; old evidence remains compatible; optionally invite review. |
+| Material capability change | Gate or required capability meaning changes. | Preserve history; explicit compatibility policy decides whether active prerequisite satisfaction carries forward or scoped revalidation is needed. |
+| Breaking prerequisite/correctness change | A prior assumption or required foundation is materially wrong/insufficient. | Preserve historical pass; active dependent progression may require visible scoped revalidation and an explicit compatibility decision. |
 
 No content change may silently erase a learner's attempts, pass record or review history.
 
@@ -182,8 +210,8 @@ When a required gate is not satisfied, the system should preserve the attempt, s
 | Perspective | Review question | Phase 1 decision |
 |---|---|---|
 | Learning integrity | Does evidence represent reasoning rather than exposure? | Reading/time/scroll never pass a lesson; revealed answers are practice only. |
-| Progression integrity | Can required work unlock only from demonstrated prerequisites? | `PASSED` unlocks the dependency graph; retention/mastery is a separate axis and ordinary forgetting is sticky. |
-| Version integrity | Can we explain which version produced an attempt? | Content/gate IDs and versions are retained; PASS requires one coherent policy or declared compatibility mapping. |
+| Progression integrity | Can required work unlock only from demonstrated prerequisites? | Historical `PASSED` stays sticky; active prerequisites use explicit compatibility/revalidation policy; retention/mastery is separate. |
+| Version integrity | Can we explain which version produced an attempt? | Content, gate-policy and gate IDs/versions are retained; PASS requires one coherent policy or declared compatibility mapping. |
 | Product simplicity | Is there one opaque score? | No; small state model plus visible dimensions and gate results. |
 | UX transparency | Can a learner tell why progress changed? | Locks, revalidation and remediation must name requirements and evidence. |
 | Future technical enforceability | Can a trusted system apply it later? | This specifies durable result semantics without prematurely defining tables or SQL. |

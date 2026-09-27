@@ -11,10 +11,21 @@ Conceptually:
 ```text
 can_access(user, lesson)
 = lesson is published and available
-  AND all required prerequisite rules are satisfied
+  AND prerequisite_satisfied(user, dependency)
+      for every required dependency
 ```
 
 The future frontend may display this decision but must not be authoritative for it. A later trusted server/database implementation must evaluate access and concurrent results. The current localStorage progress implementation is a **local simulation**, not an access-control authority.
+
+Historical `PASSED` is not automatically active prerequisite satisfaction. Conceptually:
+
+```text
+prerequisite_satisfied(user, dependency)
+= compatible pass evidence exists
+  OR required revalidation has been satisfied
+```
+
+A material compatibility/prerequisite policy may leave a new dependency unsatisfied while historical `PASSED` remains visible. It must name the scoped revalidation required; previously learned and reference content remain accessible. Weak ordinary recall never changes prerequisite satisfaction or requests revalidation.
 
 ## What a gate is
 
@@ -98,7 +109,8 @@ Every meaningful result should conceptually retain:
 | outcome | `satisfied`, `not_satisfied`, `practice_only` or `needs_review` |
 | attempt | Preserved chronological attempt identity/count |
 | content ID and version | What learner-facing material was used |
-| gate ID and version | Which gate and rule/evaluation applied |
+| gate-policy ID and version | Which complete required/supporting gate set defines PASS |
+| gate ID and version | Which individual gate and evaluator applied |
 | assistance level | `none`, `hint`, `guided` or `answer_revealed` |
 | evidence summary | Why the result did or did not satisfy the requirement |
 | evaluated time | When the policy evaluated it |
@@ -107,9 +119,21 @@ These are conceptual result semantics only; Phase 1 intentionally does not inven
 
 ## Version compatibility invariant
 
-Each attempt keeps its original `content_id`, `content_version`, `gate_id` and `gate_version`. A PASS is evaluated against one coherent gate-policy version, or against an explicitly declared compatibility mapping between versions.
+Each evaluation keeps its original `content_id`, `content_version`, `gate_policy_id`, `gate_policy_version`, `gate_id` and `gate_version`.
 
-The system must not silently combine incompatible evidence — for example Gate A and Gate B from policy v1 with Gate C from policy v2 — and treat it as `PASS v2`. When a new version is published, compatible old evidence may carry forward only after an explicit compatibility decision. Incompatible evidence remains historical evidence but cannot silently satisfy the new policy; attempts are never deleted.
+`gate_version` identifies one individual gate definition/evaluator. `gate_policy_version` identifies the complete required/supporting gate set that defines PASS. For example:
+
+```text
+Index Foundation — Policy v3
+├── Prediction Gate v2
+├── Lab Evidence Gate v4
+├── Debug Gate v1
+└── Explain-back Gate v3
+```
+
+A PASS is evaluated against one coherent gate-policy version, or against an explicitly declared compatibility mapping between versions. The system must not silently infer policy compatibility from matching gate IDs.
+
+For example, Policy v1 may have Gate A ✓ and Gate B ✓ while Policy v2 has Gate C ✓. Those individual results cannot create `PASS v2` unless a compatibility mapping explicitly declares that v1 evidence satisfies the required policy-v2 requirements. When a new version is published, compatible old evidence may carry forward only after an explicit compatibility decision. Incompatible evidence remains historical evidence but cannot silently satisfy the active policy; attempts are never deleted.
 
 ## Retry and failure policy
 
@@ -137,13 +161,13 @@ From the learner's perspective, completing the last required gate should behave 
 ```text
 record attempt
 → evaluate gate
-→ if final required gate is satisfied, mark lesson PASSED
-→ evaluate dependency graph
+→ if final required gate is satisfied, preserve historical lesson PASSED
+→ evaluate each active dependency through compatibility/revalidation policy
 → make newly eligible lessons AVAILABLE
 → set retention/mastery status to RETAINING and schedule review
 ```
 
-The later technical implementation must make duplicate submit/retry and concurrent completion safe. It must not double-count evidence or produce contradictory unlock state. Later weak recall may move retention/mastery from MASTERED to RETAINING, but must not change the sticky progression pass or re-lock dependents.
+The later technical implementation must make duplicate submit/retry and concurrent completion safe. It must not double-count evidence or produce contradictory unlock state. Later weak recall may move retention/mastery from MASTERED to RETAINING, but must not change historical PASSED, active prerequisite satisfaction or re-lock dependents. Only explicit material version/prerequisite compatibility policy may require scoped revalidation.
 
 ## Lock transparency
 
@@ -190,13 +214,13 @@ Later design and implementation must explicitly support the following; Phase 1 d
 |---|---|
 | Duplicate submit caused by retry/network | Same logical attempt must not create contradictory or double unlock results. |
 | Two browser tabs complete final gate concurrently | One coherent learner-visible pass/unlock result; preserve both attempts if distinct. |
-| Lesson version changes while in progress | Attribute each attempt to its original content/gate versions. Carry old evidence forward only through an explicit compatibility mapping; otherwise retain it as history and explain the new requirement without erasing it. |
+| Lesson version changes while in progress | Attribute each evaluation to original content, gate-policy and gate versions. Carry old evidence forward only through an explicit compatibility mapping; otherwise retain historical PASS/attempts, explain the scoped revalidation and leave only newly gated dependencies unsatisfied. |
 | Answer revealed before independent pass | Record practice evidence and offer equivalent independent variation later. |
 | Challenge-out pass | Accept only equal-or-stronger evidence; record how it was earned. |
 | Lesson with multiple prerequisites | Evaluate all required graph edges, then show which ones remain. |
 | Multiple lessons unlock at once | Make each eligible lesson AVAILABLE; do not force a false linear order. |
-| Weak later recall | Lower mastery confidence and schedule review; never silently relock passed progress. |
-| Material correctness change to a passed lesson | Keep history and request visible, scoped revalidation when necessary. |
+| Weak later recall | Lower retention/mastery confidence and schedule review; historical PASS and active prerequisite satisfaction remain unchanged. |
+| Material correctness change to a passed lesson | Keep historical PASS and attempts visible; explicit compatibility policy may require scoped revalidation before new dependencies are satisfied. |
 | Legacy localStorage migration | Preserve/label legacy confidence appropriately; do not falsely convert it into authoritative pass evidence. |
 | Remote/local progress conflict | Resolve with preserved attempt history and visible reconciliation; do not silently discard evidence. |
 | Optional branch incomplete while main path continues | Keep main required path open when its own prerequisites are satisfied. |
@@ -206,8 +230,8 @@ Later design and implementation must explicitly support the following; Phase 1 d
 | Perspective | Gate-policy conclusion |
 |---|---|
 | Learning integrity | Required gates collect reasoning/application evidence rather than page exposure. |
-| Progression integrity | Only satisfied declared prerequisites unlock required dependents; progression `PASSED` remains sticky while retention/mastery can change. |
-| Version integrity | Results retain content/gate versions and assistance; PASS uses one coherent policy version or declared compatibility mapping. |
+| Progression integrity | Only active prerequisite satisfaction unlocks required dependents; historical `PASSED` stays visible while retention/mastery can change. |
+| Version integrity | Results retain content, gate-policy and gate versions plus assistance; PASS uses one coherent policy version or declared compatibility mapping. |
 | Product simplicity | A gate has a small explicit result vocabulary, not a hidden global score. |
 | UX transparency | Each lock identifies remaining requirements and the action that can resolve it. |
 | Future technical enforceability | A trusted future evaluator can make attempt, pass and unlock behavior consistent under retry/concurrency. |
