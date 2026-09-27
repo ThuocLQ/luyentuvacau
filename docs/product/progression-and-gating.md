@@ -72,10 +72,10 @@ Conceptually:
 ```text
 lesson PASSED
 when every mandatory progression gate
-for the active gate policy is satisfied
+for one coherent active gate-policy version is satisfied
 ```
 
-Do not derive PASS from scroll percentage, time spent, mark-complete clicks, self-ratings or one opaque global score. A pass marks credible current prerequisite evidence, not durable mastery.
+Do not derive PASS from scroll percentage, time spent, mark-complete clicks, self-ratings or one opaque global score. A pass marks credible current prerequisite evidence, not durable mastery. `PASSED` remains the progression truth while a separate retention/mastery status can be `RETAINING` or `MASTERED`.
 
 ## Prediction and answer-reveal policy
 
@@ -97,13 +97,19 @@ Every meaningful result should conceptually retain:
 |---|---|
 | outcome | `satisfied`, `not_satisfied`, `practice_only` or `needs_review` |
 | attempt | Preserved chronological attempt identity/count |
-| content version | What learner-facing material was used |
-| gate version | Which rule/evaluation applied |
+| content ID and version | What learner-facing material was used |
+| gate ID and version | Which gate and rule/evaluation applied |
 | assistance level | `none`, `hint`, `guided` or `answer_revealed` |
 | evidence summary | Why the result did or did not satisfy the requirement |
 | evaluated time | When the policy evaluated it |
 
 These are conceptual result semantics only; Phase 1 intentionally does not invent database tables.
+
+## Version compatibility invariant
+
+Each attempt keeps its original `content_id`, `content_version`, `gate_id` and `gate_version`. A PASS is evaluated against one coherent gate-policy version, or against an explicitly declared compatibility mapping between versions.
+
+The system must not silently combine incompatible evidence — for example Gate A and Gate B from policy v1 with Gate C from policy v2 — and treat it as `PASS v2`. When a new version is published, compatible old evidence may carry forward only after an explicit compatibility decision. Incompatible evidence remains historical evidence but cannot silently satisfy the new policy; attempts are never deleted.
 
 ## Retry and failure policy
 
@@ -134,10 +140,10 @@ record attempt
 → if final required gate is satisfied, mark lesson PASSED
 → evaluate dependency graph
 → make newly eligible lessons AVAILABLE
-→ schedule retention review
+→ set retention/mastery status to RETAINING and schedule review
 ```
 
-The later technical implementation must make duplicate submit/retry and concurrent completion safe. It must not double-count evidence or produce contradictory unlock state.
+The later technical implementation must make duplicate submit/retry and concurrent completion safe. It must not double-count evidence or produce contradictory unlock state. Later weak recall may move retention/mastery from MASTERED to RETAINING, but must not change the sticky progression pass or re-lock dependents.
 
 ## Lock transparency
 
@@ -184,7 +190,7 @@ Later design and implementation must explicitly support the following; Phase 1 d
 |---|---|
 | Duplicate submit caused by retry/network | Same logical attempt must not create contradictory or double unlock results. |
 | Two browser tabs complete final gate concurrently | One coherent learner-visible pass/unlock result; preserve both attempts if distinct. |
-| Lesson version changes while in progress | Attribute attempt to its version; explain compatibility instead of erasing it. |
+| Lesson version changes while in progress | Attribute each attempt to its original content/gate versions. Carry old evidence forward only through an explicit compatibility mapping; otherwise retain it as history and explain the new requirement without erasing it. |
 | Answer revealed before independent pass | Record practice evidence and offer equivalent independent variation later. |
 | Challenge-out pass | Accept only equal-or-stronger evidence; record how it was earned. |
 | Lesson with multiple prerequisites | Evaluate all required graph edges, then show which ones remain. |
@@ -200,8 +206,8 @@ Later design and implementation must explicitly support the following; Phase 1 d
 | Perspective | Gate-policy conclusion |
 |---|---|
 | Learning integrity | Required gates collect reasoning/application evidence rather than page exposure. |
-| Progression integrity | Only satisfied declared prerequisites unlock required dependents; pass remains sticky under ordinary forgetting. |
-| Version integrity | Results retain content/gate versions and assistance so policy changes remain explainable. |
+| Progression integrity | Only satisfied declared prerequisites unlock required dependents; progression `PASSED` remains sticky while retention/mastery can change. |
+| Version integrity | Results retain content/gate versions and assistance; PASS uses one coherent policy version or declared compatibility mapping. |
 | Product simplicity | A gate has a small explicit result vocabulary, not a hidden global score. |
 | UX transparency | Each lock identifies remaining requirements and the action that can resolve it. |
 | Future technical enforceability | A trusted future evaluator can make attempt, pass and unlock behavior consistent under retry/concurrency. |
