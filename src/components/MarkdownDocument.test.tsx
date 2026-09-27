@@ -8,6 +8,7 @@ import CompositeIndexVisual from './learning/index/CompositeIndexVisual'
 import PlannerEstimateVisual from './learning/index/PlannerEstimateVisual'
 import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
+import OutboxGoldenLesson from './learning/outbox/OutboxGoldenLesson'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
 import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
 
@@ -103,6 +104,13 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/Approved 0 \/ 100/)).toBeInTheDocument()
   })
 
+  it('reveals Outbox durable state and duplicate-safe restart reasoning', () => {
+    render(<OutboxGoldenLesson stage="crash" />)
+    fireEvent.click(screen.getByLabelText('Sau publish'))
+    fireEvent.click(screen.getByRole('button', { name: 'Reveal surviving state' }))
+    expect(screen.getByLabelText('surviving durable state')).toHaveTextContent('#E17 Pending')
+    expect(screen.getByText(/publish lại là an toàn hơn bỏ mất event/)).toBeInTheDocument()
+  })
   it('switches Race protection and multi-instance boundary modes', () => {
     render(<><RaceGoldenLesson stage="protection" /><RaceGoldenLesson stage="boundary" /></>)
     fireEvent.click(screen.getByRole('button', { name: '`lock` trong một process' }))

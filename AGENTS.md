@@ -5,7 +5,8 @@ This repository contains a learner-first engineering learning system.
 Before changing any Learning Lab, lesson narrative, learning visual, quiz tied to a lesson, or research/source-map file:
 
 1. Read `docs/engineering-learning-standard.md`.
-2. Treat that file as the canonical learning-design source of truth.
+2. Before broadly reopening a mature lesson, read `docs/authoring/lesson-compliance-status.md`; require real learner evidence, a factual issue, or a concrete UI bug.
+3. Treat the canonical standard as the learning-design source of truth.
 3. Preserve the declared learner prerequisite boundary.
 4. Do not silently introduce unexplained concepts.
 5. Treat vocabulary friction as a learner blocker. For a new term: explain it inline if one sentence is enough; use inline explanation + glossary support if it recurs; if it requires its own mechanism, teach that mini-concept before continuing. Never make the glossary a prerequisite for understanding the current paragraph.

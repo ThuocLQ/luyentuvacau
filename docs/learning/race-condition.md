@@ -1,7 +1,7 @@
 # Race Condition & Concurrency
 
 :::learning-goal
-Sau bài này, bạn có thể nhìn một shared state, nêu invariant cần giữ, trace một interleaving làm invariant vỡ, chạy reproduction C# nhỏ và chọn đúng correctness boundary. Mục tiêu không phải nhớ nhiều primitive.
+Sau bài này, bạn có thể nhìn một giá trị bị nhiều operation cùng đọc/ghi, nêu rule cần giữ, trace các bước bị xen kẽ làm rule vỡ, chạy reproduction C# nhỏ và chọn đúng correctness boundary. Mục tiêu không phải nhớ nhiều primitive.
 :::
 
 ## Prerequisites
@@ -34,7 +34,7 @@ Bạn sẽ đi từ “hai thread chạy cùng lúc” tới câu chính xác h�
 
 ### Shared state là gì?
 
-`balance` là **shared mutable state**: nhiều operation có thể đọc và thay đổi cùng một giá trị. Shared state không tự sai. Nó trở thành nguy hiểm khi rule đúng/sai của operation phụ thuộc vào giá trị đó và các bước không được phối hợp.
+`balance` là **shared mutable state**: nhiều operation có thể đọc và thay đổi cùng một giá trị. Nó không tự sai; nó nguy hiểm khi rule đúng/sai phụ thuộc vào giá trị đó nhưng các bước không được phối hợp.
 
 ### Thấy failure trước khi học thuật ngữ
 
@@ -42,7 +42,7 @@ Dưới đây là một **simplified execution model**. Nó cố ý cho A/B xen 
 
 {{RACE_VISUAL:interleaving}}
 
-Sau hai `READ`, A và B đều có local snapshot là 100. Sau hai `CHECK`, hệ thống đã cho phép tổng 110. `WRITE` cuối chỉ làm triệu chứng lộ ra: balance 70 che write 20 của A. Evidence cần nhìn không chỉ là final balance mà còn là **2 successful withdrawals / 100 available**.
+Sau hai `READ`, A và B đều có **local snapshot** — bản sao giá trị 100 mà từng request đã đọc vào riêng —. Sau hai `CHECK`, hệ thống đã cho phép tổng 110. `WRITE` cuối chỉ làm triệu chứng lộ ra: balance 70 che write 20 của A. Evidence cần nhìn không chỉ là final balance mà còn là **2 successful withdrawals / 100 available**.
 
 Bây giờ mới gọi tên lỗi: **race condition** xảy ra khi correctness phụ thuộc vào operation concurrent nào được chạy trước. Nó không đồng nghĩa “cứ hai thread là có race”; cần shared state + invariant + một interleaving cho outcome sai. Bài này không đi sâu vào khái niệm low-level *data race*, vì nó không cần để giải thích boundary này.
 
@@ -52,7 +52,7 @@ Bây giờ mới gọi tên lỗi: **race condition** xảy ra khi correctness p
 
 Không suy ra “mỗi C# statement là atomic”. Điều cần hỏi là: *toàn bộ rule READ/CHECK/WRITE có được bảo vệ như một đơn vị không?*
 
-Phần phải không bị interleave sai được gọi là **critical section**. Từ invariant, ta mới chọn property cần có: mutual exclusion cho multi-step shared memory, hay simple atomic update cho một counter, hay database concurrency rule cho state ở database.
+Phần phải không bị interleave sai được gọi là **critical section**. Từ invariant, ta mới chọn property cần có: **mutual exclusion** (một execution vào thì execution khác phải chờ) cho multi-step shared memory, hay simple atomic update cho một counter, hay database concurrency rule cho state ở database.
 
 ## Same requests, different execution boundary
 
@@ -214,7 +214,7 @@ record WithdrawalResult(bool Approved, int ApprovedAmount);
 
 ### Optional observation — contention và scope (không phải experiment chạy sẵn)
 
-Sau khi correctness đã được chứng minh, bạn có thể đo thời gian chờ trước `lock` trong một benchmark riêng và tăng số concurrent call. Dùng kết quả đó để cân nhắc granularity; đừng kết luận từ laptop benchmark nhỏ. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant.
+Sau khi correctness đã được chứng minh, bạn có thể đo thời gian chờ trước `lock` trong một benchmark riêng và tăng số concurrent call. Dùng kết quả đó để cân nhắc **granularity** (phạm vi lock rộng hay hẹp); đừng kết luận từ laptop benchmark nhỏ. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant. Thời gian chờ khi nhiều operation tranh cùng lock được gọi là **contention**.
 ## Debug from evidence
 
 Khi production có duplicate reservation, missing update hoặc final count bất thường, dùng loop này:
@@ -224,7 +224,7 @@ Khi production có duplicate reservation, missing update hoặc final count bấ
 3. **Hypothesis:** viết một candidate interleaving như A read → B read → A/B check → writes.
 4. **Evidence:** structured log theo operation, số row update thực tế và version concurrency (nếu flow có dùng), trace timeline; thread/task ID chỉ thêm khi thực sự giúp phân biệt work.
 5. **Experiment:** reproduce trong test/local simulation bằng controllable gate; không lấy random sleep làm primary technique.
-6. **Fix boundary:** bảo vệ đúng source of truth, rồi viết regression test cho invariant.
+6. **Fix boundary:** bảo vệ đúng **source of truth** — nơi chốt dữ liệu/rule nghiệp vụ — rồi viết regression test để lỗi cũ không quay lại.
 
 ## Break It: process-local protection không phải multi-instance protection
 
@@ -252,7 +252,7 @@ RETURNING quantity;
 **Candidate interleaving:** request A/B vào instance khác nhau; gate A/gate B không phối hợp; cả hai đọc availability cũ.
 **Evidence:** query số row update thực tế, order/reservation rows, instance ID và provider operation ID.
 **Correctness boundary:** đặt reservation rule ở database transaction/concurrency boundary; local lock chỉ có thể giảm contention trong từng process.
-**Trade-off:** conditional update giữ invariant sát data nhưng caller phải xử lý 0 row/conflict; serializing rộng hơn có thể giảm throughput; external side effect cần state và recovery flow riêng.
+**Trade-off:** conditional update giữ invariant sát data nhưng caller phải xử lý 0 row/conflict; serializing rộng hơn có thể giảm **throughput** (lượng work xử lý được trong một khoảng thời gian); external side effect cần state và recovery flow riêng.
 
 Không chọn “use lock” trước khi biết state sống ở đâu. Không chọn distributed lock chỉ vì app scale-out.
 

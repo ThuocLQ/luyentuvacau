@@ -56,6 +56,8 @@ export const glossary: GlossaryTerm[] = [
   ['signalr-group', 'SignalR group', 'Nhãn route message tới một nhóm connection SignalR.', 'Group không phải quyền truy cập bền: server phải kiểm authorization trước khi join, và client cần rejoin/resync sau reconnect hoặc restart.', 'realtime-signalr'],
   ['backplane', 'Backplane', 'Kênh giúp nhiều instance SignalR chuyển message tới connection nằm ở instance khác.', 'Redis backplane và Azure SignalR Service giải quyết routing khi scale-out; chúng không thay source of truth hay durable event flow.', 'realtime-signalr'],
   ['solid', 'SOLID', 'Nhóm nguyên tắc giúp giữ contract rõ và thay đổi code cục bộ hơn.', 'SOLID không bắt buộc mỗi class có interface. Đặt abstraction ở boundary biến động có evidence; code nội bộ ổn định có thể giữ concrete.', 'solid-design'],
+  ['overhead', 'Overhead', 'Chi phí CPU, memory, I/O, storage, network hoặc độ phức tạp phát sinh thêm để một cơ chế hoạt động.', 'Index có thể giảm work khi đọc nhưng thêm write/storage overhead; cần xem đó có đáng với workload thật không.', 'performance-scale'],
+  ['workload', 'Workload', 'Kiểu và lượng công việc hệ thống thực tế phải xử lý.', 'Workload có thể khác về request volume, read/write mix, concurrency, query shape và data distribution.', 'performance-scale'],
   ['liskov-substitution', 'Liskov Substitution Principle (LSP)', 'Implementation phải giữ được hành vi mà caller đã tin từ contract.', 'Nếu một implementation chỉ có thể ném NotSupportedException cho method bắt buộc, hãy tách capability hoặc thiết kế contract khác.', 'solid-design'],
 ].map(([id, term, shortDefinition, explanation, doc]) => ({ id, term, shortDefinition, explanation, relatedDocs: [doc] }))
 

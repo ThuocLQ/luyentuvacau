@@ -41,7 +41,7 @@ export default function MarkdownDocument({ doc }: Props) {
   const learningLesson = isLearning ? findLearningLesson(doc.slug) : undefined
   const learningDomain = learningLesson ? learningDomains.find(domain => domain.id === learningLesson.domainId) : undefined
   const visualRenderer = learningVisualRenderers[doc.slug]
-  const lessonParts = useMemo(() => visualRenderer ? doc.content.split(/\r?\n\{\{(?:INDEX|RACE)_VISUAL:([a-z]+)\}\}\r?\n/) : null, [doc.content, visualRenderer])
+  const lessonParts = useMemo(() => visualRenderer ? doc.content.split(/\r?\n\{\{(?:INDEX|RACE|OUTBOX)_VISUAL:([a-z]+)\}\}\r?\n/) : null, [doc.content, visualRenderer])
   const lessonPartRenderings = useMemo(() => lessonParts?.map((part, index) => index % 2 === 0 ? enhanceHtml(renderMarkdown(part)) : null) ?? null, [lessonParts])
   const lessonRendered = useMemo(() => lessonPartRenderings ? {
     html: lessonPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).map(part => part.html).join(''),
