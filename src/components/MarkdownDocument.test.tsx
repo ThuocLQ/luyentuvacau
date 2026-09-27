@@ -105,26 +105,31 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/Approved 0 \/ 100/)).toBeInTheDocument()
   })
 
-  it('makes duplicate delivery and one local Reservation observable', () => {
+  it('keeps relay publish attempts separate from consumer deliveries', () => {
     render(<OutboxGoldenLesson stage="crash" />)
     fireEvent.click(screen.getByLabelText('Sau publish'))
     fireEvent.click(screen.getByLabelText('2 lần'))
     fireEvent.click(screen.getByRole('button', { name: 'Reveal state' }))
     const state = screen.getByLabelText('state after crash')
     expect(state).toHaveTextContent('#E17 Pending')
-    expect(state).toHaveTextContent('Broker deliveries')
-    expect(state).toHaveTextContent('1')
+    expect(state).toHaveTextContent('Relay publish attempts1')
+    expect(state).toHaveTextContent('Consumer deliveries0')
+    expect(state).toHaveTextContent('ProcessedEventKhông có')
+    expect(state).toHaveTextContent('Reservation count0')
 
     fireEvent.click(screen.getByRole('button', { name: 'Restart relay' }))
-    expect(state).toHaveTextContent('2')
-    fireEvent.click(screen.getByRole('button', { name: 'Deliver duplicate to consumer' }))
-    expect(state).toHaveTextContent('ProcessedEvent')
-    expect(state).toHaveTextContent('#E17')
-    expect(state).toHaveTextContent('Reservation count')
-    expect(state).toHaveTextContent('1')
+    expect(state).toHaveTextContent('Relay publish attempts2')
+    expect(state).toHaveTextContent('Consumer deliveries0')
+    fireEvent.click(screen.getByRole('button', { name: 'Deliver #E17 to consumer' }))
+    expect(state).toHaveTextContent('Consumer deliveries1')
+    expect(state).toHaveTextContent('ProcessedEvent#E17')
+    expect(state).toHaveTextContent('Reservation count1')
     fireEvent.click(screen.getByRole('button', { name: 'Deliver same event again' }))
-    expect(state).toHaveTextContent('Reservation count')
-    expect(state).toHaveTextContent('1')
+    expect(state).toHaveTextContent('Relay publish attempts2')
+    expect(state).toHaveTextContent('Consumer deliveries2')
+    expect(state).toHaveTextContent('ProcessedEvent#E17')
+    expect(state).toHaveTextContent('Reservation count1')
+    expect(state).not.toHaveTextContent('Broker deliveries')
   })
   it('switches Race protection and multi-instance boundary modes', () => {
     render(<><RaceGoldenLesson stage="protection" /><RaceGoldenLesson stage="boundary" /></>)
@@ -169,7 +174,7 @@ describe('Golden Learning Lab visuals', () => {
 
   it('keeps Outbox wording broker-neutral and honest about unqueryable email', () => {
     expect(outboxLesson).not.toContain('at-least-once delivery')
-    expect(outboxLesson).toContain('Delivery guarantee cụ thể vẫn phụ thuộc broker/client confirm/ack contract')
+    expect(outboxLesson).toContain('Publication và delivery có thể lặp tùy broker/client contract')
     expect(outboxLesson).toContain('không thể đồng thời guarantee **không mất** và **không trùng** email')
   })
   it('removes the Limit confounder when the lab isolates estimate accuracy', () => {

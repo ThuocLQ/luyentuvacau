@@ -107,7 +107,7 @@ catch (DbUpdateException ex) when (IsUniqueViolation(ex))
 
 **Run:** trong visual, chọn `Sau DB commit`, bật reveal.
 
-**Inspect:** `Order`, `Outbox`, `Broker deliveries`, `ProcessedEvent`, `Reservation count`.
+**Inspect:** `Order`, `Outbox`, `Relay publish attempts`, `Consumer deliveries`, `ProcessedEvent`, `Reservation count`.
 
 **Observation:** chỉ Order và Outbox còn. Relay có thể đọc `Pending` và publish sau restart.
 
@@ -121,15 +121,15 @@ catch (DbUpdateException ex) when (IsUniqueViolation(ex))
 
 **Predict:** chọn `Sau publish`, rồi chọn dự đoán `1 lần` hoặc `2 lần` trước reveal.
 
-**Run:** bấm `Reveal state`. Visual cho `Broker deliveries = 1`, `Outbox = #E17 Pending`, `ProcessedEvent = Không có`, `Reservation count = 0`. Bấm `Restart relay`, sau đó bấm `Deliver duplicate to consumer`; cuối cùng bấm `Deliver same event again`.
+**Run:** bấm `Reveal state`. Visual cho `Relay publish attempts = 1`, `Consumer deliveries = 0`, `Outbox = #E17 Pending`, `ProcessedEvent = Không có`, `Reservation count = 0`. Bấm `Restart relay`, sau đó bấm `Deliver #E17 to consumer`; cuối cùng bấm `Deliver same event again`.
 
-**Inspect:** sau restart, `Broker deliveries = 2`; sau lần consume đầu, `ProcessedEvent = #E17` và `Reservation count = 1`; sau lần duplicate tiếp theo, hai state local này vẫn không đổi.
+**Inspect:** sau restart, `Relay publish attempts = 2` nhưng `Consumer deliveries = 0`. Sau lần deliver đầu, `Consumer deliveries = 1`, `ProcessedEvent = #E17` và `Reservation count = 1`. Sau lần deliver cùng event tiếp theo, `Consumer deliveries = 2` nhưng hai state local này vẫn không đổi.
 
-**Observation:** publish/delivery có thể lặp, nhưng local business effect trong simulation chỉ xảy ra một lần.
+**Observation:** relay thử publish hai lần không có nghĩa broker bắt buộc deliver hai lần. Trong controlled simulation, cùng event sau đó được deliver cho consumer hai lần, nhưng local business effect chỉ xảy ra một lần.
 
 **Interpret / Why:** relay không có bằng chứng durable cho publish trước crash nên retry publish là một lựa chọn an toàn để tránh bỏ mất intent. Consumer đặt event identity cùng business change trong local transaction, nên cùng event không nhân Reservation.
 
-**Learn:** thiết kế này chấp nhận publish/delivery có thể lặp khi retry. Consumer dùng event identity để cùng event không nhân business effect local. Delivery guarantee cụ thể vẫn phụ thuộc broker/client confirm/ack contract; Outbox không tự tạo exactly-once end-to-end.
+**Learn:** relay có thể retry publish khi chưa có progress durable. Publication và delivery có thể lặp tùy broker/client contract; consumer dùng event identity để cùng event không nhân business effect local. Outbox không tự tạo exactly-once end-to-end.
 
 ### Experiment 3 — external provider timeout
 

@@ -46,7 +46,7 @@ create Order + notify Inventory
 - The EF Core snippet is illustrative; actual transaction/retry behavior depends on provider and configured execution strategy.
 - Unique-violation detection is provider-specific. The invariant is one database-enforced event identity.
 - Ordering is not global by default; define scope such as per Order only when the business flow needs it.
-- The local visual deliberately demonstrates a controlled publish-retry and local dedupe sequence; it does not assert a universal broker delivery guarantee.
+- The local visual deliberately demonstrates two relay publish attempts, then two controlled consumer deliveries of the same event and local dedupe. It does not assert that publish attempt, broker acceptance or consumer delivery are equivalent, or that any broker has a universal delivery guarantee.
 
 ## Claims intentionally kept out
 
