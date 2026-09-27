@@ -2,7 +2,7 @@
 
 > Draft research foundation — Phase 2, Step 1.
 
-Research date: 2026-09-27  
+Research date: 2026-09-27
 Scope: evidence for why and how deep a future Senior Backend curriculum should go. This is not a roadmap, lesson plan, dependency map, case bank, UI design, or data model.
 
 ## Decision rules
