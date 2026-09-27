@@ -1,169 +1,49 @@
-# QuanNet Senior Backend Evidence Map
+# Senior Backend Evidence Map
 
-> Draft research foundation — Phase 2, Step 1.
+> **Status:** Phase 2 / Step 1 — canonical normalized research map; frozen pending a new research question.
+>
+> **Purpose:** define the evidence a Backend .NET engineer needs to demonstrate senior-level judgment. This is a research and curriculum-boundary artifact, not a roadmap, lesson plan, case bank, staffing plan, or product specification.
+>
+> **Research date:** 2026-09-27. Product/documentation versions are rechecked when a version-sensitive lesson is authored.
 
-Research date: 2026-09-27
-Scope: evidence for why and how deep a future Senior Backend curriculum should go. This is not a roadmap, lesson plan, dependency map, case bank, UI design, or data model.
+## 1. Status, purpose and research date
 
-## Decision rules
+- **Status:** Phase 2 / Step 1 — canonical normalized research map; frozen pending a new research question.
+- **Purpose:** define evidence for senior Backend .NET judgment; this is not a roadmap, lesson plan, case bank, product specification, or implementation task.
+- **Research date:** 2026-09-27. Version-sensitive sources are rechecked when a lesson is authored.
 
-- Phase 1 learner semantics are frozen. Technical evidence remains L1–L4; English remains separate at E1–E4.
-- Index, Race Condition, and Outbox are pilots, not proof of Senior-core coverage.
-- Depth follows mechanism risk, production failure cost, and transfer value—not popularity.
-- Teach the portable mechanism once, implement deeply in .NET, then transfer to Java/JVM and identify only material deltas.
-- Hours are curriculum-planning estimates for deliberate study/evidence work, not scientific measurements.
+## 2. Evidence-map invariants
 
-## Source hierarchy and baseline
+1. A core track earns its place from durable engineering evidence, not from a vendor's popularity or an employer's interview format.
+2. Concepts are portable first. The learning order is: portable concept → .NET deep implementation → Java/JVM transfer → a deep dive only where the runtime, engine, or broker changes the conclusion.
+3. A lab is evidence, not a demo. Exit evidence must include a mechanism, a failure or boundary, observable data, and a defensible decision.
+4. A product is a primary lab stack only when it exposes the intended mechanism. It is never proof that the product itself is the curriculum.
+5. Redis as a data system and Cache Engineering are deliberately separate. One teaches Redis storage/replication/Streams boundaries; the other teaches cache-aside, invalidation, stampede, stale-data and source-of-truth decisions.
+6. An overlay can change practice format, but cannot replace the core engineering evidence needed by a senior backend engineer.
+7. All hour ranges in this document are **LOW-CONFIDENCE** first-pass estimates. They are planning signals, not a completion promise.
 
-| Role | Authoritative sources | Purpose |
-|---|---|---|
-| Fundamental | [CMU 15-445/645](https://15445.courses.cs.cmu.edu/fall2026/schedule.html), [MIT 6.5840](https://pdos.csail.mit.edu/6.824/schedule.html), [Stanford CS144](https://web.stanford.edu/class/cs144/), [Berkeley CS162](https://cs162.org/) | Storage, query execution, concurrency, RPC, replication, consensus, OS and networking mechanisms. |
-| Product | [PostgreSQL 18.6](https://www.postgresql.org/docs/current/), [.NET lifecycle](https://learn.microsoft.com/en-us/dotnet/core/releases-and-support), [JEP 444](https://openjdk.org/jeps/444), [Spring](https://docs.spring.io/spring-framework/reference/), [Kafka](https://kafka.apache.org/documentation/), [Redis](https://redis.io/docs/latest/), [MongoDB](https://www.mongodb.com/docs/), [Kubernetes](https://kubernetes.io/docs/), [OpenTelemetry](https://opentelemetry.io/docs/), [OWASP API Security](https://api-security.owasp.org/) | Product/version truth at lesson authoring. |
-| Production | [Google SRE](https://sre.google/sre-book/), [AWS Builders' Library](https://aws.amazon.com/builders-library/), [Software Engineering at Google](https://abseil.io/resources/swe-book) | Failure classes and operating practice. |
-| Hiring | [Microsoft](https://careers.microsoft.com/v2/global/en/hiring-tips/technical-interviewing), [Amazon SDE II](https://www.amazon.jobs/content/en/how-we-hire/sde-ii-interview-prep) | Interview signal only, not curriculum truth. |
-| Context only | [Stack Overflow 2025](https://survey.stackoverflow.co/2025/technology), [CNCF](https://www.cncf.io/reports/), [DORA](https://dora.dev/research/) | Prioritization only, never mechanism truth. |
+## 3. Source hierarchy
 
-### Version boundaries
+1. **Fundamental sources** establish mechanisms and long-lived abstractions.
+2. **Official / product / protocol sources** establish current contracts, APIs, release and version boundaries.
+3. **Production sources** establish operational reasoning, recovery and trade-off patterns.
+4. **Hiring sources** indicate how a subset of employers assess evidence; they do not define the engineering curriculum.
+5. **Industry-relevance sources** are context only. They do not make a technology a core track.
 
-- PostgreSQL primary lab is 18.6; PostgreSQL 19 is development/beta at this research date.
-- .NET primary lane is .NET 10 LTS, supported through November 2028.
-- Java transfer boundary: Java 25 LTS; Java 27 current release; Virtual Threads finalized in JDK 21. They do not change race correctness.
-- Re-check Spring, Kafka, Kubernetes, Redis, MongoDB, Cassandra and OpenTelemetry for every lesson; this map does not freeze vendor configurations.
-
-## Senior-core exit model
-
-L1 understand mechanism → L2 apply canonical case → L3 debug from evidence → L4 reason about trade-off and transfer → explain clearly. Technical communication is language-neutral; English evidence is separately measured.
-
-Every eventual track needs an observable mechanism, a controlled failure, an evidence/debug direction, and a changed-condition transfer. Reading content is never exit evidence.
-
-## Portfolio classification
-
-| Track | Depth class | Status tags | Hours |
-|---|---|---|---:|
-| Programming & Runtime | MUST MASTER | EVERGREEN FOUNDATION; IMPLEMENTATION-SPECIFIC CURRENT | 18–28 |
-| Concurrency & Async | MUST MASTER DEEP | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 28–42 |
-| Networking & HTTP | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 20–30 |
-| Relational Database | MUST MASTER DEEP | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 36–54 |
-| NoSQL & Specialized Data | SHOULD MASTER / TRANSFER | CURRENT PRODUCTION REALITY | 22–34 |
-| Distributed Systems | MUST MASTER DEEP | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 36–54 |
-| Messaging & Data Consistency | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 26–40 |
-| Cache Engineering | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 18–28 |
-| API & Resilience | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 22–34 |
-| Security | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 24–38 |
-| Observability & Performance | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 22–34 |
-| Reliability / SRE | MUST MASTER | EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY | 20–32 |
-| Testing & Engineering Quality | MUST MASTER | EVERGREEN FOUNDATION | 20–30 |
-| Architecture & System Design | MUST MASTER | EVERGREEN FOUNDATION; INTERVIEW OVERLAY | 26–40 |
-| Containers / Kubernetes / Delivery | SHOULD MASTER / TRANSFER | CURRENT PRODUCTION REALITY; IMPLEMENTATION-SPECIFIC CURRENT | 22–34 |
-| .NET / CLR / ASP.NET Core | MUST MASTER | IMPLEMENTATION-SPECIFIC CURRENT | 30–46 |
-| JVM / Java / Spring | SHOULD MASTER / TRANSFER | IMPLEMENTATION-SPECIFIC CURRENT | 24–38 |
-| Big-Tech Coding / Interview | INTERVIEW OVERLAY | INTERVIEW OVERLAY | 18–30 |
-| AI-assisted Engineering | CURRENT EXPANSION | EMERGING / WATCH | 10–18 |
-
-**Total before overlap removal: 422–652 focused hours.** A future dependency map must remove duplicate mechanism teaching before a unique-path estimate is claimed.
-
-## Track evidence
-
-Each row states why/evidence; capabilities; failure → symptom → evidence; primary lab and transfer; non-goals; exit evidence; open question.
-
-### 1. Programming & Runtime Principles — MUST MASTER
-Why: senior debugging separates code from runtime behavior; CS162 plus .NET/JVM product sources. Capabilities: process/thread boundary, allocation, GC/JIT, blocking vs async I/O, cancellation and ownership. Failure: allocation/retention or blocking request path → latency/memory growth → counters, dump, retaining path, ThreadPool metrics. Lab: .NET 10 minimal API plus diagnostics; transfer to JVM heap/GC/JIT. Non-goals: writing GC or memorizing collectors. Exit: choose evidence before a bounded runtime fix. Open: minimum local diagnostics setup.
-
-### 2. Concurrency & Async — MUST MASTER DEEP
-Why: CMU concurrency and MIT RPC/threads show interleavings are fundamental. Capabilities: invariant, atomicity, lost update, check-then-act, lock scope, cancellation, bounded concurrency, backpressure, sync-over-async, local vs distributed state. Failure: lost update/deadlock/starvation/local lock across instances → duplicate/stall/latency → trace, wait graph, runtime/database evidence. Lab: Task, SemaphoreSlim/Channel, optimistic concurrency; transfer to JMM, atomics, executors, CompletableFuture, Virtual Threads. Non-goals: lock-free research. Exit: L4 explains invariant/interleaving/evidence/multi-instance boundary. Open: one inspectable cross-runtime race.
-
-### 3. Networking & HTTP — MUST MASTER
-Why: CS144 and official HTTP/TLS sources explain layers beneath APIs; first-party hiring guidance names HTTP/TLS/TCP/IP. Capabilities: DNS/TCP/TLS/HTTP boundaries, connection reuse, timeout budget, streaming, proxy/load-balancer boundary, retry safety. Failure: ambiguous timeout, connection exhaustion, unsafe retry, untrusted forwarded header → trace/socket-pool/audit evidence. Lab: ASP.NET Core + HttpClientFactory delay/cancellation; transfer to Spring WebClient. Non-goals: implementing TCP or status-code trivia. Exit: trace request and justify timeout/retry ownership. Open: safe local proxy/TLS lab.
-
-### 4. Relational Database Engineering — MUST MASTER DEEP
-Why: CMU covers storage through recovery; PostgreSQL covers indexes, concurrency, monitoring, WAL and HA. Capabilities: constraints, query shape, plans, selectivity, transactions/isolation, locks/MVCC, migration/recovery. Failure: indexed-but-slow query, wrong composite order, skew/stale stats, deadlock/anomaly, migration under traffic → EXPLAIN ANALYZE/BUFFERS, estimate/actual, lock/activity and rollout evidence. Lab: PostgreSQL 18 SQL with EF Core/Dapper. Transfer boundary: PostgreSQL heap/MVCC differs materially from SQL Server clustered layout, InnoDB and Oracle consistency. Non-goals: parallel vendor tutorials/DBA catalog. Exit: debug plan or transaction evidence and justify trade-off. Open: realistic inspectable skew data.
-
-### 5. NoSQL & Specialized Data Systems — SHOULD MASTER / TRANSFER
-Why: a senior must choose a data model for access pattern and consistency boundary, not say NoSQL as one thing. Capabilities: document modelling, LSM/wide-column partition thinking, key-value latency/eviction, inverted-index search semantics. Failure: unbounded document, hot partition, wrong consistency/read assumption, eviction, relevance treated as relational correctness → model/partition/eviction/query evidence. Lab: MongoDB document model, Cassandra partition-design simulation, Redis data structures, Elasticsearch/OpenSearch-style inverted-index mental model. Non-goals: operate all four in depth or treat them as relational substitutes. Exit: reject a mismatched storage choice and transfer access-pattern reasoning. Open: which search engine is practical for local labs.
-
-### 6. Distributed Systems — MUST MASTER DEEP
-Why: MIT 6.5840 includes RPC, Raft, linearizability, transactions, Spanner, chain replication and sharded KV. Capabilities: partial failure, replication, consistency boundary, quorum/leader concepts, partitioning, coordination and time uncertainty. Failure: timeout ambiguity, stale replica, leader unavailable, retry amplification, coordination bottleneck, clock assumption → correlation trace, replica/leader state, lag and load evidence. Lab: multi-process .NET key-value/order simulation; transfer to Java service design. Non-goals: implementing Raft/Paxos or claiming CAP is a design recipe. Exit: state guarantees, unknowns, evidence and recovery under a changed topology. Open: minimal simulation with visible state.
-
-### 7. Messaging & Data Consistency — MUST MASTER
-Why: Kafka and production sources make delivery, replay and side effects core backend concerns. Capabilities: producer/consumer boundary, idempotency, ordering scope, retries, offset/ack timing, outbox/inbox, reconciliation. Failure: duplicate delivery, poison message, premature commit, rebalance, retry storm, DB-publish gap, external unknown outcome → message metadata, consumer ledger, broker/client contract and audit evidence. Lab: PostgreSQL outbox + local broker/Kafka-style flow; transfer to RabbitMQ semantics only where delivery/ack differs. Non-goals: promise exactly-once as universal outcome or memorize broker configuration. Exit: prove one local effect under duplicate/replay and explain recovery. Open: select broker fixture.
-
-### 8. Cache Engineering — MUST MASTER
-Why: caching changes correctness and failure behavior, not merely speed. Capabilities: source of truth, cache-aside, invalidation, TTL, stampede, hot key, penetration, replica lag and fallback. Failure: synchronized expiry/stale data/cache outage → hit rate, key distribution, origin load, age/version evidence. Lab: Redis cache-aside around PostgreSQL source of truth; transfer to in-process/CDN cache boundaries. Non-goals: cache every read or treat cache as authoritative. Exit: design failure-safe invalidation/fallback and explain changed workload. Open: cache metrics contract.
-
-### 9. API & Resilience — MUST MASTER
-Why: API boundary is where retries, timeouts, idempotency and overload become customer-visible. Capabilities: contract/versioning, validation, authorization boundary, idempotency key, timeout/retry/backoff/jitter, circuit/load shedding, rate/size limits. Failure: retry duplicates operation, retry storm, cascading timeout, ambiguous outcome → traces, idempotency record, saturation and downstream evidence. Lab: ASP.NET Core API + downstream stub + persistent idempotency/reconciliation. Transfer: Spring controller/filter/resilience libraries do not change contract reasoning. Non-goals: universal retry recipe. Exit: justify a policy from side-effect and failure contract. Open: common error taxonomy.
-
-### 10. Security — MUST MASTER
-Why: OWASP API Security captures realistic authorization and abuse boundaries. Capabilities: authentication vs authorization, object/function/property authorization, tenant boundary, input/output validation, secrets, SSRF, injection, abuse controls and audit trail. Failure: BOLA, brute force, resource/business-flow abuse, SQL/NoSQL injection, SSRF, race abuse, unsafe third-party trust → authorization decision/audit/log/request evidence. Lab: ASP.NET Core policy/claim + tenant/resource test suite and hostile requests. Transfer: Spring Security filters/annotations and data access differ, principle does not. Non-goals: cryptography implementation, broad pentest curriculum. Exit: demonstrate exploit path, evidence and layered fix. Open: safe SSRF lab boundaries.
-
-### 11. Observability & Performance — MUST MASTER
-Why: OTel/SRE support traces, metrics, logs and context propagation. Failures: missing context, high-cardinality cost, p99 hidden by average, sampled-away root cause; evidence is trace/log/metric correlation and profiles. Lab: OTel-instrumented .NET API; transfer to Java agent/SDK. Non-goal: dashboard decoration or one vendor. Exit: choose discriminating evidence before concluding. Open: low-cost local telemetry stack.
-
-### 12. Reliability / SRE — MUST MASTER
-Why: Google SRE/AWS support SLI/SLO, overload, capacity, degradation, incident and rollback reasoning. Failures: cascading failure, queue growth, bad retry, failed restore; evidence is saturation/latency/error/queue/recovery signal. Lab: controlled downstream failure and runbook; transfer across deploy targets. Non-goal: ceremony or availability promise. Exit: reduce blast radius and state recovery evidence. Open: safe load-generator limit.
-
-### 13. Testing & Engineering Quality — MUST MASTER
-Why: Software Engineering at Google grounds deterministic unit/integration/contract/property testing, review and change safety. Failures: flake, mock-hidden contract break, migration release failure; evidence is repeatability and real-boundary test. Lab: .NET order/outbox suite; transfer to JUnit/Testcontainers. Non-goal: coverage percentage as quality. Exit: choose smallest test that can falsify the risky assumption. Open: repository fixture standard.
-
-### 14. Architecture & System Design — MUST MASTER
-Why: hiring signal validates design relevance; core mechanisms prevent diagram-only answers. Failures: shared DB coupling, unclear source of truth, synchronous chain, unbounded fanout; evidence is dependency/data/latency path. Lab: evolving order/payment design; transfer to unfamiliar domain. Non-goal: memorized templates or hyperscale theatre. Exit: state requirements, unknowns, options, decision and recovery. Open: common scenario vocabulary without a case bank.
-
-### 15. Containers / Kubernetes / Delivery — SHOULD MASTER / TRANSFER
-Why: Kubernetes docs establish pod lifecycle, probes, requests/limits, termination, rollout/rollback and autoscaling. Failures: liveness cascade, readiness error, OOM/CPU throttle, dropped work, capacity loss; evidence is events, probe/resource state, logs and rollout history. Lab: .NET API/worker on local Kubernetes; transfer to Spring/managed cluster. Non-goal: cluster administration. Exit: explain lifecycle mismatch and safe rollout/rollback. Open: Windows-friendly local cluster.
-
-## Implementation lanes and overlays
-
-### 16. .NET / CLR / ASP.NET Core — MUST MASTER
-Primary deep lane: CLR allocation/GC/LOH, JIT, Task/async-await, ThreadPool starvation, request pipeline, DI lifetime, EF Core/Dapper, HttpClientFactory and diagnostics. Evidence is a runnable service, not framework trivia. Do not present a .NET convention as a portable principle. Open: a stable .NET 10 diagnostics baseline.
-
-### 17. JVM / Java / Spring — SHOULD MASTER / TRANSFER
-Deep only material deltas: JVM/bytecode/JIT, heap/GC, Java Memory Model, synchronized/volatile/atomics, executors/CompletableFuture/Virtual Threads, Spring IoC/proxy/AOP, transaction-proxy boundary, Hibernate persistence-context/proxies. Do not conflate Java, JVM, Spring Framework, Spring Boot, JPA and Hibernate. Exit: explain a .NET-to-Java delta without losing the portable mechanism. Open: which Spring transaction/proxy cases deserve a runnable transfer lab.
-
-### 18. Big-Tech Coding / Interview — INTERVIEW OVERLAY
-Use hiring sources as relevance signal. Practice constraint clarification, invariant/complexity, tests, trade-offs and follow-ups with evidence-first cards tied to core tracks. Do not target problem count or bypass foundations. Exit: solve/explain an unfamiliar bounded problem with assumptions and tests. Open: a rubric that preserves the separate English axis.
-
-### 19. AI-assisted Engineering — CURRENT EXPANSION
-Verify generated code/claims, constrain context, protect secrets, write tests, inspect diffs and catch hallucinated APIs/dependency confusion. Lab: accept/reject a generated patch with official docs, tests and review evidence. Do not teach prompt tricks or treat output as authority. Open: sensitive-context policy.
-
-## Cross-vendor and cross-stack boundaries
-
-- **Relational:** portable query/isolation/recovery first; PostgreSQL 18 primary lab; compare SQL Server, MySQL/InnoDB and Oracle only where physical layout, secondary indexes, MVCC/read consistency, locking, plans, identity or online DDL changes reasoning.
-- **NoSQL:** MongoDB teaches document-model boundary; Cassandra partition/LSM/wide-column thinking; Redis key-value/in-memory/eviction; Elasticsearch/OpenSearch-style systems inverted-index search. They are not one NoSQL category.
-- **Messaging:** do not copy Kafka ordering/offset semantics into RabbitMQ; use broker-specific sources when delivery contract changes.
-- **Runtime/web:** cancellation, ownership and HTTP boundaries are portable first; .NET and JVM/Spring are explicit transfer deltas.
-
-## Assumptions rejected and deferred questions
-
-- Popularity does not make a topic core; trend reports are context-only.
-- Kubernetes is important but remains SHOULD MASTER / TRANSFER: it does not outrank concurrency, relational database or distributed-systems mechanisms.
-- Virtual Threads do not remove backpressure, bounded concurrency, synchronization or distributed correctness.
-- AI assistance never substitutes for testing, debugging, architecture, security or database reasoning.
-
-Deferred to later steps: final lesson order/prerequisite graph; canonical scenario inventory and assessment variants; lab fixture/broker/local-Kubernetes details; unique-path hours after overlap removal; retention-policy versioning (explicitly Phase 4).
-
-## Research stop check
-
-- [x] Mechanism, source hierarchy and version boundaries identified.
-- [x] Every track has depth, canonical failure/evidence direction, lab/transfer boundary, exit capability, non-goal and open/deferred boundary.
-- [x] Scope held: no lessons, roadmap, dependency map, case bank, code, Supabase or UI changes.
-
-
-## Authoritative source registry
-
-Source IDs are stable evidence references; current/version-sensitive sources are rechecked when an eventual lesson is authored.
+## 4. Authoritative source registry
 
 | ID | Source / role |
 |---|---|
-| F-DB-CMU | [CMU 15-445/645](https://15445.courses.cs.cmu.edu/fall2026/schedule.html) — database mechanisms |
-| F-DS-MIT | [MIT 6.5840](https://pdos.csail.mit.edu/6.824/schedule.html) — distributed mechanisms |
+| F-DB-CMU | [CMU 15-445/645](https://15445.courses.cs.cmu.edu/fall2026/schedule.html) — storage, indexes, execution, concurrency, recovery and distributed DB mechanisms |
+| F-DS-MIT | [MIT 6.5840](https://pdos.csail.mit.edu/6.824/schedule.html) — distributed agreement, consistency and transaction mechanisms |
 | F-NET-STANFORD | [Stanford CS144](https://web.stanford.edu/class/cs144/) — networking foundations |
-| F-OS-BERKELEY | [Berkeley CS162](https://cs162.org/) — OS and I/O foundations |
-| P-DOTNET | [.NET support lifecycle](https://learn.microsoft.com/en-us/dotnet/core/releases-and-support) |
+| F-OS-BERKELEY | [Berkeley CS162](https://cs162.org/) — OS, I/O and resource foundations |
+| P-DOTNET | [.NET lifecycle/docs](https://learn.microsoft.com/en-us/dotnet/core/releases-and-support) |
 | P-DOTNET-DIAG | [.NET diagnostics](https://learn.microsoft.com/en-us/dotnet/core/diagnostics/) |
 | P-JAVA-JLS | [Java Language Specification](https://docs.oracle.com/javase/specs/) |
 | P-JAVA-JVMS | [Java Virtual Machine Specification](https://docs.oracle.com/javase/specs/jvms/se25/html/index.html) |
-| P-SPRING | [Spring Framework reference](https://docs.spring.io/spring-framework/reference/) and [Spring Boot reference](https://docs.spring.io/spring-boot/reference/) |
-| P-PG | [PostgreSQL 18.6 documentation](https://www.postgresql.org/docs/current/) |
+| P-SPRING | [Spring Framework](https://docs.spring.io/spring-framework/reference/) and [Spring Boot](https://docs.spring.io/spring-boot/reference/) references |
+| P-PG | [PostgreSQL current documentation](https://www.postgresql.org/docs/current/) — primary lab target, currently PostgreSQL 18 |
 | P-SQLSERVER | [SQL Server documentation](https://learn.microsoft.com/en-us/sql/sql-server/) |
 | P-MYSQL-INNODB | [MySQL InnoDB reference](https://dev.mysql.com/doc/refman/en/innodb-introduction.html) |
 | P-ORACLE | [Oracle Database Concepts](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/) |
@@ -175,132 +55,247 @@ Source IDs are stable evidence references; current/version-sensitive sources are
 | P-OTEL | [OpenTelemetry documentation](https://opentelemetry.io/docs/) |
 | P-SEARCH | [OpenSearch documentation](https://docs.opensearch.org/latest/) |
 | PROTO-HTTP | [RFC 9110: HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110) |
-| PROTO-TLS | [RFC 9846: TLS 1.3](https://www.rfc-editor.org/rfc/rfc9846) — current canonical TLS 1.3 specification; it obsoletes RFC 8446 |
+| PROTO-TLS | [RFC 9846: TLS 1.3](https://www.rfc-editor.org/rfc/rfc9846) — current TLS 1.3 specification; obsoletes RFC 8446 |
 | SEC-OWASP | [OWASP API Security](https://api-security.owasp.org/) |
 | SEC-PORTSWIGGER | [PortSwigger Web Security Academy](https://portswigger.net/web-security) |
-| PROD-GOOGLE-SRE | [Google SRE book](https://sre.google/sre-book/) |
-| PROD-AWS-RETRY | [AWS Builders' Library](https://aws.amazon.com/builders-library/) — retry/timeout/overload material |
-| PROD-AWS-IDEMPOTENCY | [AWS Builders' Library](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) |
+| PROD-GOOGLE-SRE | [Google SRE Book](https://sre.google/sre-book/) |
+| PROD-AWS-RETRY | [AWS Builders' Library](https://aws.amazon.com/builders-library/) — timeout, retry and overload |
+| PROD-AWS-IDEMPOTENCY | [AWS: idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) |
 | ENG-SWE-GOOGLE | [Software Engineering at Google](https://abseil.io/resources/swe-book) |
 | HIRE-MICROSOFT | [Microsoft technical interviewing](https://careers.microsoft.com/v2/global/en/hiring-tips/technical-interviewing) |
 | HIRE-AMAZON | [Amazon SDE II prep](https://www.amazon.jobs/content/en/how-we-hire/sde-ii-interview-prep) |
-| TREND-SO | [Stack Overflow 2025](https://survey.stackoverflow.co/2025/technology) — context only |
-| TREND-GITHUB | [GitHub Octoverse 2025](https://github.blog/news-insights/octoverse/) — context only |
+| TREND-SO | [Stack Overflow technology survey](https://survey.stackoverflow.co/2025/technology) — context only |
+| TREND-GITHUB | [GitHub Octoverse](https://github.blog/news-insights/octoverse/) — context only |
 | TREND-CNCF | [CNCF reports](https://www.cncf.io/reports/) — context only |
 | TREND-DORA | [DORA research](https://dora.dev/research/) — context only |
 
-## Auditable-track field contract
+Every registry ID is either cited by a dossier below or intentionally retained as a boundary reference for its named implementation lane. The registry is not a reading list.
 
-Each track in this map is evaluated using the same record: **Track; Why Senior needs it; Depth class; Status tags; Fundamental sources; Official/product/protocol sources; Hiring signal; Industry relevance signal; Core capabilities; Canonical failure classes; Production symptom classes; Evidence/debug direction; Primary lab stack; Cross-stack/vendor transfer; Explicit non-goals; Exit evidence; estimated focused-hour range; estimate confidence; open research questions.**
+## 5. Depth-class semantics
 
-The compact initial entries above are supplemented by the hardening dossiers below. All planning-hour ranges in this map are **LOW-CONFIDENCE**: they include first-pass mechanism learning, runnable lab, canonical failure/debug, production reasoning and transfer. They exclude later spaced retrieval, remediation, capstones and repeated interview practice. Full unique-path hours remain unresolved until Step 2/3 decomposes dependencies and removes overlap.
+| Class | Meaning |
+|---|---|
+| MUST MASTER DEEP | Explain the mechanism; reproduce and diagnose canonical failures; compare alternatives; transfer across a meaningful implementation boundary. |
+| MUST MASTER | Make safe production decisions; reproduce at least one failure; gather evidence and explain the boundary. |
+| SHOULD MASTER / TRANSFER | Build durable conceptual fluency and transfer it when the stack demands it; no claim of operator/engine-specialist depth. |
+| AWARENESS / ON DEMAND | Recognize the boundary and know when to investigate; no core exit gate. |
+| INTERVIEW OVERLAY | Assessment practice over existing engineering knowledge; not a replacement curriculum. |
+| CURRENT EXPANSION | Relevant modern practice that must not alter the evergreen core without evidence. |
 
-## Benchmark hardening dossiers
+## 6. Hour-estimation semantics
 
-### Operating Systems & I/O Foundations — MUST MASTER
+Each estimate includes first-pass mechanism study, small examples, hands-on work, one canonical debugging/failure exercise, production reasoning, and initial transfer. It excludes spaced recall, remediation, capstones, repeated interview drills and real-production experience. Every range is LOW-CONFIDENCE because dependency decomposition and deduplication have not happened. **No total-program hour count is published.** The unique total remains unresolved until later dependency work and deduplication.
 
-- **Why Senior needs it:** a backend service consumes OS-managed processes, threads, virtual memory, file descriptors/handles and sockets; runtime, network and container symptoms are unintelligible without useful OS intuition.
-- **Depth/status/sources:** MUST MASTER; EVERGREEN FOUNDATION; fundamental: F-OS-BERKELEY; product transfer: P-DOTNET, P-DOTNET-DIAG, P-K8S; hiring: HIRE-MICROSOFT; trend: TREND-SO context only.
-- **Capabilities:** process vs thread; user/kernel boundary; files/handles; blocking I/O; sockets and IPC; scheduling/context switch/waiting; starvation/priority intuition; virtual memory/page-cache relationship; graceful termination/signals; resource exhaustion of FD, memory, processes/threads and sockets.
-- **Failures/symptoms/evidence:** FD/socket leak → connection/open-file errors → process handles and socket metrics; blocked I/O → queue/latency rise → thread/wait evidence; termination mismatch → lost work → lifecycle logs and broker/HTTP drain evidence; memory pressure → OOM/eviction → runtime/container metrics.
-- **Lab/transfer:** .NET worker/API that opens resources, blocks and receives termination; transfer into CLR, connection pools, containers and graceful shutdown.
-- **Non-goals:** kernel, device-driver or compiler course. **Exit:** explain which OS resource is exhausted and how it reaches app behavior. **Hours/confidence:** 20–32, LOW-CONFIDENCE. **Open:** Windows/Linux command surface for labs.
+## 7. Canonical portfolio classification
 
-### Relational Database Engineering — MUST MASTER DEEP
+| # | Core track | Depth class |
+|---:|---|---|
+| 1 | Programming & Software Design Foundations | MUST MASTER |
+| 2 | Runtime & Memory | MUST MASTER |
+| 3 | Operating Systems & I/O Foundations | MUST MASTER |
+| 4 | Concurrency & Async | MUST MASTER DEEP |
+| 5 | Networking & HTTP | MUST MASTER |
+| 6 | Relational Database Engineering | MUST MASTER DEEP |
+| 7 | NoSQL & Specialized Data Systems | SHOULD MASTER / TRANSFER |
+| 8 | Cache Engineering | MUST MASTER |
+| 9 | Distributed Systems | MUST MASTER DEEP |
+| 10 | Messaging & Event-Driven Consistency | MUST MASTER |
+| 11 | API Contracts & Resilience | MUST MASTER |
+| 12 | Security | MUST MASTER |
+| 13 | Observability & Performance | MUST MASTER |
+| 14 | Reliability / SRE | MUST MASTER |
+| 15 | Testing & Engineering Quality | MUST MASTER |
+| 16 | Architecture & System Design | MUST MASTER |
+| 17 | Containers / Kubernetes / Cloud Delivery | SHOULD MASTER / TRANSFER |
 
-- **Why/depth/status:** persistence correctness and performance are senior-core; MUST MASTER DEEP; EVERGREEN FOUNDATION plus CURRENT PRODUCTION REALITY. Fundamental: F-DB-CMU. Product: P-PG primary lab, P-SQLSERVER/P-MYSQL-INNODB/P-ORACLE transfer. Hiring: HIRE-MICROSOFT/HIRE-AMAZON; trend: TREND-SO context only.
-- **Capabilities:** data modelling and invariants; pages/heap/physical organization; buffer management; index structures and composite query shape; execution and optimizer/cardinality/statistics; ACID/isolation/MVCC/locking/deadlocks; WAL/logging/crash recovery; constraints; migration; replication/failover; partition/shard boundary; backup/restore and RPO/RTO; connection-pool exhaustion; production query diagnosis.
-- **Canonical failures:** index exists but query remains slow; equality+range/incorrect composite order; low selectivity/skew/stale stats; function/cast blocks path; deep pagination; lock/deadlock/anomaly; migration under traffic; exhausted pool; bad restore/failover assumption.
-- **Symptoms/evidence:** p99/query latency, rows/loops, estimate-vs-actual, buffers/I/O, lock waits/activity, pool utilization, replication/backup/recovery evidence. Primary lab is PostgreSQL 18.x with SQL and EF Core/Dapper; DB is the source of truth, ORM is not the mechanism.
-- **Transfer/non-goals/exit:** compare engine behavior only if heap vs clustered layout, secondary index, MVCC/read consistency, locking, plan or online DDL changes the conclusion. Do not train DBAs or parallel-teach engines. Exit: predict, observe, debug and transfer a plan/transaction/recovery decision. **Hours/confidence:** 70–105, LOW-CONFIDENCE. **Open:** bounded HA/restore lab and safe migration fixture.
+## 8. Core track dossiers
 
-### Networking & HTTP — MUST MASTER
+### 1. Programming & Software Design Foundations
 
-- **Sources:** F-NET-STANFORD; PROTO-HTTP; PROTO-TLS; P-DOTNET/P-SPRING; HIRE-MICROSOFT/HIRE-AMAZON. **Status:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
-- **Capabilities:** explicitly distinguish DNS, TCP, TLS, HTTP semantics, reuse/pools, proxy/LB, timeout, streaming, cancellation and retry safety.
-- **Failure/evidence/lab:** DNS/connection/TLS/HTTP failure or unsafe retry → trace timings, pool/socket state, proxy headers and audit evidence; ASP.NET Core HttpClientFactory/delay/cancellation lab transfers to Spring WebClient. **Non-goal:** routing certification. **Exit:** name layer, unknown outcome and safe evidence. **Hours/confidence:** 24–38, LOW-CONFIDENCE. **Open:** local TLS/proxy fixture.
+- **Why Senior needs it:** turn requirements into maintainable boundaries, not merely compiling code. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION.
+- **Fundamental sources:** ENG-SWE-GOOGLE. **Official / product / protocol sources:** P-DOTNET, P-JAVA-JLS. **Production sources:** Not a primary signal for this track. **Hiring signal:** HIRE-MICROSOFT, HIRE-AMAZON. **Industry relevance signal:** TREND-GITHUB (context only).
+- **Core capabilities:** invariants, domain/API boundaries, error handling, composition, dependency direction and refactoring. **Canonical failure classes:** leaky abstraction, duplicated rule, invalid state, accidental coupling. **Production symptom classes:** risky changes, inconsistent behavior, regressions. **Evidence / debugging direction:** trace one invariant through code, tests and persistence; distinguish cause from duplicate symptom.
+- **Primary lab stack:** .NET 10 service plus focused tests. **Cross-stack / cross-vendor transfer:** Java/Spring uses the same boundary reasoning. **Explicit non-goals:** language-lawyer puzzles or pattern catalog memorization. **Exit evidence / mastery target:** justify a refactor that protects an invariant and falsify the old design with a test. **Estimated first-pass focused hours:** 24–36. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** smallest representative refactoring fixture.
 
-### NoSQL & Specialized Data Systems — SHOULD MASTER / TRANSFER
+### 2. Runtime & Memory
 
-**Umbrella rule:** NoSQL is not a data model. Why: a senior chooses an access-pattern and correctness boundary, not a brand. Fundamental: F-DB-CMU/F-DS-MIT; products P-MONGO, P-CASSANDRA, P-REDIS, P-SEARCH; relevance only: TREND-SO/TREND-GITHUB. Hours: 30–48, LOW-CONFIDENCE. Exit: reject a mismatched model and transfer the reasoning; non-goal: operate all products deeply.
+- **Why Senior needs it:** allocation, lifetime and blocking symptoms cannot be solved by guessing at GC. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-OS-BERKELEY. **Official / product / protocol sources:** P-DOTNET, P-DOTNET-DIAG, P-JAVA-JVMS. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** TREND-SO (context only).
+- **Core capabilities:** managed heap, allocation rate, GC generations, retention, stack/heap intuition, pooling boundaries and async resource lifetime. **Canonical failure classes:** allocation churn, retained object, LOH pressure, finalizer leak, unsafe buffer ownership. **Production symptom classes:** rising memory, GC time, OOM, latency spikes. **Evidence / debugging direction:** correlate allocation/heap/GC with a memory dump and retaining path; test one lifetime hypothesis.
+- **Primary lab stack:** .NET API/worker with dotnet-counters, dotnet-trace and dotnet-dump. **Cross-stack / cross-vendor transfer:** transfer heap/retention reasoning to JVM; investigate collector differences only when mitigation changes. **Explicit non-goals:** implementing GC or tuning every flag. **Exit evidence / mastery target:** explain a memory symptom from evidence and validate a safe mitigation. **Estimated first-pass focused hours:** 24–40. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** Windows-friendly capture fixture.
 
-| Subtrack | Core mechanism and canonical failures | Evidence, lab, transfer and non-goal |
-|---|---|---|
-| MongoDB / Document Model | Embed vs reference, aggregate/document boundary, indexes, arrays/multikey, aggregation, transaction, replica/shard basics. Failures: unbounded document, wrong shard key, hot chunk, transaction assumed free. | Explain/query/index/shard telemetry. Primary local MongoDB model lab; transfer to aggregate boundary. Do not present JSON storage as schema-free correctness. |
-| Cassandra / Wide-column + LSM | Access-pattern-first modelling, partition/clustering keys, commit log, memtable, immutable SSTable, compaction, amplification, TTL/tombstone, consistency and multi-region. Failures: hot/huge partition, tombstone scan, bad consistency assumption. | Partition/read-write/compaction evidence; design/simulation lab first. Do not run a multi-region ops course. |
-| Redis as a Data System | Key/value structures, memory model, TTL/eviction, persistence, replication, cluster/hash slots, Streams/coordination only when useful. Failures: eviction surprise, memory growth, hot slot/key, replica assumption. | INFO/latency/memory/key-distribution evidence; local Redis structure/persistence lab. **Redis data-system semantics != Cache Engineering patterns.** |
-| Search / Inverted Index | Inverted index, analyzer/tokenizer, text vs keyword, relevance, refresh/eventual visibility, shard/replica, deep pagination and DB/search source-of-truth. Failures: mapping/analyzer mismatch, stale visibility, deep-page cost, search treated as source of truth. | Query/profile/refresh/index evidence; OpenSearch-style local/simulated lab. Do not teach search as relational database. |
+### 3. Operating Systems & I/O Foundations
 
-Cache Engineering retains cache-aside, invalidation, stampede, hot key, penetration, TTL avalanche, stale data, fallback and source-of-truth boundary.
+- **Why Senior needs it:** processes, threads, virtual memory, handles, sockets and termination are service substrate. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION.
+- **Fundamental sources:** F-OS-BERKELEY. **Official / product / protocol sources:** P-DOTNET, P-K8S. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** process/thread distinction, scheduling/waits, virtual memory/page cache, files/handles/sockets, blocking I/O, limits and graceful termination. **Canonical failure classes:** handle/socket leak, blocked I/O, starvation, memory pressure, termination-loss race. **Production symptom classes:** open-file/connection errors, queue growth, OOM/eviction, lost rollout work. **Evidence / debugging direction:** identify an exhausted OS resource with handle/socket, wait, runtime and container evidence.
+- **Primary lab stack:** .NET worker/API with controlled file/socket use and shutdown. **Cross-stack / cross-vendor transfer:** transfers to JVM and containers; command surface is not the concept. **Explicit non-goals:** kernel, driver or scheduler implementation. **Exit evidence / mastery target:** connect an OS resource limit to app behavior and recovery. **Estimated first-pass focused hours:** 20–32. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** minimum Windows/Linux evidence set.
 
-### Observability & Performance — MUST MASTER
+### 4. Concurrency & Async
 
-- **Sources/depth:** MUST MASTER; EVERGREEN FOUNDATION and CURRENT PRODUCTION REALITY; PROD-GOOGLE-SRE, P-OTEL, P-DOTNET-DIAG, F-OS-BERKELEY, P-PG; relevance TREND-DORA only.
-- **Capabilities:** latency distribution/p50/p95/p99, throughput, saturation/error rate, CPU, allocation/memory/GC, ThreadPool/queue, blocking/wait, database I/O, profiling, tracing, metrics, logs, context propagation, sampling/cardinality, load testing and benchmark validity.
-- **Failure/symptom/evidence:** high p99, throughput collapse, CPU/GC pressure, queue growth, slow DB or missing trace context; follow symptom → competing hypotheses → discriminating telemetry → experiment → root cause → mitigation, never dashboard → guess.
-- **Lab/transfer/non-goals/exit:** OTel + .NET diagnostics + PostgreSQL under controlled load; transfer to Java OTel/JFR-equivalent evidence. Do not teach a monitoring vendor or synthetic benchmark as production truth. Exit: defend a root-cause conclusion from evidence. **Hours:** 32–52 LOW-CONFIDENCE. **Open:** local load/telemetry budget.
+- **Why Senior needs it:** concurrent work must preserve invariants through overlap, cancellation, saturation and failure. **Depth class:** MUST MASTER DEEP. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-OS-BERKELEY, F-DS-MIT. **Official / product / protocol sources:** P-DOTNET, P-JAVA-JLS, P-JAVA-JVMS. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT, HIRE-AMAZON. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** async versus thread, await/cancellation, shared-state invariants, lock/atomic/channel choices, bounded concurrency, backpressure, ordering and ThreadPool starvation. **Canonical failure classes:** lost update, deadlock, race, unbounded fan-out, sync-over-async, fire-and-forget loss. **Production symptom classes:** high waits, stuck requests, queue growth, duplicate/missing state, latency collapse. **Evidence / debugging direction:** reproduce the interleaving; inspect tasks/threads, waits, queue depth and persisted result before changing synchronization.
+- **Primary lab stack:** .NET async API/worker with PostgreSQL invariant and Channel/SemaphoreSlim exercises. **Cross-stack / cross-vendor transfer:** map to Java executors, CompletableFuture and JMM; deep dive only where memory/interrupt semantics change the conclusion. **Explicit non-goals:** lock-free research or one primitive as universal. **Exit evidence / mastery target:** prove an invariant across a race and defend a concurrency limit from load evidence. **Estimated first-pass focused hours:** 44–70. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** deterministic learner race harness.
 
-### Messaging & Data Consistency — MUST MASTER
+### 5. Networking & HTTP
 
-Sources: F-DS-MIT, P-KAFKA, PROD-AWS-RETRY, PROD-AWS-IDEMPOTENCY, P-PG; hiring HIRE-MICROSOFT. Add schema evolution, producer/consumer compatibility, replay under changed code/schema and event-contract ownership to delivery/ordering/retry/outbox/idempotency. Failure classes: duplicate, poison, ordering scope, rebalance, premature ack, retry storm, replay incompatibility, DLQ assumption, DB-publish gap, external unknown outcome. Evidence: message headers/schema version, consumer ledger, offset/ack state, audit/outbox and broker-client contract. Lab: PostgreSQL outbox plus Kafka-style flow; transfer to RabbitMQ only after contract differences are named. Non-goal: universal exactly-once or broker configuration memorization. Exit: safely replay a changed event and prove one local effect. **Hours:** 32–50 LOW-CONFIDENCE. **Open:** schema-registry fixture.
+- **Why Senior needs it:** a request failure is not automatically an application failure; safe diagnosis starts by locating the layer. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-NET-STANFORD. **Official / product / protocol sources:** PROTO-HTTP, PROTO-TLS, P-DOTNET, P-SPRING. **Production sources:** PROD-AWS-RETRY. **Hiring signal:** HIRE-MICROSOFT, HIRE-AMAZON. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** DNS, TCP, TLS, HTTP semantics, reuse/pools, proxy/load-balancer boundary, timeout, streaming, cancellation and retry safety. **Canonical failure classes:** DNS miss, connection exhaustion, TLS mismatch, proxy header misuse, timeout with unknown outcome, unsafe retry. **Production symptom classes:** connection errors, slow first byte, handshake failure, elevated 5xx/timeout. **Evidence / debugging direction:** timing, trace, socket/pool state, proxy headers and audit evidence identify the layer.
+- **Primary lab stack:** ASP.NET Core + downstream stub with HttpClientFactory, cancellation and latency faults. **Cross-stack / cross-vendor transfer:** transfers to Spring WebClient and compliant clients. **Explicit non-goals:** routing certification or packet-capture specialization. **Exit evidence / mastery target:** state failure layer, unknown outcome and safe next action. **Estimated first-pass focused hours:** 24–38. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** local TLS/proxy fixture.
+
+### 6. Relational Database Engineering
+
+- **Why Senior needs it:** durable correctness and much backend performance depend on data-model, transaction and query reasoning. **Depth class:** MUST MASTER DEEP. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DB-CMU. **Official / product / protocol sources:** P-PG, P-SQLSERVER, P-MYSQL-INNODB, P-ORACLE. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT, HIRE-AMAZON. **Industry relevance signal:** TREND-SO (context only).
+- **Core capabilities:** modelling/invariants; physical pages/heap; buffer management; indexes and composite query shape; execution/optimizer/stats; ACID/isolation/MVCC/locking/deadlocks; WAL/recovery; constraints; migrations; replication/failover; partition/sharding; backup/RPO-RTO; pool exhaustion; production query diagnosis. **Canonical failure classes:** slow plan despite index, wrong composite index, stale stats/skew, lock/deadlock, migration under load, exhausted pool, bad backup/failover assumption. **Production symptom classes:** p99 query latency, rows/loops mismatch, buffer/I/O pressure, lock waits, pool saturation, replication/recovery lag. **Evidence / debugging direction:** query shape, actual-vs-estimated rows, plan, buffers, lock/activity and pool evidence; never infer from ORM syntax alone.
+- **Primary lab stack:** PostgreSQL 18 + SQL + EF Core/Dapper; PostgreSQL is a lab engine, not the universal model. **Cross-stack / cross-vendor transfer:** compare SQL Server/MySQL/Oracle where layout, MVCC/read consistency, locking, plan or online-DDL changes the result. **Explicit non-goals:** DBA certification or deep operation of four engines. **Exit evidence / mastery target:** predict, observe and defend a query/transaction/recovery decision, then name engine deltas. **Estimated first-pass focused hours:** 70–105. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** safe HA/restore and migration-under-traffic fixture.
+
+### 7. NoSQL & Specialized Data Systems
+
+- **Why Senior needs it:** choose an access pattern and correctness boundary, not a fashionable database brand. **Depth class:** SHOULD MASTER / TRANSFER. **Status tags:** CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DB-CMU, F-DS-MIT. **Official / product / protocol sources:** P-MONGO, P-CASSANDRA, P-REDIS, P-SEARCH. **Production sources:** Not a primary signal for this track. **Hiring signal:** HIRE-AMAZON. **Industry relevance signal:** TREND-SO, TREND-GITHUB (context only).
+- **Core capabilities:** MongoDB document/aggregate and index/shard boundary; Cassandra partition/clustering keys, LSM, compaction, tombstones and consistency; Redis key structures, memory, TTL/eviction, persistence, replication, cluster and Streams; Search inverted index, analyzer, relevance, refresh and source-of-truth boundary. **Canonical failure classes:** unbounded document/hot shard, hot/huge Cassandra partition/tombstone scan, Redis eviction/hot key/slot, search mapping mismatch or stale visibility. **Production symptom classes:** unbounded read/write amplification, uneven load, memory loss, inconsistent search result. **Evidence / debugging direction:** inspect query/index/profile, partition/key distribution, memory/latency, refresh and replica evidence.
+- **Primary lab stack:** local MongoDB, Redis and OpenSearch; Cassandra model/simulation before multi-region operations. **Cross-stack / cross-vendor transfer:** compare access pattern, partition/consistency and source-of-truth contract; products are not interchangeable. **Explicit non-goals:** operate all products deeply or call JSON “schema-free correctness.” **Exit evidence / mastery target:** reject a mismatched data model and transfer the reason. **Estimated first-pass focused hours:** 30–48. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** bounded Cassandra and search fixtures.
+
+### 8. Cache Engineering
+
+- **Why Senior needs it:** cache improves a path only while correctness, invalidation and load-shedding remain explicit. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DS-MIT. **Official / product / protocol sources:** P-REDIS. **Production sources:** PROD-GOOGLE-SRE, PROD-AWS-RETRY. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** TREND-SO (context only).
+- **Core capabilities:** source of truth, cache-aside, TTL, invalidation, consistency window, stampede, hot key, penetration, avalanche, fallback and cache observability. **Canonical failure classes:** stale read, missing invalidation, thundering herd, cache treated as authority, unsafe fallback. **Production symptom classes:** DB surge, skewed latency, stale customer view, Redis saturation. **Evidence / debugging direction:** follow key lifecycle, hit/miss, downstream load, TTL and invalidation event before adding cache capacity.
+- **Primary lab stack:** .NET + PostgreSQL source of truth + Redis cache. **Cross-stack / cross-vendor transfer:** transfers to in-process/CDN cache after their invalidation/consistency contract is named. **Explicit non-goals:** Redis data-structure/Streams operation; that belongs to track 7. **Exit evidence / mastery target:** design and test a stale-data and stampede recovery path. **Estimated first-pass focused hours:** 20–34. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** common cache metric contract.
+
+### 9. Distributed Systems
+
+- **Why Senior needs it:** multiple processes fail independently; senior decisions state a guarantee, its boundary and recovery. **Depth class:** MUST MASTER DEEP. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DS-MIT, F-OS-BERKELEY. **Official / product / protocol sources:** P-DOTNET, P-JAVA-JVMS. **Production sources:** PROD-GOOGLE-SRE, PROD-AWS-RETRY. **Hiring signal:** HIRE-MICROSOFT, HIRE-AMAZON. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** partial failure, time/ordering limits, consistency models, ownership, replication, quorum/leader intuition, distributed transaction boundaries, reconciliation and blast radius. **Canonical failure classes:** split/lagged state, duplicate/late message, timeout unknown outcome, failed leader/failover assumption, false global ordering. **Production symptom classes:** divergent balances/status, retry storms, stale reads, cross-service incident. **Evidence / debugging direction:** identify source of truth, causal boundary, audit/reconciliation record and competing hypotheses before proposing coordination.
+- **Primary lab stack:** multi-process .NET services with PostgreSQL and controlled faults. **Cross-stack / cross-vendor transfer:** .NET stays a complete deep lane; Java is transfer; only genuine runtime/broker/engine differences add depth. **Explicit non-goals:** implement Raft/Paxos or claim universal consistency. **Exit evidence / mastery target:** explain guarantee, unknown outcome and recovery for an unseen cross-service case. **Estimated first-pass focused hours:** 60–95. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** visible deterministic failure simulation.
+
+### 10. Messaging & Event-Driven Consistency
+
+- **Why Senior needs it:** a broker moves records, not automatically one correct business effect. **Depth class:** MUST MASTER. **Status tags:** CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DS-MIT. **Official / product / protocol sources:** P-KAFKA, P-PG. **Production sources:** PROD-AWS-RETRY, PROD-AWS-IDEMPOTENCY. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** TREND-CNCF (context only).
+- **Core capabilities:** producer/consumer, partition/order scope, ack/offset, retry, duplicate, poison, replay, rebalance, idempotency, outbox/inbox, reconciliation, unknown external effect, schema evolution/compatibility and event ownership. Kafka is the primary case, not the definition. **Canonical failure classes:** duplicate, poison, premature ack, ordering assumption, retry storm, incompatible replay, DB-publish gap, external unknown outcome. **Production symptom classes:** duplicate business action, missing state transition, lag, stuck partition, incompatible consumer. **Evidence / debugging direction:** inspect headers/schema version, consumer ledger, offset/ack state, audit/outbox and broker-client delivery contract.
+- **Primary lab stack:** PostgreSQL outbox + Kafka-style producer/consumer. **Cross-stack / cross-vendor transfer:** Kafka → RabbitMQ retains delivery principles but re-evaluates broker contract, routing, ordering and acknowledgement. **Explicit non-goals:** universal exactly-once or broker configuration memorization. **Exit evidence / mastery target:** replay a changed event and prove one local effect is safe. **Estimated first-pass focused hours:** 32–50. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** schema-registry fixture.
+
+### 11. API Contracts & Resilience
+
+- **Why Senior needs it:** public behavior must survive retry, timeout, evolution and downstream failure without silently corrupting an operation. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-NET-STANFORD, F-DS-MIT. **Official / product / protocol sources:** PROTO-HTTP, P-DOTNET, P-SPRING. **Production sources:** PROD-AWS-RETRY, PROD-AWS-IDEMPOTENCY. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** contract/versioning, validation, status semantics, pagination/filtering, idempotency key, timeout/retry/circuit/bulkhead boundaries, cancellation, error taxonomy and backward compatibility. **Canonical failure classes:** breaking response change, retry duplicate, conflicting idempotency key, swallowed cancellation, timeout treated as failure. **Production symptom classes:** client breakage, duplicate transaction, retry storm, inconsistent errors. **Evidence / debugging direction:** inspect contract, request fingerprint, operation/audit record, downstream state and retry budget.
+- **Primary lab stack:** ASP.NET Core API + downstream fault stub + persistent idempotency record. **Cross-stack / cross-vendor transfer:** Spring REST uses the same HTTP and side-effect reasoning. **Explicit non-goals:** one resilience library policy for every call. **Exit evidence / mastery target:** defend a compatible contract and safe unknown-outcome flow. **Estimated first-pass focused hours:** 28–44. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** canonical error taxonomy.
+
+### 12. Security
+
+- **Why Senior needs it:** backend ownership includes deciding who can act on which object, from which trust boundary, under abuse. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** Not a primary signal for this track. **Official / product / protocol sources:** SEC-OWASP, SEC-PORTSWIGGER, P-DOTNET, P-SPRING, PROTO-TLS. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-AMAZON. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** authentication, authorization, object/tenant authorization, session/token, OAuth/OIDC awareness, validation, SQL/NoSQL injection, SSRF, CSRF/CORS/XSS backend implications, abuse, secrets, unsafe third-party trust, race abuse and audit. **Canonical failure classes:** IDOR/tenant escape, injection, SSRF, leaked secret, permissive CORS, token/session misuse, unsafe callback. **Production symptom classes:** unauthorized access, data leak, anomalous traffic, audit gap. **Evidence / debugging direction:** reproduce against a safe fixture; trace identity, policy, object ownership, input and audit decision.
+- **Primary lab stack:** ASP.NET Core policy/tenant tests and safe HTTP/database stubs. **Cross-stack / cross-vendor transfer:** Spring Security changes implementation, not trust-boundary reasoning. **Explicit non-goals:** full pentest, cryptography course or compliance certification. **Exit evidence / mastery target:** demonstrate exploit path, layered fix and regression evidence. **Estimated first-pass focused hours:** 34–54. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** safe SSRF exercise.
+
+### 13. Observability & Performance
+
+- **Why Senior needs it:** a dashboard is evidence collection, not a root-cause answer. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-OS-BERKELEY, F-DB-CMU. **Official / product / protocol sources:** P-OTEL, P-DOTNET-DIAG, P-PG. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** TREND-DORA (context only).
+- **Core capabilities:** p50/p95/p99, throughput, saturation/errors, CPU, allocation/memory/GC, ThreadPool/queues, blocking/waits, DB I/O, profiling/tracing/metrics/logs, context propagation, sampling, high cardinality, load-test and benchmark validity. **Canonical failure classes:** average hides tail, bad sampling/cardinality, benchmark without workload, missing context, GC/ThreadPool/DB bottleneck guess. **Production symptom classes:** high p99, throughput collapse, CPU/GC pressure, queue growth, slow DB. **Evidence / debugging direction:** symptom → competing hypotheses → discriminating evidence → experiment → root cause → mitigation; never dashboard → guess.
+- **Primary lab stack:** OTel + .NET diagnostics + PostgreSQL under controlled load. **Cross-stack / cross-vendor transfer:** Java OTel/JFR-equivalent evidence; vendor dashboards are replaceable. **Explicit non-goals:** monitoring-vendor course or synthetic benchmark presented as production truth. **Exit evidence / mastery target:** defend a root-cause conclusion with disconfirming evidence. **Estimated first-pass focused hours:** 32–52. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** local telemetry/load budget.
+
+### 14. Reliability / SRE
+
+- **Why Senior needs it:** service design must include overload, recovery and bounded blast radius. **Depth class:** MUST MASTER. **Status tags:** CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DS-MIT. **Official / product / protocol sources:** P-OTEL, P-K8S. **Production sources:** PROD-GOOGLE-SRE, PROD-AWS-RETRY. **Hiring signal:** HIRE-AMAZON. **Industry relevance signal:** TREND-DORA (context only).
+- **Core capabilities:** SLI/SLO/error budget intuition, load shedding, timeout/retry budgets, graceful degradation, dependency failure, incident evidence, rollout/rollback, backup/recovery and RPO/RTO reasoning. **Canonical failure classes:** retry amplification, cascading failure, unbounded queue, poor readiness, untested recovery. **Production symptom classes:** availability loss, overload, rising error/latency, failed deployment, recovery gap. **Evidence / debugging direction:** define user impact and dependency boundary; use error/latency/saturation plus recovery/audit evidence.
+- **Primary lab stack:** .NET services with downstream faults, OTel and local deployment target. **Cross-stack / cross-vendor transfer:** principles survive cloud/tool changes. **Explicit non-goals:** on-call ceremony or SRE job replacement. **Exit evidence / mastery target:** propose a bounded mitigation and recovery verification. **Estimated first-pass focused hours:** 24–40. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** safe overload cap.
+
+### 15. Testing & Engineering Quality
+
+- **Why Senior needs it:** quality evidence should falsify risky assumptions before a customer does. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION.
+- **Fundamental sources:** ENG-SWE-GOOGLE. **Official / product / protocol sources:** P-DOTNET, P-SPRING. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-AMAZON. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** test pyramid by risk, unit/integration/contract tests, fixtures, deterministic time/concurrency, property/boundary cases, migration and failure testing, CI feedback and review evidence. **Canonical failure classes:** mock proves wrong behavior, flaky test, coverage-only target, missing contract test, production-only failure path. **Production symptom classes:** escaped regression, non-reproducible CI, unsafe release. **Evidence / debugging direction:** state the risky assumption, create a failing test/fixture, then prove behavior at the required boundary.
+- **Primary lab stack:** .NET test suite with PostgreSQL/broker stubs and CI-friendly fixtures. **Cross-stack / cross-vendor transfer:** JUnit/Spring test mechanics differ, risk model does not. **Explicit non-goals:** coverage quota or framework trivia. **Exit evidence / mastery target:** add the smallest reliable test that would have caught a risky regression. **Estimated first-pass focused hours:** 24–40. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** shared fixture standard.
+
+### 16. Architecture & System Design
+
+- **Why Senior needs it:** design is the act of making requirements, ownership, failure and trade-offs inspectable. **Depth class:** MUST MASTER. **Status tags:** EVERGREEN FOUNDATION; CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-DS-MIT, F-DB-CMU. **Official / product / protocol sources:** P-DOTNET, P-K8S. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT, HIRE-AMAZON. **Industry relevance signal:** Not a primary signal for this track.
+- **Core capabilities:** requirement clarification, data ownership, synchronous/asynchronous boundaries, capacity assumptions, consistency, failure/recovery, security/observability and incremental delivery. **Canonical failure classes:** diagram-first design, shared DB ownership, unbounded dependency chain, unspoken consistency assumption, no recovery path. **Production symptom classes:** ambiguous responsibility, incident blast radius, costly change, unreconcilable state. **Evidence / debugging direction:** map requirement → invariant → option → evidence → trade-off → recovery; request missing constraints rather than invent them.
+- **Primary lab stack:** order/payment-like .NET design with PostgreSQL, cache and broker boundaries. **Cross-stack / cross-vendor transfer:** architecture is portable; technology choice is justified by a contract. **Explicit non-goals:** template diagrams or a second distributed-systems course. **Exit evidence / mastery target:** defend one design under a changed requirement and failure injection. **Estimated first-pass focused hours:** 32–52. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** stable scenario vocabulary.
+
+### 17. Containers / Kubernetes / Cloud Delivery
+
+- **Why Senior needs it:** application behavior changes under image, lifecycle, configuration, rollout and platform resource boundaries. **Depth class:** SHOULD MASTER / TRANSFER. **Status tags:** CURRENT PRODUCTION REALITY.
+- **Fundamental sources:** F-OS-BERKELEY. **Official / product / protocol sources:** P-K8S, P-DOTNET. **Production sources:** PROD-GOOGLE-SRE. **Hiring signal:** HIRE-MICROSOFT. **Industry relevance signal:** TREND-CNCF (context only).
+- **Core capabilities:** image/process boundary, config/secrets, request/limit meaning, probe/lifecycle, deployment/rollout/rollback, logs/metrics and managed-cloud responsibility boundary. **Canonical failure classes:** bad image/config, readiness misconception, OOMKilled, failed rollout, secret leak, treating a pod as durable state. **Production symptom classes:** CrashLoopBackOff, unavailable rollout, throttling, lost work, inaccessible evidence. **Evidence / debugging direction:** read lifecycle/status/events, resource usage, app logs and deployment history before changing YAML.
+- **Primary lab stack:** containerized .NET service on local Kubernetes plus one managed-cloud conceptual transfer. **Cross-stack / cross-vendor transfer:** Kubernetes concepts transfer across clouds; provider integrations require their own contract review. **Explicit non-goals:** cluster-admin certification, all cloud services or Helm trivia. **Exit evidence / mastery target:** explain and recover a rollout/lifecycle failure without treating Kubernetes as magic. **Estimated first-pass focused hours:** 28–48. **Estimate confidence:** LOW-CONFIDENCE. **Open research questions:** Windows-friendly local cluster baseline.
+
+## 9. Implementation lanes
+
+### .NET — PRIMARY DEEP IMPLEMENTATION LANE
+
+.NET is the primary place for deep runnable evidence: ASP.NET Core request lifetime, async/Task/ThreadPool, DI/lifetime, EF Core/Dapper query shape, diagnostics, OpenTelemetry, testing and container delivery. P-DOTNET and P-DOTNET-DIAG anchor current behavior. A learner can complete the core engineering map without Java.
+
+### JVM / Java / Spring — SHOULD MASTER / TRANSFER delta lane
+
+P-JAVA-JLS, P-JAVA-JVMS and P-SPRING are used after the portable concept and .NET deep implementation are stable. Reuse the mechanism, then learn only differences that alter behavior: memory model/interrupt/cancellation, runtime diagnostics, framework transaction/lifetime, HTTP client and observability integration. This lane is neither a duplicate foundation nor a requirement to become a Java specialist.
+
+## 10. Overlays
 
 ### Big-Tech Interview Overlay — INTERVIEW OVERLAY
 
-- **Why/depth/sources:** practice the evaluated form without replacing engineering learning; INTERVIEW OVERLAY; HIRE-MICROSOFT/HIRE-AMAZON, with core-track sources as truth. **Hours:** 24–45 LOW-CONFIDENCE; later spaced interview repetition is excluded.
-- **Coding / DSA lane:** data structures, algorithms, Big-O, edge cases and code without heavy IDE assistance; failure is an optimized but unproven solution; evidence is counterexample and test.
-- **System-design stress lane:** time-boxed requirement clarification, design communication, trade-off defense, follow-up changes and failure injection; it practices Architecture, not a second Architecture curriculum.
-- **Behavioral / engineering-impact lane:** ownership, decision, incident, failure/learning, conflict/trade-off and measurable impact; Amazon's first-party guidance is a signal for this lane.
-- **Non-goals/exit/open:** no problem-count target or curriculum bypass. Exit: reason and communicate an unfamiliar problem with assumptions/evidence. Open: rubric that preserves the separate English axis.
+- **Purpose:** DSA, time-boxed system-design stress, behavioral/impact communication.
+- **Sources:** HIRE-MICROSOFT, HIRE-AMAZON; core track sources remain truth.
+- **Boundary:** it changes assessment practice, not the core portfolio. A candidate can skip this overlay and still have a complete senior-backend core.
+- **Hours:** 24–45, **LOW-CONFIDENCE**; repeated interview practice is excluded.
 
-## Hardened hour interpretation
+### AI-assisted Engineering — CURRENT EXPANSION
 
-The earlier 422–652 aggregate was a non-deduplicated first sketch and is **not** a credible unique-path claim once deep database, distributed, OS/I/O and performance evidence are included. The broad track ranges now intentionally make database 70–105 and distributed systems 60–95 hours for first-pass depth; a complete programme may plausibly approach the earlier 750–1,010 planning hypothesis after decomposition, but this map does not assert that total. Step 2/3 must produce a dependency-aware unique-path total.
+- **Purpose:** use generated code and research with verification, provenance, security and test evidence.
+- **Sources:** ENG-SWE-GOOGLE, SEC-OWASP, TREND-GITHUB (context only).
+- **Boundary:** AI tool change does not alter the core mechanisms. The exit is evidence-backed accept/reject judgment, not prompt tricks.
+- **Hours:** 12–20, **LOW-CONFIDENCE**.
 
-## Final cross-review
+## 11. Cross-track / vendor boundaries
 
-| Lens | Finding and response |
+- PostgreSQL is the relational primary lab; SQL Server, MySQL/InnoDB and Oracle are transfer deltas, not four duplicate database tracks.
+- Kafka is the event primary case; RabbitMQ requires a fresh broker-contract check. Delivery principles persist; ordering, acknowledgement and routing semantics must not be assumed identical.
+- Redis data-system work remains in track 7; cache correctness remains track 8.
+- Kubernetes can disappear from a role without making core backend reasoning incoherent. It is an implementation lane, not a prerequisite for concurrency, DB, distributed systems or reliability.
+- A vendor becoming less popular does not remove an evergreen mechanism. Trend sources are never a promotion rule.
+
+## 12. Adversarial curriculum review
+
+| Challenge | Result |
 |---|---|
-| Academic | CMU/MIT/Stanford/Berkeley exposed OS/I/O as underrepresented; it is now a MUST MASTER evergreen track. DB, concurrency, distributed and network mechanism depth is explicit. |
-| Production | Google SRE/AWS and .NET diagnostics require overload/retry/unknown outcome plus runtime, queue, wait, GC and I/O evidence; performance now uses competing hypotheses rather than telemetry alone. |
-| Hiring | Microsoft/Amazon support networking, resiliency, system-design communication and behavioral impact; Big-Tech Interview Overlay now has three bounded lanes. |
-| Vendor neutrality | PostgreSQL, .NET, Java, Kafka and Redis remain lab/reference implementations. Engine/broker/runtime divergences are named when they alter reasoning. |
-| Overbreadth | Kubernetes, Cassandra, vendor configuration and framework trivia remain bounded; no track becomes an operator/DBA/certification course. |
-| Underdepth | OS, relational DB, concurrency, distributed systems, networking, performance and security now state failure, symptom, evidence, lab and exit evidence. |
-| Transfer | Explicit paths cover .NET → Java, PostgreSQL → other engines, Kafka → broker contract differences, single process → multi-instance and happy path → failure path. |
+| Kubernetes disappears | Core remains coherent; only implementation-lane practice changes. |
+| SQL Server replaces PostgreSQL | Portable relational mechanisms remain; engine deltas are researched. |
+| Kafka becomes RabbitMQ | Delivery principles persist; broker contract is re-evaluated. |
+| No Java role | .NET lane remains complete. |
+| .NET role moves to Java | Portable mechanisms reuse; Java adds only real deltas. |
+| Redis structures/Streams are needed | Track 7 remains useful; Cache Engineering stays separate. |
+| No Big-Tech target | Core remains complete; overlay is optional. |
+| AI tools change | Core is unaffected; verification practice adapts. |
+| Vendor loses popularity | Evergreen mechanism survives; trend evidence stays context-only. |
+| Candidate knows APIs but cannot diagnose | Exit evidence fails. |
+| Candidate explains but cannot reproduce/debug | Foundation is insufficient. |
+| Employer-only topic without engineering evidence | Move it to an overlay or omit it. |
 
-## Remaining open research questions
+## 13. Remaining research questions
 
-1. Exact dependency graph and duplicate-concept removal.
-2. Canonical-case bank and assessment variants.
-3. Windows-friendly local lab fixtures for broker, telemetry, database restore and Kubernetes.
-4. Policy for generated-code context and sensitive data.
-5. Unique-path hours after deep-track decomposition.
+1. Dependency graph and duplicate-concept elimination.
+2. Canonical cases and assessment variants.
+3. Windows-friendly fixtures for broker, telemetry, restore and local Kubernetes.
+4. Version-sensitive lab policy and source recheck cadence.
+5. Unique-path hours after dependency decomposition and deduplication.
 
-## Research stop check
+## 14. Step-1 freeze criteria
 
-- [x] Registry contains stable authoritative source IDs, including HTTP RFC 9110 and current TLS 1.3 RFC 9846.
-- [x] OS/I/O, relational benchmark, NoSQL subtracks, performance, messaging evolution and interview lanes are evidence-mapped.
-- [x] All estimates are LOW-CONFIDENCE and explicitly exclude later retention/remediation/capstone repetition.
-- [x] Scope held: this file only; no roadmap, dependency graph, lesson, case bank, code or Supabase work.
-
-## Evidence-reference coverage index
-
-This index completes the auditable fields for the compact portfolio entries: source IDs include Fundamental; Official/Product/Protocol; Hiring; Industry relevance (always context-only). All listed estimates have LOW-CONFIDENCE.
-
-| Track | Source IDs | Primary lab / transfer | Explicit non-goal | Exit evidence | Open question |
-|---|---|---|---|---|---|
-| Runtime | F-OS-BERKELEY; P-DOTNET; P-DOTNET-DIAG; P-JAVA-JVMS; HIRE-MICROSOFT; TREND-SO | .NET diagnostics → JVM | GC implementation | evidence-led memory/latency fix | minimal diagnostic setup |
-| Concurrency | F-DB-CMU; F-DS-MIT; P-DOTNET; P-JAVA-JLS; HIRE-MICROSOFT; TREND-SO | .NET tasks/DB → JMM | lock-free research | invariant + interleaving + boundary | common race lab |
-| Networking | F-NET-STANFORD; PROTO-HTTP; PROTO-TLS; P-DOTNET; P-SPRING; HIRE-MICROSOFT; TREND-SO | HTTP client → WebClient | routing certification | layer/timeout/retry decision | local TLS fixture |
-| Database | F-DB-CMU; P-PG; P-SQLSERVER; P-MYSQL-INNODB; P-ORACLE; HIRE-AMAZON; TREND-SO | PostgreSQL → engine deltas | DBA training | plan/transaction diagnosis | restore fixture |
-| NoSQL umbrella | F-DB-CMU; F-DS-MIT; P-MONGO; P-CASSANDRA; P-REDIS; P-SEARCH; TREND-GITHUB | local model/simulation → access-pattern transfer | operate every system | reject mismatched model | search fixture |
-| Distributed | F-DS-MIT; F-OS-BERKELEY; PROD-GOOGLE-SRE; HIRE-MICROSOFT; TREND-SO | multi-process .NET → Java | implement Raft/Paxos | guarantee/unknown/recovery reasoning | visible simulation |
-| Messaging | F-DS-MIT; P-KAFKA; P-PG; PROD-AWS-RETRY; PROD-AWS-IDEMPOTENCY; HIRE-MICROSOFT | outbox/broker → RabbitMQ contract | universal exactly-once | replay one local effect | schema fixture |
-| Cache | F-DS-MIT; P-REDIS; PROD-GOOGLE-SRE; TREND-SO | Redis + PG → in-process/CDN | cache as authority | invalidation/fallback design | metric contract |
-| API/Resilience | PROTO-HTTP; SEC-OWASP; PROD-AWS-RETRY; PROD-AWS-IDEMPOTENCY; HIRE-MICROSOFT | ASP.NET downstream stub → Spring | universal retry policy | side-effect-aware policy | error taxonomy |
-| Security | SEC-OWASP; SEC-PORTSWIGGER; P-DOTNET; P-SPRING; HIRE-AMAZON | policy/tenant tests → Spring Security | crypto/pentest course | exploit/evidence/layered fix | safe SSRF lab |
-| Reliability | PROD-GOOGLE-SRE; PROD-AWS-RETRY; P-OTEL; TREND-DORA | downstream failure → deploy targets | on-call ceremony | blast-radius/recovery evidence | safe load cap |
-| Testing | ENG-SWE-GOOGLE; P-DOTNET; P-SPRING; HIRE-AMAZON | order/outbox tests → JUnit | coverage target | falsify risky assumption | fixture standard |
-| Architecture | F-DS-MIT; PROD-GOOGLE-SRE; HIRE-MICROSOFT; HIRE-AMAZON | order/payment design → new domain | diagram template | requirements/options/recovery | scenario vocabulary |
-| Kubernetes | F-OS-BERKELEY; P-K8S; P-DOTNET; TREND-CNCF | local K8s → managed/Spring | cluster admin | lifecycle/rollout reasoning | Windows local cluster |
-| AI overlay | ENG-SWE-GOOGLE; SEC-OWASP; TREND-GITHUB | generated patch → evidence checklist | prompt tricks | accept/reject with evidence | context policy |
+- [x] Exactly one canonical portfolio classification has 17 core tracks.
+- [x] OS/I/O is an explicit core track; NoSQL has explicit MongoDB, Cassandra, Redis-as-data-system and Search scope.
+- [x] Redis-as-data-system and Cache Engineering are separate.
+- [x] Every core dossier uses the standard field contract and has a single LOW-CONFIDENCE range.
+- [x] Deep tracks include failure, debugging evidence and transfer direction.
+- [x] Source IDs used by the map exist in the registry; each registry entry is cited or intentionally retained as an implementation-boundary reference.
+- [x] .NET is the deep lane; Java is transfer; overlays are not core.
+- [x] No stale aggregate total or obsolete core-track hour range is published.
+- [x] Step 1 stops here: no roadmap, dependency map, case bank, lesson, code, Supabase or UI work.
