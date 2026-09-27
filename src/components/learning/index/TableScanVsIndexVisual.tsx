@@ -17,11 +17,11 @@ export default function TableScanVsIndexVisual() {
 
   return <section className="index-visual-card" aria-labelledby="scan-lookup-title">
     <span className="mini-label">Visual 1 · Stop & compare</span>
-    <h3 id="scan-lookup-title">Table scan và Index path khác nhau ở candidate work nào?</h3>
+    <h3 id="scan-lookup-title">Table scan và shortcut theo tenant khác nhau ở candidate work nào?</h3>
     <p>Query cần tenant 42, status Paid. Mô hình nhỏ này chỉ đếm row/candidate work; nó không đo page hay I/O production.</p>
     <div className="index-choice-row" role="group" aria-label="Chọn access path">
       <button className={mode === 'scan' ? 'active' : ''} onClick={() => setMode('scan')}>Table scan</button>
-      <button className={mode === 'index' ? 'active' : ''} onClick={() => setMode('index')}>Index theo tenant</button>
+      <button className={mode === 'index' ? 'active' : ''} onClick={() => setMode('index')}>Shortcut theo tenant</button>
     </div>
     <div className="index-counters" aria-live="polite">
       <span>Rows considered <strong>{considered.length}</strong></span><span>Candidate rows <strong>{candidateRows.length}</strong></span>
@@ -36,6 +36,6 @@ export default function TableScanVsIndexVisual() {
         </div>
       })}
     </div>
-    <p className="index-observation"><strong>{mode === 'scan' ? 'Table scan:' : 'Index path:'}</strong> {mode === 'scan' ? 'phải xét toàn bộ dataset của mô hình, rồi mới biết 5 row thuộc tenant 42.' : 'đi vào vùng candidate tenant 42 trước; status vẫn là work còn lại nếu chưa nằm trong Index.'}</p>
+    <p className="index-observation"><strong>{mode === 'scan' ? 'Table scan:' : 'Shortcut path:'}</strong> {mode === 'scan' ? 'phải xét toàn bộ dataset của mô hình, rồi mới biết 5 row thuộc tenant 42.' : 'đi vào vùng candidate tenant 42 trước; status vẫn là work còn lại nếu chưa nằm trong shortcut.'}</p>
   </section>
 }

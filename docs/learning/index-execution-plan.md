@@ -1,116 +1,196 @@
 # Index & Execution Plan
 
 :::learning-goal
-Sau bài này, bạn sẽ giải thích được Index giúp database bớt làm work gì; đọc evidence trong `EXPLAIN (ANALYZE, BUFFERS)`; và biết khi nào chưa đủ dữ kiện để đề xuất một index.
+Sau bài này, bạn có thể tự giải thích: vì sao database không thể cứ kiểm từng row mãi; shortcut có thứ tự giúp giảm work ra sao; vì sao query nhiều điều kiện cần một thứ tự rõ ràng; và evidence nào cần nhìn trước khi đề xuất thay đổi cho query.
 :::
 
-## Trước khi bắt đầu
+## Prerequisites
 
-Bạn chỉ cần biết table, row, column, `SELECT`, `WHERE`, `ORDER BY`. Bài này sẽ xây lần lượt Index, page, buffer, B-tree, composite index, planner và execution plan. Bạn không cần biết chúng trước khi bắt đầu.
+Bạn đã biết `SELECT`, `WHERE` và `ORDER BY`. Bài tự giải thích các term như Index, planner, execution plan và `BUFFERS`; không cần biết B-tree hay PostgreSQL internals trước.
 
-## Một vấn đề thật
+## Câu hỏi đầu tiên: tìm vài đơn hàng trong rất nhiều đơn thế nào?
 
-Endpoint lịch sử đơn hàng trả 20 đơn mới nhất của một tenant. Khi table lớn, p95 tăng từ 80 ms lên 1.8 s dù DB CPU chỉ 35%. Có người đề nghị thêm Redis.
+Giả sử API cần trả về các đơn `Paid` mới nhất của tenant 42. `Tenant` ở đây là một khách hàng/công ty/tổ chức trong hệ thống phục vụ nhiều khách hàng; database có table `orders`, mỗi **row** là một đơn hàng.
 
-Chưa chọn giải pháp. Câu hỏi đầu tiên là: **database đang phải đọc, lọc và sắp bao nhiêu dữ liệu để trả 20 row?** Cache không thay thế việc hiểu work gốc đó.
+Lúc table chỉ có 12 row, cách đơn giản nhất rất ổn: đọc từng row, kiểm `tenant_id`, kiểm `status`, rồi giữ những row đúng. Chưa có shortcut nào cả.
 
-## Table scan: đường đi đơn giản nhất
+```text
+row 01 → không phải tenant 42 → bỏ
+row 02 → tenant 42, Paid → giữ
+row 03 → không phải tenant 42 → bỏ
+…
+row 12 → kiểm tiếp
+```
 
-Nếu chưa có đường đi tốt hơn, database có thể đọc lần lượt table, kiểm từng row với `tenant_id = 42`, giữ row đúng và bỏ row sai. Đó là **table scan** (trong PostgreSQL plan thường thấy `Seq Scan`).
+Hãy đoán trước: với 12 row, có đáng xây thêm cấu trúc phụ chỉ để tìm vài row không? Thường là không. **Quét lần lượt** dễ hiểu, ít [[overhead]] — phần CPU, storage hoặc work thêm để duy trì một cơ chế — và có thể là lựa chọn rẻ nhất.
 
-Table scan không phải lỗi. Với table nhỏ, hoặc query cần phần lớn row, scan có thể rẻ hơn index. Vấn đề là khi database xét rất nhiều row để trả rất ít row.
+PostgreSQL gọi kiểu quét này là `Seq Scan` (sequential scan). Cái tên quan trọng ít hơn cơ chế: không có lối tắt, nên database kiểm row theo thứ tự table.
+
+## Khi cách đơn giản bắt đầu đắt
+
+
+Cùng cách quét đó hoạt động thế nào khi số row tăng?
+
+| Số row trong `orders` | Nếu chưa có shortcut, database có thể phải làm gì để tìm row ở gần cuối? |
+|---|---|
+| 12 | kiểm một ít row, thường không đáng lo |
+| 1,000 | kiểm rất nhiều row dù chỉ trả vài row |
+| 1,000,000 | có thể xét gần như cả table chỉ để tìm một nhóm nhỏ |
+
+Điều làm ta khó chịu không phải “table lớn” một cách mơ hồ. Đó là **work không cần thiết**: nhiều row chắc chắn không liên quan vẫn bị đem ra kiểm.
+
+Vậy property mới ta cần là gì? Ta cần biết **nên bắt đầu tìm ở vùng nào**, thay vì luôn đi từ row đầu tiên.
+
+## Tự tạo ra ý tưởng của Index
+
+Nếu tự thiết kế shortcut cho một cuốn sổ đơn hàng, bạn có thể tách riêng `tenant_id` ra một danh sách. Danh sách đó không thay nội dung đơn hàng; nó chỉ nói “key này có đơn ở khu vực nào”. Giữ danh sách theo thứ tự là **một** cách để bỏ qua cả khoảng không thể chứa key cần tìm.
+
+Đây là lúc tên kỹ thuật xuất hiện: **Index** là cấu trúc phụ mà database duy trì để có thêm một cách tìm/định vị dữ liệu. Index là khái niệm rộng; nó không mặc định là một danh sách có thứ tự. Một *candidate row* chỉ là row có khả năng khớp, vẫn có thể bị điều kiện khác loại sau đó.
+
+Ví dụ sách có mục lục “Index → trang”; database có “key → candidate row/location”. Ví dụ sách giúp thấy điểm bắt đầu, nhưng không thay cơ chế database: database vẫn có thể phải kiểm thêm điều kiện hoặc đọc row thật sau khi đi qua Index. Ở phần tiếp theo, ta mới xây một chiến lược Index cụ thể dùng key có thứ tự.
+
+Một **access path** là đường database dùng để lấy row. `Seq Scan` là một access path; đi qua Index là một access path khác. Index mở thêm một đường, chứ không hứa database luôn dùng đường đó.
 
 {{INDEX_VISUAL:scan}}
 
-Visual là mô hình toy: counter nói row/candidate work đã **consider**, **eliminate** và **return**. Nó không đo page hay I/O production; mục tiêu là thấy phần work nào Index có thể giảm.
+Quay lại 12 row trong visual. So sánh hai đường: quét table xét cả 12 row; shortcut theo tenant đi thẳng tới nhóm tenant 42, nhưng vẫn phải kiểm `status`. Visual chỉ đếm work trên row, không giả lập page hay I/O production.
 
-## Index là access path, không phải nút tăng tốc
+Khi làm lab PostgreSQL, hãy nối toy với evidence như sau: `Rows considered` gần với các row mà Seq Scan phải xét; `Eliminated` gần với `Rows Removed by Filter`; `Returned` gần với actual rows mà scan node trả ra sau `Filter`. Đây là mapping để học cơ chế, không phải mô hình byte-level của executor và chỉ nên dùng theo ngữ cảnh Seq Scan có `Filter` này.
 
-**Index** là cấu trúc dữ liệu phụ mà database duy trì: nó giữ key theo thứ tự và giữ thông tin để đi tới candidate row. Nó giống mục lục sách: không thay nội dung sách, nhưng cho ta điểm bắt đầu tốt hơn.
+:::must-remember
+Index không phải nút “làm query nhanh”. Nó đổi câu hỏi từ “đọc mọi row?” thành “có thể đi gần đúng vùng row cần tìm không?”, đổi lại database phải duy trì thêm cấu trúc đó khi dữ liệu thay đổi.
+:::
 
-Một query có thể lấy dữ liệu bằng nhiều đường. **Access path** là đường database chọn để lấy row: ví dụ scan toàn table, đi qua Index, hoặc (trong một số plan) bitmap path. Index chỉ mở thêm access path; nó không bắt database luôn dùng nó.
+## Thứ tự loại range như thế nào?
 
-## Page và buffer: database thực sự chạm gì?
+Với key đã sắp 1–90, muốn tìm 42, ta không cần kiểm các **khoảng giá trị (range)** 1–30 và 61–90. Chỉ range 31–60 còn khả năng đúng. Nói đơn giản, thứ tự giúp database loại cả khoảng chắc chắn không thể chứa giá trị cần tìm trước khi đọc entry có khả năng khớp.
 
-Database thường đọc dữ liệu theo **page**: một block chứa nhiều row/entry, không phải cứ một điều kiện là một lần đọc đúng một row. **Buffer** là vùng memory database dùng để giữ page đã chạm. Khi `EXPLAIN ... BUFFERS` báo `shared hit` hoặc `read`, đó là evidence về page/buffer đã dùng; nó không tự kết luận query tốt hay xấu.
+Nhưng một danh sách sắp thứ tự chứa hàng triệu key vẫn không nên bị xem như một mảnh nhỏ trong memory. Database lưu/đọc dữ liệu thành các khối; ở PostgreSQL, khối như vậy gọi là **page**. Ta chưa cần học storage internals — chỉ cần thấy một page chứa nhiều entry, và database muốn tránh mở quá nhiều page vô ích.
 
-Mental model cần giữ là: Index có thể đưa database tới **vùng page có khả năng phù hợp** trước, rồi database vẫn có thể đọc candidate entry/row để kiểm điều kiện còn lại.
+Ta lại có một nhu cầu mới: thay vì lướt một danh sách key khổng lồ, cần vài **tầng chỉ đường (routing)** để chọn đúng vùng lớn trước, rồi thu hẹp dần.
 
-## Key có thứ tự giúp loại work thế nào?
+## Vì sao B-tree xuất hiện ở đây?
 
-Danh sách lộn xộn buộc ta kiểm từng chỗ. Danh sách được giữ theo thứ tự cho phép loại một khoảng: nếu nhánh là 1–30 thì key 42 không thể ở đó. Đây là lý do B-tree hữu ích.
+**B-tree** là chiến lược Index cụ thể dùng key có thứ tự và nhiều tầng routing. Nó không phải binary tree hai nhánh. Với PostgreSQL 17, `CREATE INDEX` mặc định tạo B-tree và đây là loại general-purpose phổ biến khi tìm theo điều kiện bằng (`tenant_id = 42`), điều kiện khoảng (`created_at > ...`, `BETWEEN ...`) hoặc đọc theo thứ tự; PostgreSQL còn có index type khác cho access pattern khác, nhưng chúng nằm ngoài bài này. Trong mental model này:
 
-**B-tree** là cấu trúc Index phổ biến. Mô hình dưới đây đơn giản hóa layout nội bộ PostgreSQL nhưng trung thực ở cơ chế: root hướng đến range, node dưới thu hẹp range, leaf chứa candidate entry đã sắp theo key.
+- **root** là điểm chỉ đường đầu tiên;
+- node ở giữa tiếp tục chia range;
+- **leaf** là tầng cuối chứa các entry đã sắp, từ đó database xét candidate entry/row.
+
+B-tree tồn tại để trả lời một câu cụ thể: *làm sao loại rất nhiều range mà không quét một danh sách key lớn từ đầu đến cuối?*
 
 {{INDEX_VISUAL:btree}}
 
-Trước khi reveal, hãy chọn range chứa 42. Sau đó đi từng bước: visual đánh dấu nhánh bị loại, focus vào edge còn lại, rồi tới leaf. Điều cần nhớ không phải hình cây mà là: **thứ tự key loại range không thể đúng trước khi đọc candidate entries**.
+Trước khi bấm reveal, chọn range có thể chứa 42. Sau trace, tự trả lời: **những range nào ta chưa hề cần inspect?** Đó là lợi ích cần nhớ. SVG là mô hình dạy học, không phải layout byte-level của PostgreSQL; connector biểu diễn đường đi qua range.
 
-## Composite index: thứ tự của cả tuple
+## Một query thật đặt ra vấn đề mới
 
-Query thật thường vừa lọc vừa sắp:
+Shortcut theo một key là chưa đủ cho nhiều API. Endpoint của chúng ta cần:
 
 ```sql
+SELECT id, created_at, total
+FROM orders
 WHERE tenant_id = 42
   AND status = 'Paid'
 ORDER BY created_at DESC, id DESC
 LIMIT 20;
 ```
 
-Một **composite index** (Index ghép) có thể là:
+Ta không chỉ cần tenant 42. Ta cần các đơn `Paid`, theo thứ tự mới nhất trước, và dừng khi đủ 20 row.
+
+Một query không chỉ được xác định bởi table. Tổ hợp cột lọc, điều kiện bằng như `tenant_id = 42`, điều kiện khoảng như `created_at > ...`/`BETWEEN`, cột sắp xếp và có/không có `LIMIT` sẽ quyết định database cần làm work gì. Tổ hợp đó thường được gọi là **query shape**.
+
+Nếu một B-tree index giữ nhiều field, nên sắp chúng thế nào để query shape này không phải quay lại sort quá nhiều? Câu trả lời có tên là **composite index** (hay multicolumn index): index có nhiều key column, ví dụ:
 
 ```sql
-(tenant_id, status, created_at DESC, id DESC)
+CREATE INDEX ix_orders_tenant_status_created
+ON orders (tenant_id, status, created_at DESC, id DESC);
 ```
 
-Nó được sắp theo tuple, không phải mỗi cột được sắp độc lập. Hãy đọc như: tenant trước; trong tenant là status; trong cặp tenant/status là `created_at` mới nhất; cuối cùng là `id`. Vì vậy equality ở `tenant_id` và `status` có thể đưa database vào một vùng liên tiếp, phần sau đã đúng thứ tự để `LIMIT 20` dừng sớm.
+Đừng học thuộc tên “left-most prefix” ở đây. **Tuple** ở đây chỉ là một nhóm giá trị index key đã được xếp thứ tự, ví dụ `(42, Paid, 2026-09-26 10:30, 9001)`. Hãy đọc tuple theo thứ tự thật:
+
+```text
+tenant_id trước
+→ bên trong mỗi tenant, status
+→ bên trong tenant/status, created_at mới nhất trước
+→ nếu thời gian trùng, id mới hơn trước
+```
 
 {{INDEX_VISUAL:composite}}
 
-Chuyển sang query chỉ có `created_at`. Khi thiếu leading key `tenant_id`, database không có điểm bắt đầu trực tiếp cho một range liên tiếp theo thứ tự tuple trên. Đây là reason, không phải câu thần chú “left-most prefix”.
+Với `tenant_id = 42` và `status = 'Paid'`, các tuple đúng nằm cạnh nhau; phần `created_at DESC, id DESC` trong vùng đó đã có thứ tự nên `LIMIT 20` có thể dừng sớm. Chuyển visual sang “created_at only”: trong PostgreSQL 17 lab và mental model cơ bản này, thiếu tenant/status khiến index không còn cho cùng một điểm bắt đầu trực tiếp vào vùng liên tiếp theo `created_at`. Version/planner khác có thể có strategy bổ sung; bài này không dạy chúng.
 
-:::must-remember
-Index `(tenant_id, status, created_at, id)` có thể tốt cho đúng query shape trên. Nó không tự là Index tốt cho mọi query có nhắc một trong bốn cột.
+:::comparison
+Câu hỏi quyết định: index này có khớp **query shape** không? `(tenant_id, status, created_at, id)` có thể rất hợp cho query ở trên, nhưng không tự là index tốt cho mọi query nhắc một trong bốn cột. PostgreSQL có quy tắc chi tiết cho multicolumn B-tree; điểm khởi đầu an toàn là hiểu thứ tự tuple và kiểm plan thật.
 :::
 
-## Planner dự đoán trước, database quan sát sau
+## Có Index rồi, database nên luôn dùng nó chứ?
 
-Trước khi query chạy, **planner** (còn gọi optimizer) so sánh các access path. Nó chưa biết kết quả thật, nên phải estimate số row và cost.
+Chưa chắc. Nếu query cần gần hết table, việc đi qua Index rồi quay lại lấy rất nhiều row có thể không đáng hơn đọc table tuần tự. Với query khác, `ORDER BY` + `LIMIT` có thể làm Index path đáng giá dù điều kiện lọc không hẹp. Database có ít nhất các lựa chọn gần nhau:
 
-**Cardinality estimate** là số row planner dự đoán một bước sẽ tạo ra. **Selectivity** nói predicate loại được bao nhiêu row: `order_id = 123` thường thu hẹp mạnh; `status = 'Paid'` có thể giữ lại rất nhiều row. Đây là input cho cost, không phải luật “selectivity cao thì luôn dùng Index”.
+| Cùng trả lời câu hỏi “lấy row bằng đường nào?” | Trực giác dùng trong bài này |
+|---|---|
+| `Seq Scan` | đọc table lần lượt; thường hợp khi table nhỏ hoặc cần phần lớn row |
+| `Index Scan` | dùng key có thứ tự để đi vào một vùng candidate |
+| Bitmap path | gom match từ Index trước, rồi đọc table theo nhóm; đọc plan thấy thì nhận ra đây là một lựa chọn khác, chưa cần tối ưu nó trong bài này |
 
-Planner dùng **statistics**: bản tóm tắt distribution dữ liệu, được PostgreSQL cập nhật qua `ANALYZE`. Statistics không chứa từng row và không ép planner chọn Index. Sau bulk load hoặc distribution đổi mạnh, `ANALYZE` cho planner một estimate tốt hơn.
+Vì không có lựa chọn nào luôn thắng, database phải chọn đường **trước khi** chạy query. Nó so sánh lượng work mà mỗi đường *có khả năng* cần làm. Bộ phận làm việc đó có tên **planner** (cũng hay gọi optimizer).
+
+## Planner cần đoán điều gì trước khi chạy?
+
+Planner không thể chạy toàn bộ query chỉ để chọn plan. Nó cần ước lượng: “sau điều kiện này, khoảng bao nhiêu row còn lại?” Đây là **row estimate**, hay `cardinality estimate` trong tài liệu kỹ thuật.
+
+Ví dụ 1,000 đơn:
+
+```text
+status = 'Paid'  → khớp 820 đơn
+order_id = 123   → khớp 1 đơn
+```
+
+Điều kiện nào thu hẹp dữ liệu hơn? `order_id = 123`. Property “điều kiện giữ lại ít hay nhiều phần dữ liệu” được gọi là **selectivity**. Selectivity mô tả query so với data; nó không nói planner đã đoán đúng hay sai.
+
+Nhưng planner biết 820 hay 1 bằng cách nào khi chưa chạy query? Nó dùng **statistics**: phần tóm tắt về cách dữ liệu phân bố. PostgreSQL thu thập/cập nhật statistics bằng `ANALYZE`. Với table lớn, statistics dựa trên **sample** (lấy mẫu: chỉ dùng một phần dữ liệu đại diện thay vì toàn bộ table), nên estimate vẫn có thể lệch; đó là lý do để điều tra, không phải lời hứa rằng planner “biết chính xác”.
 
 {{INDEX_VISUAL:planner}}
 
-Visual này tách hai câu hỏi: selectivity là predicate giữ lại bao nhiêu data; estimate accuracy là planner đoán row count gần actual đến đâu. Chỉ sau đó mới dùng estimate để so cost/candidate plan. Khi estimate và actual lệch lớn, đó là hypothesis cần điều tra statistics/correlation/data shape, chưa phải kết luận “planner sai”.
+Visual tách hai câu hỏi để không bị lẫn:
 
-## Execution plan: đọc theo data flow
+1. `Paid = 82%` hay `Paid = 0.1%` — điều kiện lọc giữ lại bao nhiêu row? Đó là selectivity.
+2. 4,000 row dự đoán nhưng 82,000 row thực tế — planner đoán gần đúng đến đâu? Đó là estimate accuracy.
 
-`EXPLAIN` cho biết strategy planner dự định dùng. `EXPLAIN (ANALYZE, BUFFERS)` chạy query thật, cho actual rows/timing và buffer activity.
+Label và số nằm ngoài bar; bar chỉ biểu diễn độ lớn tương đối. Khi estimate/actual lệch, bắt đầu bằng giả thuyết về statistics và xem data/parameter thực tế có khác **giả định (assumption)** của planner không; chưa vội kết luận index hay planner sai.
 
-Đừng đọc mọi field một lúc. Đọc theo thứ tự:
+## Bây giờ mới cần `EXPLAIN`
 
-1. **Scan:** `Seq Scan` là đọc table lần lượt; `Index Scan` đi từ Index tới candidate range.
-2. **Điều kiện:** `Index Cond` và `Filter` là qualifier/evidence nằm trên scan node: `Index Cond` dùng để vào range; `Filter` kiểm sau khi row đã tới scan node. Chúng không phải plan node độc lập.
-3. **Rows:** estimate là dự đoán; actual là quan sát. Mismatch là điểm bắt đầu debug.
-4. **Sort:** xuất hiện khi access path chưa cho output đúng thứ tự.
-5. **Buffers:** page/buffer database đã chạm; diễn giải cùng scan type và rows.
-6. **Time:** nhìn sau cùng; timing đổi theo cache và load, plan shape/relative change thường dễ so hơn.
+Ta đã có câu hỏi đúng: *database đã chọn access path nào, và vì sao?* `EXPLAIN` cho xem plan mà planner dự định dùng. Nó chưa chạy query để lấy actual result.
 
-`Bitmap Index Scan`/`Bitmap Heap Scan` là note senior: planner có thể gom nhiều Index match rồi đọc table theo nhóm page. Nó là một access path khác, không tự tốt hoặc xấu.
+Khi cần biết điều gì thực sự xảy ra, dùng `EXPLAIN ANALYZE`: database chạy query và trả thêm actual rows/timing.
+
+Trước khi thêm `BUFFERS`, hãy hỏi vì sao database cần buffer. Database đọc dữ liệu theo page. Nếu page vừa được dùng, PostgreSQL muốn lấy lại từ shared memory thay vì lại yêu cầu dữ liệu từ các tầng storage thấp hơn. Simplified mental model là: `storage → page → shared buffers → bước xử lý của query`.
+
+Vì vậy `BUFFERS` là evidence về page/buffer activity: `shared hit` nghĩa page cần dùng đã có trong PostgreSQL shared buffers; `shared read` nghĩa PostgreSQL phải nạp page vào shared buffers. `shared read` không đồng nghĩa chắc chắn với một physical disk seek, vì OS/filesystem cache cũng có thể tham gia. Đọc buffer numbers cùng scan type và row count; chúng không tự kết luận plan tốt hay xấu.
+
+Một execution plan gồm các bước. PostgreSQL hiển thị mỗi bước như một **node**: có node scan, sort hoặc limit. **Scan node** chỉ là bước đọc các candidate row; `Filter` và `Index Cond` là thông tin gắn vào scan node, không phải bước riêng.
+
+Đọc plan theo từng lớp, không mở tất cả field cùng lúc:
+
+1. **Access path:** `Seq Scan`, `Index Scan` hay bitmap path?
+2. **Điều kiện ở scan:** `Index Cond` là điều kiện dùng để đi vào range của Index; `Filter` là điều kiện còn kiểm khi row đã tới scan. Chúng là metadata/evidence gắn với scan node, không phải operator riêng.
+3. **Thứ tự:** có `Sort` không? Nếu có, output từ access path chưa tự đúng thứ tự cần trả.
+4. **Ước lượng và thực tế:** estimate khác actual rows bao xa?
+5. **Đến cuối mới đọc thêm:** `BUFFERS`, rồi time, luôn đặt cạnh plan shape và **workload** — kiểu và lượng công việc thật hệ thống đang xử lý.
 
 {{INDEX_VISUAL:plan}}
 
-Visual cho phép đổi baseline và index flow, rồi reveal từng lớp: scan, condition, estimate, actual, sort, buffers, time. Nó cho thấy **row/data flow** thay vì chỉ xếp các box của plan.
+Visual cho thấy row/data flow qua operator thật. `Filter`/`Index Cond` nằm trong scan node; `Sort`/`Limit` mới là operator trong flow. Hãy đổi Baseline/After Index và reveal từng layer trước khi tự giải thích plan.
 
-## Lab PostgreSQL: predict → run → inspect → learn
+## Lab: kiểm chứng từng lớp, không học mọi field cùng lúc
 
 :::hands-on
-Đây là **local simulation**. Docker/PostgreSQL chạy trên máy bạn, không kết nối production. Version, cache state và cost model có thể làm outcome khác nhau; ghi evidence trước khi kết luận.
+Lab này là **local simulation**: PostgreSQL chạy trong Docker trên máy bạn, không kết nối production. Version, cache state và dữ liệu có thể làm plan khác nhau. Ghi observation trước khi kết luận.
 :::
 
-### Setup Windows-friendly
+### Setup
 
 Bạn cần Docker Desktop và cổng `5432` còn trống.
 
@@ -119,8 +199,6 @@ docker run --name quannet-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=
 docker exec quannet-postgres pg_isready -U postgres -d quannet_lab
 docker exec -it quannet-postgres psql -U postgres -d quannet_lab
 ```
-
-Dừng lab bằng `docker stop quannet-postgres`. Chỉ dùng `docker rm -f quannet-postgres` khi muốn xóa container và lab data.
 
 ```sql
 CREATE TABLE orders (
@@ -142,14 +220,14 @@ FROM generate_series(1, 300000) AS g;
 ANALYZE orders;
 ```
 
-### Experiment 1 — baseline
+### Experiment 1 — chưa có shortcut
 
-**Question:** chưa có secondary Index, database làm gì để lấy 20 đơn của tenant 42/Paid mới nhất?
+**Question:** chưa có B-tree index khớp query, database dùng đường nào, filtering work bao nhiêu, và có phải `Sort` không?
 
-**Predict:** tenant 42 chỉ là một phần table, nhưng output cần newest-first nên plan có thể `Seq Scan → Sort → Limit`.
+**Predict:** `Seq Scan` có thể xét phần lớn table, loại nhiều row bằng `Filter`, rồi `Sort` các row còn khớp trước `Limit`.
 
 ```sql
-EXPLAIN (ANALYZE, BUFFERS)
+EXPLAIN (ANALYZE)
 SELECT id, created_at, total
 FROM orders
 WHERE tenant_id = 42 AND status = 'Paid'
@@ -157,24 +235,22 @@ ORDER BY created_at DESC, id DESC
 LIMIT 20;
 ```
 
-**Inspect:** scan type; `Filter`; `Sort`; estimated/actual rows; buffers; total time.
+**Inspect:** theo đúng thứ tự: (1) `Seq Scan`; (2) `Filter`; (3) `Rows Removed by Filter`; (4) actual rows mà scan node trả ra; (5) `Sort`; (6) `Limit`.
 
-**Outcome:** `Seq Scan` + `Sort` là một outcome hợp lý, không phải đáp án bắt buộc trên mọi máy.
+Với Seq Scan có `Filter` trong experiment này, có thể đọc gần đúng: row scan đã xét ≈ số row scan node trả ra sau `Filter` + `Rows Removed by Filter`. Đây không phải công thức chung cho mọi operator. `actual rows` là output của scan node sau filtering, nên một mình nó không nói scan đã xét bao nhiêu row. **Interpret:** outcome có thể khác theo máy; mô tả evidence rồi mới kết luận, không săn một plan “đúng duy nhất”.
 
-**Why / Learn:** không có access path khớp query shape, database có thể phải inspect nhiều row rồi sort. Ghi output vào worksheet trước khi nhận xét.
+### Experiment 2 — thêm đúng thứ tự tuple
 
-### Experiment 2 — chỉ đổi access path
+**Question:** composite index có tạo một range tenant/status và có sẵn order cho `LIMIT` không?
 
-**Question:** Index ghép có tạo candidate range và giữ order không?
-
-**Predict:** `Index Cond` dùng tenant/status, `Sort` có thể biến mất.
+**Predict:** `Index Cond` có thể dùng tenant/status; `Sort` có thể biến mất.
 
 ```sql
 CREATE INDEX ix_orders_tenant_status_created
 ON orders (tenant_id, status, created_at DESC, id DESC);
 ANALYZE orders;
 
-EXPLAIN (ANALYZE, BUFFERS)
+EXPLAIN (ANALYZE)
 SELECT id, created_at, total
 FROM orders
 WHERE tenant_id = 42 AND status = 'Paid'
@@ -182,32 +258,26 @@ ORDER BY created_at DESC, id DESC
 LIMIT 20;
 ```
 
-**Inspect:** `Index Scan` hay bitmap/seq path? `Index Cond`? `Sort`? rows/buffers/time so với baseline?
+**Inspect:** access path, `Index Cond`, `Sort`, actual rows. **Why:** đây là evidence cho tuple ordering và `LIMIT`, không phải bằng chứng rằng mọi index đều tốt.
 
-**Learn:** Index path và không Sort khớp mental model. Bitmap hoặc Seq Scan vẫn có thể hợp lý; nhìn total cost, rows, pages và distribution trước khi ép plan.
+### Experiment 3 — hỏi planner đã đoán gần chưa
 
-### Experiment 3 — Break A: phá selectivity
+**Question:** planner dự đoán số row có gần số row scan node thực sự produce không?
 
-**Question:** nếu mọi row tenant 42 là Paid, predicate `status` còn thu hẹp được gì?
-
-**Predict:** status không giảm range bên trong tenant 42; `ORDER BY ... LIMIT` vẫn có thể làm Index path đáng giá.
+Query ở Experiment 2 giữ `ORDER BY ... LIMIT 20` vì đó là API shape thật. Nhưng `Limit` có thể làm operator bên dưới dừng sớm. Ở experiment này, ta chủ động đơn giản hóa query để cô lập một câu hỏi duy nhất: planner estimate có gần actual rows không? Ta tạm bỏ `ORDER BY` và `LIMIT` vì chúng có thể đưa sorting/early-stop behavior vào cùng một experiment.
 
 ```sql
-UPDATE orders SET status = 'Paid' WHERE tenant_id = 42;
-ANALYZE orders;
 EXPLAIN (ANALYZE, BUFFERS)
-SELECT id, created_at, total FROM orders
-WHERE tenant_id = 42 AND status = 'Paid'
-ORDER BY created_at DESC, id DESC LIMIT 20;
+SELECT id, created_at, total
+FROM orders
+WHERE tenant_id = 42 AND status = 'Paid';
 ```
 
-**Why / Learn:** không dùng shortcut “selectivity thấp thì chắc Seq Scan”. Planner so tổng work, gồm range, order, `LIMIT`, page cost và estimate.
+**Inspect:** trên scan node liên quan, so estimated rows với actual rows produced. Sau đó mới xem `shared hit/read` trong `BUFFERS`, với mental model shared buffers ở phần trên. Nếu máy chọn path hợp lệ khác, vẫn tìm cặp estimate/actual của node thực sự tạo ra row cho điều kiện này; không ép một plan cố định. **Why:** `ANALYZE` tạo statistics cho planner; bỏ early stop giúp tách estimate accuracy khỏi cơ chế `LIMIT`.
 
-### Experiment 4 — Break B: phá query shape
+### Experiment 4 — phá query shape
 
-**Question:** bỏ `tenant_id`/`status`, Index hiện tại còn cho điểm bắt đầu trực tiếp không?
-
-**Predict:** không; leading key bị thiếu nên `created_at` không tạo contiguous range theo tuple đó.
+**Question:** nếu chỉ có `created_at`, B-tree index tenant/status/created_at còn cho cùng điểm bắt đầu trực tiếp không?
 
 ```sql
 EXPLAIN (ANALYZE, BUFFERS)
@@ -216,76 +286,63 @@ WHERE created_at > now() - interval '1 day'
 ORDER BY created_at DESC, id DESC LIMIT 20;
 ```
 
-**Why / Learn:** Index vẫn tồn tại nhưng có thể không phù hợp query shape. Đừng thêm Index mới trước khi biết frequency, write volume, plan hiện tại và SLO.
+**Predict:** trong PostgreSQL 17 lab, leading key không có nên index hiện tại không cho cùng direct range theo query shape này. **Learn:** version/planner strategy có thể thay đổi access path, vì vậy đọc plan; không học thuộc một slogan và không thêm index mới trước khi biết query frequency, write volume và evidence hiện tại.
 
-### Evidence worksheet
+## Production story: vì sao cuối cùng mới nhắc p95?
 
-| Experiment | Prediction | Actual plan shape | Estimate vs actual | Buffers/time | What changed? |
-|---|---|---|---|---|---|
-| Baseline |  |  |  |  |  |
-| Composite Index |  |  |  |  |  |
-| Break A |  |  |  |  |  |
-| Break B |  |  |  |  |  |
+Sau khi hiểu database work, ta mới đo tác động lên user. Câu hỏi là: **user chờ API bao lâu?** Ta đo response time của nhiều request, không chỉ một request.
 
-## Khi plan ngược dự đoán
+Nhìn thử 10 response time đã sắp: `100 ms, 110 ms, 120 ms, 130 ms, 140 ms, 150 ms, 900 ms, 1.2 s, 1.5 s, 2.0 s`. Nếu chỉ báo một average, ta không biết phần lớn user chờ ở đâu hay một nhóm nhỏ đang chậm hơn nhiều. Average nén cả **distribution** (cách response time phân bố) vào một số; outlier có thể kéo số đó lên, nhưng average vẫn không chỉ ra vị trí của phần lớn request hay nhóm request chậm ở phần cuối (tail).
 
-**Observation:** plan/rows/buffers khác prediction.
-**Hypothesis:** query shape, distribution, statistics, cache state hoặc cost model khác assumption.
-**Evidence:** `Index Cond`, `Filter`, estimate/actual, `Sort`, buffers, distribution query.
-**Experiment:** `ANALYZE`, đổi một predicate trên test data, chạy lại.
-**Conclusion:** giữ, sửa hoặc bỏ candidate Index; không ép plan trong production chỉ để thắng benchmark.
+Sắp response time từ nhanh tới chậm, **percentile** trả lời: “bao nhiêu phần trăm request ở hoặc dưới mốc này?”
 
-## Production case: điều tra theo staged disclosure
+| Câu hỏi | Metric gần nhất |
+|---|---|
+| request điển hình ở giữa mất bao lâu? | `p50` (50% request không chậm hơn mốc này) |
+| phần lớn traffic có còn chậm không? | `p95` (95% request không chậm hơn mốc này) |
+| phần đuôi rất chậm ra sao? | `p99` |
+| có request chậm nhất bất thường không? | max |
 
-**Symptom:** Orders API trả 20 row, p95 tăng 80 ms → 1.8 s.
-**Known facts:** DB CPU 35%; plan hiện tại `Seq Scan → Sort`; khoảng 1.8M row considered, 20 row returned.
-**Unknown:** frequency, tenant/status distribution, write rate, buffers/cache state, estimate accuracy và SLO.
-**Hypotheses:** query shape thiếu access path; data distribution làm estimate sai; hoặc bottleneck không nằm ở DB read.
-**Evidence cần lấy:** SQL/parameter thật, `EXPLAIN (ANALYZE, BUFFERS)`, p95 (95% request không chậm hơn mốc này), rows, buffers, write rate.
-**Decision:** thử candidate Index trên data gần production, đo read benefit và write impact.
+Không metric nào thay metric khác. Production case dùng `p95` vì một average duy nhất không mô tả được toàn bộ distribution. `p95` trả lời một câu khác: khoảng 95% request hoàn thành không chậm hơn mốc nào? Nó không mô tả “5% chậm nhất” chi tiết ra sao; nó chỉ nói xấp xỉ 95% observations ở hoặc dưới threshold đó.
 
-Nếu rollout: **canary** là chỉ áp dụng cho một phần traffic/workload để quan sát trước; **rollback** là đường quay về release/schema an toàn nếu metric xấu. Không thêm Redis chỉ vì endpoint chậm: cache là candidate sau khi đã hiểu access path và correctness/invalidation requirement.
+**Symptom:** Orders API trả 20 row; `p95` tăng từ 80 ms lên 1.8 s. `p95` ở đây nghĩa là xấp xỉ 95% request không chậm hơn mốc đo được. Đây là symptom, chưa phải kết luận “cần Redis”.
 
-## Senior trade-off
+**Evidence cần lấy:** SQL và parameter thật, `EXPLAIN (ANALYZE, BUFFERS)`, estimate/actual rows, `Sort`, phân bố tenant/status, query frequency, **tần suất ghi (write rate)** và storage. **Hypothesis cạnh tranh:** query shape thiếu access path; statistics không phản ánh data; hoặc bottleneck nằm ngoài database read. **Decision:** thử candidate index trên data gần [[workload]] (kiểu và lượng công việc thật hệ thống xử lý), đo read benefit cùng write/storage impact rồi mới triển khai có kiểm soát (rollout).
 
-Mỗi `INSERT`, `UPDATE`, `DELETE` liên quan phải cập nhật Index; đó là write overhead cụ thể. Index cũng dùng storage và có thể tăng cache pressure. Covering Index hoặc thêm cột chỉ đáng cân nhắc khi evidence read benefit bù được write/storage cost.
+## Trade-off và câu trả lời interview
 
-Không dùng Index khi chưa có query shape/evidence; không giữ duplicate Index không còn traffic; không nói “Index luôn nhanh hơn”; không ép planner bằng hint workaround thay cho điều tra cause.
+Index giúp read path có thể làm ít work hơn, nhưng mỗi `INSERT`, `UPDATE`, `DELETE` liên quan phải duy trì thêm index entry. Index cũng tốn storage. Vì vậy câu trả lời trưởng thành không phải “thêm index”, mà là “index này phục vụ query nào, xuất hiện bao nhiêu, giảm work nào, và write cost có chấp nhận được không?”
 
-## Transfer challenge
-
-Table `orders` có 30M row. Query lọc `customer_id`, `status IN ('Paid','Shipped')`, sort newest, lấy 20 row. Bạn chưa biết distribution, frequency, write volume hay plan.
-
-Trả lời trước: **Bạn cần biết gì, vì sao nó ảnh hưởng decision, và sẽ lấy evidence ở đâu?**
-
-Checklist sau khi bạn trả lời:
-
-- có SQL/parameter và `EXPLAIN (ANALYZE, BUFFERS)` trên data representative;
-- biết estimated/actual rows, distribution và query frequency;
-- biết write rate/storage budget/SLO;
-- có candidate Index để test nhưng chưa hứa deploy;
-- xem keyset pagination nếu page rất sâu.
-
-Model answer: “Em cần estimate/actual rows và distribution vì candidate range phụ thuộc selectivity thực. Em lấy plan có buffers với parameter representative, đối chiếu query frequency và write rate, rồi thử Index candidate trên data gần production trước khi canary.”
+:::interview-answer
+“Với query lấy 20 đơn mới nhất của một tenant/status, em bắt đầu từ query shape chứ không mặc định thêm index. Composite index có thể xếp `tenant_id`, `status`, rồi `created_at/id` để database đi vào một vùng nhỏ, có sẵn order và dừng ở `LIMIT`. Em xác minh bằng plan: access path, `Index Cond` hoặc `Filter`, `Sort`, estimate so với actual rows, sau đó mới đọc buffers/time. Em cũng kiểm write rate và storage vì index được cập nhật khi dữ liệu đổi.”
+:::
 
 ## Explain it back
 
-Hãy tự trả lời trong 60–120 giây: Index là gì, mechanism nào giảm work, evidence nào bạn đọc trong plan, và trade-off nào bạn phải đo?
+Hãy tự nói trong 60–120 giây, theo chuỗi này: scan → work tăng → cần key có thứ tự → loại range → cần nhiều tầng routing → B-tree → query nhiều field → tuple order → nhiều access path → planner/estimate/statistics → `EXPLAIN` evidence.
 
-Sau khi nói xong, tự check: có nhắc access path, ordered candidate range, estimate/actual rows, `Sort`/buffers, write/storage cost và điều kiện “không luôn dùng Index” chưa?
-
-Model answer: “Index là cấu trúc phụ có key theo thứ tự để database có thêm access path, đi gần candidate range thay vì luôn scan cả table. Với query tenant/status lấy 20 row mới nhất, Index ghép có thể vừa thu hẹp range vừa có sẵn order nên bớt sort và dừng sớm. Em xem scan type, `Index Cond`/`Filter`, estimate so với actual rows, buffers và timing. Em cũng đo write rate/storage vì Index phải được cập nhật khi dữ liệu đổi.”
+Nếu bị kẹt, đừng quay về định nghĩa. Hỏi lại: *cách đơn giản trước đó làm gì, và nó bắt đầu thiếu ở đâu?*
 
 ## Final recall
 
-1. Khi nào table scan lại hợp lý hơn Index path?
-2. Index giảm work gì, và nó không hứa điều gì?
-3. Vì sao `(tenant_id, status, created_at, id)` không cho direct range khi chỉ có `created_at`?
-4. `Index Cond` khác `Filter` thế nào?
-5. Estimate/actual mismatch dẫn bạn tới hypothesis nào?
-6. Write overhead của Index đến từ đâu?
+1. Vì sao scan vẫn là lựa chọn hợp lý trong vài query?
+2. B-tree index trong bài này dùng property nào để giảm vùng dữ liệu phải tìm?
+3. B-tree giải quyết giới hạn nào của danh sách key lớn có thứ tự?
+4. Vì sao composite index phải đọc theo tuple order?
+5. Planner cần estimate trước khi chạy query để làm gì?
+6. `EXPLAIN`, `EXPLAIN ANALYZE` và `BUFFERS` lần lượt trả lời câu hỏi nào?
+7. Vì sao production case chọn p95 thay vì chỉ nhìn average?
 
-Tóm tắt: ordered key giúp loại range; composite Index theo tuple; planner dự đoán từ statistics; plan là evidence; quyết định Index là read benefit đổi lấy write/storage cost.
+:::final-recall
+Index không hứa “nhanh hơn”. B-tree index trong bài này dùng key có thứ tự và nhiều tầng routing để đưa database tới vùng candidate phù hợp hơn. Composite index theo thứ tự tuple; planner chọn giữa các access path nhờ estimate/statistics; `EXPLAIN` biến quyết định đó thành evidence; write/storage cost quyết định có nên giữ index hay không.
+:::
+
+## Further learning
+
+- [Use The Index, Luke!: The Search Tree](https://use-the-index-luke.com/sql/anatomy/the-tree) — trực giác leaf entries và nhiều tầng routing của B-tree.
+- [PostgreSQL Indexes and B-Trees / EXPLAIN](https://www.youtube.com/watch?v=YZSHpDn7GP4) — một visual explanation khác về B-tree traversal và `EXPLAIN`; dùng để củng cố sau core lesson.
+- [PostgreSQL 17: Multicolumn Indexes](https://www.postgresql.org/docs/17/indexes-multicolumn.html) — semantics chính xác cho lab `postgres:17`.
+- [PostgreSQL 17: Using EXPLAIN](https://www.postgresql.org/docs/17/using-explain.html) — đọc plan và `BUFFERS` sâu hơn sau lab.
 
 ## Continue
 

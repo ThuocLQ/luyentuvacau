@@ -1,154 +1,1554 @@
-# QuanNet Engineering Learning Standard v2.3
+# QuanNet Engineering Learning Standard v2.4 — Final Canonical
+
+> **Status:** Canonical / project-wide source of truth  
+> **Audience:** Backend .NET developer with basic programming and SQL foundations  
+> **Language:** Vietnamese-first, preserve industry technical terms when useful  
+> **Core principle:** **Concept Origin Before Definition**
+
+---
 
 ## 1. Product goal
 
-QuanNet giúp Backend .NET developer Việt Nam **hiểu cơ chế, tự kiểm chứng, debug, giải thích và chuyển kiến thức sang tình huống mới**. Một lesson không được xem là hoàn thành chỉ vì người học đã đọc hết hoặc trả lời đúng một câu hỏi.
+QuanNet is not a content library and not an interview-cram site.
 
-**Mastery > Calendar.** Tiến độ và streak chỉ là tín hiệu phụ. Dấu hiệu học chắc là người học mô tả được mechanism, dự đoán được outcome, dùng evidence để sửa giả thuyết, và nêu được trade-off trong context mới.
+Its goal is to help a backend engineer:
 
-## 2. Depth before brevity
+- understand why a concept exists;
+- visualize and trace how it works;
+- apply it in runnable practice;
+- observe evidence instead of guessing;
+- break and debug assumptions;
+- reason about boundaries and trade-offs;
+- transfer the mechanism to unseen cases;
+- explain it clearly in Vietnamese and technical English;
+- retain it through retrieval and later review.
 
-Viết ngắn chỉ tốt khi người học đã có mental model. Với topic mới, ưu tiên giải thích đủ sâu rồi mới nén thành recall. Không dùng một slogan để thay cho quan hệ nguyên nhân–kết quả.
-
-Mỗi lesson công bố rõ prerequisite boundary: người học cần biết gì, và không cần biết gì. Không đưa một concept mới vào câu giải thích khi nó chưa được định nghĩa hoặc chưa có chỗ để người học quan sát nó.
-
-Ở lần đầu xuất hiện:
-
-- giữ thuật ngữ chuẩn của ngành khi đó là cách developer dùng thật;
-- định nghĩa ngắn bằng tiếng Việt tự nhiên;
-- nói concept đó giải quyết vấn đề nào và nó liên hệ với concept ngay trước ra sao;
-- chỉ dùng song ngữ khi nó giúp nhận diện thuật ngữ trong tài liệu, log hoặc phỏng vấn.
-
-Kiểm soát **vocabulary load**: một đoạn không mở quá nhiều thuật ngữ mới. Kiểm soát **concept dependency**: planner chỉ xuất hiện sau access path; estimate chỉ xuất hiện khi đã có “dự đoán trước khi chạy”; buffer chỉ xuất hiện sau page/buffer mental model.
-
-## 3. Teaching sequence
-
-Mặc định dùng progression **Toy → Realistic → Production**:
-
-1. Toy model cô lập một mechanism với dữ liệu nhỏ.
-2. Realistic example thêm query shape, failure hoặc data distribution gần công việc thật.
-3. Production case thêm symptom, evidence, unknowns, risk, rollout và recovery.
-
-Áp dụng progressive disclosure. Người học thấy một lớp quyết định trước; chi tiết tiếp theo chỉ mở khi nó trả lời câu hỏi đang có. Không dump một execution plan, bảng metric hoặc architecture diagram ngay đầu bài.
-
-Một giải thích sâu phải có **Why Chain**: điều gì xảy ra → tại sao mechanism đó tạo outcome → dấu hiệu nào quan sát được → khi assumption thay đổi thì kết luận nào đổi. Định nghĩa không có mechanism và evidence chưa đủ.
-
-## 4. Visuals are teaching, not decoration
-
-Visual chỉ tồn tại khi nó dạy một mechanism, một quality attribute hoặc một execution trace mà prose đơn thuần khó làm rõ.
-
-Visual tốt cần có:
-
-- input/query hoặc state ban đầu;
-- prediction trước khi reveal khi phù hợp;
-- từng bước chuyển state, phần bị loại/chọn và lý do;
-- control learner-driven: Reset, Previous, Next; không autoplay;
-- reduced-motion support và mobile-readable layout;
-- mapping từ visual sang evidence thật: plan, log, metric, query output hoặc test.
-
-Dùng SVG khi cần biểu diễn cấu trúc/đường đi thật (tree, graph, flow). Không dùng một chuỗi card hoặc box thay cho cơ chế cần học. Không xây generic diagram engine nếu một visual tập trung giải quyết đúng một lesson sẽ rõ và dễ bảo trì hơn.
-
-## 5. Labs must teach
-
-Lab là **local simulation** hoặc sandbox trừ khi được live-verified rõ ràng. Lab không phải checklist lệnh chạy.
-
-Mỗi experiment có flow:
-
-1. **Question** — đang kiểm tra hypothesis nào?
-2. **Predict** — learner dự đoán mechanism/outcome trước.
-3. **Run** — lệnh nhỏ, deterministic khi có thể.
-4. **Inspect** — chỉ rõ output, field, metric hay log cần nhìn.
-5. **Interpret** — outcome nói gì và không nói gì.
-6. **Why** — nối evidence về mental model.
-7. **Learn** — rule quyết định có điều kiện.
-
-Nhiều outcome có thể hợp lệ theo version, cache, cost model và dữ liệu. Dạy `result before conclusion`: ghi observation trước, rồi mới tạo hypothesis. Có ít nhất một Break It / debug flow khi failure là phần quan trọng: observation → hypothesis → evidence → experiment → conclusion/recovery.
-
-## 6. Senior layer
-
-Senior content không phải thêm acronym. Nó phải làm rõ decision boundary:
-
-- symptom và known facts;
-- điều còn unknown;
-- các hypothesis cạnh tranh;
-- evidence phân biệt chúng;
-- decision, trade-off, blast radius, rollout/canary/rollback hoặc reconciliation khi phù hợp.
-
-Không gọi một giải pháp là best practice nếu chưa nêu workload, correctness requirement, ownership và failure mode. Anti-pattern phải có lý do cơ chế, không chỉ ghi “không nên”.
-
-Transfer case cho phép câu trả lời “chưa đủ thông tin”. Bài mẫu phải chỉ ra cần thêm dữ kiện nào, vì dữ kiện đó ảnh hưởng decision nào, và sẽ lấy evidence ở đâu.
-
-## 7. Explain, recall and assessment
-
-`Explain it back` luôn yêu cầu learner tự trả lời trước. Sau đó mới hiện checklist, rồi model answer ngắn, chính xác bằng tiếng Việt tự nhiên và technical English vừa đủ.
-
-`Final Recall` hỏi câu cụ thể trước khi đưa summary. Recall không được là bản sao ngắn hơn của cả lesson.
-
-Quiz và interview follow-up dùng cùng terminology với lesson. Câu hỏi cần context, constraints, evidence và rationale; không dùng English-heavy hoặc thuật ngữ để làm khó người học.
-
-## 8. Golden Lesson acceptance criteria
-
-Một Golden Lesson đạt khi người học có thể:
-
-- nêu vấn đề thật mà concept giải quyết;
-- mô tả mechanism bằng ngôn ngữ của mình;
-- dự đoán và đọc một visual/execution trace;
-- chạy hoặc diễn giải lab evidence;
-- debug ít nhất một assumption sai;
-- cân nhắc production trade-off và unknown;
-- giải thích ngắn gọn trong interview;
-- transfer sang case lạ mà không overclaim.
-
-Index & Execution Plan là benchmark về độ sâu, không phải template heading hay visual bắt buộc cho mọi bài. Runtime/Data có thể dùng decision table và code; Distributed Systems dùng message flow/failure matrix; System Design dùng framework/diagram; Finance dùng lifecycle/state flow; Project Stories dùng worksheet; Question Bank dùng practice cards. Consistency là cùng learning standard, không phải tất cả trang giống nhau.
-
-## 9. UI scope
-
-QuanNet là learning dashboard nhẹ: roadmap, lesson tiếp theo, self-assessment và review. Không thêm gamification/analytics phức tạp nếu chúng không cải thiện learning loop.
-## 10. Research-backed authoring
-
-Golden Learning Labs không được author chỉ từ model memory. Trước khi viết hoặc rewrite, author phải thực hiện research có mục đích học tập:
+The optimization target is:
 
 ```text
-Primary / official technical sources
-+ high-quality engineering material
-+ selected video or teaching material when a visual mechanism matters
-+ realistic cases
-→ cross-check
-→ original QuanNet synthesis
+UNDERSTAND
+→ VISUALIZE
+→ TRACE
+→ APPLY
+→ VERIFY
+→ BREAK
+→ DEBUG
+→ REASON
+→ TRANSFER
+→ COMMUNICATE
+→ RETAIN
 ```
 
-Nguồn chính thức ưu tiên cho fact/semantics; maintainer/vendor material và nguồn engineering mạnh giúp giải thích production; video là teaching/visual reference, không mặc định là source-of-truth.
+**Mastery > Calendar.**
 
-Source hierarchy mặc định cho factual correctness:
+Lesson count, streak, reading speed, content volume and roadmap completion are secondary signals.
+
+---
+
+## 2. Canonical learning loop
+
+A major QuanNet lesson should normally follow this causal learning loop:
 
 ```text
-official specification / documentation
-→ maintainer or vendor engineering material
-→ strong independent technical material
-→ experienced technical educator
+PREREQUISITE BOUNDARY
+→ QUESTION / REAL PROBLEM
+→ SIMPLEST APPROACH
+→ WHAT WORKS ABOUT IT
+→ WHERE IT BREAKS
+→ NEW PROPERTY WE NEED
+→ INTUITIVE SOLUTION
+→ NAME THE CONCEPT
+→ VISUALIZE
+→ TRACE STEP BY STEP
+→ WORKED EXAMPLE
+→ HANDS-ON
+→ VERIFY WITH EVIDENCE
+→ GO DEEPER
+→ BREAK
+→ DEBUG
+→ WHY CHAIN
+→ TRADE-OFF / BOUNDARY
+→ PRODUCTION CASE
+→ TRANSFER
+→ EXPLAIN
+→ RECALL
+```
+
+This is a reasoning model, not a rigid heading template. Different topics may use different page structures.
+
+---
+
+## 3. Prerequisite boundary
+
+Every major lesson must explicitly state what the learner is expected to know before starting.
+
+If a concept or term is not inside that prerequisite boundary, the lesson must do one of three things:
+
+1. teach it;
+2. introduce it with enough context to continue safely;
+3. intentionally link to a real prerequisite lesson.
+
+A lesson must never silently depend on knowledge that was not declared.
+
+### Self-contained rule
+
+External videos, articles and docs are reinforcement.
+
+The learner must be able to understand the core mechanism, complete the main lab and explain the main decision boundary **without opening external material**.
+
+---
+
+## 4. Concept Origin Before Definition
+
+Do not open an important concept with a definition.
+
+Build the need first:
+
+```text
+problem
+→ simplest approach
+→ limitation
+→ missing property
+→ intuitive solution
+→ technical name
+→ short definition
+→ mechanism
+→ evidence
+```
+
+A learner should feel:
+
+> “If I did not know this concept existed, I would now want to invent something similar.”
+
+### Bad
+
+```text
+A B-tree is a balanced tree used by databases...
+```
+
+### Better
+
+```text
+Scanning every row becomes expensive.
+Ordered keys let us eliminate impossible ranges.
+A very large ordered key set cannot be treated like one tiny flat list.
+We need multiple routing levels to reach the correct region.
+That structure is where a B-tree becomes useful.
+```
+
+---
+
+## 5. Name It Late
+
+If the mechanism can be understood before the technical name, delay the name.
+
+Examples:
+
+```text
+"database needs to choose which data-access route is likely cheaper"
+→ planner / optimizer
+```
+
+```text
+"how many rows this step is expected to output"
+→ row estimate / cardinality estimate
+```
+
+```text
+"the rule must stay correct even when two executions overlap"
+→ invariant / synchronization need
+```
+
+The technical term should arrive when the learner already has a mental slot for it.
+
+---
+
+## 6. First-use rule
+
+For a non-trivial concept, first use should normally include:
+
+```text
+problem
+→ naive/simple approach
+→ limitation
+→ need
+→ intuition
+→ technical name
+→ short definition
+→ tiny example
+→ connection to previous idea
+```
+
+A plain `definition → example` flow is acceptable only for genuinely simple concepts.
+
+---
+
+## 7. No Undefined Concept rule
+
+Do not write as if the learner already understands a term merely because it is common among senior engineers.
+
+Audit especially:
+
+- metrics and acronyms;
+- runtime internals;
+- networking terms;
+- database-plan terms;
+- distributed-systems terminology;
+- security vocabulary;
+- cloud/platform terminology.
+
+If an unexplained term is not necessary, remove it.
+
+If it is necessary, teach enough of it before using it as a dependency.
+
+---
+
+## 8. Zero-Friction Vocabulary Rule
+
+A learner should not need to leave the lesson and search the web merely to understand the next sentence.
+
+Unknown vocabulary is a **learning-flow blocker**, not a minor editorial issue.
+
+For every unfamiliar term, use the smallest teaching treatment that lets the learner continue safely.
+
+### Level 1 — Inline explanation
+
+Use when one short sentence is enough.
+
+Example:
+
+```text
+overhead
+= phần chi phí phát sinh thêm để một mechanism hoạt động,
+ngoài phần work chính mà ta thật sự muốn thực hiện.
+```
+
+Then reconnect the word to the current topic:
+
+```text
+Index write overhead
+= ngoài việc ghi row chính,
+database còn phải duy trì thêm index structure.
+```
+
+The learner should not need to open another page.
+
+### Level 2 — Inline explanation + Glossary
+
+Use when the term:
+
+- is common in engineering;
+- will recur across lessons;
+- benefits from a stable short definition.
+
+At first use:
+
+1. explain it naturally in the lesson;
+2. optionally mark it with the project glossary syntax such as `[[overhead]]`;
+3. continue the lesson without requiring the glossary popup.
+
+The glossary reinforces the term; it does not unlock the paragraph.
+
+### Level 3 — Mini-concept before continuing
+
+If a term cannot be understood safely in one or two sentences because it has its own mechanism, dependency chain, trade-off or failure mode, do not hide it behind a tooltip.
+
+Pause the main lesson and teach the needed concept first.
+
+Possible examples, depending on the prerequisite boundary:
+
+```text
+contention
+backpressure
+MVCC
+eventual consistency
+serialization
+idempotency
+```
+
+A tooltip is not a substitute for correct dependency order.
+
+---
+
+## 9. Vocabulary Escalation Rule
+
+When a new term appears, decide its treatment explicitly:
+
+```text
+Can the learner understand it safely in one sentence?
+→ explain inline
+
+Will the term recur and matter later?
+→ inline explanation + glossary support
+
+Does understanding it require its own mechanism?
+→ teach a mini-concept before continuing
+```
+
+Do not send the learner into a research rabbit hole for ordinary vocabulary.
+
+External research should be for:
+
+```text
+"I want to go deeper."
+```
+
+not:
+
+```text
+"I cannot understand the next sentence without Google."
+```
+
+### Preserve useful industry language
+
+Do not solve vocabulary friction by translating every technical term into unnatural Vietnamese.
+
+Prefer:
+
+```text
+technical term
++ short Vietnamese meaning
++ concrete local example
+```
+
+Example:
+
+```text
+throughput
+= lượng work hệ thống xử lý được trong một khoảng thời gian.
+
+Ví dụ:
+500 requests/second is a throughput measurement.
+```
+
+The learner should recognize the term later in documentation, logs, code review and interviews.
+
+---
+
+## 10. Glossary Is Support, Not Dependency
+
+The lesson must remain understandable without opening glossary popovers.
+
+The glossary exists to:
+
+- reinforce a short definition;
+- preserve common industry terminology;
+- provide one compact example;
+- support later recall;
+- let the learner quickly revisit a term across lessons.
+
+The glossary must not:
+
+- contain essential reasoning missing from the lesson;
+- replace Concept Origin;
+- hide a missing prerequisite;
+- become a dumping ground for full lessons;
+- force repeated popup navigation during normal reading.
+
+### First-use rule still wins
+
+Even when a term has a glossary entry, its first meaningful use in a lesson must contain enough context for the learner to continue.
+
+Bad:
+
+```text
+Index has write [[overhead]].
+```
+
+if the learner has never met the word.
+
+Better:
+
+```text
+Index has write [[overhead]] — tức database phải làm thêm work
+để cập nhật index ngoài việc ghi row chính.
+```
+
+After that, `overhead` may be used normally.
+
+---
+
+## 11. Vocabulary Friction Audit
+
+Before freezing a lesson, read it using only the declared prerequisite boundary.
+
+Mark any word or phrase likely to trigger:
+
+> “Tôi phải Google từ này trước thì mới hiểu được câu tiếp theo.”
+
+For each marked term:
+
+```text
+unnecessary?
+→ remove it
+
+simple meaning?
+→ explain inline
+
+common recurring engineering term?
+→ inline + glossary
+
+mechanism-heavy concept?
+→ teach it before continuing
+```
+
+Audit both obvious technical terms and “ordinary engineer vocabulary” that experts often forget beginners may not know.
+
+Typical examples:
+
+```text
+overhead
+workload
+latency
+throughput
+predicate
+distribution
+contention
+invariant
+serialization
+idempotency
+consistency
+backpressure
+cardinality
+selectivity
+buffer
+partition
+payload
+metadata
+```
+
+This list is illustrative, not a glossary quota.
+
+### Success criterion
+
+Vocabulary should preserve the learner's reasoning flow:
+
+```text
+read
+→ understand enough
+→ continue reasoning
+```
+
+not:
+
+```text
+read
+→ stop
+→ search web
+→ read unrelated material
+→ return later
+→ reconstruct the original context
+```
+
+The goal is not to explain every English word.
+
+The goal is:
+
+> **No vocabulary should interrupt the learner's reasoning merely because the author assumed it was obvious.**
+
+---
+
+## 12. Vocabulary load budget
+
+Prefer one new major idea at a time.
+
+A short learning step should not force the learner to simultaneously hold several new terms such as:
+
+```text
+planner
+statistics
+selectivity
+cardinality
+cost model
+histogram
+correlation
+```
+
+Preferred progression:
+
+```text
+stabilize A
+→ introduce B
+→ connect A + B
+→ introduce C
+```
+
+If a paragraph requires 5–7 unfamiliar terms, the dependency order is probably wrong.
+
+---
+
+## 13. Abstraction ladder
+
+For difficult topics:
+
+```text
+concrete problem
+→ intuitive / physical picture
+→ simple mechanism
+→ technical abstraction
+→ real implementation evidence
+→ nuance
+```
+
+Do not start from the abstraction and expect the learner to invent intuition later.
+
+Technical depth is not removed; it is placed after the mental model.
+
+---
+
+## 14. Example progression
+
+Prefer:
+
+```text
+Tiny concrete example
+→ Worked example
+→ Guided reasoning
+→ Real lab
+→ Production case
+→ Independent transfer
+```
+
+### Tiny example
+
+Use numbers small enough to inspect mentally.
+
+### Worked example
+
+Show:
+
+```text
+Context
+→ Input
+→ Prediction
+→ Execution
+→ Intermediate states
+→ Observable result
+→ Interpretation
+→ Why
+```
+
+### Generalization
+
+Only generalize after the learner has seen a concrete mechanism.
+
+---
+
+## 15. Toy → Realistic → Production
+
+Use three scales intentionally.
+
+### Toy
+
+Small numbers and simplified state to expose the mechanism.
+
+### Realistic
+
+A query, API, runtime flow or service interaction close to daily engineering work.
+
+### Production
+
+Add only the complexity needed for reasoning:
+
+- latency or throughput;
+- concurrency;
+- data volume;
+- multiple instances;
+- failures;
+- retries;
+- operational evidence;
+- SLO/availability requirements;
+- write/read trade-offs.
+
+Do not start with production complexity.
+
+---
+
+## 16. Metrics must have an origin
+
+Do not use production metrics as decoration.
+
+Before a metric such as:
+
+```text
+p95
+p99
+RPS
+QPS
+SLO
+error rate
+CPU
+GC pause
+```
+
+the learner should know:
+
+1. what engineering question is being asked;
+2. what is being measured;
+3. what the simplest alternative is;
+4. why that alternative is insufficient;
+5. what this metric adds;
+6. what nearby metric answers a different question.
+
+Example:
+
+```text
+How long do users wait?
+→ measure many response times
+→ average compresses the distribution into one number
+→ we need threshold questions
+→ percentiles
+→ p50 / p95 / p99
+```
+
+Do not imply one metric replaces all others.
+
+---
+
+## 17. Neighbor Concept rule
+
+When concepts belong to the same decision space, teach enough comparison to place the current concept correctly.
+
+Examples:
+
+```text
+average / p50 / p95 / p99 / max
+```
+
+```text
+Seq Scan / Index Scan / Bitmap path
+```
+
+```text
+lock / Interlocked / SemaphoreSlim
+```
+
+```text
+retry / timeout / circuit breaker
+```
+
+Do not build a catalog.
+
+Ask a decision question first:
+
+> What property are we trying to obtain?
+
+Then compare only what helps answer it.
+
+---
+
+## 18. Keep abstractions distinct
+
+Do not collapse a broad abstraction into one implementation.
+
+Examples:
+
+```text
+Index ≠ B-tree
+```
+
+```text
+async ≠ new thread
+```
+
+```text
+SemaphoreSlim ≠ state-correctness lock
+```
+
+```text
+message broker ≠ exactly-once business effect
+```
+
+```text
+cache ≠ source of truth
+```
+
+If the lesson focuses on one implementation, say so explicitly.
+
+---
+
+## 19. Visuals are mechanism tools
+
+Visuals are not decoration.
+
+A strong visual should answer one main learning question.
+
+Examples:
+
+```text
+What work does a scan eliminate?
+How does a B-tree narrow the search range?
+Where does a race violate the invariant?
+Which process owns a lock?
+Where can an outbox flow fail?
+```
+
+### Visual hierarchy
+
+Prefer:
+
+```text
+interactive learner-controlled visual
+→ step-by-step SVG
+→ static SVG
+→ detailed timeline/table
+→ ASCII
+```
+
+Choose the simplest medium that makes the mechanism visible.
+
+---
+
+## 20. Progressive visual disclosure
+
+For multi-step mechanisms:
+
+```text
+Predict
+→ Reveal / Next
+→ Observe
+→ Compare
+→ Explain
+```
+
+Do not dump every state at once.
+
+If animation is used:
+
+- no disruptive autoplay;
+- Play/Pause/Next/Reset when useful;
+- mechanism remains understandable with reduced motion;
+- state must be inspectable;
+- meaning must not depend on color alone.
+
+---
+
+## 21. Visual ↔ evidence mapping
+
+A simplified visual must connect to real evidence.
+
+Examples:
+
+```text
+toy eliminated rows
+↔ Rows Removed by Filter
+```
+
+```text
+index range condition
+↔ Index Cond
+```
+
+```text
+ordering visual
+↔ Sort node / absence of Sort
+```
+
+```text
+planner estimate visual
+↔ estimated rows vs actual rows
+```
+
+```text
+page/buffer mental model
+↔ BUFFERS
+```
+
+```text
+race interleaving
+↔ logs / database affected rows / controlled reproduction
+```
+
+Label simplifications clearly. Do not present a teaching visual as a byte-level/runtime-accurate implementation model.
+
+---
+
+## 22. Geometry represents data; prose explains data
+
+Do not force long text into geometry.
+
+Bad:
+
+```text
+[ 8%-wide bar containing a long sentence ]
+```
+
+Better:
+
+```text
+Actual: 82,000 rows
+[██████████████████]
+
+Estimate: 4,000 rows
+[█]
+```
+
+Rules:
+
+- labels/values outside dynamic-width bars;
+- no long vertical semantic labels;
+- no prose forced into tiny nodes/circles;
+- no clipping as a “solution”;
+- no accidental horizontal page overflow;
+- intentional horizontal scroll only for structures that genuinely need width.
+
+---
+
+## 23. Accessibility baseline
+
+Interactive learning UI must:
+
+- work without hover;
+- support touch;
+- use native buttons/controls where possible;
+- be keyboard-accessible;
+- expose useful text/ARIA labels;
+- remain understandable under reduced motion;
+- not encode meaning only by color or animation.
+
+Responsive priority:
+
+```text
+meaning > visual cleverness
+```
+
+---
+
+## 24. Mechanism-specific components
+
+Learning visuals may live under:
+
+```text
+src/components/learning/
+```
+
+Prefer mechanism-specific components over a generic visualization engine.
+
+A lightweight registry such as:
+
+```text
+lesson slug → visual renderer
+```
+
+is acceptable.
+
+Do not build abstraction infrastructure unless multiple real lessons prove the need.
+
+---
+
+## 25. Lab standard
+
+A lab is not a list of commands.
+
+Each experiment should follow:
+
+```text
+Question
+→ Prediction
+→ Setup / Run
+→ Inspect
+→ Actual observation
+→ Interpretation
+→ Mechanism
+→ Learn / Next question
+```
+
+The learner should know **what to look at and why** before running the command.
+
+---
+
+## 26. Result Before Conclusion
+
+Teach:
+
+```text
+baseline
+→ change
+→ re-run
+→ compare evidence
+→ interpret
+→ conclude
+```
+
+Do not state the conclusion first and make the lab merely confirm it.
+
+---
+
+## 27. Isolate the learning question
+
+When possible, design each experiment to expose one main mechanism.
+
+If a realistic query contains several interacting mechanisms, create a smaller experiment when necessary.
+
+Examples:
+
+- remove `LIMIT` when teaching estimate-vs-actual if early stop would confound interpretation;
+- use controlled concurrency gates when teaching a race;
+- separate retry behavior from idempotency storage when teaching duplicate effects.
+
+The rule is not “change one syntax token.” The rule is:
+
+> isolate one reasoning question.
+
+---
+
+## 28. Multiple-valid-outcomes rule
+
+Runtime/database/distributed experiments may have more than one valid result depending on:
+
+- version;
+- cache state;
+- planner;
+- data distribution;
+- runtime;
+- machine;
+- concurrency timing.
+
+Teach:
+
+```text
+prediction
+→ observe actual result
+→ explain why this valid outcome happened
+```
+
+Do not force the learner to obtain one exact output unless the experiment deliberately controls it.
+
+---
+
+## 29. Failure is first-class
+
+Important lessons should include a meaningful failure or broken assumption.
+
+Good failure examples:
+
+- stale estimate;
+- missing leading query condition;
+- race interleaving;
+- timeout;
+- duplicate message;
+- DB commit succeeds but publish fails;
+- retry causes repeated side effect;
+- cache becomes stale.
+
+Failure should expose the mechanism, not exist merely for drama.
+
+---
+
+## 30. Debugging loop
+
+Use:
+
+```text
+Observation
+→ Hypothesis
+→ Evidence
+→ Experiment
+→ Conclusion
+```
+
+When information is insufficient, a correct answer may be:
+
+> “Not enough information yet.”
+
+But the learner must then state:
+
+- what is missing;
+- why it matters;
+- what evidence to collect next.
+
+---
+
+## 31. Why Chain
+
+A deep explanation should connect:
+
+```text
+what happened
+→ why this mechanism produced it
+→ what state changed
+→ what evidence proves it
+→ what assumption would change the conclusion
+```
+
+Do not confuse depth with jargon count.
+
+---
+
+## 32. Production story standard
+
+A production scenario should include only useful realism.
+
+Recommended structure:
+
+```text
+Symptom
+Known facts
+Unknowns
+Candidate hypotheses
+Evidence needed
+Correctness / performance boundary
+Decision options
+Trade-offs
+Recovery / rollout when relevant
+```
+
+Ask the learner to reason before showing the model direction.
+
+Production complexity must come after the foundational mechanism.
+
+---
+
+## 33. Trade-off standard
+
+Do not teach a mechanism as “best practice” without context.
+
+For a recommendation, explain:
+
+- which property it gives;
+- what it costs;
+- what boundary it protects;
+- what it does not protect;
+- what workload assumptions matter;
+- what evidence would change the decision.
+
+---
+
+## 34. Tool-after-problem
+
+Do not start from a tool.
+
+Bad:
+
+```text
+Today we learn Redis.
+```
+
+Better:
+
+```text
+This read is repeated frequently and recomputation is expensive.
+What property do we need?
+What correctness risk does a cached copy introduce?
+Now introduce Redis as one implementation option.
+```
+
+Tools are answers to problems, not the curriculum axis.
+
+---
+
+## 35. Transfer challenge
+
+Transfer must change a meaningful condition.
+
+Examples:
+
+- one process → four instances;
+- equality lookup → range query;
+- memory state → database source of truth;
+- one consumer → consumer group;
+- one retry → unknown outcome after timeout.
+
+Do not ask the learner to repeat the worked example with renamed variables.
+
+---
+
+## 36. Explain it back
+
+After understanding and practice:
+
+1. learner explains the mechanism in Vietnamese for 60–120 seconds;
+2. learner checks against a short checklist;
+3. optional short technical-English explanation follows.
+
+Technical English must not introduce new technical content.
+
+---
+
+## 37. Technical and English mastery stay separate
+
+### Technical mastery
+
+```text
+L1 — Understand
+L2 — Apply
+L3 — Debug
+L4 — Reason / Trade-off / Transfer
+```
+
+### English mastery
+
+```text
+E1 — Read / understand
+E2 — Short technical answer
+E3 — Explain for 2–3 minutes
+E4 — Discuss trade-offs / follow-up questions
+```
+
+Do not merge these into one score.
+
+---
+
+## 38. Recall standard
+
+Final recall should test:
+
+- mechanism;
+- intermediate state;
+- failure mode;
+- evidence;
+- boundary;
+- trade-off;
+- transfer.
+
+Avoid recall questions that only ask for definitions.
+
+---
+
+## 39. Research-backed authoring is mandatory for major lessons
+
+A Golden Lesson must not be authored only from model memory.
+
+Default research stack:
+
+```text
+official / primary technical sources
++
+strong teaching-oriented article/book/site
++
+selected video when temporal/visual teaching helps
++
+realistic engineering cases when useful
+↓
+cross-check
+↓
+original QuanNet synthesis
+```
+
+---
+
+## 40. Source roles
+
+Use sources for different jobs.
+
+```text
+official docs/spec
+→ factual correctness
+
+maintainer/vendor engineering material
+→ implementation/production detail
+
+strong independent article/book/site
+→ conceptual explanation
+
+selected educator/video
+→ teaching sequence and visual intuition
+
+engineering incident/case
+→ failure and production boundary
+```
+
+Do not ask one source to do everything.
+
+---
+
+## 41. Source hierarchy for factual claims
+
+Prefer:
+
+```text
+official specification/documentation
+→ maintainer/vendor engineering
+→ strong independent technical source
+→ experienced educator
 → community discussion
 ```
 
-Đây không phải ranking mù: docs có thể khó dạy, teaching source có thể đơn giản hóa. QuanNet phải cross-check fact quan trọng bằng primary source. Với .NET, PostgreSQL, Kubernetes, AWS và framework/library API, ghi version/date khi behavior phụ thuộc version. Đánh giá video theo technical credibility, mechanism depth, clarity, visual quality, observable example, production relevance, freshness khi version-sensitive và mức khớp với nguồn chính thức. Không chọn chỉ vì view/title/SEO.
+This is not blind ranking.
 
-Một major lesson thường cần ít nhất một primary source và một teaching-oriented source. Dùng thêm nguồn khi claim khó, version-sensitive hoặc contested. Khi nguồn khác nhau, kiểm tra version, workload, definition và abstraction level; nếu chưa đủ evidence, ghi uncertainty thay vì chọn một bên im lặng.
+A teaching source may explain better than docs, but important facts should still be cross-checked against primary material.
 
-### Originality and scope
+---
 
-Không copy/translate transcript, article prose, diagram, screenshot hoặc animation của nguồn. Research cung cấp fact, misconception, teaching pattern và failure idea. QuanNet phải tạo narrative tiếng Việt, example, SVG/interaction, lab và transfer case nguyên bản. Không dump research vào lesson; chỉ giữ concept cần cho learning outcome.
+## 42. Version-sensitive research
 
-### Fact, model and engineering judgment
+For version-sensitive topics such as:
 
-- **Fact:** behavior có docs/spec/evidence hỗ trợ; ghi version/boundary khi quan trọng.
-- **Simplified mental model:** được phép để dạy mechanism, nhưng label khi không phải layout/implementation chính xác.
-- **Engineering judgment:** phụ thuộc context; nêu constraint, trade-off và evidence có thể đổi decision.
+- .NET / C#;
+- ASP.NET Core;
+- PostgreSQL;
+- Kafka;
+- Redis;
+- Kubernetes;
+- AWS;
+- libraries/frameworks;
 
-### Research workflow and traceability
+record the relevant version/date in research notes when behavior depends on it.
 
-Trước authoring, ghi internal/source note gồm: learning question, primary facts, common misconceptions, concept dependencies, visual pattern, realistic example, failure case, trade-off, potential outdated claim và sources. Dừng research khi mechanism đã được verify, misconception/teaching representation rõ, lab và production trade-off có evidence.
+If lab targets a specific version, learner-facing behavior should be grounded primarily in that version's documentation.
 
-Mỗi Golden Lesson có source map ngắn (khoảng 3–8 nguồn tốt): source, type, điều đã verify/học, và QuanNet sử dụng thế nào. Có thể có `Further Learning`, nhưng nêu rõ learner sẽ học thêm gì; core lesson phải self-contained. Chỉ thêm video timestamp khi đã kiểm tra trực tiếp, không suy đoán timestamp.
+Newer behavior may be noted as a boundary, not silently mixed into the lab.
 
-### Research acceptance
+---
 
-Trước publish, xác nhận research đã cải thiện ít nhất một trong: correctness, visual, example, failure/debug case hoặc production reasoning. Citation count không phải quality metric. Golden Lesson vẫn phải thỏa acceptance ở phần 8: hiểu → trace → evidence → lab → debug → trade-off → transfer → explain → recall.
+## 43. Video research rule
+
+Video is especially useful for mechanisms that are hard to see:
+
+- concurrency;
+- B-tree traversal;
+- memory/runtime behavior;
+- networking;
+- message flow;
+- distributed failure;
+- execution state.
+
+Evaluate videos by:
+
+- credibility;
+- mechanism depth;
+- conceptual clarity;
+- visual quality;
+- production relevance;
+- freshness when version-sensitive;
+- agreement with primary sources.
+
+Do not choose by view count or SEO title.
+
+---
+
+## 44. Teaching-pattern extraction
+
+When researching an educator, extract:
+
+- what problem they start with;
+- how they create the need for the concept;
+- when terminology appears;
+- the size of the first example;
+- what visual causes the mechanism to click;
+- what misconception is addressed;
+- what comparison helps a decision.
+
+Do not copy their structure mechanically.
+
+---
+
+## 45. Originality and copyright rule
+
+Do not copy or closely reproduce:
+
+- transcripts;
+- translated transcripts;
+- article prose;
+- diagrams;
+- screenshots;
+- animation sequences;
+- source-specific examples that are distinctive.
+
+QuanNet must synthesize original:
+
+- Vietnamese narrative;
+- examples;
+- SVGs/interactions;
+- lab;
+- production cases;
+- transfer challenges.
+
+---
+
+## 46. Source map requirement
+
+A major Golden Lesson should maintain an author-facing source map, normally around 3–8 strong sources.
+
+For each source record:
+
+```text
+source
+type / role
+version/date when relevant
+facts verified
+teaching insight extracted
+how QuanNet used it
+claims intentionally NOT imported
+```
+
+Source maps are authoring traceability, not required learner reading.
+
+---
+
+## 47. Research stop condition
+
+Stop researching when:
+
+- core mechanism is verified;
+- important misconceptions are known;
+- version boundary is understood;
+- teaching representation is clear;
+- lab can verify the mechanism;
+- production trade-offs are sufficiently grounded.
+
+More citations do not automatically improve the lesson.
+
+---
+
+## 48. Further Learning
+
+Further Learning is optional reinforcement.
+
+Keep a small set and state what each source helps with, for example:
+
+```text
+Visual explanation
+Useful for: seeing the mechanism another way
+
+Official reference
+Useful for: exact semantics
+
+Production article
+Useful for: failure/trade-off depth
+```
+
+Do not dump links.
+
+Do not require Further Learning for core comprehension.
+
+---
+
+## 49. Learner-first terminology audit
+
+Before freeze, scan the lesson as if the learner knows only the declared prerequisites.
+
+For every important term ask:
+
+```text
+Where did this come from?
+What problem does it solve?
+Was its need created before its name?
+Is this abstraction distinct from its implementation?
+Would a learner need Google to continue?
+```
+
+If yes, fix the dependency flow or remove the term.
+
+---
+
+## 50. “Could a beginner ask why?” audit
+
+For every major statement, ask:
+
+> “Why?”
+
+If the lesson cannot answer near that point:
+
+- add motivation;
+- move the concept later;
+- simplify;
+- or remove it.
+
+---
+
+## 51. Learner friction audit
+
+Review specifically for:
+
+- unexplained jargon;
+- sudden acronyms;
+- too many concepts in one paragraph;
+- examples too large to inspect;
+- visuals that do not answer a clear question;
+- code that runs but does not teach;
+- lab fields that are listed without observation guidance;
+- production details that appear before the mechanism;
+- conclusions stated before evidence.
+
+---
+
+## 52. UI authoring rules
+
+Learning UI must stay clean, compact and readable.
+
+Do not make the app feel like a presentation deck.
+
+Avoid:
+
+- oversized text;
+- cards occupying space without learning value;
+- decorative panels around every paragraph;
+- too many simultaneous buttons;
+- long vertical labels;
+- prose inside proportional bars;
+- horizontally scrolling normal prose.
+
+Semantic blocks should help scanning, not compete with the lesson.
+
+---
+
+## 53. Markdown vs custom components
+
+Use Markdown for narrative, code, tables and semantic blocks.
+
+Use custom React learning components only when the mechanism genuinely benefits from:
+
+- interaction;
+- state transition;
+- spatial relationship;
+- temporal sequence;
+- progressive disclosure.
+
+Do not convert normal prose into React components.
+
+---
+
+## 54. Validation before freeze
+
+Before considering a lesson technically complete, run relevant project validation, including the project's canonical commands such as:
+
+```bash
+npm run validate:content
+npm run validate:css
+npm run lint
+npm run test
+npm run build
+npm run check
+```
+
+Do not claim a command passed unless it actually ran successfully.
+
+Browser verification is required for learner-facing visual/UI changes.
+
+Check desktop and mobile behavior.
+
+---
+
+## 55. Freeze criteria
+
+A lesson is not frozen merely because:
+
+- code compiles;
+- tests pass;
+- facts are correct;
+- the page looks polished.
+
+Freeze only when:
+
+### Concept origin
+The learner understands why every major concept needs to exist.
+
+### Mechanism
+The learner can describe state and transitions.
+
+### Evidence
+The learner can connect the mental model to observable evidence.
+
+### Practice
+The learner can run the core experiment.
+
+### Failure/debug
+The learner can explain at least one meaningful failure.
+
+### Boundary
+The learner knows when the mechanism does not apply.
+
+### Transfer
+The learner can reason through a changed scenario.
+
+### Communication
+The learner can explain it back without reading definitions.
+
+---
+
+## 56. Human study is the final acceptance gate
+
+AI review is not the final proof of teaching quality.
+
+After technical freeze:
+
+```text
+HUMAN STUDY SESSION
+→ learner studies from the beginning
+→ record real confusion
+→ record terms that feel premature
+→ record visuals that do not help
+→ record lab outcomes that are confusing
+→ record sections that are too compressed or too verbose
+```
+
+Only real learner evidence should justify another learner-facing rewrite.
+
+Do not enter endless AI polishing loops.
+
+---
+
+## 57. Anti-patterns
+
+Avoid:
+
+- definition → advantages → code;
+- jargon dumps;
+- bullet-only teaching;
+- production complexity first;
+- tool-first curriculum;
+- visual decoration without mechanism;
+- ASCII everywhere when spatial interaction matters;
+- code without state trace;
+- labs that are copy/paste checklists;
+- “best practice” without boundary;
+- “senior” content that is only more jargon;
+- arbitrary word-count targets;
+- adding topics to fill a roadmap;
+- generic visual engines before repeated need;
+- conclusions before evidence;
+- research for citation count;
+- treating one successful run as proof of correctness;
+- treating one implementation as the abstraction itself.
+
+---
+
+## 58. QuanNet canonical quality test
+
+For every major concept, the learner should be able to answer:
+
+```text
+1. What problem made this concept necessary?
+2. What simpler approach came before it?
+3. Where did that approach fail?
+4. What new property did we need?
+5. How does this concept provide that property?
+6. What state/data actually changes?
+7. What evidence can I observe?
+8. What similar concept solves a different problem?
+9. When should I NOT use this?
+10. What happens when an assumption changes?
+```
+
+If the learner can only recite a definition, the lesson is not finished.
+
+---
+
+## 59. Final principle
+
+QuanNet should make the learner think:
+
+> **“I understand why engineers needed to invent this.”**
+
+before:
+
+> **“I remember what this is called.”**
+
+The permanent learning principle is:
+
+```text
+QUESTION
+→ SIMPLE APPROACH
+→ LIMITATION
+→ NEED
+→ CONCEPT
+→ MECHANISM
+→ EVIDENCE
+→ FAILURE
+→ DEBUG
+→ BOUNDARY
+→ TRANSFER
+→ EXPLAIN
+→ RECALL
+```

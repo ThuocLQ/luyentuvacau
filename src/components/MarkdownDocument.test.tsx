@@ -8,7 +8,10 @@ import CompositeIndexVisual from './learning/index/CompositeIndexVisual'
 import PlannerEstimateVisual from './learning/index/PlannerEstimateVisual'
 import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
+import OutboxGoldenLesson from './learning/outbox/OutboxGoldenLesson'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
+import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
+import outboxLesson from '../../docs/learning/outbox-idempotency.md?raw'
 
 vi.mock('../hooks/useReviewProgress', () => ({ useReviewProgress: () => ({ find: () => undefined, pin: vi.fn(), record: vi.fn(), remove: vi.fn() }) }))
 vi.mock('../hooks/useScrollSpy', () => ({ useScrollSpy: () => null }))
@@ -48,23 +51,33 @@ describe('Golden Learning Lab visuals', () => {
   })
 
   it('separates selectivity from cardinality-estimate accuracy', () => {
-    render(<PlannerEstimateVisual />)
+    const { container } = render(<PlannerEstimateVisual />)
     fireEvent.click(screen.getByRole('button', { name: 'Paid = 82%' }))
-    expect(screen.getByText(/illustrative estimate 810,000 rows/)).toBeInTheDocument()
+    expect(screen.getByText('Planner estimate (minh họa)')).toBeInTheDocument()
+    expect(screen.getByText('810,000 rows')).toBeInTheDocument()
     expect(screen.queryByText(/estimate 4,000 rows/)).not.toBeInTheDocument()
+    expect(container.querySelector('.estimate-track')?.textContent).toBe('')
 
     fireEvent.click(screen.getByRole('button', { name: 'Estimate accuracy' }))
     fireEvent.click(screen.getByRole('button', { name: 'Bad estimate' }))
-    expect(screen.getByText('4,000 rows')).toBeInTheDocument()
-    expect(screen.getByText('82,000 rows')).toBeInTheDocument()
+    expect(screen.getAllByText('4,000 rows')).toHaveLength(2)
+    expect(screen.getAllByText('82,000 rows')).toHaveLength(2)
   })
 
+  it('uses a horizontal semantic label chip rather than vertical body text', () => {
+    render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'semantic-chip', title: 'Semantic chip', content: '# Test\n\n:::learning-goal\nĐây là mục tiêu học.\n:::' }} /></MemoryRouter>)
+    const block = document.querySelector('.semantic-block')
+    expect(block).toHaveAttribute('data-label', 'learning goal')
+    expect(block).toHaveClass('semantic-label-horizontal')
+    expect(block).not.toHaveClass('semantic-label-vertical')
+  })
   it('keeps the table-scan visual focused on candidate work, not page I/O', () => {
     render(<TableScanVsIndexVisual />)
     expect(screen.queryByText(/Page considered/)).not.toBeInTheDocument()
     expect(screen.getByText('Rows considered')).toBeInTheDocument()
     expect(screen.getByText('Candidate rows')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Index theo tenant' }))
+    expect(screen.queryByRole('button', { name: 'Index theo tenant' })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Shortcut theo tenant' }))
     expect(screen.getByText('Rows considered')).toBeInTheDocument()
   })
 
@@ -92,6 +105,32 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/Approved 0 \/ 100/)).toBeInTheDocument()
   })
 
+  it('keeps relay publish attempts separate from consumer deliveries', () => {
+    render(<OutboxGoldenLesson stage="crash" />)
+    fireEvent.click(screen.getByLabelText('Sau publish'))
+    fireEvent.click(screen.getByLabelText('2 lần'))
+    fireEvent.click(screen.getByRole('button', { name: 'Reveal state' }))
+    const state = screen.getByLabelText('state after crash')
+    expect(state).toHaveTextContent('#E17 Pending')
+    expect(state).toHaveTextContent('Relay publish attempts1')
+    expect(state).toHaveTextContent('Consumer deliveries0')
+    expect(state).toHaveTextContent('ProcessedEventKhông có')
+    expect(state).toHaveTextContent('Reservation count0')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Restart relay' }))
+    expect(state).toHaveTextContent('Relay publish attempts2')
+    expect(state).toHaveTextContent('Consumer deliveries0')
+    fireEvent.click(screen.getByRole('button', { name: 'Deliver #E17 to consumer' }))
+    expect(state).toHaveTextContent('Consumer deliveries1')
+    expect(state).toHaveTextContent('ProcessedEvent#E17')
+    expect(state).toHaveTextContent('Reservation count1')
+    fireEvent.click(screen.getByRole('button', { name: 'Deliver same event again' }))
+    expect(state).toHaveTextContent('Relay publish attempts2')
+    expect(state).toHaveTextContent('Consumer deliveries2')
+    expect(state).toHaveTextContent('ProcessedEvent#E17')
+    expect(state).toHaveTextContent('Reservation count1')
+    expect(state).not.toHaveTextContent('Broker deliveries')
+  })
   it('switches Race protection and multi-instance boundary modes', () => {
     render(<><RaceGoldenLesson stage="protection" /><RaceGoldenLesson stage="boundary" /></>)
     fireEvent.click(screen.getByRole('button', { name: '`lock` trong một process' }))
@@ -112,6 +151,60 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
   })
 
+  it('keeps Index as the broad idea and B-tree as the PostgreSQL 17 strategy', () => {
+    expect(indexLesson).toContain('Index là khái niệm rộng')
+    expect(indexLesson).toContain('**B-tree** là chiến lược Index cụ thể')
+    expect(indexLesson).toContain('PostgreSQL 17, `CREATE INDEX` mặc định tạo B-tree')
+  })
+
+  it('keeps scan evidence natural without treating returned rows as examined rows', () => {
+    expect(indexLesson).toContain('`Rows Removed by Filter`')
+    expect(indexLesson).toContain('actual rows mà scan node trả ra')
+    expect(indexLesson).not.toContain('scan node emit')
+    expect(indexLesson).not.toContain('row scan emit')
+    expect(indexLesson).toContain('`actual rows` là output của scan node sau filtering')
+  })
+
+  it('explains workload at its first lesson use and keeps Race heading learner-first', () => {
+    const firstWorkload = indexLesson.indexOf('workload')
+    expect(indexLesson.slice(Math.max(0, firstWorkload - 80), firstWorkload + 120)).toContain('kiểu và lượng công việc thật hệ thống đang xử lý')
+    expect(raceLesson).toContain('Optional observation — tranh cùng lock và phạm vi')
+    expect(raceLesson).not.toContain('Optional observation — contention và scope')
+  })
+
+  it('keeps Outbox wording broker-neutral and honest about unqueryable email', () => {
+    expect(outboxLesson).not.toContain('at-least-once delivery')
+    expect(outboxLesson).toContain('Publication và delivery có thể lặp tùy broker/client contract')
+    expect(outboxLesson).toContain('không thể đồng thời guarantee **không mất** và **không trùng** email')
+  })
+  it('removes the Limit confounder when the lab isolates estimate accuracy', () => {
+    const estimateExperiment = indexLesson.split('### Experiment 3')[1].split('### Experiment 4')[0]
+    const estimateSql = estimateExperiment.match(/```sql\n([\s\S]*?)```/)?.[1] ?? ''
+    expect(estimateSql).toContain('SELECT id, created_at, total')
+    expect(estimateExperiment).toContain('cô lập một câu hỏi duy nhất')
+    expect(estimateSql).not.toContain('LIMIT')
+    expect(estimateSql).not.toContain('ORDER BY')
+  })
+
+  it('introduces buffers before BUFFERS evidence and p95 only in the production story', () => {
+    const productionStory = indexLesson.indexOf('## Production story')
+    const beforeProduction = indexLesson.slice(0, productionStory)
+    expect(indexLesson.indexOf('shared buffers')).toBeLessThan(indexLesson.indexOf('### Experiment 3'))
+    expect(beforeProduction).not.toContain('p95')
+    expect(indexLesson).toContain('100 ms, 110 ms, 120 ms')
+    expect(indexLesson).toContain('youtube.com/watch?v=YZSHpDn7GP4')
+  })
+  it('keeps ordered lookup as B-tree-specific in the final recall and summary', () => {
+    const finalRecall = indexLesson.split('## Final recall')[1]
+    expect(finalRecall).toContain('B-tree index trong bài này dùng property nào')
+    expect(finalRecall).toContain('B-tree index trong bài này dùng key có thứ tự')
+  })
+
+  it('uses p95 as a percentile threshold rather than claiming average always hides tail latency', () => {
+    const productionStory = indexLesson.split('## Production story')[1].split('## Trade-off')[0]
+    expect(productionStory).toContain('average duy nhất không mô tả được toàn bộ distribution')
+    expect(productionStory).toContain('95% request hoàn thành không chậm hơn mốc nào')
+  })
   it('keeps the source map internal rather than exposing a dead learner link', () => {
     expect(raceLesson).not.toContain('/docs/research/race-condition-source-map')
   })

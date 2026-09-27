@@ -63,7 +63,7 @@ export function enhanceHtml(html: string): { html: string; toc: TocItem[] } {
     if (!marker || !first) return
     const type = marker[1]
     first.textContent = first.textContent?.replace(/^\[![a-z-]+\]\s*/, '') ?? ''
-    block.classList.add('semantic-block', `semantic-${type}`)
+    block.classList.add('semantic-block', 'semantic-label-horizontal', `semantic-${type}`)
     block.dataset.label = type.replace(/-/g, ' ')
   })
 
