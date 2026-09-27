@@ -9,15 +9,17 @@ A required next lesson unlocks only after its declared prerequisite competence h
 Conceptually:
 
 ```text
-can_access(user, lesson)
+progression_eligible(user, lesson)
 = lesson/content is published and active in the curriculum
   AND prerequisite_satisfied(user, dependency)
-      for every required active dependency
+      for every required active prerequisite
 ```
 
-`AVAILABLE` is the resulting learner progression status when this rule is true; it is not an input to the rule.
+This predicate decides eligibility to perform official required progression for a lesson. It is not a content-read authorization decision: locked learning, curiosity and reference content can remain viewable.
 
-The future frontend may display this decision but must not be authoritative for it. A later trusted server/database implementation must evaluate access and concurrent results. The current localStorage progress implementation is a **local simulation**, not an access-control authority.
+For a lesson that has not started yet, `progression_eligible = true` means `progression_status` may enter `AVAILABLE`. `IN_PROGRESS` and `PASSED` remain later, separate progression states.
+
+The future frontend may display this decision but must not be authoritative for it. A later trusted server/database implementation must evaluate official progression eligibility and concurrent results. The current localStorage progress implementation is a **local simulation**, not an access-control authority.
 
 Historical `PASSED` is not automatically active prerequisite satisfaction. Conceptually:
 
@@ -61,7 +63,7 @@ Lesson A ──┐
 Lesson B ──┘
 ```
 
-If the active prerequisite requirements for both A and B are satisfied, C becomes `AVAILABLE`. Historical `PASSED` alone is not enough when an explicit compatibility or revalidation policy says otherwise. If the graph allows it, multiple lessons can be available together. Recommendation order and access permission are separate concepts.
+If the active prerequisite requirements for both A and B are satisfied, C becomes progression-eligible; if C has not started yet, it may enter `AVAILABLE`. Historical `PASSED` alone is not enough when an explicit compatibility or revalidation policy says otherwise. If the graph allows it, multiple lessons can be progression-eligible together. Recommendation order and official progression eligibility are separate concepts.
 
 May be locked:
 
@@ -169,7 +171,7 @@ record attempt
 → set retention/mastery status to RETAINING and schedule review
 ```
 
-The later technical implementation must make duplicate submit/retry and concurrent completion safe. It must not double-count evidence or produce contradictory unlock state. Later weak recall may move retention/mastery from MASTERED to RETAINING, but must not change historical PASSED, active prerequisite satisfaction or re-lock dependents. Only explicit material version/prerequisite compatibility policy may require scoped revalidation.
+The later technical implementation must make duplicate submit/retry and concurrent completion safe. It must not double-count evidence or produce contradictory unlock state. Later weak recall may move retention/mastery from MASTERED to RETAINING, but must never change progression eligibility or re-lock dependents. Only an explicit material/breaking prerequisite compatibility policy may require scoped revalidation for a not-yet-passed dependent.
 
 ## Lock transparency
 
@@ -217,6 +219,7 @@ Later design and implementation must explicitly support the following; Phase 1 d
 | Duplicate submit caused by retry/network | Same logical attempt must not create contradictory or double unlock results. |
 | Two browser tabs complete final gate concurrently | One coherent learner-visible pass/unlock result; preserve both attempts if distinct. |
 | Lesson version changes while in progress | Attribute each evaluation to original content, gate-policy and gate versions. Carry old evidence forward only through an explicit compatibility mapping; otherwise retain historical PASS/attempts, explain the scoped revalidation and leave only newly gated dependencies unsatisfied. |
+| Material/breaking prerequisite revalidation | An `AVAILABLE` or `IN_PROGRESS` dependent may move to `LOCKED` only under an explicit material/breaking compatibility policy. Preserve attempts, notes and evidence; keep learning/reference content viewable; explain why; after revalidation it becomes progression-eligible again. A `PASSED` dependent never regresses. |
 | Answer revealed before independent pass | Record practice evidence and offer equivalent independent variation later. |
 | Challenge-out pass | Accept only equal-or-stronger evidence; record how it was earned with `content_id` / `content_version`, `gate_policy_id` / `gate_policy_version`, and `gate_id` / `gate_version`. |
 | Lesson with multiple prerequisites | Evaluate all required graph edges, then show which ones remain. |
@@ -265,4 +268,6 @@ Later design and implementation must explicitly support the following; Phase 1 d
 
 ## Deliberately deferred
 
-Phase 1 does not define UI components, access-control APIs, Supabase, SQL, tables, RLS, migration algorithm, specific scoring thresholds, final retry limits, AI evaluation or a new curriculum roadmap. Those decisions need a separately reviewed technical/product phase.
+Phase 1 does not define UI components, content-read authorization APIs, Supabase, SQL, tables, RLS, migration algorithm, specific scoring thresholds, final retry limits, AI evaluation or a new curriculum roadmap. Those decisions need a separately reviewed technical/product phase.
+
+Phase 4 must decide how `MASTERED` and retention-policy criteria are versioned and made compatible over time, analogous to gate-policy versioning for `PASSED`. Phase 1 deliberately does not define fields, tables or compatibility mechanics for that policy.

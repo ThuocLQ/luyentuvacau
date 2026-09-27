@@ -24,6 +24,8 @@ No authoring status is a learner achievement. A learner cannot become `PASSED` b
 
 ```text
 progression_status: LOCKED → AVAILABLE → IN_PROGRESS → PASSED
+                     exceptional revalidation only:
+                     AVAILABLE / IN_PROGRESS → LOCKED
 
 retention_status:   NOT_STARTED → RETAINING → MASTERED
                                       ↑             │
@@ -36,8 +38,8 @@ These are two independent state axes, not one mutually exclusive enum. The learn
 
 | State | Meaning | Entry condition | What it does not mean |
 |---|---|---|---|
-| LOCKED | Required prerequisite competence is not yet demonstrated. | At least one required prerequisite is unsatisfied. | Curiosity content, glossary, references and optional learning must not be hidden. |
-| AVAILABLE | The learner may begin required progression work. | The lesson is published/available and all required prerequisites are satisfied. | The learner has understood the lesson. |
+| LOCKED | Official required progression is currently gated because at least one active prerequisite is unsatisfied. | A required active prerequisite is unsatisfied, including a visible material/breaking revalidation case for a not-yet-passed lesson. | The learning content, curiosity material, glossary and references are hidden or unreadable. |
+| AVAILABLE | The learner may begin official required progression work. | A not-yet-started lesson is published and active, and all required active prerequisites are satisfied. | The learner has understood the lesson, or every progression-eligible lesson must be AVAILABLE. |
 | IN_PROGRESS | The learner has started a meaningful progression attempt. | A gate attempt or explicitly tracked learning activity exists. | Mere page open, scroll or elapsed time alone. |
 | PASSED | Historical record that the learner satisfied the policy used for this pass. | Mandatory gates of one coherent evaluated policy were satisfied. | Automatic satisfaction of every future prerequisite policy, durable recall, transfer or complete senior mastery. |
 
@@ -63,7 +65,7 @@ retention_status   = MASTERED
 
 ## Sticky progression
 
-Ordinary weak later review never silently changes a passed prerequisite back to `LOCKED`.
+`PASSED` never regresses to `LOCKED`; it remains historical progression truth. Ordinary weak later review never causes a reverse progression transition.
 
 ```text
 weak delayed recall
@@ -71,10 +73,10 @@ weak delayed recall
 → mastery confidence decreases
 → review or targeted remediation becomes due
 → historical pass evidence remains
-→ already unlocked dependents stay available
+→ progression eligibility remains unchanged
 ```
 
-Only explicit material version, correctness or prerequisite compatibility policy may request revalidation. That action must be visible to the learner, preserve historical evidence and explain exactly what changed and which new evidence is needed. It is not a silent deletion or a blanket reset. Weak ordinary recall never requests revalidation.
+The sole exceptional reverse transition is `AVAILABLE` or `IN_PROGRESS → LOCKED`, and only an explicit material/breaking prerequisite compatibility policy may require it for a not-yet-passed lesson. The action must be visible to the learner, preserve attempts, learner notes and evidence, and explain exactly what changed and which new evidence is needed. `LOCKED` here gates official progression only; it does not remove visible learning or reference content. After prerequisite revalidation succeeds, the lesson is progression-eligible again. If earlier attempts exist, a later implementation may restore the appropriate continuation experience; Phase 1 deliberately does not define restoration UI details. Weak ordinary recall never requests this transition.
 
 ## Existing capability scales remain canonical
 
@@ -174,11 +176,11 @@ Do not model this by silently changing `PASSED → LOCKED`. `PASSED` remains vis
 
 Consider: A v1 is `PASSED`, so B becomes `AVAILABLE` or `IN_PROGRESS`; later A v2 introduces a material or breaking prerequisite correction and its compatibility policy requires scoped revalidation.
 
-- Ordinary weak recall never changes B access.
-- Only that explicit material/breaking compatibility policy may temporarily gate B's future progression, and only while B has not itself been `PASSED`.
-- Existing B attempts and in-progress work are preserved. If B is already `PASSED`, its historical pass is never erased.
-- Previously learned and reference content stays accessible.
-- The learner sees why revalidation is required, what changed, and what evidence can satisfy it.
+- Ordinary weak recall never changes B progression eligibility.
+- Only that explicit material/breaking compatibility policy may temporarily move B from `AVAILABLE` or `IN_PROGRESS` to `LOCKED`, and only while B has not itself been `PASSED`.
+- Existing B attempts, learner notes, evidence and in-progress work are preserved. If B is already `PASSED`, its historical pass is never erased.
+- Previously learned and reference content stays accessible; `LOCKED` means official progression is gated, not that content disappears.
+- After prerequisite revalidation succeeds, B is progression-eligible again. The learner sees why revalidation is required, what changed, and what evidence can satisfy it.
 
 **Principle:** revalidation may gate future progression, but it never deletes learning history.
 
@@ -231,3 +233,5 @@ When a required gate is not satisfied, the system should preserve the attempt, s
 ## Deliberately deferred
 
 Phase 1 does not define Supabase, schema, SQL, API contracts, UI screens, scoring formula, adaptive algorithm, AI grading, final retry limits or a new senior curriculum. Those require later implementation/design review and human-study evidence.
+
+Phase 4 must decide how `MASTERED` and retention-policy criteria are versioned and made compatible over time, analogous to gate-policy versioning for `PASSED`. Phase 1 deliberately does not define fields, tables or compatibility mechanics for that policy.
