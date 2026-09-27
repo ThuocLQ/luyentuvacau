@@ -10,10 +10,12 @@ Conceptually:
 
 ```text
 can_access(user, lesson)
-= lesson is published and available
+= lesson/content is published and active in the curriculum
   AND prerequisite_satisfied(user, dependency)
-      for every required dependency
+      for every required active dependency
 ```
+
+`AVAILABLE` is the resulting learner progression status when this rule is true; it is not an input to the rule.
 
 The future frontend may display this decision but must not be authoritative for it. A later trusted server/database implementation must evaluate access and concurrent results. The current localStorage progress implementation is a **local simulation**, not an access-control authority.
 
@@ -59,7 +61,7 @@ Lesson A ──┐
 Lesson B ──┘
 ```
 
-If both A and B are passed, C becomes `AVAILABLE`. If the graph allows it, multiple lessons can be available together. Recommendation order and access permission are separate concepts.
+If the active prerequisite requirements for both A and B are satisfied, C becomes `AVAILABLE`. Historical `PASSED` alone is not enough when an explicit compatibility or revalidation policy says otherwise. If the graph allows it, multiple lessons can be available together. Recommendation order and access permission are separate concepts.
 
 May be locked:
 
@@ -216,7 +218,7 @@ Later design and implementation must explicitly support the following; Phase 1 d
 | Two browser tabs complete final gate concurrently | One coherent learner-visible pass/unlock result; preserve both attempts if distinct. |
 | Lesson version changes while in progress | Attribute each evaluation to original content, gate-policy and gate versions. Carry old evidence forward only through an explicit compatibility mapping; otherwise retain historical PASS/attempts, explain the scoped revalidation and leave only newly gated dependencies unsatisfied. |
 | Answer revealed before independent pass | Record practice evidence and offer equivalent independent variation later. |
-| Challenge-out pass | Accept only equal-or-stronger evidence; record how it was earned. |
+| Challenge-out pass | Accept only equal-or-stronger evidence; record how it was earned with `content_id` / `content_version`, `gate_policy_id` / `gate_policy_version`, and `gate_id` / `gate_version`. |
 | Lesson with multiple prerequisites | Evaluate all required graph edges, then show which ones remain. |
 | Multiple lessons unlock at once | Make each eligible lesson AVAILABLE; do not force a false linear order. |
 | Weak later recall | Lower retention/mastery confidence and schedule review; historical PASS and active prerequisite satisfaction remain unchanged. |

@@ -170,6 +170,18 @@ prerequisite_satisfied(user, dependency)
 
 Do not model this by silently changing `PASSED → LOCKED`. `PASSED` remains visible historical progression truth. When revalidation is required, historical attempts and the historical pass remain; the active dependency may be unsatisfied, newly gated progression may wait, and the learner must see exactly what requires revalidation. Previously learned and reference content must not disappear.
 
+### Revalidation effect on already-available work
+
+Consider: A v1 is `PASSED`, so B becomes `AVAILABLE` or `IN_PROGRESS`; later A v2 introduces a material or breaking prerequisite correction and its compatibility policy requires scoped revalidation.
+
+- Ordinary weak recall never changes B access.
+- Only that explicit material/breaking compatibility policy may temporarily gate B's future progression, and only while B has not itself been `PASSED`.
+- Existing B attempts and in-progress work are preserved. If B is already `PASSED`, its historical pass is never erased.
+- Previously learned and reference content stays accessible.
+- The learner sees why revalidation is required, what changed, and what evidence can satisfy it.
+
+**Principle:** revalidation may gate future progression, but it never deletes learning history.
+
 ### Version compatibility invariant
 
 A learner PASS must be evaluated against one coherent gate-policy version, or an explicitly declared compatibility mapping between versions. The system must not silently infer policy compatibility from matching gate IDs.
@@ -191,7 +203,7 @@ No content change may silently erase a learner's attempts, pass record or review
 
 Experienced learners may prove competence without consuming every instructional page. Challenge-out is not a bypass: it must provide evidence equal to or stronger than the normal required gates.
 
-For senior-core topics, a trivial recognition quiz cannot challenge out. An acceptable policy uses independent canonical reasoning, evidence/debug work and communication or transfer appropriate to the topic. A challenge-out pass should be recorded as evidence with its content and gate versions.
+For senior-core topics, a trivial recognition quiz cannot challenge out. An acceptable policy uses independent canonical reasoning, evidence/debug work and communication or transfer appropriate to the topic. A challenge-out pass should be recorded as evidence with `content_id` / `content_version`, `gate_policy_id` / `gate_policy_version`, and `gate_id` / `gate_version`.
 
 ## Failure semantics
 
