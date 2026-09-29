@@ -4,7 +4,7 @@
 
 ## Purpose and stop boundary
 
-This map records which prior capability mechanism a target may assume. Batch A contains only approved edges whose targets belong to Tracks 1–5. It is not a lesson order, learner progression gate, database schema, or frontend rule.
+This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5 and Batch B1 targets for Tracks 6–8. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 9–17 are not yet complete.
 
 ## Capability dependency != learner gating
 
@@ -18,7 +18,7 @@ A REQUIRED edge is only a candidate for a later lesson prerequisite; it does not
 
 ## Graph invariants
 
-Batch A uses frozen capability IDs only. REQUIRED and all ordering edges must be acyclic; track number and table row order are not learning order. This is not the complete Step-3 graph.
+The current A+B1 partial graph uses frozen capability IDs and has been checked for acyclic REQUIRED and combined ordering edges; track number and table row order are not learning order. This is not the complete Step-3 graph.
 
 ## Dependency registry
 
@@ -64,7 +64,6 @@ Batch A uses frozen capability IDs only. REQUIRED and all ordering edges must be
 | net-tcp-connection-semantics | net-failure-localization-unknown-outcome | REQUIRED | The target separates connection/reset/lifetime failure from later stages. | connection establishment and reset stage | — |
 | net-tls-trust-handshake | net-failure-localization-unknown-outcome | REQUIRED | The target needs TLS trust/negotiation as a stage distinct from TCP and HTTP. | TLS negotiation and trust stage | — |
 | net-http-semantics | net-failure-localization-unknown-outcome | REQUIRED | An HTTP response proves the path reached a later stage than DNS, TCP or TLS. | response semantics as stage evidence | — |
-
 | prog-invariants-domain-model | db-modeling-invariants | REQUIRED | database modelling decides which invariants should also be represented by schema, key or constraint rather than only application code. | business-valid state and invariant ownership. | — |
 | db-physical-storage-pages | db-buffer-io | REQUIRED | buffer/cache reasoning assumes that logical requests ultimately access database pages whose presence in memory changes physical I/O. | database data is accessed in page-sized physical units. | — |
 | os-virtual-memory-page-cache | db-buffer-io | RECOMMENDED | this helps prevent calling every database buffer hit/miss a disk I/O, but DB buffer behavior can still be introduced independently. | OS memory/page-cache is distinct from database-owned buffer state. | — |
@@ -88,10 +87,10 @@ Batch A uses frozen capability IDs only. REQUIRED and all ordering edges must be
 | db-wal-crash-recovery | db-backup-restore | RECOMMENDED | important for PITR-style recovery, but backup/restore can first be understood with snapshots/full backups. | durable log can extend a base backup toward a later recovery point. | — |
 | os-resource-exhaustion | db-connection-pool-exhaustion | REQUIRED | pool exhaustion is one concrete finite-resource exhaustion mode. | connections are finite resources and waiting grows when demand exceeds available capacity. | — |
 | concurrency-bounded-backpressure | db-connection-pool-exhaustion | RECOMMENDED | helps explain why enlarging a pool may move overload into the database, but pool semantics can be taught without full backpressure depth. | unbounded concurrent work can overrun finite downstream capacity. | — |
-| db-buffer-io | db-production-diagnosis-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| db-optimizer-cardinality-stats | db-production-diagnosis-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| db-locks-deadlocks-contention | db-production-diagnosis-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| db-connection-pool-exhaustion | db-production-diagnosis-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
+| db-buffer-io | db-production-diagnosis-transfer | REQUIRED | Production diagnosis must distinguish buffer/cache behavior and physical I/O from other latency causes. | buffer hit/read behavior distinguishes memory access from physical I/O. | — |
+| db-optimizer-cardinality-stats | db-production-diagnosis-transfer | REQUIRED | Production diagnosis must compare optimizer estimates with actual execution before blaming query syntax or adding an index. | estimated vs actual cardinality and plan-choice evidence. | — |
+| db-locks-deadlocks-contention | db-production-diagnosis-transfer | REQUIRED | Production diagnosis must treat blocking and lock waits as a competing explanation for slow requests. | blocking/lock evidence as an alternative explanation for latency. | — |
+| db-connection-pool-exhaustion | db-production-diagnosis-transfer | REQUIRED | A slow database-facing request may spend time waiting to acquire a connection even when the eventual SQL execution is fast. | connection acquisition wait can dominate request latency independently of query execution. | — |
 | nosql-mongo-aggregate-model | nosql-mongo-index-shard-transaction | REQUIRED | index, shard-key and transaction decisions are made relative to how documents are grouped and accessed. | document/aggregate boundary and expected access pattern. | — |
 | dist-partitioning-ownership-rebalancing | nosql-mongo-index-shard-transaction | RECOMMENDED | Mongo shard reasoning benefits from it, but basic product shard-key behavior may be taught with a focused recap. | portable partition ownership and skew/rebalancing intuition. | — |
 | db-transactions-isolation-anomalies | nosql-mongo-index-shard-transaction | RECOMMENDED | relational transaction experience helps expose the changed boundary, but Mongo transactions must not be taught as relational transactions with different syntax. | transaction scope and cost of coordinating multiple state changes. | — |
@@ -102,17 +101,17 @@ Batch A uses frozen capability IDs only. REQUIRED and all ordering edges must be
 | dist-replication-leader-quorum | nosql-redis-persistence-replication-cluster-streams | REQUIRED | Redis owns its implementation behavior; Distributed Systems owns general replication reasoning. | portable replication, lag and failover semantics. | — |
 | dist-partitioning-ownership-rebalancing | nosql-redis-persistence-replication-cluster-streams | RECOMMENDED | useful for hash-slot/cluster intuition, but Redis cluster mechanics can be introduced with local recap. | partition ownership and redistribution. | — |
 | msg-model-queue-topic-partition-order | nosql-redis-persistence-replication-cluster-streams | RECOMMENDED | helps compare Redis Streams with messaging systems, but Streams is not itself a prerequisite for the messaging track. | consumer/group-like stream processing vocabulary and ordering scope. | — |
-| nosql-search-inverted-index-analysis | nosql-search-refresh-shards-pagination | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
+| nosql-search-inverted-index-analysis | nosql-search-refresh-shards-pagination | REQUIRED | Refresh visibility, sharding and pagination only make sense once the learner understands that search operates over an inverted-index projection rather than authoritative row storage. | documents and terms are represented in an inverted index whose visibility differs from source-of-truth storage. | — |
 | dist-partitioning-ownership-rebalancing | nosql-search-refresh-shards-pagination | RECOMMENDED | general partition intuition helps, but search shard behavior can be introduced self-contained. | shards divide work/state across owners. | — |
-| nosql-mongo-aggregate-model | nosql-model-selection | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-cassandra-partition-model | nosql-model-selection | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-redis-structures-memory | nosql-model-selection | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-search-inverted-index-analysis | nosql-model-selection | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-model-selection | nosql-transfer-storage-choice | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-mongo-index-shard-transaction | nosql-transfer-storage-choice | RECOMMENDED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-cassandra-lsm-compaction-consistency | nosql-transfer-storage-choice | RECOMMENDED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-redis-persistence-replication-cluster-streams | nosql-transfer-storage-choice | RECOMMENDED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| nosql-search-refresh-shards-pagination | nosql-transfer-storage-choice | RECOMMENDED | The target uses this source mechanism at its own data or cache boundary. |  | — |
+| nosql-mongo-aggregate-model | nosql-model-selection | REQUIRED | Storage-family selection must compare the document/aggregate boundary as an actual workload model, not a product label. | document/aggregate storage model and its query/update boundary. | — |
+| nosql-cassandra-partition-model | nosql-model-selection | REQUIRED | Storage-family selection must understand Cassandra as an access-pattern-first partition model before comparing it with other families. | wide-column access-pattern-first partition model. | — |
+| nosql-redis-structures-memory | nosql-model-selection | REQUIRED | Storage-family selection must understand Redis as finite-memory key/value data structures rather than merely "a fast database." | in-memory key/value structure and memory boundary. | — |
+| nosql-search-inverted-index-analysis | nosql-model-selection | REQUIRED | Storage-family selection must understand search as an inverted-index projection optimized for retrieval rather than transactional authority. | inverted-index/search projection model. | — |
+| nosql-model-selection | nosql-transfer-storage-choice | REQUIRED | L4 transfer assumes the learner can already choose a storage family from workload, access pattern and consistency requirements before the conditions are changed. | choose storage family from workload/access/consistency requirements. | — |
+| nosql-mongo-index-shard-transaction | nosql-transfer-storage-choice | RECOMMENDED | Mongo-specific index, shard and transaction failure boundaries provide stronger evidence for rejecting or selecting the document family in an unseen workload. | document-system failure and cost boundaries beyond basic modelling. | — |
+| nosql-cassandra-lsm-compaction-consistency | nosql-transfer-storage-choice | RECOMMENDED | LSM, compaction, tombstone and consistency costs deepen transfer reasoning when Cassandra is one of the candidate storage families. | LSM/compaction/tombstone/consistency cost boundary. | — |
+| nosql-redis-persistence-replication-cluster-streams | nosql-transfer-storage-choice | RECOMMENDED | Redis durability, replication and cluster behavior clarifies when an in-memory data system stops fitting the workload or recovery need. | Redis durability/replication/cluster boundary. | — |
+| nosql-search-refresh-shards-pagination | nosql-transfer-storage-choice | RECOMMENDED | Refresh delay, shard behavior and pagination cost clarify the boundary between search projection and authoritative storage in a new workload. | search refresh/shard/pagination/source-of-truth boundary. | — |
 | cache-need-source-of-truth | cache-patterns | REQUIRED | cache patterns only make sense once read/write ownership is explicit. | cache is a duplicate/derived copy and another system remains authoritative. | — |
 | cache-need-source-of-truth | cache-invalidation-consistency | REQUIRED | invalidation/freshness exists because two copies can disagree. | cached value may diverge from authoritative state. | — |
 | cache-patterns | cache-stampede-penetration-avalanche-hot-key | REQUIRED | the overload modes are consequences of how cached reads populate or miss the cache. | cache miss/population/expiry behavior and origin fallback path. | — |
@@ -121,10 +120,10 @@ Batch A uses frozen capability IDs only. REQUIRED and all ordering edges must be
 | nosql-redis-structures-memory | cache-capacity-eviction-fallback | RECOMMENDED | Redis is a useful implementation anchor, but Cache Engineering must stay vendor-neutral. | one concrete in-memory implementation has finite memory and different data structures. | — |
 | cache-invalidation-consistency | cache-multilayer-coherence | REQUIRED | multi-layer coherence generalizes that stale-copy problem across several cache layers/instances. | one cached copy can become stale relative to source. | — |
 | dist-consistency-linearizability | cache-multilayer-coherence | RECOMMENDED | formal consistency vocabulary deepens the analysis, but cache coherence can first be taught operationally. | different copies may expose different visibility guarantees. | — |
-| cache-invalidation-consistency | cache-evidence-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| cache-stampede-penetration-avalanche-hot-key | cache-evidence-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| cache-capacity-eviction-fallback | cache-evidence-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. |  | — |
-| cache-multilayer-coherence | cache-evidence-transfer | REQUIRED | The target uses this source mechanism at its own data or cache boundary. | layer-specific freshness/version divergence. | — |
+| cache-invalidation-consistency | cache-evidence-transfer | REQUIRED | L4 cache diagnosis must be able to treat stale or missing invalidation as a direct cause even in a single-layer cache. | staleness/invalidation as one candidate cause. | — |
+| cache-stampede-penetration-avalanche-hot-key | cache-evidence-transfer | REQUIRED | L4 cache diagnosis must distinguish origin overload caused by miss, expiry distribution or concentrated key traffic. | load-distribution and miss/expiry overload modes. | — |
+| cache-capacity-eviction-fallback | cache-evidence-transfer | REQUIRED | L4 cache diagnosis must distinguish memory pressure, eviction and fallback-induced origin load from freshness failures. | finite cache memory, eviction and origin fallback behavior. | — |
+| cache-multilayer-coherence | cache-evidence-transfer | REQUIRED | L4 transfer across cache topologies requires distinguishing which cache layer or instance owns the stale version and how that copy diverged. | layer-specific freshness/version divergence. | — |
 ## Batch-A audit
 
 - Dependency rows: 40
@@ -133,6 +132,20 @@ Batch A uses frozen capability IDs only. REQUIRED and all ordering edges must be
 - No non-edge was stored. In particular, no edge is added from async to check-then-act races, VM to allocation/GC, TCP to HTTP semantics, generics to all adapters, or collection complexity to diagnostics.
 - Cycle and frozen-ID validation applies only to Batch A; this does not claim the complete Step-3 graph exists or has been audited.
 
+## Batch-B1 audit
+
+- B1 rows: 60
+- B1 REQUIRED: 37
+- B1 RECOMMENDED: 23
+- cumulative rows: 100
+- cumulative REQUIRED: 70
+- cumulative RECOMMENDED: 30
+- unknown capability IDs: 0
+- duplicate From/To pairs: 0
+- REQUIRED cycle: none in current A+B1 partial graph
+- REQUIRED + RECOMMENDED cycle: none in current A+B1 partial graph
+- new target tracks: 6–8 only
+
 ## Pending batches
 
-Batches B–D will add approved targets for Tracks 6–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
+B2–D will add approved target capabilities for Tracks 9–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
