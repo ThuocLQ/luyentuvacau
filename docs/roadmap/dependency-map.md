@@ -1,10 +1,10 @@
 # Senior Backend Capability Dependency Map
 
-> **Status:** DRAFT — Phase 2 / Step 3 — Batches A + B1 + B2 + C1 + C2 complete
+> **Status:** DRAFT — Phase 2 / Step 3 — Batches A + B1 + B2 + C1 + C2 + C3 complete
 
 ## Purpose and stop boundary
 
-This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5, Batch B1 targets for Tracks 6–8, Batch B2 targets for Tracks 9–10, Batch C1 targets for Tracks 11–12, and Batch C2 targets for Tracks 13–14. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 15–17 are not yet complete.
+This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5, Batch B1 targets for Tracks 6–8, Batch B2 targets for Tracks 9–10, Batch C1 targets for Tracks 11–12, Batch C2 targets for Tracks 13–14, and Batch C3 targets for Track 15. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 16–17 are not yet complete.
 
 ## Capability dependency != learner gating
 
@@ -18,7 +18,7 @@ A REQUIRED edge is only a candidate for a later lesson prerequisite; it does not
 
 ## Graph invariants
 
-The current A+B1+B2+C1+C2 partial graph uses frozen capability IDs. REQUIRED edges and REQUIRED + RECOMMENDED ordering edges are acyclic; track number and table row order are not learning order. The complete Step-3 graph does not yet exist in this artifact.
+The current A+B1+B2+C1+C2+C3 partial graph uses frozen capability IDs. REQUIRED edges and REQUIRED + RECOMMENDED ordering edges are acyclic; track number and table row order are not learning order. The complete Step-3 graph does not yet exist in this artifact.
 
 ## Dependency registry
 
@@ -251,6 +251,31 @@ The current A+B1+B2+C1+C2 partial graph uses frozen capability IDs. REQUIRED edg
 | rel-user-journey-sli-slo-budget | rel-failure-injection-verification | REQUIRED | A reliability fault experiment must state what acceptable user behavior or reliability property it is trying to validate rather than merely proving that infrastructure stayed alive. | user-impact reliability target and observable SLI for the experiment. | — |
 | obs-diagnostic-method | rel-failure-injection-verification | RECOMMENDED | Hypothesis/evidence discipline improves experiment design and interpretation, but Reliability still owns fault scope, user impact and safe stop conditions. | prediction, discriminating evidence, controlled experiment and before/after conclusion. | Observability owns generic diagnostic experiment method. |
 | obs-signals-correlation | rel-health-readiness-semantics | RECOMMENDED | Telemetry-signal awareness helps distinguish a useful health indicator from arbitrary dependency status, but liveness/readiness semantics can be introduced without first mastering observability. | a signal should correspond to the property the operator intends to act upon. | Observability owns signal mechanics; Reliability owns health meaning and routing/restart policy. |
+| prog-invariants-domain-model | test-risk-strategy-boundaries | RECOMMENDED | Explicit business invariants make it easier to identify what a change could violate, but testing risk can also come from protocol, performance or infrastructure behavior rather than a domain invariant. | valid state and behavior that a change must preserve. | Programming owns invariant definition; Testing owns risk-oriented falsification strategy. |
+| test-risk-strategy-boundaries | test-unit-integration-contract | REQUIRED | Choosing unit, integration or contract scope must start from the risky mechanism that needs falsification rather than from test-type vocabulary. | identify the risky assumption and the narrowest trustworthy boundary that still contains the real mechanism. | Testing owns both capabilities. |
+| test-unit-integration-contract | test-real-dependency-fixtures | REQUIRED | A real dependency fixture is justified when the selected test boundary includes engine or protocol behavior that an isolated double cannot prove. | difference between local isolated behavior and an integration boundary whose real semantics matter. | — |
+| concurrency-races-check-then-act | test-time-concurrency-determinism | REQUIRED | A deterministic race test must know which check, mutation and competing interleaving it is trying to force rather than relying on sleeps and chance. | check-then-act race window and concrete unsafe interleaving. | Concurrency owns race mechanics; Testing owns reproducible test control. |
+| concurrency-cancellation-lifetime | test-time-concurrency-determinism | RECOMMENDED | Cancellation and shutdown tests often require controlling operation lifetime explicitly, but deterministic concurrency testing also applies to races with no cancellation. | cooperative cancellation and logical operation lifetime. | Concurrency owns cancellation semantics. |
+| test-risk-strategy-boundaries | test-time-concurrency-determinism | RECOMMENDED | Risk-oriented boundary selection helps decide which interleaving or time condition is worth controlling, but the deterministic testing mechanism can be introduced directly from a known race. | identify the specific concurrency/time assumption that the test should falsify. | — |
+| prog-invariants-domain-model | test-property-boundary-fuzz | REQUIRED | Property-based and boundary testing need an invariant or behavioral rule that must remain true over many generated inputs rather than merely generating random values. | state or behavior invariant that all valid executions/inputs must preserve. | Programming owns invariant semantics; Testing owns broad-input falsification. |
+| test-risk-strategy-boundaries | test-property-boundary-fuzz | RECOMMENDED | Risk analysis helps focus generated and boundary inputs on meaningful failure surfaces, but property testing can first be taught from one explicit invariant. | prioritize the input/state region whose failure would matter. | — |
+| test-risk-strategy-boundaries | test-failure-resilience | REQUIRED | A failure test must choose a meaningful dependency or resource failure that threatens a real invariant rather than inject faults randomly. | identify the risky boundary, expected behavior and invariant under failure. | Testing owns both general risk strategy and repeatable failure testing. |
+| dist-partial-failure-uncertainty | test-failure-resilience | RECOMMENDED | Distributed partial failure provides realistic examples where one dependency fails while other state remains active, but failure testing also applies to local resources and single-process systems. | one dependency or component can fail or become unreachable while the rest of the operation/system retains state. | Distributed Systems owns partial-failure mechanism; Testing owns controlled reproduction. |
+| test-risk-strategy-boundaries | test-migration-compatibility | REQUIRED | Migration compatibility testing must identify which transitional old/new combinations can break before constructing a matrix of fixtures. | derive test boundary and failure risk from a change that spans multiple versions or persisted representations. | — |
+| api-versioning-compatibility | test-migration-compatibility | RECOMMENDED | API compatibility supplies one concrete mixed-version contract to test, but migration testing also applies to database and event evolution. | old and new API contracts may coexist during rollout. | API owns API compatibility semantics; Testing owns how coexistence is falsified. |
+| db-schema-evolution | test-migration-compatibility | RECOMMENDED | Database schema evolution supplies concrete old/new application and data states, but it is one migration domain rather than a universal prerequisite. | old/new binaries, schema versions and persisted data may coexist during migration. | Database owns schema evolution semantics. |
+| msg-schema-evolution-contract-ownership | test-migration-compatibility | RECOMMENDED | Retained historical events and independently deployed consumers broaden compatibility testing, but migration testing can first be learned in another versioned boundary. | old/new message contracts and historical events may coexist. | Messaging owns event evolution; Testing owns compatibility falsification. |
+| test-risk-strategy-boundaries | test-ci-flakiness-repeatability | REQUIRED | Diagnosing a flaky test requires knowing which state and behavior should determine the verdict so hidden timing, ordering or environment dependencies can be separated from the actual product risk. | relevant test state, intended invariant and trustworthy verdict boundary. | — |
+| test-time-concurrency-determinism | test-ci-flakiness-repeatability | RECOMMENDED | Timing and interleaving are common sources of flakes, so deterministic control provides useful diagnostic techniques, but CI flakiness may also come from shared state or environment dependencies. | explicit time/interleaving control replaces sleeps and probabilistic ordering. | — |
+| test-real-dependency-fixtures | test-ci-flakiness-repeatability | RECOMMENDED | Real fixtures introduce lifecycle, isolation, port and cleanup failure modes that commonly surface only under parallel CI, but CI repeatability does not require every test to use real dependencies. | fixture startup, state isolation, version and cleanup are part of the test's relevant environment. | — |
+| test-risk-strategy-boundaries | test-review-static-analysis-change-safety | REQUIRED | Review, analyzers and regression tests only provide useful change-safety evidence when reviewers know what behavior or contract the change puts at risk. | identify changed invariant, contract or failure boundary that deserves evidence. | Testing owns risk/evidence strategy; static analysis and review are supporting mechanisms. |
+| prog-api-refactoring-change-safety | test-review-static-analysis-change-safety | RECOMMENDED | General refactoring/change-safety experience helps distinguish implementation cleanup from behavior-changing risk, but review strategy can still teach this boundary locally. | preserve or intentionally migrate externally meaningful behavior during a code change. | Programming owns general code/change design; Testing owns evidence for change safety. |
+| test-unit-integration-contract | test-risk-transfer | REQUIRED | L4 transfer must be able to move the test boundary when the real mechanism changes rather than preserving the same test shape across architectures. | choose unit, integration or contract boundary according to where the behavior can actually fail. | — |
+| test-failure-resilience | test-risk-transfer | REQUIRED | An unseen architecture change often introduces a new failure boundary, so L4 testing must preserve invariants when dependency/resource failure modes change. | inject a controlled failure and verify durable state, outcome and recovery invariant. | — |
+| test-time-concurrency-determinism | test-risk-transfer | RECOMMENDED | Concurrency changes are an important transfer case where previous happy-path test structure stops being trustworthy, but not every unfamiliar change is concurrent. | control an interleaving, clock or operation lifetime to reproduce a concurrency-sensitive failure. | — |
+| test-property-boundary-fuzz | test-risk-transfer | RECOMMENDED | Property and generated-input reasoning broadens transfer to unfamiliar input/state spaces, but L4 risk transfer does not require property-based testing for every architecture change. | test an invariant across broad or generated input and preserve the failing case. | — |
+| test-migration-compatibility | test-risk-transfer | RECOMMENDED | Version-transition reasoning strengthens transfer when architecture changes introduce coexistence or migration, but not every changed boundary is versioned. | test old/new representations and transitional compatibility rather than only final state. | — |
+| test-review-static-analysis-change-safety | test-risk-transfer | RECOMMENDED | Review and static evidence broaden L4 change reasoning beyond runtime tests, but dynamic risk-boundary selection remains sufficient to begin the transfer capability. | combine diff intent, static findings and targeted dynamic evidence when the implementation changes. | — |
 ## Batch-A audit
 
 - Dependency rows: 40
@@ -318,6 +343,21 @@ The current A+B1+B2+C1+C2 partial graph uses frozen capability IDs. REQUIRED edg
 - C2 REQUIRED transitive redundancy through REQUIRED-only paths: 0
 - new target tracks: 13–14 only
 
+## Batch-C3 audit
+
+- C3 rows: 25
+- C3 REQUIRED: 10
+- C3 RECOMMENDED: 15
+- cumulative rows: 252
+- cumulative REQUIRED: 158
+- cumulative RECOMMENDED: 94
+- unknown capability IDs: 0
+- duplicate From/To pairs: 0
+- REQUIRED cycle: none in current partial graph
+- REQUIRED + RECOMMENDED cycle: none
+- C3 REQUIRED transitive redundancy through REQUIRED-only paths: 0
+- new target track: 15 only
+
 ## Pending batches
 
-Remaining batches will add approved target capabilities for Tracks 15–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
+The remaining batch will add approved target capabilities for Tracks 16–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
