@@ -1,10 +1,10 @@
 # Senior Backend Capability Dependency Map
 
-> **Status:** DRAFT — Phase 2 / Step 3 — Batches A + B1 + B2 complete
+> **Status:** DRAFT — Phase 2 / Step 3 — Batches A + B1 + B2 + C1 complete
 
 ## Purpose and stop boundary
 
-This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5, Batch B1 targets for Tracks 6–8, and Batch B2 targets for Tracks 9–10. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 11–17 are not yet complete.
+This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5, Batch B1 targets for Tracks 6–8, Batch B2 targets for Tracks 9–10, and Batch C1 targets for Tracks 11–12. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 13–17 are not yet complete.
 
 ## Capability dependency != learner gating
 
@@ -18,7 +18,7 @@ A REQUIRED edge is only a candidate for a later lesson prerequisite; it does not
 
 ## Graph invariants
 
-The current A+B1+B2 partial graph uses frozen capability IDs. REQUIRED edges and REQUIRED + RECOMMENDED ordering edges are acyclic; track number and table row order are not learning order. The complete Step-3 graph does not yet exist in this artifact.
+The current A+B1+B2+C1 partial graph uses frozen capability IDs. REQUIRED edges and REQUIRED + RECOMMENDED ordering edges are acyclic; track number and table row order are not learning order. The complete Step-3 graph does not yet exist in this artifact.
 
 ## Dependency registry
 
@@ -172,6 +172,45 @@ The current A+B1+B2 partial graph uses frozen capability IDs. REQUIRED edges and
 | msg-consumer-groups-offsets-rebalance | msg-lag-backpressure-evidence | REQUIRED | Consumer lag is measured relative to partition assignment and offset progress, so those mechanics must already be understood. | current and committed offsets per partition and consumer assignment | — |
 | concurrency-bounded-backpressure | msg-lag-backpressure-evidence | REQUIRED | Lag growth must be interpreted against arrival rate, service capacity and bounded in-flight work rather than solved by unlimited consumer concurrency. | finite downstream capacity and bounded concurrent work | Concurrency owns portable backpressure; Messaging owns lag and broker evidence |
 | msg-delivery-retry-poison-dlq | msg-lag-backpressure-evidence | RECOMMENDED | Retry storms and poison-message handling can reduce effective consumption rate or hold progress, so they are useful competing hypotheses for lag. | repeated retry or poison handling consumes processing capacity and may block progress | — |
+| net-http-semantics | api-contract-resource-semantics | REQUIRED | An HTTP API contract is expressed through request/response protocol semantics, so resource operations cannot be modelled safely without understanding what the HTTP method, status, headers and body communicate. | HTTP request/response operation semantics and externally observable protocol behavior. | Networking owns HTTP protocol semantics; API owns the business/resource contract expressed over HTTP. |
+| prog-errors-results | api-validation-errors-pagination | REQUIRED | A stable API error model assumes the learner can distinguish expected domain failure from unexpected exception before mapping those outcomes to a client-visible response. | expected failure versus unexpected exception and failure propagation. | Programming owns general error/result semantics; API owns external validation and error contract. |
+| api-contract-resource-semantics | api-validation-errors-pagination | REQUIRED | Validation, error representation and pagination are parts of the client-visible API contract and must preserve the meaning of the resource operation. | request intent, response meaning and externally visible API behavior. | — |
+| api-contract-resource-semantics | api-versioning-compatibility | REQUIRED | Compatibility can only be evaluated after the existing request, response and resource behavior has been identified as a contract. | current externally observable API contract and resource semantics. | — |
+| prog-api-refactoring-change-safety | api-versioning-compatibility | RECOMMENDED | General change-safety reasoning helps distinguish implementation refactoring from externally breaking change, but API versioning can still introduce compatibility rules locally. | preserve or deliberately migrate externally consumed behavior during change. | Programming owns general change safety; API owns client/server version compatibility. |
+| api-contract-resource-semantics | api-request-identity-idempotency | REQUIRED | Request idempotency needs a precise definition of which client attempts represent the same logical API operation versus a genuinely new state transition. | logical API operation and its intended business effect. | — |
+| dist-rpc-unknown-completion | api-request-identity-idempotency | RECOMMENDED | Remote-completion ambiguity provides the strongest motivation for stable request identity, but idempotency can first be introduced from ordinary duplicate submission. | a remote operation may have completed even though its response was not received. | Distributed Systems owns remote-completion uncertainty; API owns request-operation identity. |
+| concurrency-cancellation-lifetime | api-deadlines-timeout-cancellation | REQUIRED | Deadline propagation assumes cancellation is a cooperative signal tied to operation lifetime rather than an automatic rollback of already completed work. | cooperative cancellation and logical operation lifetime. | Concurrency owns cancellation mechanics; API owns end-to-end deadline and timeout policy. |
+| dist-rpc-unknown-completion | api-deadlines-timeout-cancellation | REQUIRED | A timeout or expired deadline must not be interpreted as proof that the remote operation did not execute. | missing response and remote business completion are separate facts. | Distributed Systems owns completion uncertainty; API owns deadline policy. |
+| net-failure-localization-unknown-outcome | api-deadlines-timeout-cancellation | RECOMMENDED | Layer-specific networking evidence improves timeout diagnosis and helps separate DNS, connection, TLS and HTTP timing, but API deadline policy can be taught without requiring full network diagnosis first. | different network stages may consume time or fail before an API result is observed. | Networking owns failure-layer localization. |
+| api-deadlines-timeout-cancellation | api-retry-backoff-jitter | REQUIRED | A retry policy must fit inside the remaining operation time budget rather than creating attempts that outlive the caller's useful deadline. | finite end-to-end deadline and propagated cancellation budget. | — |
+| api-request-identity-idempotency | api-retry-backoff-jitter | REQUIRED | Retrying a mutation safely requires knowing whether another attempt represents the same logical operation and whether repeating it can duplicate the business effect. | stable logical operation identity and duplicate-effect protection. | — |
+| concurrency-bounded-backpressure | api-circuit-bulkhead-rate-limit | REQUIRED | Bulkhead and admission-control decisions assume finite execution and downstream capacity; otherwise rejecting or bounding work has no resource model. | finite capacity, bounded concurrent work and overload protection. | Concurrency owns portable bounded work/backpressure; API owns service-boundary resilience policy. |
+| dist-partial-failure-uncertainty | api-circuit-bulkhead-rate-limit | RECOMMENDED | Partial dependency failure makes circuit isolation and blast-radius control easier to motivate, but these protection mechanisms can first be taught from finite-capacity overload. | one dependency or path may be unhealthy while unrelated components remain usable. | Distributed Systems owns partial failure. |
+| api-request-identity-idempotency | api-unknown-outcome-reconciliation | REQUIRED | Resolving an ambiguous mutation requires a stable operation identity so status lookup, stored result and later retry all refer to the same business operation. | stable logical operation key and persisted operation outcome. | — |
+| dist-rpc-unknown-completion | api-unknown-outcome-reconciliation | REQUIRED | The target exists because transport failure cannot determine whether the remote mutation actually completed. | remote execution may succeed even when the caller observes timeout or lost response. | Distributed Systems owns remote-completion uncertainty. |
+| dist-reconciliation-convergence | api-unknown-outcome-reconciliation | REQUIRED | Once completion is ambiguous, recovery requires comparing authoritative state and applying a repeatable repair or status transition rather than guessing. | authoritative-state comparison and idempotent reconciliation. | Distributed Systems owns portable reconciliation; API applies it to an ambiguous request operation. |
+| api-deadlines-timeout-cancellation | api-unknown-outcome-reconciliation | RECOMMENDED | Deadline semantics provide a common trigger for entering an unknown outcome state, but reconciliation can also follow disconnects or other ambiguous failures. | caller lifetime may end while remote processing remains unresolved. | — |
+| sec-trust-boundary-threat-model | sec-auth-session-token | REQUIRED | Authentication only has meaning after identifying which caller or system crosses a trust boundary and what identity must be established before trusting its claims. | actor, asset and trust-boundary identification. | — |
+| sec-auth-session-token | sec-authorization-object-tenant | REQUIRED | Object or tenant authorization needs a server-trusted subject identity before policy can decide what that subject may do to a resource. | authenticated subject and trusted identity claims. | Security owns both mechanisms but keeps authentication distinct from authorization. |
+| api-contract-resource-semantics | sec-authorization-object-tenant | REQUIRED | Authorization decisions operate on a concrete action and resource, so the API's resource/state-transition semantics must already be explicit. | requested action, target resource and operation semantics. | API owns normal resource contract; Security owns permission to perform that operation. |
+| sec-auth-session-token | sec-oauth-oidc-awareness | REQUIRED | OAuth/OIDC role separation only becomes clear once the learner already understands basic identity establishment, token validation and session lifetime. | authentication identity, token validation and caller session/token lifecycle. | — |
+| sec-trust-boundary-threat-model | sec-injection-ssrf-input-output | REQUIRED | Injection and SSRF reasoning begins by identifying which data or destination choice is attacker-controlled as it crosses into a trusted interpreter, query or network action. | untrusted input crossing a trust boundary into a privileged action. | — |
+| net-request-path-dns | sec-injection-ssrf-input-output | RECOMMENDED | DNS and destination-resolution knowledge improves SSRF analysis because an attacker-controlled hostname may resolve into internal or otherwise forbidden network locations, but injection/SSRF can be introduced before deep networking. | hostname resolution selects a network destination before connection. | Networking owns DNS/path mechanics; Security owns adversarial destination control. |
+| sec-trust-boundary-threat-model | sec-browser-boundaries-cors-csrf-xss | REQUIRED | CORS, CSRF and XSS are different trust-boundary failures in the browser model and cannot be distinguished safely without identifying actor, origin and credential boundary. | trusted versus untrusted actor/origin and protected asset/action. | — |
+| net-http-semantics | sec-browser-boundaries-cors-csrf-xss | REQUIRED | Backend implications of CORS and CSRF rely on HTTP request, header, cookie/credential and response semantics rather than vulnerability names alone. | HTTP request/response headers and credential-bearing request behavior. | Networking owns HTTP protocol semantics; Security owns browser trust and abuse reasoning. |
+| sec-trust-boundary-threat-model | sec-secrets-third-party-trust | REQUIRED | A secret or external callback is security-sensitive only relative to the authority it grants and the trust boundary through which the third-party data or action arrives. | authority-bearing asset and external trust boundary. | — |
+| sec-trust-boundary-threat-model | sec-abuse-bruteforce-resource-business-flow | REQUIRED | Abuse controls must identify the actor, resource and sensitive business flow being protected rather than rate-limit every request uniformly. | actor, protected asset and abuse path across a trust boundary. | — |
+| api-circuit-bulkhead-rate-limit | sec-abuse-bruteforce-resource-business-flow | RECOMMENDED | Service-level rate and resource protection provides useful mechanics for controlling abusive request volume, but Security adds identity, attacker intent and business-flow dimensions. | admission/rate control over finite service capacity. | API owns general resilience/admission policy; Security applies identity-aware controls against adversarial abuse. |
+| concurrency-races-check-then-act | sec-race-business-logic-abuse | REQUIRED | Adversarial race abuse intentionally exploits the same gap between a check and later state transition that exists in an ordinary race condition. | check-then-act interleaving and non-atomic state transition. | Concurrency owns race mechanism; Security owns deliberate exploitation of the business invariant. |
+| sec-trust-boundary-threat-model | sec-audit-detection-evidence | REQUIRED | Security audit evidence must record meaningful activity at a trust or privilege boundary; otherwise logs become generic application noise without an investigation model. | security-relevant actor, action, asset and trust boundary. | Security owns which security decision/action requires evidence. |
+| obs-logs-structured-correlation | sec-audit-detection-evidence | RECOMMENDED | Structured and correlated logging improves storage and investigation of security events, but the semantics of what must be audited do not depend on first mastering generic observability logging. | stable structured fields and correlation across events. | Observability owns generic logging mechanics; Security owns audit semantics. |
+| sec-authorization-object-tenant | sec-unseen-attack-transfer | REQUIRED | An unseen security case may involve a caller legitimately authenticated but unauthorized for a particular object or tenant. | subject-action-resource authorization using server-trusted ownership or tenant state. | — |
+| sec-injection-ssrf-input-output | sec-unseen-attack-transfer | REQUIRED | L4 attack transfer must recognize when attacker-controlled input changes query, interpreter, destination or output behavior even when the vulnerability is unlabeled. | untrusted input must remain data rather than control over a privileged sink or destination. | — |
+| sec-abuse-bruteforce-resource-business-flow | sec-unseen-attack-transfer | REQUIRED | Unfamiliar incidents may use valid endpoints and credentials at abusive frequency or sequence rather than malformed input. | identity/resource/business-flow aware abuse reasoning. | — |
+| sec-race-business-logic-abuse | sec-unseen-attack-transfer | REQUIRED | L4 transfer must test whether concurrent valid-looking requests can violate the business invariant even when each request passes validation individually. | adversarial exploitation of a non-atomic business transition. | — |
+| sec-audit-detection-evidence | sec-unseen-attack-transfer | REQUIRED | An unlabeled attack cannot be defended by vulnerability recognition alone; the learner must collect identity, action, target and state evidence that discriminates plausible abuse paths. | security audit timeline and evidence needed to investigate an action. | — |
+| sec-secrets-third-party-trust | sec-unseen-attack-transfer | RECOMMENDED | Third-party and credential trust boundaries broaden transfer to webhooks, provider APIs and compromised credentials, but not every unseen attack needs that integration context. | authority-bearing secrets and externally supplied trusted-looking actions. | — |
+| sec-browser-boundaries-cors-csrf-xss | sec-unseen-attack-transfer | RECOMMENDED | Browser-origin and ambient-credential cases broaden transfer beyond server-to-server abuse, but browser mechanics are not required for every L4 security incident. | browser origin, ambient credential and script execution trust boundaries. | — |
 ## Batch-A audit
 
 - Dependency rows: 40
@@ -209,6 +248,21 @@ The current A+B1+B2 partial graph uses frozen capability IDs. REQUIRED edges and
 - B2 REQUIRED transitive redundancy through REQUIRED-only paths: 0
 - new target tracks: 9–10 only
 
+## Batch-C1 audit
+
+- C1 rows: 39
+- C1 REQUIRED: 29
+- C1 RECOMMENDED: 10
+- cumulative rows: 187
+- cumulative REQUIRED: 130
+- cumulative RECOMMENDED: 57
+- unknown capability IDs: 0
+- duplicate From/To pairs: 0
+- REQUIRED cycle: none in current A+B1+B2+C1 partial graph
+- REQUIRED + RECOMMENDED cycle: none
+- C1 REQUIRED transitive redundancy through REQUIRED-only paths: 0
+- new target tracks: 11–12 only
+
 ## Pending batches
 
-Remaining batches will add approved target capabilities for Tracks 11–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
+Remaining batches will add approved target capabilities for Tracks 13–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
