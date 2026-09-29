@@ -1,6 +1,6 @@
 # Senior Backend Deep-Track Capability Map
 
-> **Status:** Phase 2 / Step 2 canonical decomposition.
+> **Status:** FROZEN — Phase 2 / Step 2 canonical capability decomposition.
 > **Purpose:** what a Senior Backend engineer must be capable of. This is not learning order, a dependency graph, lesson plan, case bank, or hour estimate.
 
 ## Invariants and pre-edit gate
