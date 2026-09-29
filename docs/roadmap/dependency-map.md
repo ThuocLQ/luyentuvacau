@@ -1,10 +1,10 @@
 # Senior Backend Capability Dependency Map
 
-> **Status:** DRAFT — Phase 2 / Step 3 — Batches A + B1 complete
+> **Status:** DRAFT — Phase 2 / Step 3 — Batches A + B1 + B2 complete
 
 ## Purpose and stop boundary
 
-This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5 and Batch B1 targets for Tracks 6–8. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 9–17 are not yet complete.
+This map records which prior capability mechanism a target may assume. The current artifact contains Batch A targets for Tracks 1–5, Batch B1 targets for Tracks 6–8, and Batch B2 targets for Tracks 9–10. It is not a lesson order, learner progression gate, database schema, or frontend rule; Tracks 11–17 are not yet complete.
 
 ## Capability dependency != learner gating
 
@@ -18,7 +18,7 @@ A REQUIRED edge is only a candidate for a later lesson prerequisite; it does not
 
 ## Graph invariants
 
-The current A+B1 partial graph uses frozen capability IDs and has been checked for acyclic REQUIRED and combined ordering edges; track number and table row order are not learning order. This is not the complete Step-3 graph.
+The current A+B1+B2 partial graph uses frozen capability IDs. REQUIRED edges and REQUIRED + RECOMMENDED ordering edges are acyclic; track number and table row order are not learning order. The complete Step-3 graph does not yet exist in this artifact.
 
 ## Dependency registry
 
@@ -124,6 +124,54 @@ The current A+B1 partial graph uses frozen capability IDs and has been checked f
 | cache-stampede-penetration-avalanche-hot-key | cache-evidence-transfer | REQUIRED | L4 cache diagnosis must distinguish origin overload caused by miss, expiry distribution or concentrated key traffic. | load-distribution and miss/expiry overload modes. | — |
 | cache-capacity-eviction-fallback | cache-evidence-transfer | REQUIRED | L4 cache diagnosis must distinguish memory pressure, eviction and fallback-induced origin load from freshness failures. | finite cache memory, eviction and origin fallback behavior. | — |
 | cache-multilayer-coherence | cache-evidence-transfer | REQUIRED | L4 transfer across cache topologies requires distinguishing which cache layer or instance owns the stale version and how that copy diverged. | layer-specific freshness/version divergence. | — |
+| concurrency-local-vs-distributed | dist-partial-failure-uncertainty | RECOMMENDED | The local-vs-distributed boundary makes it easier to see that one process lock or memory model does not imply shared fate across replicas, but partial failure can still be introduced directly. | process-local coordination does not create shared authority or shared failure state across replicas | Concurrency owns local synchronization scope; Distributed Systems owns partial failure |
+| net-failure-localization-unknown-outcome | dist-partial-failure-uncertainty | RECOMMENDED | Network-stage evidence gives a concrete example of one path failing while the rest of the system may continue, but distributed partial failure is broader than networking. | DNS, TCP, TLS or HTTP failure on one path does not reveal global system state | Networking owns failure-layer localization; Distributed Systems owns partial failure |
+| dist-partial-failure-uncertainty | dist-rpc-unknown-completion | REQUIRED | RPC ambiguity exists because the caller observes messages, replies and timeouts rather than the remote process's internal completion state. | a remote component may execute, fail, slow or become unreachable independently of the caller | — |
+| net-failure-localization-unknown-outcome | dist-rpc-unknown-completion | REQUIRED | To reason about an RPC timeout, the learner must distinguish a failure before the request could reach the server from a failure after remote execution may have begun. | transport-stage evidence and the fact that absence of an HTTP response does not prove absence of remote execution | Networking owns path localization; Distributed Systems owns remote-completion uncertainty |
+| dist-consistency-linearizability | dist-replication-leader-quorum | REQUIRED | Replication read, acknowledgement and failover choices must be judged against the visibility or ordering guarantee the operation requires. | allowed read/write histories and required visibility guarantee | — |
+| dist-partial-failure-uncertainty | dist-replication-leader-quorum | REQUIRED | Replication only becomes an engineering guarantee when copies may lag, fail or become unreachable independently. | independent replica or network-path failure and uncertainty | — |
+| dist-partial-failure-uncertainty | dist-consensus-coordination-purpose | REQUIRED | Coordination exists because participants may lose contact or disagree while a safe shared decision still requires one coherent authority or committed value. | participants can fail or become mutually unreachable while agreement is still required | — |
+| dist-replication-leader-quorum | dist-consensus-coordination-purpose | RECOMMENDED | Leader and quorum replication provides a useful concrete context for coordination, but consensus purpose can also be introduced with ownership or configuration decisions. | leader, quorum and replicated-decision roles | — |
+| concurrency-local-vs-distributed | dist-partitioning-ownership-rebalancing | RECOMMENDED | The local-vs-distributed boundary helps explain why an in-process lock cannot assign ownership across replicas, but partition ownership can be introduced independently. | process-local authority does not define distributed key or work ownership | Concurrency owns local synchronization scope; Distributed Systems owns partition ownership |
+| dist-partial-failure-uncertainty | dist-partitioning-ownership-rebalancing | RECOMMENDED | Node loss and temporary unreachability make rebalance transitions more intuitive, but static partition ownership does not require prior partial-failure depth. | a current partition owner may disappear or become unreachable | — |
+| db-transactions-isolation-anomalies | dist-transactions-2pc-boundary | REQUIRED | Two-phase commit extends the idea of one transactional commit/abort boundary across multiple transactional participants. | atomic commit or abort within one transactional resource | Relational Database owns local transaction mechanics; Distributed Systems owns cross-resource coordination |
+| dist-partial-failure-uncertainty | dist-transactions-2pc-boundary | REQUIRED | Prepared participants and the coordinator may fail or become unreachable between prepare and the final decision. | independent participant/coordinator failure during a multi-step distributed decision | — |
+| prog-invariants-domain-model | dist-reconciliation-convergence | REQUIRED | Reconciliation needs a defined valid state or authoritative invariant to know what mismatch should be repaired. | valid target state and invariant ownership | Programming owns invariant definition; Distributed Systems owns convergence/reconciliation |
+| dist-partial-failure-uncertainty | dist-reconciliation-convergence | REQUIRED | Reconciliation exists partly because one component may miss or ambiguously complete work while other components continue and preserve divergent state. | partial failure can leave durable incomplete or divergent state | — |
+| dist-rpc-unknown-completion | dist-reconciliation-convergence | RECOMMENDED | Unknown RPC completion is a common reason to reconcile state later, although reconciliation also applies to missed events and other divergence. | a remote operation may have executed even though the caller did not receive its outcome | — |
+| dist-rpc-unknown-completion | dist-guarantee-recovery-transfer | REQUIRED | L4 distributed reasoning must handle an operation whose remote effect cannot be inferred from a timeout or missing response. | ambiguous remote completion states | — |
+| dist-replication-leader-quorum | dist-guarantee-recovery-transfer | REQUIRED | L4 transfer must reason about stale copies, acknowledgement rules and failover when evaluating a changed distributed topology. | replica, acknowledgement, stale-read and failover semantics | — |
+| dist-consensus-coordination-purpose | dist-guarantee-recovery-transfer | REQUIRED | L4 transfer must know what agreement or ownership guarantee coordination buys and when loss of quorum prevents safe progress. | agreement, quorum and exclusive-coordination guarantee | — |
+| dist-time-order-causality | dist-guarantee-recovery-transfer | REQUIRED | L4 transfer must distinguish wall-clock order from causal or version order when reconstructing a distributed incident. | wall-clock timestamps do not by themselves define causal or total order | — |
+| dist-reconciliation-convergence | dist-guarantee-recovery-transfer | REQUIRED | L4 recovery reasoning must include how incomplete or divergent state can converge safely after the incident. | compare actual state with authority and apply repeatable repair | — |
+| dist-partitioning-ownership-rebalancing | dist-guarantee-recovery-transfer | RECOMMENDED | Ownership and rebalance depth strengthens transfer when topology or partition distribution changes, but the L4 capability can begin without every partitioning case. | partition ownership, rebalance and hot-owner behavior | — |
+| dist-transactions-2pc-boundary | dist-guarantee-recovery-transfer | RECOMMENDED | Two-phase commit gives an additional coordination/recovery boundary to compare with other distributed designs, but it is not required for every L4 incident. | prepare, commit and blocking-recovery boundary across participants | — |
+| msg-model-queue-topic-partition-order | msg-producer-acks-durability | REQUIRED | Producer acknowledgement semantics are defined relative to where a record is routed and which broker unit accepts it. | queue, topic or partition publication boundary and ordering scope | — |
+| dist-replication-leader-quorum | msg-producer-acks-durability | REQUIRED | A producer acknowledgement may depend on broker replica acknowledgement and leader state, so durability cannot be reasoned about from the client response alone. | replica acknowledgement, leader and failover semantics | Distributed Systems owns portable replication; Messaging owns the producer acknowledgement contract |
+| msg-model-queue-topic-partition-order | msg-consumer-groups-offsets-rebalance | REQUIRED | Consumer-group assignment and offsets only make sense once partition and ordering scope are explicit. | partitions, destination model and ordering scope | — |
+| dist-partitioning-ownership-rebalancing | msg-consumer-groups-offsets-rebalance | RECOMMENDED | Consumer-group rebalance is one application of assigning and moving work ownership, but broker-specific group mechanics can be taught with a local recap. | owner assignment, reassignment and in-flight work during rebalance | Distributed Systems owns portable ownership; Messaging owns consumer-group semantics |
+| msg-model-queue-topic-partition-order | msg-delivery-retry-poison-dlq | REQUIRED | Retry, poison handling and DLQ policy operate on broker-delivered records, so the delivery identity and ordering boundary must already be clear. | broker-delivered record identity and ordering boundary | — |
+| dist-partial-failure-uncertainty | msg-delivery-retry-poison-dlq | RECOMMENDED | Partial outage explains why repeated retry can amplify load while the broker and consumer continue running, but retry classification can be taught directly. | downstream may be slow or unavailable while other messaging components remain active | — |
+| msg-delivery-retry-poison-dlq | msg-consumer-idempotency-inbox | REQUIRED | Inbox or deduplication exists because retry and recovery can deliver the same logical message more than once. | repeated delivery of one logical message after failure or retry | — |
+| db-transactions-isolation-anomalies | msg-consumer-idempotency-inbox | REQUIRED | A local inbox is strongest when deduplication state and the local business effect share one transactional boundary. | one local database transaction can atomically bind deduplication record and business state | Relational Database owns local transaction semantics; Messaging owns duplicate-delivery protection |
+| msg-model-queue-topic-partition-order | msg-outbox-db-publish-gap | REQUIRED | Outbox reasoning assumes that publishing a broker record is a separate system effect from committing business state in the database. | broker publication boundary is distinct from local database commit | — |
+| db-transactions-isolation-anomalies | msg-outbox-db-publish-gap | REQUIRED | The outbox relies on writing business state and the outbox record in one local transaction before a separate relay publishes it. | atomic local database commit boundary | Relational Database owns local transaction semantics; Messaging owns the DB-to-broker delivery gap |
+| dist-partial-failure-uncertainty | msg-outbox-db-publish-gap | REQUIRED | The dual-write gap matters because the process or network may fail after one side has succeeded and before the other side is known complete. | one component or communication step may fail independently between two effects | — |
+| msg-producer-acks-durability | msg-outbox-db-publish-gap | RECOMMENDED | Producer acknowledgement depth improves reasoning about relay retries and ambiguous broker acceptance, but the DB-versus-broker atomicity gap can be introduced first. | broker acceptance acknowledgement may itself be ambiguous after timeout | — |
+| msg-consumer-groups-offsets-rebalance | msg-replay-backfill | REQUIRED | Replay and backfill need a concrete way to choose historical positions and reason about partition assignment while processing them. | partition offsets, committed position and consumer assignment | — |
+| msg-consumer-idempotency-inbox | msg-replay-backfill | RECOMMENDED | Duplicate-safe local effects make replay safer, although some projections are naturally rebuildable without a general inbox mechanism. | repeated delivery and local deduplication behavior | — |
+| msg-schema-evolution-contract-ownership | msg-replay-backfill | RECOMMENDED | Historical replay may encounter old event versions, so compatibility depth improves replay safety, but replay can first be taught on one stable schema. | old and new event contracts may coexist in retained history | — |
+| msg-model-queue-topic-partition-order | msg-schema-evolution-contract-ownership | REQUIRED | Event schema evolution belongs to a producer-consumer contract over retained messages, not just a local serialization type. | message contract, producer ownership and independently deployed consumers | — |
+| prog-api-refactoring-change-safety | msg-schema-evolution-contract-ownership | RECOMMENDED | General contract-change safety is useful prior experience, but event compatibility has distinct retained-history and producer-consumer semantics. | preserve externally consumed behavior while old and new consumers may coexist | Programming owns general change safety; Messaging owns event-contract evolution |
+| msg-model-queue-topic-partition-order | msg-workflow-saga-compensation | REQUIRED | A message-driven Saga uses commands or events as durable boundaries between workflow steps, so the messaging interaction model must already be understood. | messages or commands represent independently processed workflow steps | — |
+| dist-partial-failure-uncertainty | msg-workflow-saga-compensation | REQUIRED | Saga compensation exists because distributed steps can succeed or fail independently and cannot be rolled back by one local transaction. | partial completion across independently failing participants | — |
+| dist-reconciliation-convergence | msg-workflow-saga-compensation | RECOMMENDED | Reconciliation provides useful recovery intuition when compensation itself fails, but Saga state and compensation can be introduced before general reconciliation depth. | repair incomplete distributed state toward a valid outcome | — |
+| dist-rpc-unknown-completion | msg-external-side-effect-reconciliation | REQUIRED | An external provider may commit a side effect even when the local caller never receives its response. | remote side effect may have completed despite a timeout or lost response | Distributed Systems owns remote-completion uncertainty; Messaging owns external-effect recovery in an event-driven workflow |
+| dist-reconciliation-convergence | msg-external-side-effect-reconciliation | REQUIRED | Safe external-effect recovery requires comparing local state with an authoritative external result and applying repeatable repair. | authoritative state comparison and idempotent reconciliation | — |
+| msg-consumer-idempotency-inbox | msg-external-side-effect-reconciliation | RECOMMENDED | Stable operation identity and duplicate-safe local effects help reconciliation, but an inbox cannot prove or deduplicate an external provider effect by itself. | stable local operation identity and duplicate-delivery protection | Messaging keeps local inbox semantics distinct from external-provider state |
+| msg-consumer-groups-offsets-rebalance | msg-lag-backpressure-evidence | REQUIRED | Consumer lag is measured relative to partition assignment and offset progress, so those mechanics must already be understood. | current and committed offsets per partition and consumer assignment | — |
+| concurrency-bounded-backpressure | msg-lag-backpressure-evidence | REQUIRED | Lag growth must be interpreted against arrival rate, service capacity and bounded in-flight work rather than solved by unlimited consumer concurrency. | finite downstream capacity and bounded concurrent work | Concurrency owns portable backpressure; Messaging owns lag and broker evidence |
+| msg-delivery-retry-poison-dlq | msg-lag-backpressure-evidence | RECOMMENDED | Retry storms and poison-message handling can reduce effective consumption rate or hold progress, so they are useful competing hypotheses for lag. | repeated retry or poison handling consumes processing capacity and may block progress | — |
 ## Batch-A audit
 
 - Dependency rows: 40
@@ -146,6 +194,21 @@ The current A+B1 partial graph uses frozen capability IDs and has been checked f
 - REQUIRED + RECOMMENDED cycle: none in current A+B1 partial graph
 - new target tracks: 6–8 only
 
+## Batch-B2 audit
+
+- B2 rows: 48
+- B2 REQUIRED: 31
+- B2 RECOMMENDED: 17
+- cumulative rows: 148
+- cumulative REQUIRED: 101
+- cumulative RECOMMENDED: 47
+- unknown capability IDs: 0
+- duplicate From/To pairs: 0
+- REQUIRED cycle: none in current A+B1+B2 partial graph
+- REQUIRED + RECOMMENDED cycle: none in current partial graph
+- B2 REQUIRED transitive redundancy through REQUIRED-only paths: 0
+- new target tracks: 9–10 only
+
 ## Pending batches
 
-B2–D will add approved target capabilities for Tracks 9–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
+Remaining batches will add approved target capabilities for Tracks 11–17. No lesson IDs, progression schema, learner locks, UI, hours or case bank are introduced here.
