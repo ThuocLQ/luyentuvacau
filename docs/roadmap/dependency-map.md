@@ -1,10 +1,10 @@
 # Senior Backend Capability Dependency Map
 
-> **Status:** DRAFT — Phase 2 / Step 3 — dependency registry complete; final closure audit pending
+> **Status:** FROZEN — Phase 2 / Step 3 canonical capability dependency graph.
 
 ## Purpose and stop boundary
 
-This map records which prior capability mechanism a target may assume. Batch A targets Tracks 1–5; Batch B1 targets Tracks 6–8; Batch B2 targets Tracks 9–10; Batch C1 targets Tracks 11–12; Batch C2 targets Tracks 13–14; Batch C3 targets Track 15; and Batch D targets Tracks 16–17. All 17 core tracks now have their approved capability-ordering relations in the registry. It is not a lesson order, learner progression gate, database schema, or frontend rule. Step 3 is not yet frozen.
+This map records which prior capability mechanism a target may assume. All 17 core tracks are covered by 318 ordering relations over 163 frozen capability IDs: 194 REQUIRED and 124 RECOMMENDED. It is not a lesson order, learner progression gate, database schema, or frontend rule. Future lesson decomposition decides which capability dependencies become concrete lesson prerequisites only when that mapping is explicitly justified.
 
 ## Capability dependency != learner gating
 
@@ -18,7 +18,7 @@ A REQUIRED edge is only a candidate for a later lesson prerequisite; it does not
 
 ## Graph invariants
 
-The current A+B1+B2+C1+C2+C3 partial graph uses frozen capability IDs. REQUIRED edges and REQUIRED + RECOMMENDED ordering edges are acyclic; track number and table row order are not learning order. The complete Step-3 graph does not yet exist in this artifact.
+All 17 core tracks are covered by 318 ordering relations over 163 frozen capability IDs: 194 REQUIRED and 124 RECOMMENDED. REQUIRED edges are acyclic, and REQUIRED + RECOMMENDED ordering edges are acyclic. Track number and registry row order are not learning order. Multiple REQUIRED roots and parallel learning branches are intentional. A REQUIRED edge is only a candidate for a future lesson prerequisite; this artifact does not set `LOCKED` or `AVAILABLE`, RECOMMENDED never creates a progression lock, RELATED/co-learning remains a non-edge, and learner content/reference access is not restricted by this graph.
 
 ## Dependency registry
 
@@ -342,6 +342,1241 @@ The current A+B1+B2+C1+C2+C3 partial graph uses frozen capability IDs. REQUIRED 
 | delivery-cloud-responsibility-managed-services | delivery-platform-transfer | RECOMMENDED | Managed-service responsibility reasoning strengthens transfer into higher-level cloud platforms, but a VM-to-Kubernetes transfer can be evaluated without it. | provider-managed implementation changes operational responsibility but does not remove application ownership of behavior. | — |
 | delivery-autoscaling-signal-boundary | delivery-platform-transfer | RECOMMENDED | Autoscaling behavior is an important platform delta, but not every platform move changes scaling model. | same workload pressure may map to different scaling signals and delay semantics on another platform. | — |
 | delivery-rollout-rollback-strategies | delivery-platform-transfer | RECOMMENDED | Deployment strategy differs across platforms and is useful transfer evidence, but platform portability can first be evaluated from runtime requirements. | platforms implement version coexistence, traffic movement and rollback differently. | — |
+## Step-2 dependency-question resolution
+
+- Numbering is TrackNumber.QuestionNumber following the frozen Step-2 Unresolved dependency questions bullet order.
+- These resolutions introduce no new edge.
+- REQUIRED / RECOMMENDED below correspond to existing registry relations.
+- NO EDGE means the graph intentionally records no ordering relation.
+- Where a question concerns mastery level or lesson design rather than capability ordering, Step 3 does not encode that concern.
+
+TRACK 1 — PROGRAMMING
+==================================================
+
+1.1
+
+REQUIRED:
+prog-errors-results
+→ prog-api-refactoring-change-safety
+
+REQUIRED:
+prog-invariants-domain-model
+→ prog-api-refactoring-change-safety
+
+RECOMMENDED:
+prog-composition-dependencies
+→ prog-api-refactoring-change-safety
+
+Resolution:
+public change safety requires failure-contract and invariant knowledge;
+composition/dependency seams are useful but not a hard prerequisite.
+
+
+1.2
+
+RECOMMENDED:
+prog-resource-ownership
+→ net-streaming-body-cancellation
+
+REQUIRED:
+concurrency-cancellation-lifetime
+→ net-streaming-body-cancellation
+
+Resolution:
+resource ownership helps pooled-buffer/stream lifetime reasoning, but
+cooperative cancellation/lifetime is the hard prerequisite.
+
+
+1.3
+
+REQUIRED:
+prog-invariants-domain-model
+→ concurrency-interleavings-invariants
+
+REQUIRED:
+concurrency-interleavings-invariants
+→ db-transactions-isolation-anomalies
+
+Resolution:
+first establish the business/state invariant, then concurrent
+interleaving, then DB isolation behavior.
+Do NOT add db-modeling-invariants as a hard prerequisite merely because
+the final example uses a database.
+
+
+1.4
+
+NO EDGE.
+
+Resolution:
+prog-collections-complexity is intentionally independent of profiling.
+Collection/complexity reasoning can be learned before profiler skills.
+
+
+1.5
+
+NO EDGE.
+
+Resolution:
+prog-types-generics is intentionally not a universal prerequisite for
+infrastructure adapters.
+Generics/nullability may be taught where locally relevant without
+hard-gating the infrastructure graph.
+
+
+==================================================
+TRACK 2 — RUNTIME & MEMORY
+==================================================
+
+2.1
+
+RECOMMENDED:
+os-virtual-memory-page-cache
+→ runtime-memory-roots-lifetime
+
+Resolution:
+OS virtual-memory context helps distinguish OS memory from managed
+reachability, but managed-heap/root reasoning remains self-contained.
+
+
+2.2
+
+RECOMMENDED:
+runtime-diagnostics
+→ runtime-retention-pooling-large-objects
+
+Resolution:
+profiling/heap evidence improves pooling decisions but does not hard-gate
+the introduction of pooling/retention.
+
+
+2.3
+
+NO EDGE:
+runtime-jit-warmup
+→ delivery-autoscaling-signal-boundary
+
+Existing useful relation instead:
+
+RECOMMENDED:
+runtime-jit-warmup
+→ obs-load-test-benchmark-validity
+
+Resolution:
+warm-up affects measurement validity; it is not a prerequisite for
+understanding autoscaling.
+
+
+2.4
+
+NO LEVEL EDGE.
+
+Resolution:
+Step 3 does not encode "L2 before L3" mastery prerequisites.
+
+Existing REQUIRED synthesis is:
+
+runtime-retention-pooling-large-objects
+→ runtime-memory-performance-debug
+
+runtime-diagnostics
+→ runtime-memory-performance-debug
+
+This is where retention vs leak is evaluated using evidence.
+
+
+2.5
+
+NO EDGE.
+
+Resolution:
+JVM comparison is an implementation/transfer lane, not a prerequisite in
+the portable .NET-primary core graph.
+
+
+==================================================
+TRACK 3 — OPERATING SYSTEMS & I/O
+==================================================
+
+3.1
+
+REQUIRED:
+os-files-handles-sockets-ipc
+→ net-tcp-connection-semantics
+
+Resolution:
+minimal socket/resource lifecycle precedes TCP connection semantics.
+
+
+3.2
+
+RECOMMENDED:
+os-virtual-memory-page-cache
+→ db-buffer-io
+
+Resolution:
+page-cache knowledge improves DB I/O reasoning but is not a hard gate.
+
+
+3.3
+
+REQUIRED:
+os-process-thread-kernel
+→ os-scheduling-starvation
+
+RECOMMENDED:
+os-scheduling-starvation
+→ concurrency-async-parallelism
+
+Resolution:
+scheduler model owns starvation;
+async knowledge does not need to precede the OS starvation mechanism.
+
+
+3.4
+
+REQUIRED:
+os-termination-graceful-shutdown
+→ delivery-graceful-shutdown-draining
+
+NO direct prerequisite edge to Messaging.
+
+Resolution:
+OS owns process termination;
+Delivery owns orchestrator draining;
+Messaging retains message acknowledgement/durable-delivery semantics
+when the later lab involves a consumer.
+
+
+3.5
+
+REQUIRED:
+os-resource-exhaustion
+→ delivery-resources-cpu-memory
+
+RECOMMENDED:
+os-virtual-memory-page-cache
+→ delivery-resources-cpu-memory
+
+Resolution:
+finite-resource behavior is required before platform CPU/memory limits;
+deeper VM/page-cache knowledge is supporting context.
+
+
+==================================================
+TRACK 4 — CONCURRENCY & ASYNC
+==================================================
+
+4.1
+
+NO EDGE:
+concurrency-async-parallelism
+→ concurrency-races-check-then-act
+
+Actual prerequisite:
+
+REQUIRED:
+concurrency-interleavings-invariants
+→ concurrency-races-check-then-act
+
+Resolution:
+a race requires interleaving/shared-state reasoning, not async syntax.
+
+
+4.2
+
+NO EDGE between:
+concurrency-synchronization-atomicity
+and
+db-transactions-isolation-anomalies
+
+Both build from:
+
+concurrency-interleavings-invariants
+
+Resolution:
+local synchronization and DB transactional atomicity are distinct
+applications of concurrency/interleaving reasoning.
+
+
+4.3
+
+REQUIRED:
+prog-resource-ownership
+→ concurrency-cancellation-lifetime
+
+REQUIRED:
+concurrency-async-parallelism
+→ concurrency-cancellation-lifetime
+
+Resolution:
+cancellation requires both logical async lifetime and explicit ownership
+of who may end work/resources.
+
+
+4.4
+
+NO EDGE from Networking to:
+concurrency-bounded-backpressure
+
+Actual prerequisite:
+
+REQUIRED:
+concurrency-async-parallelism
+→ concurrency-bounded-backpressure
+
+Resolution:
+portable bounded-work/backpressure does not depend on network queue
+knowledge.
+
+
+4.5
+
+RECOMMENDED:
+concurrency-local-vs-distributed
+→ dist-partitioning-ownership-rebalancing
+
+RECOMMENDED:
+dist-partitioning-ownership-rebalancing
+→ msg-consumer-groups-offsets-rebalance
+
+Resolution:
+the bridge is local-vs-distributed authority
+→ portable distributed ownership
+→ broker consumer-group ownership;
+neither transfer step is a hard gate.
+
+
+==================================================
+TRACK 5 — NETWORKING & HTTP
+==================================================
+
+5.1
+
+NO additional edge.
+
+Resolution:
+net-request-path-dns is an intentional root capability.
+There is no separate service-discovery capability in the frozen map.
+DNS becomes REQUIRED when reasoning about
+net-failure-localization-unknown-outcome.
+
+
+5.2
+
+REQUIRED:
+net-http-semantics
+→ api-contract-resource-semantics
+
+REQUIRED:
+api-contract-resource-semantics
+→ api-request-identity-idempotency
+
+Resolution:
+HTTP semantics flow through explicit API operation semantics before
+request idempotency; no redundant direct shortcut is needed.
+
+
+5.3
+
+RECOMMENDED:
+net-tls-trust-handshake
+→ net-proxy-lb-forwarded-boundary
+
+REQUIRED:
+net-http-semantics
+→ net-proxy-lb-forwarded-boundary
+
+Resolution:
+TLS termination knowledge helps proxy trust reasoning but is not a hard
+gate.
+
+
+5.4
+
+REQUIRED:
+concurrency-cancellation-lifetime
+→ net-streaming-body-cancellation
+
+RECOMMENDED:
+prog-resource-ownership
+→ net-streaming-body-cancellation
+
+Resolution:
+cancellation/lifetime is required;
+ownership of stream/buffer lifetime is supporting context.
+
+
+5.5
+
+REQUIRED:
+net-failure-localization-unknown-outcome
+→ dist-rpc-unknown-completion
+
+RECOMMENDED:
+dist-rpc-unknown-completion
+→ dist-reconciliation-convergence
+
+Also:
+dist-rpc-unknown-completion
+is REQUIRED by API/external-effect ambiguous-outcome capabilities.
+
+Resolution:
+the bridge is network-stage evidence
+→ remote completion uncertainty
+→ reconciliation/recovery.
+No artificial direct dependency on generic audit logging is created.
+
+
+==================================================
+TRACK 6 — RELATIONAL DATABASE
+==================================================
+
+6.1
+
+RECOMMENDED:
+db-physical-storage-pages
+→ db-index-structures
+
+Resolution:
+physical page intuition helps, but logical index structure does not need
+to be hard-gated by page internals.
+
+
+6.2
+
+REQUIRED:
+db-transactions-isolation-anomalies
+→ db-mvcc-visibility
+
+
+6.3
+
+REQUIRED:
+db-transactions-isolation-anomalies
+→ db-wal-crash-recovery
+
+
+6.4
+
+REQUIRED:
+db-locks-deadlocks-contention
+→ db-schema-evolution
+
+
+6.5
+
+RECOMMENDED:
+os-virtual-memory-page-cache
+→ db-buffer-io
+
+Resolution:
+enough OS knowledge to distinguish OS page cache from DB-owned buffering
+is useful, but DB buffering remains teachable independently.
+
+
+==================================================
+TRACK 7 — NOSQL & SPECIALIZED DATA
+==================================================
+
+7.1
+
+General partitioning is RECOMMENDED, not universally REQUIRED, for the
+product-specific partition/shard capabilities.
+
+Existing examples:
+
+RECOMMENDED:
+dist-partitioning-ownership-rebalancing
+→ nosql-cassandra-partition-model
+
+RECOMMENDED:
+dist-partitioning-ownership-rebalancing
+→ nosql-mongo-index-shard-transaction
+
+RECOMMENDED:
+dist-partitioning-ownership-rebalancing
+→ nosql-redis-persistence-replication-cluster-streams
+
+RECOMMENDED:
+dist-partitioning-ownership-rebalancing
+→ nosql-search-refresh-shards-pagination
+
+
+7.2
+
+NO EDGE from relational page/index capability to Cassandra LSM.
+
+Resolution:
+LSM is a distinct storage-family mechanism, not an extension of
+relational B-tree/page knowledge.
+
+
+7.3
+
+Redis:
+
+REQUIRED:
+dist-replication-leader-quorum
+→ nosql-redis-persistence-replication-cluster-streams
+
+Cassandra:
+
+REQUIRED:
+dist-consistency-linearizability
+→ nosql-cassandra-lsm-compaction-consistency
+
+Resolution:
+there is no blanket "learn generic replication before every NoSQL
+system" rule.
+Each product consumes the portable mechanism it actually needs.
+
+
+7.4
+
+REQUIRED:
+
+nosql-mongo-aggregate-model
+→ nosql-model-selection
+
+nosql-cassandra-partition-model
+→ nosql-model-selection
+
+nosql-redis-structures-memory
+→ nosql-model-selection
+
+nosql-search-inverted-index-analysis
+→ nosql-model-selection
+
+Resolution:
+counter-model introduction comes before responsible storage-family
+selection.
+
+
+7.5
+
+NO generic source-of-truth prerequisite edge into:
+
+nosql-search-inverted-index-analysis
+
+Resolution:
+the search capability itself establishes the inverted-index projection
+boundary.
+Do not force Cache Engineering or Architecture source-of-truth concepts
+to precede the first search model.
+
+
+==================================================
+TRACK 8 — CACHE ENGINEERING
+==================================================
+
+8.1
+
+REQUIRED:
+cache-need-source-of-truth
+→ cache-patterns
+
+REQUIRED:
+cache-need-source-of-truth
+→ cache-invalidation-consistency
+
+REQUIRED:
+cache-need-source-of-truth
+→ cache-capacity-eviction-fallback
+
+Resolution:
+source-of-truth reasoning is the foundational cache capability;
+later cache capabilities inherit it transitively where appropriate.
+
+
+8.2
+
+RECOMMENDED:
+concurrency-bounded-backpressure
+→ cache-stampede-penetration-avalanche-hot-key
+
+
+8.3
+
+NO Messaging prerequisite.
+
+Actual prerequisite:
+
+REQUIRED:
+cache-need-source-of-truth
+→ cache-invalidation-consistency
+
+Resolution:
+event ordering is one implementation context for invalidation, not the
+origin of cache freshness reasoning.
+
+
+8.4
+
+RECOMMENDED:
+dist-consistency-linearizability
+→ cache-multilayer-coherence
+
+
+8.5
+
+NO EDGE.
+
+Resolution:
+negative-caching interaction with authorization/not-found semantics is a
+future lesson/case design concern, not a capability-ordering relation in
+Step 3.
+
+
+==================================================
+TRACK 9 — DISTRIBUTED SYSTEMS
+==================================================
+
+9.1
+
+REQUIRED:
+dist-partial-failure-uncertainty
+→ dist-rpc-unknown-completion
+
+
+9.2
+
+REQUIRED:
+dist-consistency-linearizability
+→ dist-replication-leader-quorum
+
+Also REQUIRED:
+dist-partial-failure-uncertainty
+→ dist-replication-leader-quorum
+
+
+9.3
+
+RECOMMENDED:
+dist-replication-leader-quorum
+→ dist-consensus-coordination-purpose
+
+REQUIRED:
+dist-partial-failure-uncertainty
+→ dist-consensus-coordination-purpose
+
+Resolution:
+replication is a useful coordination example, not a hard prerequisite.
+
+
+9.4
+
+NO Messaging prerequisite.
+
+REQUIRED:
+prog-invariants-domain-model
+→ dist-reconciliation-convergence
+
+REQUIRED:
+dist-partial-failure-uncertainty
+→ dist-reconciliation-convergence
+
+RECOMMENDED:
+dist-rpc-unknown-completion
+→ dist-reconciliation-convergence
+
+Resolution:
+reconciliation remains a portable Distributed Systems capability.
+
+
+9.5
+
+RECOMMENDED:
+concurrency-local-vs-distributed
+→ dist-partitioning-ownership-rebalancing
+
+Resolution:
+the learner benefits from understanding the local/distributed authority
+boundary, but no deep local-synchronization prerequisite is imposed.
+
+
+==================================================
+TRACK 10 — MESSAGING
+==================================================
+
+10.1
+
+REQUIRED:
+db-transactions-isolation-anomalies
+→ msg-outbox-db-publish-gap
+
+Also REQUIRED:
+msg-model-queue-topic-partition-order
+→ msg-outbox-db-publish-gap
+
+dist-partial-failure-uncertainty
+→ msg-outbox-db-publish-gap
+
+Resolution:
+yes, local DB transaction semantics is one of the required foundations
+for Outbox.
+
+
+10.2
+
+REQUIRED:
+msg-consumer-groups-offsets-rebalance
+→ msg-replay-backfill
+
+
+10.3
+
+NO EDGE between:
+
+api-request-identity-idempotency
+
+and
+
+msg-consumer-idempotency-inbox
+
+Inbox actual prerequisites:
+
+REQUIRED:
+msg-delivery-retry-poison-dlq
+→ msg-consumer-idempotency-inbox
+
+REQUIRED:
+db-transactions-isolation-anomalies
+→ msg-consumer-idempotency-inbox
+
+Resolution:
+API request idempotency and Messaging inbox idempotency are sibling
+applications at different boundaries.
+
+
+10.4
+
+RECOMMENDED:
+dist-partial-failure-uncertainty
+→ msg-delivery-retry-poison-dlq
+
+Resolution:
+partial-failure reasoning helps retry classification and retry-storm
+analysis but is not a hard gate for basic delivery retry.
+
+Producer durability separately requires:
+
+dist-replication-leader-quorum
+→ msg-producer-acks-durability
+
+
+10.5
+
+RECOMMENDED:
+dist-reconciliation-convergence
+→ msg-workflow-saga-compensation
+
+NO reverse edge.
+
+Resolution:
+reconciliation is portable and may strengthen Saga recovery, but Saga
+does not own or precede the reconciliation concept.
+
+
+==================================================
+TRACK 11 — API CONTRACTS & RESILIENCE
+==================================================
+
+11.1
+
+Transitively REQUIRED:
+
+dist-partial-failure-uncertainty
+→ dist-rpc-unknown-completion
+→ api-unknown-outcome-reconciliation
+
+There is intentionally NO redundant direct shortcut from partial failure
+to the API capability.
+
+
+11.2
+
+REQUIRED:
+api-request-identity-idempotency
+→ api-retry-backoff-jitter
+
+
+11.3
+
+REQUIRED:
+concurrency-cancellation-lifetime
+→ api-deadlines-timeout-cancellation
+
+
+11.4
+
+NO Testing prerequisite.
+
+Actual API prerequisite:
+
+REQUIRED:
+api-contract-resource-semantics
+→ api-versioning-compatibility
+
+RECOMMENDED:
+prog-api-refactoring-change-safety
+→ api-versioning-compatibility
+
+Testing later verifies compatibility; it does not define it.
+
+
+11.5
+
+NO Security identity/tenant prerequisite for generic API rate/bulkhead
+policy.
+
+REQUIRED:
+concurrency-bounded-backpressure
+→ api-circuit-bulkhead-rate-limit
+
+Later Security consumes this as:
+
+RECOMMENDED:
+api-circuit-bulkhead-rate-limit
+→ sec-abuse-bruteforce-resource-business-flow
+
+
+==================================================
+TRACK 12 — SECURITY
+==================================================
+
+12.1
+
+REQUIRED:
+api-contract-resource-semantics
+→ sec-authorization-object-tenant
+
+Also REQUIRED:
+sec-auth-session-token
+→ sec-authorization-object-tenant
+
+
+12.2
+
+REQUIRED:
+concurrency-races-check-then-act
+→ sec-race-business-logic-abuse
+
+
+12.3
+
+REQUIRED:
+sec-auth-session-token
+→ sec-oauth-oidc-awareness
+
+
+12.4
+
+RECOMMENDED:
+net-request-path-dns
+→ sec-injection-ssrf-input-output
+
+REQUIRED:
+sec-trust-boundary-threat-model
+→ sec-injection-ssrf-input-output
+
+Resolution:
+network destination knowledge helps SSRF, but trust-boundary reasoning is
+the hard prerequisite.
+
+
+12.5
+
+RECOMMENDED:
+obs-logs-structured-correlation
+→ sec-audit-detection-evidence
+
+REQUIRED:
+sec-trust-boundary-threat-model
+→ sec-audit-detection-evidence
+
+Resolution:
+Security independently owns what must be audited;
+Observability logging implementation is supporting context only.
+
+
+==================================================
+TRACK 13 — OBSERVABILITY & PERFORMANCE
+==================================================
+
+13.1
+
+RECOMMENDED:
+net-http-semantics
+→ obs-tracing-distributed-evidence
+
+RECOMMENDED:
+msg-model-queue-topic-partition-order
+→ obs-tracing-distributed-evidence
+
+REQUIRED:
+obs-instrumentation-context
+→ obs-tracing-distributed-evidence
+
+Resolution:
+network/messaging paths are tracing contexts, not universal hard
+prerequisites.
+
+
+13.2
+
+REQUIRED:
+runtime-diagnostics
+→ obs-profiling-runtime-evidence
+
+
+13.3
+
+RECOMMENDED:
+db-execution-operators
+→ obs-db-io-downstream-attribution
+
+The hard evidence prerequisites are Observability capabilities:
+
+obs-latency-throughput-saturation
+→ obs-db-io-downstream-attribution
+
+obs-tracing-distributed-evidence
+→ obs-db-io-downstream-attribution
+
+
+13.4
+
+NO EDGE.
+
+Resolution:
+percentiles, throughput and saturation are intentionally taught inside
+the same capability:
+obs-latency-throughput-saturation.
+
+Do not invent an ordering edge inside one capability.
+
+
+13.5
+
+YES — diagnostic method starts with a minimal evidence foundation.
+
+REQUIRED:
+
+obs-signals-correlation
+→ obs-diagnostic-method
+
+obs-latency-throughput-saturation
+→ obs-diagnostic-method
+
+Only RECOMMENDED:
+
+obs-db-io-downstream-attribution
+obs-profiling-runtime-evidence
+obs-logs-structured-correlation
+obs-load-test-benchmark-validity
+
+→ obs-diagnostic-method
+
+
+==================================================
+TRACK 14 — RELIABILITY / SRE
+==================================================
+
+14.1
+
+REQUIRED:
+obs-latency-throughput-saturation
+→ rel-user-journey-sli-slo-budget
+
+
+14.2
+
+Transitively REQUIRED:
+
+concurrency-bounded-backpressure
+→ rel-overload-load-shedding-degradation
+→ rel-cascading-failure-queue-capacity
+
+No redundant direct shortcut is needed.
+
+
+14.3
+
+NO Delivery prerequisite.
+
+Existing direction:
+
+REQUIRED:
+rel-health-readiness-semantics
+→ delivery-probes-health
+
+Health semantics precede platform implementation.
+
+
+14.4
+
+REQUIRED:
+db-backup-restore
+→ rel-disaster-recovery-rpo-rto
+
+
+14.5
+
+REQUIRED:
+test-failure-resilience
+→ rel-failure-injection-verification
+
+Also REQUIRED:
+rel-user-journey-sli-slo-budget
+→ rel-failure-injection-verification
+
+
+==================================================
+TRACK 15 — TESTING
+==================================================
+
+15.1
+
+NO blanket DB/Messaging prerequisite.
+
+REQUIRED:
+test-unit-integration-contract
+→ test-real-dependency-fixtures
+
+Resolution:
+the generic fixture capability depends on recognizing the real
+integration boundary; concrete DB/broker mechanism becomes relevant in
+the particular test scenario.
+
+
+15.2
+
+REQUIRED:
+concurrency-races-check-then-act
+→ test-time-concurrency-determinism
+
+
+15.3
+
+RECOMMENDED:
+
+api-versioning-compatibility
+→ test-migration-compatibility
+
+db-schema-evolution
+→ test-migration-compatibility
+
+msg-schema-evolution-contract-ownership
+→ test-migration-compatibility
+
+REQUIRED:
+test-risk-strategy-boundaries
+→ test-migration-compatibility
+
+Resolution:
+no single API/DB/Event evolution domain is a universal hard prerequisite.
+
+
+15.4
+
+REQUIRED:
+test-failure-resilience
+→ rel-failure-injection-verification
+
+NO reverse edge.
+
+
+15.5
+
+Risk strategy is the Testing root, but it is not made a direct hard
+parent of every node.
+
+REQUIRED from test-risk-strategy-boundaries to:
+
+test-unit-integration-contract
+test-failure-resilience
+test-migration-compatibility
+test-ci-flakiness-repeatability
+test-review-static-analysis-change-safety
+
+RECOMMENDED to:
+
+test-time-concurrency-determinism
+test-property-boundary-fuzz
+
+test-real-dependency-fixtures is reached through
+test-unit-integration-contract.
+
+test-risk-transfer deliberately does NOT have a direct REQUIRED shortcut
+from risk strategy because the requirement is already carried through
+its required child capabilities.
+
+
+==================================================
+TRACK 16 — ARCHITECTURE
+==================================================
+
+16.1
+
+NO whole-track or L3 prerequisite barrier.
+
+Resolution:
+Step 3 does not encode "all these tracks must reach L3".
+
+Architecture synthesis uses capability-specific REQUIRED edges only.
+
+arch-requirements-quality-attributes remains an intentional root so
+architecture reasoning can begin before every technical track is
+complete.
+
+
+16.2
+
+REQUIRED:
+msg-model-queue-topic-partition-order
+→ arch-sync-async-integration
+
+Also REQUIRED:
+net-http-semantics
+→ arch-sync-async-integration
+
+arch-requirements-quality-attributes
+→ arch-sync-async-integration
+
+
+16.3
+
+REQUIRED:
+dist-consistency-linearizability
+→ arch-consistency-latency-availability
+
+
+16.4
+
+API / DB / Event evolution are all RECOMMENDED, not REQUIRED:
+
+api-versioning-compatibility
+→ arch-evolution-migration-strangler
+
+db-schema-evolution
+→ arch-evolution-migration-strangler
+
+msg-schema-evolution-contract-ownership
+→ arch-evolution-migration-strangler
+
+Hard foundations are:
+
+arch-boundaries-ownership
+prog-api-refactoring-change-safety
+
+→ arch-evolution-migration-strangler
+
+
+16.5
+
+For:
+arch-failure-recovery-security-observability
+
+REQUIRED:
+
+arch-boundaries-ownership
+dist-partial-failure-uncertainty
+sec-trust-boundary-threat-model
+obs-signals-correlation
+rel-user-journey-sli-slo-budget
+
+RECOMMENDED:
+
+rel-disaster-recovery-rpo-rto
+
+Resolution:
+specific capability evidence is required; entire Reliability or Security
+tracks are not globally gated.
+
+
+==================================================
+TRACK 17 — DELIVERY
+==================================================
+
+17.1
+
+Container lifecycle:
+
+REQUIRED:
+os-process-thread-kernel
+→ delivery-container-process-lifecycle
+
+Graceful draining:
+
+REQUIRED:
+os-termination-graceful-shutdown
+→ delivery-graceful-shutdown-draining
+
+REQUIRED:
+delivery-container-process-lifecycle
+→ delivery-graceful-shutdown-draining
+
+Resolution:
+process lifecycle precedes container lifecycle;
+OS termination semantics specifically precede orchestrated draining.
+
+
+17.2
+
+REQUIRED:
+rel-health-readiness-semantics
+→ delivery-probes-health
+
+
+17.3
+
+REQUIRED:
+obs-latency-throughput-saturation
+→ delivery-autoscaling-signal-boundary
+
+Also REQUIRED:
+delivery-resources-cpu-memory
+→ delivery-autoscaling-signal-boundary
+
+
+17.4
+
+API / DB / Event compatibility are RECOMMENDED, not REQUIRED:
+
+api-versioning-compatibility
+→ delivery-rollout-rollback-strategies
+
+db-schema-evolution
+→ delivery-rollout-rollback-strategies
+
+msg-schema-evolution-contract-ownership
+→ delivery-rollout-rollback-strategies
+
+Hard prerequisites are:
+
+delivery-artifact-image-config
+rel-change-rollout-rollback-risk
+
+→ delivery-rollout-rollback-strategies
+
+
+17.5
+
+NO Testing prerequisite for provenance.
+
+REQUIRED:
+delivery-artifact-image-config
+→ delivery-cicd-promotion-provenance
+
+Resolution:
+test repeatability and artifact provenance are separate concepts.
+CI may execute tests, but test semantics do not define build-once /
+promote-exact-artifact provenance.
+
+
+==================================================
+
 ## Batch-A audit
 
 - Dependency rows: 40
@@ -444,17 +1679,68 @@ The current A+B1+B2+C1+C2+C3 partial graph uses frozen capability IDs. REQUIRED 
 - longest REQUIRED chain: 6
 - new target tracks: 16–17 only
 
-## Final closure pending
+## Final whole-graph audit
 
-The dependency registry now covers all 17 core tracks.
+- Frozen capability IDs: 163
+- Dependency rows: 318
+- REQUIRED: 194
+- RECOMMENDED: 124
+- Unknown capability IDs: 0
+- Duplicate From/To pairs: 0
+- Mixed-relation duplicate pairs: 0
+- REQUIRED cycles: 0
+- REQUIRED + RECOMMENDED cycles: 0
+- REQUIRED roots: 38
+- Fully isolated capabilities: 3
+- Longest REQUIRED chain: 6
+- Approved REQUIRED transitive semantic exceptions: 3
+- All other REQUIRED transitive redundancies: 0
+- Empty reasons: 0
+- Empty assumed slices: 0
+- Generic semantic filler patterns: 0
 
-Step 3 is NOT FROZEN yet.
+Isolated capabilities:
 
-A final closure pass must still:
+- prog-values-identity
+- prog-types-generics
+- prog-collections-complexity
 
-- reconcile all 85 unresolved Step-2 dependency questions;
-- run whole-registry semantic/ownership audit;
-- verify roots / parallel paths;
-- verify progression-boundary language;
-- compute final registry fingerprint/checksum;
-- change lifecycle status only after those checks pass.
+Canonical registry fingerprint:
+
+SHA-256: db5ba3052c4cd1b91966df7469a1d566a93e255efdfcb47d6c70bb3543611703
+
+Canonicalization: 318 data rows only → exact row text → LF between rows → final LF → UTF-8 → SHA-256.
+
+## Ownership closure
+
+- Programming owns invariants / code-level design.
+- Runtime owns managed execution/runtime mechanisms.
+- OS owns process/resource/I/O mechanisms.
+- Concurrency owns local interleaving/cancellation/backpressure.
+- Networking owns protocol/path mechanics.
+- DB owns relational engine/storage/transaction mechanics.
+- NoSQL owns product/storage-family mechanics.
+- Cache owns cached-copy correctness.
+- Distributed Systems owns portable distributed uncertainty, consistency, replication, ownership and reconciliation.
+- Messaging owns broker delivery/event-driven consistency boundaries.
+- API owns request/contract/resilience policy.
+- Security owns adversarial trust/authorization/abuse reasoning.
+- Observability owns telemetry/evidence/diagnostic mechanics.
+- Reliability owns user-impact operating/recovery policy.
+- Testing owns falsification/repeatability strategy.
+- Architecture synthesizes; it does not become owner of mechanisms above.
+- Delivery owns runtime/platform implementation; it does not redefine OS/Reliability/Observability/Security mechanisms.
+
+## Step-3 closure
+
+Phase 2 / Step 3 is frozen.
+
+The capability dependency graph is the canonical ordering model for the 163 frozen Senior Backend capabilities.
+
+It does not define lesson order or learner lock state.
+
+Future lesson decomposition may map REQUIRED capability dependencies onto concrete required lesson prerequisites only where that mapping is explicitly justified.
+
+RECOMMENDED relations remain non-blocking.
+
+Any future graph change requires reopening Step 3 and updating the registry fingerprint.
