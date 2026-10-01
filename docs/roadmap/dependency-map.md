@@ -446,4 +446,15 @@ The current A+B1+B2+C1+C2+C3 partial graph uses frozen capability IDs. REQUIRED 
 
 ## Final closure pending
 
-The dependency registry now covers all 17 core tracks.`n`nStep 3 is NOT FROZEN yet.`n`nA final closure pass must still:`n`n- reconcile all 85 unresolved Step-2 dependency questions;`n- run whole-registry semantic/ownership audit;`n- verify roots / parallel paths;`n- verify progression-boundary language;`n- compute final registry fingerprint/checksum;`n- change lifecycle status only after those checks pass.
+The dependency registry now covers all 17 core tracks.
+
+Step 3 is NOT FROZEN yet.
+
+A final closure pass must still:
+
+- reconcile all 85 unresolved Step-2 dependency questions;
+- run whole-registry semantic/ownership audit;
+- verify roots / parallel paths;
+- verify progression-boundary language;
+- compute final registry fingerprint/checksum;
+- change lifecycle status only after those checks pass.
