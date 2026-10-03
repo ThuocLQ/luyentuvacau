@@ -8,14 +8,14 @@
 | Metric | Result |
 |---|---:|
 | Frozen capabilities | 163 |
-| Proposed Learning Units | 94 |
+| Proposed Learning Units | 102 |
 | Primary assessment homes | 163 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary assignments | 0 |
 | Unknown capability IDs | 0 |
-| Singleton units | 56 |
-| Multi-capability units | 38 |
-| Single-owner units | 94 |
+| Singleton units | 67 |
+| Multi-capability units | 35 |
+| Single-owner units | 102 |
 | Multi-owner units | 0 |
 
 ## B. Primary-Home Registry
@@ -40,13 +40,6 @@
 | arch-requirements-quality-attributes | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
 | arch-scale-capacity-partitioning | Architecture & System Design | L3 | lu-arch-scale-capacity-partitioning | Architecture & Engineering Reasoning |
 | arch-sync-async-integration | Architecture & System Design | L3 | lu-arch-sync-async-integration | Architecture & Engineering Reasoning |
-| cache-capacity-eviction-fallback | Cache Engineering | L3 | lu-cache-capacity-eviction-fallback | Data & Consistency |
-| cache-evidence-transfer | Cache Engineering | L4 | lu-cache-capacity-eviction-fallback | Data & Consistency |
-| cache-invalidation-consistency | Cache Engineering | L3 | lu-cache-invalidation-consistency | Data & Consistency |
-| cache-multilayer-coherence | Cache Engineering | L3 | lu-cache-invalidation-consistency | Data & Consistency |
-| cache-need-source-of-truth | Cache Engineering | L2 | lu-cache-capacity-eviction-fallback | Data & Consistency |
-| cache-patterns | Cache Engineering | L2 | lu-cache-patterns | Data & Consistency |
-| cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 | lu-cache-patterns | Data & Consistency |
 | concurrency-async-parallelism | Concurrency & Async | L2 | lu-concurrency-async-parallelism | Runtime & Concurrency |
 | concurrency-bounded-backpressure | Concurrency & Async | L3 | lu-concurrency-async-parallelism | Runtime & Concurrency |
 | concurrency-cancellation-lifetime | Concurrency & Async | L3 | lu-concurrency-async-parallelism | Runtime & Concurrency |
@@ -56,23 +49,6 @@
 | concurrency-memory-visibility | Concurrency & Async | L3 | lu-concurrency-memory-visibility | Runtime & Concurrency |
 | concurrency-races-check-then-act | Concurrency & Async | L3 | lu-race-atomicity | Runtime & Concurrency |
 | concurrency-synchronization-atomicity | Concurrency & Async | L3 | lu-race-atomicity | Runtime & Concurrency |
-| db-backup-restore | Relational Database Engineering | L3 | lu-db-backup-restore | Data & Consistency |
-| db-buffer-io | Relational Database Engineering | L2 | lu-db-buffer-io | Data & Consistency |
-| db-composite-query-shape | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
-| db-connection-pool-exhaustion | Relational Database Engineering | L3 | lu-db-connection-pool-exhaustion | Data & Consistency |
-| db-execution-operators | Relational Database Engineering | L3 | lu-execution-plan-estimates | Data & Consistency |
-| db-index-structures | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
-| db-locks-deadlocks-contention | Relational Database Engineering | L3 | lu-db-locks-deadlocks-contention | Data & Consistency |
-| db-modeling-invariants | Relational Database Engineering | L3 | lu-db-modeling-invariants | Data & Consistency |
-| db-mvcc-visibility | Relational Database Engineering | L3 | lu-db-mvcc-visibility | Data & Consistency |
-| db-optimizer-cardinality-stats | Relational Database Engineering | L3 | lu-execution-plan-estimates | Data & Consistency |
-| db-partitioning-sharding-boundary | Relational Database Engineering | L3 | lu-db-modeling-invariants | Data & Consistency |
-| db-physical-storage-pages | Relational Database Engineering | L2 | lu-db-buffer-io | Data & Consistency |
-| db-production-diagnosis-transfer | Relational Database Engineering | L4 | lu-db-buffer-io | Data & Consistency |
-| db-replication-failover | Relational Database Engineering | L3 | lu-db-replication-failover | Data & Consistency |
-| db-schema-evolution | Relational Database Engineering | L3 | lu-db-locks-deadlocks-contention | Data & Consistency |
-| db-transactions-isolation-anomalies | Relational Database Engineering | L3 | lu-db-locks-deadlocks-contention | Data & Consistency |
-| db-wal-crash-recovery | Relational Database Engineering | L3 | lu-db-backup-restore | Data & Consistency |
 | delivery-artifact-image-config | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-artifact-image-config | Production Engineering |
 | delivery-autoscaling-signal-boundary | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
 | delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
@@ -113,16 +89,6 @@
 | net-streaming-body-cancellation | Networking & HTTP | L3 | lu-net-streaming-body-cancellation | Service & Network |
 | net-tcp-connection-semantics | Networking & HTTP | L2 | lu-net-connection-reuse-pooling | Service & Network |
 | net-tls-trust-handshake | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
-| nosql-cassandra-partition-model | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
-| nosql-model-selection | NoSQL & Specialized Data Systems | L3 | lu-nosql-model-selection | Data & Consistency |
-| nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
-| nosql-mongo-index-shard-transaction | NoSQL & Specialized Data Systems | L3 | lu-nosql-mongo-index-shard-transaction | Data & Consistency |
-| nosql-redis-persistence-replication-cluster-streams | NoSQL & Specialized Data Systems | L3 | lu-nosql-redis-persistence-replication-cluster-streams | Data & Consistency |
-| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
-| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
-| nosql-search-refresh-shards-pagination | NoSQL & Specialized Data Systems | L3 | lu-nosql-search-refresh-shards-pagination | Data & Consistency |
-| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
 | obs-cardinality-sampling-cost | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
 | obs-db-io-downstream-attribution | Observability & Performance | L3 | lu-obs-db-io-downstream-attribution | Production Engineering |
 | obs-diagnostic-method | Observability & Performance | L4 | lu-obs-db-io-downstream-attribution | Production Engineering |
@@ -185,13 +151,45 @@
 | test-risk-transfer | Testing & Engineering Quality | L4 | lu-test-failure-resilience | Architecture & Engineering Reasoning |
 | test-time-concurrency-determinism | Testing & Engineering Quality | L3 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
 | test-unit-integration-contract | Testing & Engineering Quality | L3 | lu-test-unit-integration-contract | Architecture & Engineering Reasoning |
+| db-index-structures | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
+| db-composite-query-shape | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
+| db-execution-operators | Relational Database Engineering | L3 | lu-execution-plan-estimates | Data & Consistency |
+| db-optimizer-cardinality-stats | Relational Database Engineering | L3 | lu-execution-plan-estimates | Data & Consistency |
+| db-backup-restore | Relational Database Engineering | L3 | lu-db-backup-restore | Data & Consistency |
+| db-wal-crash-recovery | Relational Database Engineering | L3 | lu-db-wal-crash-recovery | Data & Consistency |
+| db-buffer-io | Relational Database Engineering | L2 | lu-db-buffer-io | Data & Consistency |
+| db-physical-storage-pages | Relational Database Engineering | L2 | lu-db-buffer-io | Data & Consistency |
+| db-production-diagnosis-transfer | Relational Database Engineering | L4 | lu-db-production-diagnosis-transfer | Data & Consistency |
+| db-connection-pool-exhaustion | Relational Database Engineering | L3 | lu-db-connection-pool-exhaustion | Data & Consistency |
+| db-locks-deadlocks-contention | Relational Database Engineering | L3 | lu-db-locks-deadlocks-contention | Data & Consistency |
+| db-transactions-isolation-anomalies | Relational Database Engineering | L3 | lu-db-transactions-mvcc-isolation | Data & Consistency |
+| db-mvcc-visibility | Relational Database Engineering | L3 | lu-db-transactions-mvcc-isolation | Data & Consistency |
+| db-schema-evolution | Relational Database Engineering | L3 | lu-db-schema-evolution | Data & Consistency |
+| db-modeling-invariants | Relational Database Engineering | L3 | lu-db-modeling-invariants | Data & Consistency |
+| db-partitioning-sharding-boundary | Relational Database Engineering | L3 | lu-db-partitioning-sharding-boundary | Data & Consistency |
+| db-replication-failover | Relational Database Engineering | L3 | lu-db-replication-failover | Data & Consistency |
+| nosql-cassandra-partition-model | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
+| nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
+| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 | lu-nosql-storage-choice-transfer | Data & Consistency |
+| nosql-model-selection | NoSQL & Specialized Data Systems | L3 | lu-nosql-model-selection | Data & Consistency |
+| nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 | lu-nosql-mongo-aggregate-model | Data & Consistency |
+| nosql-mongo-index-shard-transaction | NoSQL & Specialized Data Systems | L3 | lu-nosql-mongo-index-shard-transaction | Data & Consistency |
+| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 | lu-nosql-redis-structures-memory | Data & Consistency |
+| nosql-redis-persistence-replication-cluster-streams | NoSQL & Specialized Data Systems | L3 | lu-nosql-redis-persistence-replication-cluster-streams | Data & Consistency |
+| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 | lu-nosql-search-projection | Data & Consistency |
+| nosql-search-refresh-shards-pagination | NoSQL & Specialized Data Systems | L3 | lu-nosql-search-projection | Data & Consistency |
+| cache-capacity-eviction-fallback | Cache Engineering | L3 | lu-cache-capacity-eviction-fallback | Data & Consistency |
+| cache-evidence-transfer | Cache Engineering | L4 | lu-cache-evidence-transfer | Data & Consistency |
+| cache-need-source-of-truth | Cache Engineering | L2 | lu-cache-source-of-truth-invalidation | Data & Consistency |
+| cache-invalidation-consistency | Cache Engineering | L3 | lu-cache-source-of-truth-invalidation | Data & Consistency |
+| cache-multilayer-coherence | Cache Engineering | L3 | lu-cache-source-of-truth-invalidation | Data & Consistency |
+| cache-patterns | Cache Engineering | L2 | lu-cache-patterns | Data & Consistency |
+| cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 | lu-cache-patterns | Data & Consistency |
 
 ## C. Unit Composition Registry
 
 | Unit ID | Primary capability IDs | Primary count | Owner set | Singleton / Multi |
 |---|---|---:|---|---|
-| lu-index-query-shape | db-composite-query-shape; db-index-structures | 2 | Relational Database Engineering | Multi |
-| lu-execution-plan-estimates | db-execution-operators; db-optimizer-cardinality-stats | 2 | Relational Database Engineering | Multi |
 | lu-race-atomicity | concurrency-interleavings-invariants; concurrency-races-check-then-act; concurrency-synchronization-atomicity | 3 | Concurrency & Async | Multi |
 | lu-outbox-duplicate-safe-effect | msg-consumer-idempotency-inbox; msg-outbox-db-publish-gap | 2 | Messaging & Event-Driven Consistency | Multi |
 | lu-prog-api-refactoring-change-safety | prog-api-refactoring-change-safety | 1 | Programming & Software Design Foundations | Singleton |
@@ -220,21 +218,6 @@
 | lu-net-failure-localization-unknown-outcome | net-failure-localization-unknown-outcome; net-http-semantics; net-request-path-dns; net-tls-trust-handshake | 4 | Networking & HTTP | Multi |
 | lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | 1 | Networking & HTTP | Singleton |
 | lu-net-streaming-body-cancellation | net-streaming-body-cancellation | 1 | Networking & HTTP | Singleton |
-| lu-db-backup-restore | db-backup-restore; db-wal-crash-recovery | 2 | Relational Database Engineering | Multi |
-| lu-db-buffer-io | db-buffer-io; db-physical-storage-pages; db-production-diagnosis-transfer | 3 | Relational Database Engineering | Multi |
-| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | 1 | Relational Database Engineering | Singleton |
-| lu-db-locks-deadlocks-contention | db-locks-deadlocks-contention; db-schema-evolution; db-transactions-isolation-anomalies | 3 | Relational Database Engineering | Multi |
-| lu-db-modeling-invariants | db-modeling-invariants; db-partitioning-sharding-boundary | 2 | Relational Database Engineering | Multi |
-| lu-db-mvcc-visibility | db-mvcc-visibility | 1 | Relational Database Engineering | Singleton |
-| lu-db-replication-failover | db-replication-failover | 1 | Relational Database Engineering | Singleton |
-| lu-nosql-cassandra-lsm-compaction-consistency | nosql-cassandra-lsm-compaction-consistency; nosql-cassandra-partition-model; nosql-transfer-storage-choice | 3 | NoSQL & Specialized Data Systems | Multi |
-| lu-nosql-model-selection | nosql-model-selection; nosql-mongo-aggregate-model; nosql-redis-structures-memory; nosql-search-inverted-index-analysis | 4 | NoSQL & Specialized Data Systems | Multi |
-| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | 1 | NoSQL & Specialized Data Systems | Singleton |
-| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | 1 | NoSQL & Specialized Data Systems | Singleton |
-| lu-nosql-search-refresh-shards-pagination | nosql-search-refresh-shards-pagination | 1 | NoSQL & Specialized Data Systems | Singleton |
-| lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback; cache-evidence-transfer; cache-need-source-of-truth | 3 | Cache Engineering | Multi |
-| lu-cache-invalidation-consistency | cache-invalidation-consistency; cache-multilayer-coherence | 2 | Cache Engineering | Multi |
-| lu-cache-patterns | cache-patterns; cache-stampede-penetration-avalanche-hot-key | 2 | Cache Engineering | Multi |
 | lu-dist-consensus-coordination-purpose | dist-consensus-coordination-purpose; dist-guarantee-recovery-transfer; dist-partial-failure-uncertainty; dist-replication-leader-quorum | 4 | Distributed Systems | Multi |
 | lu-dist-consistency-linearizability | dist-consistency-linearizability | 1 | Distributed Systems | Singleton |
 | lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | 1 | Distributed Systems | Singleton |
@@ -284,6 +267,31 @@
 | lu-delivery-autoscaling-signal-boundary | delivery-autoscaling-signal-boundary; delivery-platform-transfer; delivery-resources-cpu-memory | 3 | Containers / Kubernetes / Cloud Delivery | Multi |
 | lu-delivery-cloud-responsibility-managed-services | delivery-cloud-responsibility-managed-services | 1 | Containers / Kubernetes / Cloud Delivery | Singleton |
 | lu-delivery-container-process-lifecycle | delivery-container-process-lifecycle; delivery-graceful-shutdown-draining; delivery-probes-health | 3 | Containers / Kubernetes / Cloud Delivery | Multi |
+| lu-index-query-shape | db-index-structures; db-composite-query-shape | 2 | Relational Database Engineering | Multi |
+| lu-execution-plan-estimates | db-execution-operators; db-optimizer-cardinality-stats | 2 | Relational Database Engineering | Multi |
+| lu-db-backup-restore | db-backup-restore | 1 | Relational Database Engineering | Singleton |
+| lu-db-wal-crash-recovery | db-wal-crash-recovery | 1 | Relational Database Engineering | Singleton |
+| lu-db-buffer-io | db-buffer-io; db-physical-storage-pages | 2 | Relational Database Engineering | Multi |
+| lu-db-production-diagnosis-transfer | db-production-diagnosis-transfer | 1 | Relational Database Engineering | Singleton |
+| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | 1 | Relational Database Engineering | Singleton |
+| lu-db-locks-deadlocks-contention | db-locks-deadlocks-contention | 1 | Relational Database Engineering | Singleton |
+| lu-db-transactions-mvcc-isolation | db-transactions-isolation-anomalies; db-mvcc-visibility | 2 | Relational Database Engineering | Multi |
+| lu-db-schema-evolution | db-schema-evolution | 1 | Relational Database Engineering | Singleton |
+| lu-db-modeling-invariants | db-modeling-invariants | 1 | Relational Database Engineering | Singleton |
+| lu-db-partitioning-sharding-boundary | db-partitioning-sharding-boundary | 1 | Relational Database Engineering | Singleton |
+| lu-db-replication-failover | db-replication-failover | 1 | Relational Database Engineering | Singleton |
+| lu-nosql-cassandra-lsm-compaction-consistency | nosql-cassandra-partition-model; nosql-cassandra-lsm-compaction-consistency | 2 | NoSQL & Specialized Data Systems | Multi |
+| lu-nosql-storage-choice-transfer | nosql-transfer-storage-choice | 1 | NoSQL & Specialized Data Systems | Singleton |
+| lu-nosql-model-selection | nosql-model-selection | 1 | NoSQL & Specialized Data Systems | Singleton |
+| lu-nosql-mongo-aggregate-model | nosql-mongo-aggregate-model | 1 | NoSQL & Specialized Data Systems | Singleton |
+| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | 1 | NoSQL & Specialized Data Systems | Singleton |
+| lu-nosql-redis-structures-memory | nosql-redis-structures-memory | 1 | NoSQL & Specialized Data Systems | Singleton |
+| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | 1 | NoSQL & Specialized Data Systems | Singleton |
+| lu-nosql-search-projection | nosql-search-inverted-index-analysis; nosql-search-refresh-shards-pagination | 2 | NoSQL & Specialized Data Systems | Multi |
+| lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | 1 | Cache Engineering | Singleton |
+| lu-cache-evidence-transfer | cache-evidence-transfer | 1 | Cache Engineering | Singleton |
+| lu-cache-source-of-truth-invalidation | cache-need-source-of-truth; cache-invalidation-consistency; cache-multilayer-coherence | 3 | Cache Engineering | Multi |
+| lu-cache-patterns | cache-patterns; cache-stampede-penetration-avalanche-hot-key | 2 | Cache Engineering | Multi |
 
 ## D. Singleton Review Registry
 
@@ -309,12 +317,6 @@
 | lu-concurrency-memory-visibility | concurrency-memory-visibility | lu-race-atomicity | Memory-publication ordering differs from an interleaving outcome. |
 | lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | net-http-semantics; net-tls-trust-handshake | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-net-streaming-body-cancellation | net-streaming-body-cancellation | net-http-semantics; concurrency-cancellation-lifetime | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | os-resource-exhaustion; concurrency-bounded-backpressure | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-db-mvcc-visibility | db-mvcc-visibility | db-transactions-isolation-anomalies | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-db-replication-failover | db-replication-failover | dist-replication-leader-quorum; db-wal-crash-recovery | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | nosql-mongo-aggregate-model; dist-partitioning-ownership-rebalancing | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | nosql-redis-structures-memory; dist-replication-leader-quorum | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-nosql-search-refresh-shards-pagination | nosql-search-refresh-shards-pagination | nosql-search-inverted-index-analysis; dist-partitioning-ownership-rebalancing | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-dist-consistency-linearizability | dist-consistency-linearizability | nosql-cassandra-lsm-compaction-consistency; cache-multilayer-coherence | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | db-partitioning-sharding-boundary; nosql-mongo-index-shard-transaction | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-dist-time-order-causality | dist-time-order-causality | dist-guarantee-recovery-transfer | Different mechanism/evidence boundary prevents one credible assessment policy. |
@@ -345,13 +347,28 @@
 | lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | arch-requirements-quality-attributes; obs-latency-throughput-saturation | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-arch-sync-async-integration | arch-sync-async-integration | arch-requirements-quality-attributes; net-http-semantics | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-delivery-cloud-responsibility-managed-services | delivery-cloud-responsibility-managed-services | sec-secrets-third-party-trust; rel-disaster-recovery-rpo-rto | Different mechanism/evidence boundary prevents one credible assessment policy. |
+| lu-db-backup-restore | db-backup-restore | strongest data boundary | WAL crash replay and DR policy use different recovery horizons/evidence. |
+| lu-db-wal-crash-recovery | db-wal-crash-recovery | strongest data boundary | Crash-window recovery is not a restore drill or replica promotion. |
+| lu-db-production-diagnosis-transfer | db-production-diagnosis-transfer | strongest data boundary | L4 synthesis compares causes; a foundation trace cannot prove it. |
+| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | strongest data boundary | Pool acquisition evidence differs from OS resource and app backpressure evidence. |
+| lu-db-locks-deadlocks-contention | db-locks-deadlocks-contention | strongest data boundary | Wait graph/cycle evidence differs from visibility and isolation evidence. |
+| lu-db-schema-evolution | db-schema-evolution | strongest data boundary | Compatibility/backfill state differs from lock or invariant state. |
+| lu-db-modeling-invariants | db-modeling-invariants | strongest data boundary | Legal persisted state differs from routing/locality evidence. |
+| lu-db-partitioning-sharding-boundary | db-partitioning-sharding-boundary | strongest data boundary | Distribution/fan-out evidence differs from modeling constraints. |
+| lu-db-replication-failover | db-replication-failover | strongest data boundary | Engine role/lag differs from generic quorum or WAL evidence. |
+| lu-nosql-storage-choice-transfer | nosql-transfer-storage-choice | strongest data boundary | L4 comparison uses foundations but does not teach one shared mechanism. |
+| lu-nosql-model-selection | nosql-model-selection | strongest data boundary | Family framing is distinct from product mechanisms and L4 transfer. |
+| lu-nosql-mongo-aggregate-model | nosql-mongo-aggregate-model | strongest data boundary | Aggregate boundary differs from route/shard/transaction tuning. |
+| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | strongest data boundary | Mongo route/transaction evidence differs from generic partitioning. |
+| lu-nosql-redis-structures-memory | nosql-redis-structures-memory | strongest data boundary | Structure/memory choice differs from durability/topology evidence. |
+| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | strongest data boundary | Topology/consumer state differs from data structure evidence. |
+| lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | strongest data boundary | Eviction-to-origin containment differs from loader and Redis-memory evidence. |
+| lu-cache-evidence-transfer | cache-evidence-transfer | strongest data boundary | L4 cache diagnosis spans foundations and has its own evidence policy. |
 
 ## E. Multi-Capability Grouping Review
 
 | Unit ID | Shared problem / need | Shared mechanism / state trace | Shared observable evidence | Shared failure / debug story | Assessment-coherence argument |
 |---|---|---|---|---|---|
-| lu-index-query-shape | Giải thích index như ordered/search structure thu hẹp candidate rows và cân read benefit với write/storage cost. | Index giữ key-to-row navigation; useful predicate/order cho phép engine prune vùng dữ liệu thay vì scan toàn bộ. → B-tree có prefix order; equality prefix thu hẹp vùng trước, range/order phía sau quyết định scan/sort còn lại. | Plan access node; rows; buffers; index usage; index size/write behavior.; Predicate/order thực; plan; actual rows; Sort node; buffers. | Index có nhưng predicate path không dùng; low selectivity; redundant index; write amplification.; Coi (A,B) như (B,A); range đứng trước equality hữu ích; ORDER BY/LIMIT lệch index; function/cast phá searchability. | One bounded trace observes all Primary mechanisms. |
-| lu-execution-plan-estimates | Đọc plan như execution pipeline và xác định operator nào làm rows, loops hay work tăng. | Scan tạo input; join kết hợp; sort/aggregate materialize/consume rows; limit có thể dừng sớm, nên SQL text không phải execution order. → Optimizer ước lượng rows từ statistics/distribution; estimate dẫn chi phí và operator choice, sai estimate kéo theo plan sai. | EXPLAIN ANALYZE; actual rows; loops; timing; memory/temp work.; Estimated vs actual rows; statistics; distribution/skew; chosen operator. | Nested loop trên input lớn; large/spilled sort; row explosion trước aggregate; đọc operator theo thứ tự câu SQL.; Stale statistics; skew; correlated predicates; estimate/actual mismatch; poor join/access choice. | One bounded trace observes all Primary mechanisms. |
 | lu-race-atomicity | Viết state transition và các interleaving có thể xảy ra để chứng minh invariant có thể bị phá ở đâu. | Khi hai operation overlap, read/validate/write có thể xen kẽ; invariant chỉ giữ nếu transition được atomically protected ở đúng owner. → Check tách khỏi act tạo cửa sổ để state đổi; correctness nằm ở compare-and-swap/conditional write/unique constraint chứ không chỉ validation trước đó. → Lock, Interlocked hoặc transactional conditional update serializes/atomically applies state transition theo scope của primitive. | Step trace; concurrent test barrier; before/after state; affected-row count; audit sequence.; Interleaving trace; concurrent integration test; conditional affected rows; unique violation; version conflict.; Critical-section trace; contention time; affected rows; invariant test dưới parallel load. | Oversell inventory; duplicate reservation; lost update; negative balance.; Duplicate creation; lost update; TOCTOU authorization; negative stock.; Read-modify-write lost update; lock sai scope; double release; atomic increment dùng cho invariant nhiều field. | One bounded trace observes all Primary mechanisms. |
 | lu-outbox-duplicate-safe-effect | Explain DB commit/broker publish gap and recover it without direct dual-write loss. | Business state and broker are separate transactional systems; crash can happen between commit, relay publish and relay acknowledgement. → Stable message/operation ID is recorded with local effect atomically or recoverably so replay is recognized. | Business row; outbox status; relay attempt; broker metadata; consumer ledger.; Message ID; inbox row; business row; transaction record; duplicate/replay test. | DB commit but no publish; broker accepts but relay timeout; retry duplicate; outbox stuck.; Crash between dedup check/write; business write succeeds inbox fails; unstable key; duplicate external effect. | One bounded trace observes all Primary mechanisms. |
 | lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu. | Allocation tạo object trên managed heap; khi vùng nhớ cần thu hồi, GC tìm object còn reachable rồi dọn phần còn lại, nên tốc độ cấp phát quyết định tần suất và chi phí collection. → Object sống khi có đường reference từ GC root như stack, static, handle hoặc long-lived collection; scope source code không đồng nghĩa object hết reachable. → Retention là object còn reachable; pool chủ động giữ object để reuse; buffer lớn có allocation/lifetime cost riêng, và pool có thể biến allocation pressure thành retained heap. | Allocation rate; GC count/time; heap size; generation size; request latency lúc collection.; Heap graph; retaining path; root type; object count/size theo thời gian.; Heap dump; generation/size distribution; pool counters; allocation trace của large buffer. | High allocation rate; frequent GC; pause dài; CPU overhead do GC.; Unexpected retention; event handler giữ subscriber; cache/list vô hạn; closure giữ graph lớn.; Pool retains too much; large buffers repeatedly allocated; long-lived owner giữ object graph; wrong-size buffer reuse. | One bounded trace observes all Primary mechanisms. |
@@ -360,15 +377,6 @@
 | lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource. | Async không tự tạo thread; concurrency là overlap lifetime; parallelism là nhiều work thực sự chạy đồng thời khi CPU/capacity cho phép. → CancellationToken báo owner rằng result không còn cần hoặc deadline đã hết; code phải observe signal, stop safely và không coi cancel là rollback của side effect đã commit. → Arrival rate lớn hơn service rate làm in-flight work tích tụ; bounded queue/semaphore buộc producer wait, reject hoặc shed thay vì giữ work vô hạn. | Timeline task/thread; CPU; active operations; request latency; queue depth.; Token propagation trace; active operation count; cancellation log; audit state; cleanup/timeout test.; In-flight count; queue depth; pool usage; throughput; p95/p99; rejection/wait time. | Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelism vô hạn cho downstream I/O.; Token không được forward; continue expensive work sau disconnect; cancel giữa side effect gây unknown outcome; dispose khi child còn dùng.; Unbounded in-flight tasks; queue/memory growth; pool exhaustion; p99 tăng dù throughput không tăng. | One bounded trace observes all Primary mechanisms. |
 | lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions. | Mỗi connection có handshake/socket/port cost; pool giữ connection usable theo lifetime/limit, nhưng network peer có thể đóng connection ngoài kiến thức client. → TCP connection được establish rồi giữ state đến close/reset; HTTP request có thể reuse connection nhưng peer/network có thể refuse/reset hoặc capacity cạn trước HTTP. | Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.; Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count. | Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.; Connection refused; reset; handshake timeout; connection exhaustion. | One bounded trace observes all Primary mechanisms. |
 | lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn. | Request path qua nhiều layer; timeout sau write không chứng minh server chưa tạo side effect, nên retry cần status query/idempotency contract chứ không chỉ exception type. → DNS maps hostname to record/address with cache/TTL; connection chỉ bắt đầu sau khi client có usable destination. → TLS handshake xác thực certificate/name/validity và thương lượng protected channel; HTTP starts only after this boundary succeeds. → Method nêu intent; status nêu kết quả ở boundary; headers điều khiển metadata/caching/auth/content negotiation; body mang representation có lifecycle riêng. | DNS result/timing; socket/TLS error; HTTP status/header; client/server/proxy trace; operation ID and audit state.; Resolution result; resolver timing; TTL/cache state; address attempted; DNS error code.; Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.; Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection. | Retry duplicate after unknown outcome; gán TLS lỗi thành HTTP 500; treat DNS failure as server rejection; mất correlation qua proxy.; NXDOMAIN/misconfigured record; slow resolver; stale cached address; IPv6/IPv4 mismatch.; Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.; GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng. | One bounded trace observes all Primary mechanisms. |
-| lu-db-backup-restore | Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery. | Backup là bản dữ liệu/log tại mốc xác định; restore tái tạo state theo phạm vi và point-in-time contract, không phải chỉ file tồn tại. → WAL records durable change intent before data page write; recovery can redo/resolve state based on log ordering. | Backup metadata; restore test; recovered timestamp/rows; duration; checksum/validation result.; WAL/log position khi thực tế; commit/restart experiment; recovery log; persisted rows after crash simulation. | Backup chưa từng restore; thiếu log cần thiết; recovered point không đạt yêu cầu; restore lâu hơn giả định.; Assume committed data means every page sync write; unsafe durability setting; expect recovery without required log. | One bounded trace observes all Primary mechanisms. |
-| lu-db-buffer-io | Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime. | Database buffer/cache có thể phục vụ page đã resident; working set và access pattern quyết định khi nào cần đọc storage. → Rows nằm trong storage pages; scan/index eventually reference pages, nên row width/physical relation size ảnh hưởng amount of work. → Query shape, plan, cardinality, buffers/I/O, locks, transaction và pool tạo symptom khác nhau; thay đổi chỉ sau khi evidence loại hypothesis khác. | EXPLAIN BUFFERS; cache hits/reads; OS/database I/O; cold/warm timing.; Page/buffer statistics; relation/index size; EXPLAIN BUFFERS khi phù hợp.; Hypothesis matrix; measured plan/rows/buffers; lock/pool timeline; before/after experiment. | Benchmark cold/warm không nhất quán; gọi mọi buffer hit là disk I/O; memory pressure làm runtime đổi nhưng bị bỏ qua.; Assume one-row lookup là one disk operation; wide row tăng page work; bỏ qua table/index size.; Nhảy từ “slow SQL” sang add index; sửa plan khi problem là pool/lock; áp dụng engine detail sai. | One bounded trace observes all Primary mechanisms. |
-| lu-db-locks-deadlocks-contention | Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock. | Lock serializes conflicting access; contention có owner sẽ release, deadlock là cycle wait cần one transaction abort. → Isolation defines visibility/conflict behavior của concurrent transactions; invariant có thể cần conditional write, serialization hoặc redesign scope. → Expand/backfill/dual-read or compatibility boundary cho phép state/schema đổi dần trước contract cleanup. | Lock/wait view; blocked/blocking session; deadlock report; transaction duration.; Two-session timeline; before/after rows; isolation setting; conflict/result.; Schema version; migration history; lock duration; old/new compatibility test; backfill progress. | Long transaction giữ lock; inconsistent lock order; hot-row serialization; deadlock cycle.; Lost update; non-repeatable observation; write skew/equivalent anomaly; transaction scope quá lớn.; Destructive column change sớm; long blocking migration; rollback incompatible; backfill race with writes. | One bounded trace observes all Primary mechanisms. |
-| lu-db-modeling-invariants | Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được. | Schema, key, constraint và transaction boundary quyết định state nào có thể persist; application validation không là guard cuối khi có nhiều writer. → Key quyết định row nằm ở partition nào; targeted query giữ locality còn key lệch tạo hot partition/fan-out. | Schema/constraints; failing insert/update; concurrent test; constraint violation; persisted rows.; Key distribution; partition size; per-partition traffic; fan-out count. | Duplicate logical entity; invalid relationship; nullable field trái domain assumption; invariant chỉ ở app; race bypass validation.; Hot partition; unbounded partition; query fan-out toàn shard; bỏ qua repartitioning. | One bounded trace observes all Primary mechanisms. |
-| lu-nosql-cassandra-lsm-compaction-consistency | Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost. | Writes append to commit log/memtable then flush immutable SSTables; reads merge relevant files and compaction rewrites them, while consistency depends replica response policy. → Partition key routes data; clustering key orders rows inside partition; table design starts from known query not ad-hoc filter. → Decision starts with read/write route, ownership, consistency and recovery needs; product behavior demonstrates fit or mismatch, not popularity. | SSTable/compaction metrics; tombstone warnings; read/write latency; replica response behavior.; Partition size/key distribution; request distribution; query shape.; Access matrix; prototype query/profile; data distribution; consistency/failure test; operating cost estimate. | Tombstone-heavy read; compaction backlog; read amplification; inappropriate consistency assumption.; Huge partition; hot partition; unsupported scan query; poor key distribution.; Chọn tool vì trend; bỏ qua source-of-truth; model không hỗ trợ primary query; hide operational cost. | One bounded trace observes all Primary mechanisms. |
-| lu-nosql-model-selection | Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding. | Mỗi family optimizes different data layout/operation: relational constraints, document aggregate, partition write, key lookup, search projection. → Embedded data updates with one document boundary; references split ownership/lifetime and require later lookup or coordinated update. → String, hash, set, sorted set and stream encode different operations/memory layouts; key cardinality and value size drive RAM need. → Analyzer transforms text into tokens; inverted index maps tokens to documents, so mapping/analyzer determines match semantics. | Access-pattern matrix; query shapes; data growth; consistency/failure requirement.; Document shape/size; query pattern; update boundary; array growth.; Key type/size; memory usage; operation latency; cardinality.; Mapping; analyzed tokens; query explanation/profile; returned scores. | Document DB for relational cross-aggregate work; Cassandra without partition query; search as authoritative transactional store; Redis chosen only “fast”.; Unbounded embedded array; assume cross-document update atomic; N+1 reference lookup.; Giant key/value; wrong structure; unbounded collection; memory underestimated.; Text vs keyword mismatch; wrong analyzer; exact match expected from analyzed text; relevance confused with correctness. | One bounded trace observes all Primary mechanisms. |
-| lu-cache-capacity-eviction-fallback | Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin. | Cache có capacity/eviction policy; miss hoặc outage chuyển demand về source, nên fallback path là một traffic amplifier tiềm năng. → Cache holds a derived copy keyed to source state; source owns final value/version, cache may be absent/stale and must not become accidental authority. → Hit/miss, TTL, key distribution, source load, freshness and fallback interact; symptom phải được tách bằng timeline/key-level evidence trước mitigation. | Memory; evictions; hit rate; origin QPS; fallback latency/error.; Source row/version; cache key/value/version; request path; miss/read timeline.; Hit/miss by key; TTL age; source load; p95/p99; cache error/fallback trace; version timeline. | Eviction gây origin surge; recursive fallback overload source; fail-open/fail-closed sai.; Cache becomes authority; source update succeeds but cache assumption differs; cached absence treated permanently true.; Treat hit rate as full success; optimize latency while serving stale data; add cache node when hot key is bottleneck. | One bounded trace observes all Primary mechanisms. |
-| lu-cache-invalidation-consistency | Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary. | Source version/timestamp defines newer state; invalidation/update event may arrive delayed/out of order; reader compares/ages cached copy according to freshness contract. → L1 belongs one instance, L2 is shared, source is authoritative; key/version/schema must let reader locate which layer served stale state. | Source version/timestamp; cache version/TTL; invalidation event; read timeline.; Layer-specific key/version; instance ID; cache age; request trace. | Missing invalidation; delayed event; out-of-order update; TTL longer than acceptable freshness.; One layer invalidated while another stale; per-instance divergence; rollout mixes cache-key/schema versions. | One bounded trace observes all Primary mechanisms. |
-| lu-cache-patterns | Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle. | Pattern allocates responsibility differently: cache-aside caller reads source on miss; read-through loader mediates; write path must define source/cache ordering. → Stampede recomputes one expired/missing key concurrently; penetration repeats invalid misses; avalanche aligns many expiries; hot key concentrates traffic independent of expiry. | Request trace; loader call count; source/cache write order; miss/error metrics.; Miss rate; expiry distribution; per-key QPS; origin load; single-flight lock/wait. | Write updates cache but not source; cache-aside miss storm; double-write ordering ambiguity.; Origin collapse after expiry; invalid-key probe overload; synchronized TTL burst; one key/slot saturated. | One bounded trace observes all Primary mechanisms. |
 | lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos. | Participants cần agree decision/order despite failure; safe progress cần đủ reachable members theo protocol rule. → Không có shared failure state; caller observes message/reply/timeout through network, not remote internal truth. → Replicas copy state; leader/quorum rule controls acceptance and when value is sufficiently replicated. → Partial failure, RPC uncertainty, consistency, replication, ownership and reconciliation compose; timeline phải gắn operation identity/state owner. | Leader/epoch/term; membership; quorum availability; committed decision/version; ownership record.; Per-node health/state; operation ID; request timings; dependency error rate; trace hop completion.; Leader/role; replica lag/position; ack count/state; operation version; failover timeline.; Timeline; per-system state; operation ID; ownership/version records; recovery result. | No quorum; stale epoch; two actors believe exclusive ownership; coordination service dependency.; One dependency unreachable; slow mistaken dead; retry amplification; local success inferred global success.; Stale replica read; leader fails during operation; insufficient ack assumed durable; stale node promoted.; Claim guarantee không có; recovery duplicates unknown effect; topology invalidates assumption. | One bounded trace observes all Primary mechanisms. |
 | lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn. | Reconciliation compares actual against authoritative state/invariant then applies repeatable correction until mismatch converges. → Execution and response delivery are independent events. | Source-vs-derived diff; audit/event history; job result; repair operation ID; mismatch count.; Operation/idempotency ID; server audit; client timing; status query; trace span. | Non-idempotent repair; endless loop; wrong truth source; missing record never emitted.; Side effect succeeded but client timeout; retry duplicates; server continues after client abandoned. | One bounded trace observes all Primary mechanisms. |
 | lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect. | Group assigns partitions; offset marks broker read position, not durable business effect. → Records route to queue/topic/partition; parallel consumers preserve order only where broker contract/key assignment does. → Reprocess records from selected offset/range; projection work differs from side effects that must be suppressed/idempotent. → Lag grows when arrival exceeds effective consumption or work is unevenly distributed/blocked. | Assignment; current/committed offset; generation/member; processing/audit record; rebalance event.; Topic/queue config; partition/key; offset/sequence; consumer assignment.; Replay range; offsets; IDs/schema version; inbox ledger; derived before/after.; Per-partition lag; arrival/consume rate; handler duration; retry rate; assignment; downstream pool/latency. | Offset commit before effect; effect succeeds then offset fails; rebalance interrupts work; stale ownership assumption.; Assume global partition order; wrong key; queue treated broadcast; partitions changed without order review.; Payment/email replayed; live/backfill race; old schema unreadable; wrong starting offset.; Hot partition; slow handler/downstream; retry storm; rebalance pause; consumers exceed shared capacity. | One bounded trace observes all Primary mechanisms. |
@@ -388,6 +396,14 @@
 | lu-delivery-artifact-image-config | Produce reproducible versioned artifact and separate immutable build from runtime config/secret. | Build creates versioned image; runtime injects config; same digest promotes environments. → CI builds once; registry stores immutable artifact; CD promotes exact reference. → Platform moves traffic/version sets over time; strategy controls coexistence/exposure. → Platform state/events cover scheduling, startup, probes, resources/restarts; app logs alone omit not-running cause. | Digest/tag; Git SHA; config source; SBOM/provenance; deployed identity.; SHA; pipeline run; digest; registry metadata; deployment record; approval.; Replica/version; deployment status; traffic; readiness; digest; rollback history.; Workload status; events; exit; metrics; logs; config refs; endpoints; revision. | Rebuild production differently; latest tag lost provenance; secret baked image; config drift; unknown rollback artifact.; Separate prod rebuild; tag moves digest; no source tie; manual bypass; rollback artifact absent.; Old/new incompatible; availability gap; irreversible schema/event; unrepresentative canary; readiness stall.; CrashLoop no exit reason; pending pod app-log only; OOMKill normal crash; mount ignored; selector mismatch. | One bounded trace observes all Primary mechanisms. |
 | lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help. | Autoscaler observes signal then changes replicas after delay; scale helps parallel app work but can increase downstream pressure. → Scheduler uses requests; CPU may throttle and memory policy may kill/evict workload. → Artifact/config/resource/health/shutdown/network/telemetry are portable requirements; platform implementations differ. | Signal; replicas; CPU/queue/concurrency; downstream; events; p95/p99.; Requests/limits; throttle; RSS; OOM; restart; node/pod metrics.; Requirement matrix; platform config; lifecycle behavior; deployment/failure result. | CPU for I/O bottleneck; consumers beyond DB; burst faster scale; hot partition; cold scale violates latency.; Throttle called lock; OOM only GC; no request; excessive reservation; limit ignores working/native/page cache.; YAML treated architecture; health shifts; filesystem assumption; CPU/memory change; debug evidence hidden. | One bounded trace observes all Primary mechanisms. |
 | lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM. | Runtime starts process with filesystem/network/resource boundaries; container lifetime follows primary process. → Platform calls probe and converts result to routing/restart by configured type. → Termination → readiness removal → signal → grace window → drain/cancel/ack/release → exit. | Process tree; state/restart; mounts; exit code; runtime events.; Probe config/result; K8s events; ready condition; restarts; routing.; Termination/readiness time; endpoints; active work; signal; grace; exit. | Child lifecycle wrong; PID assumption; durable data ephemeral FS; restart equals recovery.; Readiness wired liveness; outage restart loop; early warmup; expensive probe; terminating still routed.; Still routed after SIGTERM; ack after lost work; grace short; LB delay ignored; no durable handoff. | One bounded trace observes all Primary mechanisms. |
+| lu-index-query-shape | One canonical scenario defined in map. | One state trace joins db-index-structures; db-composite-query-shape. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-execution-plan-estimates | One canonical scenario defined in map. | One state trace joins db-execution-operators; db-optimizer-cardinality-stats. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-db-buffer-io | One canonical scenario defined in map. | One state trace joins db-buffer-io; db-physical-storage-pages. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-db-transactions-mvcc-isolation | One canonical scenario defined in map. | One state trace joins db-transactions-isolation-anomalies; db-mvcc-visibility. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-nosql-cassandra-lsm-compaction-consistency | One canonical scenario defined in map. | One state trace joins nosql-cassandra-partition-model; nosql-cassandra-lsm-compaction-consistency. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-nosql-search-projection | One canonical scenario defined in map. | One state trace joins nosql-search-inverted-index-analysis; nosql-search-refresh-shards-pagination. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-cache-source-of-truth-invalidation | One canonical scenario defined in map. | One state trace joins cache-need-source-of-truth; cache-invalidation-consistency; cache-multilayer-coherence. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-cache-patterns | One canonical scenario defined in map. | One state trace joins cache-patterns; cache-stampede-penetration-avalanche-hot-key. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
 
 ## F. Cross-Owner Review
 
@@ -401,37 +417,37 @@
 | os-files-handles-sockets-ipc → net-tcp-connection-semantics | REJECTED | OS handle lifecycle evidence and TCP connection/handshake state belong to different system boundaries; one shared assessment would use handle ownership as context rather than prove both canonical mechanisms. |
 | concurrency-cancellation-lifetime → net-streaming-body-cancellation | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | prog-resource-ownership → net-streaming-body-cancellation | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| prog-invariants-domain-model → db-modeling-invariants | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| os-virtual-memory-page-cache → db-buffer-io | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| concurrency-interleavings-invariants → db-transactions-isolation-anomalies | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| prog-invariants-domain-model → db-transactions-isolation-anomalies | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| concurrency-deadlock-starvation → db-locks-deadlocks-contention | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-replication-leader-quorum → db-replication-failover | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-partitioning-ownership-rebalancing → db-partitioning-sharding-boundary | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| os-resource-exhaustion → db-connection-pool-exhaustion | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| concurrency-bounded-backpressure → db-connection-pool-exhaustion | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-partitioning-ownership-rebalancing → nosql-mongo-index-shard-transaction | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| db-transactions-isolation-anomalies → nosql-mongo-index-shard-transaction | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-partitioning-ownership-rebalancing → nosql-cassandra-partition-model | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-consistency-linearizability → nosql-cassandra-lsm-compaction-consistency | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-replication-leader-quorum → nosql-redis-persistence-replication-cluster-streams | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-partitioning-ownership-rebalancing → nosql-redis-persistence-replication-cluster-streams | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| msg-model-queue-topic-partition-order → nosql-redis-persistence-replication-cluster-streams | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-partitioning-ownership-rebalancing → nosql-search-refresh-shards-pagination | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| concurrency-bounded-backpressure → cache-stampede-penetration-avalanche-hot-key | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| nosql-redis-structures-memory → cache-capacity-eviction-fallback | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| dist-consistency-linearizability → cache-multilayer-coherence | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
+| prog-invariants-domain-model → db-modeling-invariants | REJECTED | Domain transition reasoning is a prerequisite slice; database unit proves persisted constraint behavior with concurrent writers.|
+| os-virtual-memory-page-cache → db-buffer-io | REJECTED | OS page-cache evidence is faults/reclaim; database unit proves buffer/page statistics and query working-set behavior.|
+| concurrency-interleavings-invariants → db-transactions-isolation-anomalies | REJECTED | Application interleaving/atomicity differs from two-session version visibility and isolation anomalies.|
+| prog-invariants-domain-model → db-transactions-isolation-anomalies | REJECTED | Domain invariant names the rule; database unit proves two-session visibility/conflict behavior and isolation choice. |
+| concurrency-deadlock-starvation → db-locks-deadlocks-contention | REJECTED | Scheduler forward-progress evidence differs from database lock owner/wait-cycle evidence.|
+| dist-replication-leader-quorum → db-replication-failover | REJECTED | Generic quorum protocol differs from relational role, lag and client-operation evidence.|
+| dist-partitioning-ownership-rebalancing → db-partitioning-sharding-boundary | REJECTED | Distributed ownership/rebalance differs from relational key distribution and query fan-out evidence.|
+| os-resource-exhaustion → db-connection-pool-exhaustion | REJECTED | OS resource class is context; pool acquisition/session ownership is the assessed database mechanism.|
+| concurrency-bounded-backpressure → db-connection-pool-exhaustion | REJECTED | Admission policy is context; it does not prove pool acquisition exhaustion diagnosis.|
+| dist-partitioning-ownership-rebalancing → nosql-mongo-index-shard-transaction | REJECTED | Generic rebalancing differs from Mongo explain, shard route and transaction-scope evidence.|
+| db-transactions-isolation-anomalies → nosql-mongo-index-shard-transaction | REJECTED | Relational isolation is context; Mongo unit proves its own document/shard transaction boundary.|
+| dist-partitioning-ownership-rebalancing → nosql-cassandra-partition-model | REJECTED | Ownership vocabulary overlaps but Cassandra case needs partition/clustering query evidence.|
+| dist-consistency-linearizability → nosql-cassandra-lsm-compaction-consistency | REJECTED | Guarantee reasoning differs from LSM/compaction and replica-policy operating evidence.|
+| dist-replication-leader-quorum → nosql-redis-persistence-replication-cluster-streams | REJECTED | Redis persistence/replica/slot/PEL state is not a quorum protocol assessment.|
+| dist-partitioning-ownership-rebalancing → nosql-redis-persistence-replication-cluster-streams | REJECTED | Redis slot and Stream pending work need product-specific evidence.|
+| msg-model-queue-topic-partition-order → nosql-redis-persistence-replication-cluster-streams | REJECTED | Broker ordering differs from Redis consumer pending/ack state.|
+| dist-partitioning-ownership-rebalancing → nosql-search-refresh-shards-pagination | REJECTED | Search shard/profile/pagination cost differs from rebalancing ownership.|
+| concurrency-bounded-backpressure → cache-stampede-penetration-avalanche-hot-key | REJECTED | Admission is context; cache unit distinguishes expiry/miss/key overload shapes.|
+| nosql-redis-structures-memory → cache-capacity-eviction-fallback | REJECTED | Redis structure memory differs from derived-copy eviction-to-origin containment.|
+| dist-consistency-linearizability → cache-multilayer-coherence | REJECTED | Linearizability differs from freshness/version/layer attribution.|
 | concurrency-local-vs-distributed → dist-partial-failure-uncertainty | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | net-failure-localization-unknown-outcome → dist-partial-failure-uncertainty | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | net-failure-localization-unknown-outcome → dist-rpc-unknown-completion | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | concurrency-local-vs-distributed → dist-partitioning-ownership-rebalancing | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| db-transactions-isolation-anomalies → dist-transactions-2pc-boundary | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
+| db-transactions-isolation-anomalies → dist-transactions-2pc-boundary | REJECTED | Local isolation proves one database boundary; 2PC needs participant coordination and cross-boundary failure evidence. |
 | prog-invariants-domain-model → dist-reconciliation-convergence | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | dist-replication-leader-quorum → msg-producer-acks-durability | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | dist-partitioning-ownership-rebalancing → msg-consumer-groups-offsets-rebalance | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | dist-partial-failure-uncertainty → msg-delivery-retry-poison-dlq | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| db-transactions-isolation-anomalies → msg-consumer-idempotency-inbox | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| db-transactions-isolation-anomalies → msg-outbox-db-publish-gap | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
+| db-transactions-isolation-anomalies → msg-consumer-idempotency-inbox | REJECTED | Local transaction is a prerequisite slice; inbox assessment proves duplicate delivery and consumer effect binding. |
+| db-transactions-isolation-anomalies → msg-outbox-db-publish-gap | REJECTED | Local atomic commit is a prerequisite slice; outbox assessment proves the database-to-broker publication gap. |
 | dist-partial-failure-uncertainty → msg-outbox-db-publish-gap | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 
 ## G. Stage-2 Input Note
@@ -445,7 +461,7 @@ None.
 ## Stage-1 semantic review batches
 
 - Runtime & Concurrency — REVIEWED
-- Data & Consistency — PENDING
+- Data & Consistency — REVIEWED
 - Service & Network — PENDING
 - Distributed Systems — PENDING
 - Production Engineering — PENDING
@@ -454,3 +470,29 @@ None.
 ## Runtime & Concurrency batch closure
 
 **REVIEWED.** All 17 original in-scope units have an explicit disposition: 15 retained (including the four required singleton reviews) and 2 split. Canonical unit sections, Primary-home registry, composition registry, singleton review and cross-owner review hold the final state. REQUIRED and RECOMMENDED projection remains **NOT FINALIZED**.
+
+## Data & Consistency batch closure
+
+**REVIEWED.** The 17 original in-scope units have explicit dispositions: 9 KEEP, 7 SPLIT and 1 MERGE. Final Data & Consistency state has 25 units. The three L4 transfer capabilities are independent synthesis units. Required cross-owner neighborhoods were rejected with mechanism/evidence-specific reasons; no cross-owner merge was accepted.
+
+## Data & Consistency Decision Ledger
+
+| Original unit | Disposition | Final canonical state |
+|---|---|---|
+| lu-index-query-shape | KEEP | unchanged composition; scenario/evidence hardened |
+| lu-execution-plan-estimates | KEEP | unchanged composition; scenario/evidence hardened |
+| lu-db-backup-restore | SPLIT | lu-db-backup-restore; lu-db-wal-crash-recovery |
+| lu-db-buffer-io | SPLIT | lu-db-buffer-io; lu-db-production-diagnosis-transfer |
+| lu-db-connection-pool-exhaustion | KEEP | singleton retained |
+| lu-db-locks-deadlocks-contention | SPLIT | lu-db-locks-deadlocks-contention; lu-db-transactions-mvcc-isolation; lu-db-schema-evolution |
+| lu-db-modeling-invariants | SPLIT | lu-db-modeling-invariants; lu-db-partitioning-sharding-boundary |
+| lu-db-mvcc-visibility | MERGE | lu-db-transactions-mvcc-isolation |
+| lu-db-replication-failover | KEEP | singleton retained |
+| lu-nosql-cassandra-lsm-compaction-consistency | SPLIT | lu-nosql-cassandra-lsm-compaction-consistency; lu-nosql-storage-choice-transfer |
+| lu-nosql-model-selection | SPLIT | lu-nosql-model-selection; lu-nosql-mongo-aggregate-model; lu-nosql-redis-structures-memory |
+| lu-nosql-mongo-index-shard-transaction | KEEP | singleton retained |
+| lu-nosql-redis-persistence-replication-cluster-streams | KEEP | singleton retained |
+| lu-nosql-search-refresh-shards-pagination | MERGE | lu-nosql-search-projection |
+| lu-cache-capacity-eviction-fallback | SPLIT | lu-cache-capacity-eviction-fallback; lu-cache-evidence-transfer |
+| lu-cache-invalidation-consistency | MERGE / REASSIGN | lu-cache-source-of-truth-invalidation |
+| lu-cache-patterns | KEEP | unchanged composition |

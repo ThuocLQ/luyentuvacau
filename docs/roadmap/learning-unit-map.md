@@ -3,7 +3,7 @@
 > **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 163. Proposed Learning Units: 94. Singleton units: 56. Multi-capability units: 38. Single-owner units: 94. Multi-owner units: 0.
+Frozen capabilities: 163. Proposed Learning Units: 102. Singleton units: 67. Multi-capability units: 35. Single-owner units: 102. Multi-owner units: 0.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
@@ -13,49 +13,29 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 |---|---|---|---|---:|
 | lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
 | lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
-| lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 |
-| lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 |
-| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-errors-results | Phân loại lỗi dự đoán được và giữ lỗi bất ngờ có ngữ cảnh | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-invariants-domain-model | Giữ business invariant tại state transition và persistence boundary | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-composition-dependencies | Nối dependency tại composition root mà không làm core phụ thuộc hạ tầng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-collections-complexity | Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-resource-ownership | Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-types-generics | Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-prog-values-identity | Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
-| lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu | Runtime & Concurrency | Runtime & Memory | 3 |
-| lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ | Runtime & Concurrency | Runtime & Memory | 2 |
-| lu-runtime-jit-warmup | Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên | Runtime & Concurrency | Runtime & Memory | 1 |
-| lu-runtime-managed-execution | Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue | Runtime & Concurrency | Runtime & Memory | 1 |
-| lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 2 |
-| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
-| lu-os-scheduling-starvation | Chẩn đoán runnable work không nhận được CPU hoặc execution capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
-| lu-os-termination-graceful-shutdown | Dừng service có deadline mà không nhận thêm work và không mất trạng thái cần giữ | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
-| lu-os-virtual-memory-page-cache | Phân biệt virtual memory, working set và page cache khi đọc memory hoặc I/O symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
-| lu-os-resource-exhaustion | Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
-| lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource | Runtime & Concurrency | Concurrency & Async | 3 |
-| lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
-| lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 |
-| lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 |
-| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions | Service & Network | Networking & HTTP | 2 |
-| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn | Service & Network | Networking & HTTP | 4 |
-| lu-net-proxy-lb-forwarded-boundary | Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers | Service & Network | Networking & HTTP | 1 |
-| lu-net-streaming-body-cancellation | Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect | Service & Network | Networking & HTTP | 1 |
-| lu-db-backup-restore | Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery | Data & Consistency | Relational Database Engineering | 2 |
-| lu-db-buffer-io | Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime | Data & Consistency | Relational Database Engineering | 3 |
-| lu-db-connection-pool-exhaustion | Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-locks-deadlocks-contention | Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock | Data & Consistency | Relational Database Engineering | 3 |
-| lu-db-modeling-invariants | Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được | Data & Consistency | Relational Database Engineering | 2 |
-| lu-db-mvcc-visibility | Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-replication-failover | Reason primary/replica role, lag và failover mà không coi replica là synchronous truth | Data & Consistency | Relational Database Engineering | 1 |
-| lu-nosql-cassandra-lsm-compaction-consistency | Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost | Data & Consistency | NoSQL & Specialized Data Systems | 3 |
-| lu-nosql-model-selection | Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding | Data & Consistency | NoSQL & Specialized Data Systems | 4 |
-| lu-nosql-mongo-index-shard-transaction | Reason index, shard key and transaction boundary from Mongo query/write pattern | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-redis-persistence-replication-cluster-streams | Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-search-refresh-shards-pagination | Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-cache-capacity-eviction-fallback | Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin | Data & Consistency | Cache Engineering | 3 |
-| lu-cache-invalidation-consistency | Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary | Data & Consistency | Cache Engineering | 2 |
-| lu-cache-patterns | Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle | Data & Consistency | Cache Engineering | 2 |
+| lu-db-backup-restore | Verify backup and point-in-time restore | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-wal-crash-recovery | Explain WAL crash recovery | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-buffer-io | Separate buffer access from physical page I/O | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-production-diagnosis-transfer | Diagnose database symptoms across competing hypotheses | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-connection-pool-exhaustion | Diagnose database connection-pool exhaustion | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-locks-deadlocks-contention | Diagnose locks, contention and deadlocks | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-transactions-mvcc-isolation | Choose isolation from visible versions and invariants | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-schema-evolution | Evolve schema safely across mixed app versions | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-modeling-invariants | Enforce database modeling invariants | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-partitioning-sharding-boundary | Choose partition or shard key from access locality | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-replication-failover | Reason relational replication and failover | Data & Consistency | Relational Database Engineering | 1 |
+| lu-nosql-cassandra-lsm-compaction-consistency | Model Cassandra partitioned LSM writes and reads | Data & Consistency | NoSQL & Specialized Data Systems | 2 |
+| lu-nosql-storage-choice-transfer | Choose storage family from workload evidence | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-model-selection | Frame storage selection before product choice | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-mongo-aggregate-model | Model Mongo aggregate boundaries | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-mongo-index-shard-transaction | Tune Mongo query route and transaction boundary | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-redis-structures-memory | Choose Redis data structures with memory bounds | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-redis-persistence-replication-cluster-streams | Operate Redis durability, topology and Streams | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-search-projection | Build and operate a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 2 |
+| lu-cache-capacity-eviction-fallback | Protect origin when cache capacity or availability fails | Data & Consistency | Cache Engineering | 1 |
+| lu-cache-evidence-transfer | Diagnose cache latency, staleness and origin-load symptoms | Data & Consistency | Cache Engineering | 1 |
+| lu-cache-source-of-truth-invalidation | Keep cached copies fresh across layers | Data & Consistency | Cache Engineering | 3 |
+| lu-cache-patterns | Choose cache pattern and prevent miss overload | Data & Consistency | Cache Engineering | 2 |
 | lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 |
 | lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 |
 | lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 |
@@ -121,38 +101,33 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | db-index-structures | Relational Database Engineering | L3 |
 | db-composite-query-shape | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Giải thích index như ordered/search structure thu hẹp candidate rows và cân read benefit với write/storage cost.
+Tenant filter + ORDER BY must use one composite key path.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Index giữ key-to-row navigation; useful predicate/order cho phép engine prune vùng dữ liệu thay vì scan toàn bộ. → B-tree có prefix order; equality prefix thu hẹp vùng trước, range/order phía sau quyết định scan/sort còn lại.
+Key prefix narrows candidates; range/order decides remaining scan and sort.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Plan access node; rows; buffers; index usage; index size/write behavior.; Predicate/order thực; plan; actual rows; Sort node; buffers.
+EXPLAIN ANALYZE; actual rows; Sort; buffers; index write cost.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Index có nhưng predicate path không dùng; low selectivity; redundant index; write amplification.; Coi (A,B) như (B,A); range đứng trước equality hữu ích; ORDER BY/LIMIT lệch index; function/cast phá searchability.
+Changing predicate/order makes the index no longer searchable.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `db-index-structures`, `db-composite-query-shape` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `db-physical-storage-pages` remains separate pending its own mechanism/evidence boundary.
-- `db-execution-operators` remains separate pending its own mechanism/evidence boundary.
+KEEP as a coherent multi-capability unit.
 
 ## lu-execution-plan-estimates
 
@@ -169,38 +144,33 @@ Merged because `db-index-structures`, `db-composite-query-shape` share a direct 
 | db-execution-operators | Relational Database Engineering | L3 |
 | db-optimizer-cardinality-stats | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Đọc plan như execution pipeline và xác định operator nào làm rows, loops hay work tăng.
+A report slows when row distribution changes.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Scan tạo input; join kết hợp; sort/aggregate materialize/consume rows; limit có thể dừng sớm, nên SQL text không phải execution order. → Optimizer ước lượng rows từ statistics/distribution; estimate dẫn chi phí và operator choice, sai estimate kéo theo plan sai.
+Operators consume/produce rows; estimates choose access and join shape.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-EXPLAIN ANALYZE; actual rows; loops; timing; memory/temp work.; Estimated vs actual rows; statistics; distribution/skew; chosen operator.
+EXPLAIN ANALYZE; estimated/actual rows; loops; stats; temp work.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Nested loop trên input lớn; large/spilled sort; row explosion trước aggregate; đọc operator theo thứ tự câu SQL.; Stale statistics; skew; correlated predicates; estimate/actual mismatch; poor join/access choice.
+Skew/stale stats produce a plausible but bad plan.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `db-execution-operators`, `db-optimizer-cardinality-stats` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `db-index-structures` remains separate pending its own mechanism/evidence boundary.
-- `obs-db-io-downstream-attribution` remains separate pending its own mechanism/evidence boundary.
+KEEP as a coherent multi-capability unit.
 
 ## lu-race-atomicity
 
@@ -1500,7 +1470,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 ### Identity
 
 - **Unit ID:** lu-db-backup-restore
-- **Working title:** Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery
+- **Working title:** Verify backup and point-in-time restore
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1508,47 +1478,83 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-backup-restore | Relational Database Engineering | L3 |
-| db-wal-crash-recovery | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery.
+Recover an accidental deletion to the required point in time.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Backup là bản dữ liệu/log tại mốc xác định; restore tái tạo state theo phạm vi và point-in-time contract, không phải chỉ file tồn tại. → WAL records durable change intent before data page write; recovery can redo/resolve state based on log ordering.
+Select snapshot/log chain; restore and verify recovered state.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Backup metadata; restore test; recovered timestamp/rows; duration; checksum/validation result.; WAL/log position khi thực tế; commit/restart experiment; recovery log; persisted rows after crash simulation.
+Backup metadata; recovered timestamp/rows; duration; checksum.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Backup chưa từng restore; thiếu log cần thiết; recovered point không đạt yêu cầu; restore lâu hơn giả định.; Assume committed data means every page sync write; unsafe durability setting; expect recovery without required log.
+A backup that was never restored is unproven.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `db-backup-restore`, `db-wal-crash-recovery` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
+## lu-db-wal-crash-recovery
 
-- `rel-disaster-recovery-rpo-rto` remains separate pending its own mechanism/evidence boundary.
-- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-db-wal-crash-recovery
+- **Working title:** Explain WAL crash recovery
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| db-wal-crash-recovery | Relational Database Engineering | L3 |
+
+### Canonical scenario
+
+Process dies just after commit.
+
+### Integrated mechanism / state trace
+
+WAL records durable intent before page write; restart replays/resolves by log order.
+
+### Integrated evidence surface
+
+WAL position; commit/restart result; recovery log.
+
+### Failure and debug loop
+
+Commit does not mean every data page was flushed.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as singleton after merge pressure review.
 
 ## lu-db-buffer-io
 
 ### Identity
 
 - **Unit ID:** lu-db-buffer-io
-- **Working title:** Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime
+- **Working title:** Separate buffer access from physical page I/O
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1557,47 +1563,83 @@ Merged because `db-backup-restore`, `db-wal-crash-recovery` share a direct mecha
 |---|---|---|
 | db-buffer-io | Relational Database Engineering | L2 |
 | db-physical-storage-pages | Relational Database Engineering | L2 |
-| db-production-diagnosis-transfer | Relational Database Engineering | L4 |
 
-### Shared problem / need
+### Canonical scenario
 
-Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime.
+Same query is fast warm and slow beyond available memory.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Database buffer/cache có thể phục vụ page đã resident; working set và access pattern quyết định khi nào cần đọc storage. → Rows nằm trong storage pages; scan/index eventually reference pages, nên row width/physical relation size ảnh hưởng amount of work. → Query shape, plan, cardinality, buffers/I/O, locks, transaction và pool tạo symptom khác nhau; thay đổi chỉ sau khi evidence loại hypothesis khác.
+Rows live on pages; buffer residency avoids storage read; width and size change page work.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-EXPLAIN BUFFERS; cache hits/reads; OS/database I/O; cold/warm timing.; Page/buffer statistics; relation/index size; EXPLAIN BUFFERS khi phù hợp.; Hypothesis matrix; measured plan/rows/buffers; lock/pool timeline; before/after experiment.
+EXPLAIN BUFFERS; cache reads/hits; relation size; cold/warm timing.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Benchmark cold/warm không nhất quán; gọi mọi buffer hit là disk I/O; memory pressure làm runtime đổi nhưng bị bỏ qua.; Assume one-row lookup là one disk operation; wide row tăng page work; bỏ qua table/index size.; Nhảy từ “slow SQL” sang add index; sửa plan khi problem là pool/lock; áp dụng engine detail sai.
+Buffer hit is incorrectly called disk I/O.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `db-buffer-io`, `db-physical-storage-pages`, `db-production-diagnosis-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as a coherent multi-capability unit.
 
-### Explicit exclusions
+## lu-db-production-diagnosis-transfer
 
-- `os-virtual-memory-page-cache` remains separate pending its own mechanism/evidence boundary.
-- `db-index-structures` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-db-production-diagnosis-transfer
+- **Working title:** Diagnose database symptoms across competing hypotheses
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| db-production-diagnosis-transfer | Relational Database Engineering | L4 |
+
+### Canonical scenario
+
+Slow endpoint may be plan, I/O, lock, transaction or pool.
+
+### Integrated mechanism / state trace
+
+Compare hypotheses; discriminate with plan/rows/buffers, locks and acquisition wait.
+
+### Integrated evidence surface
+
+Hypothesis matrix; plan; lock/pool timeline; before/after.
+
+### Failure and debug loop
+
+Add index before proving the cause.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as singleton after merge pressure review.
 
 ## lu-db-connection-pool-exhaustion
 
 ### Identity
 
 - **Unit ID:** lu-db-connection-pool-exhaustion
-- **Working title:** Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity
+- **Working title:** Diagnose database connection-pool exhaustion
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1606,48 +1648,40 @@ Merged because `db-buffer-io`, `db-physical-storage-pages`, `db-production-diagn
 |---|---|---|
 | db-connection-pool-exhaustion | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity.
+Requests wait before query execution.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Pool giới hạn số session; acquisition wait xảy ra trước query khi active connection bị leak, giữ transaction lâu hoặc demand vượt capacity.
+Pool limits sessions; acquisition waits when leaked/held sessions or demand exhaust capacity.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Pool active/idle/wait; acquisition latency; DB session count; query duration; request queue.
+Pool active/idle/wait; acquisition latency; session count; request queue.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Leaked connection; transaction giữ connection quá lâu; pool nhỏ hơn concurrency không bound; tăng pool làm DB overload thêm.
+Increasing pool overloads the database.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| os-resource-exhaustion | Frozen graph neighborhood with db-connection-pool-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| concurrency-bounded-backpressure | Frozen graph neighborhood with db-connection-pool-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `os-resource-exhaustion` remains separate pending its own mechanism/evidence boundary.
-- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
+KEEP as singleton after merge pressure review.
 
 ## lu-db-locks-deadlocks-contention
 
 ### Identity
 
 - **Unit ID:** lu-db-locks-deadlocks-contention
-- **Working title:** Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock
+- **Working title:** Diagnose locks, contention and deadlocks
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1655,48 +1689,126 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-locks-deadlocks-contention | Relational Database Engineering | L3 |
-| db-transactions-isolation-anomalies | Relational Database Engineering | L3 |
-| db-schema-evolution | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock.
+Two updates block or one transaction aborts.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Lock serializes conflicting access; contention có owner sẽ release, deadlock là cycle wait cần one transaction abort. → Isolation defines visibility/conflict behavior của concurrent transactions; invariant có thể cần conditional write, serialization hoặc redesign scope. → Expand/backfill/dual-read or compatibility boundary cho phép state/schema đổi dần trước contract cleanup.
+Contention has a releasing owner; deadlock is a wait cycle requiring abort.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Lock/wait view; blocked/blocking session; deadlock report; transaction duration.; Two-session timeline; before/after rows; isolation setting; conflict/result.; Schema version; migration history; lock duration; old/new compatibility test; backfill progress.
+Blocking tree; deadlock report; transaction duration.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Long transaction giữ lock; inconsistent lock order; hot-row serialization; deadlock cycle.; Lost update; non-repeatable observation; write skew/equivalent anomaly; transaction scope quá lớn.; Destructive column change sớm; long blocking migration; rollback incompatible; backfill race with writes.
+Long transaction or inconsistent lock order.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `db-locks-deadlocks-contention`, `db-transactions-isolation-anomalies`, `db-schema-evolution` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
+## lu-db-transactions-mvcc-isolation
 
-- `concurrency-deadlock-starvation` remains separate pending its own mechanism/evidence boundary.
-- `db-production-diagnosis-transfer` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-db-transactions-mvcc-isolation
+- **Working title:** Choose isolation from visible versions and invariants
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| db-transactions-isolation-anomalies | Relational Database Engineering | L3 |
+| db-mvcc-visibility | Relational Database Engineering | L3 |
+
+### Canonical scenario
+
+Concurrent reservation must preserve one invariant.
+
+### Integrated mechanism / state trace
+
+MVCC determines visible version; isolation/conflict rule determines anomaly allowed.
+
+### Integrated evidence surface
+
+Two-session timeline; snapshot/tx ID; isolation result; lock evidence.
+
+### Failure and debug loop
+
+Snapshot confused with blocking; write skew/lost update.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as a coherent multi-capability unit.
+
+## lu-db-schema-evolution
+
+### Identity
+
+- **Unit ID:** lu-db-schema-evolution
+- **Working title:** Evolve schema safely across mixed app versions
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| db-schema-evolution | Relational Database Engineering | L3 |
+
+### Canonical scenario
+
+Old/new apps coexist while schema changes.
+
+### Integrated mechanism / state trace
+
+Expand, backfill, compatibility and cleanup keep both contracts live.
+
+### Integrated evidence surface
+
+Migration history; lock duration; compatibility test; backfill progress.
+
+### Failure and debug loop
+
+Destructive migration or incompatible rollback.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as singleton after merge pressure review.
 
 ## lu-db-modeling-invariants
 
 ### Identity
 
 - **Unit ID:** lu-db-modeling-invariants
-- **Working title:** Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được
+- **Working title:** Enforce database modeling invariants
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1704,95 +1816,83 @@ Merged because `db-locks-deadlocks-contention`, `db-transactions-isolation-anoma
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-modeling-invariants | Relational Database Engineering | L3 |
-| db-partitioning-sharding-boundary | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được.
+Multiple writers must not persist invalid state.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Schema, key, constraint và transaction boundary quyết định state nào có thể persist; application validation không là guard cuối khi có nhiều writer. → Key quyết định row nằm ở partition nào; targeted query giữ locality còn key lệch tạo hot partition/fan-out.
+Schema/key/constraint and transaction boundary decide legal persisted state.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Schema/constraints; failing insert/update; concurrent test; constraint violation; persisted rows.; Key distribution; partition size; per-partition traffic; fan-out count.
+Schema; constraint violation; concurrent test; persisted rows.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Duplicate logical entity; invalid relationship; nullable field trái domain assumption; invariant chỉ ở app; race bypass validation.; Hot partition; unbounded partition; query fan-out toàn shard; bỏ qua repartitioning.
+Application-only validation is bypassed.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `db-modeling-invariants`, `db-partitioning-sharding-boundary` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
-
-- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
-- `db-schema-evolution` remains separate pending its own mechanism/evidence boundary.
-
-## lu-db-mvcc-visibility
+## lu-db-partitioning-sharding-boundary
 
 ### Identity
 
-- **Unit ID:** lu-db-mvcc-visibility
-- **Working title:** Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking
+- **Unit ID:** lu-db-partitioning-sharding-boundary
+- **Working title:** Choose partition or shard key from access locality
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| db-mvcc-visibility | Relational Database Engineering | L3 |
+| db-partitioning-sharding-boundary | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking.
+Data grows until requests must route by key.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Multiple logical row versions cùng visibility rules cho transaction; reader có thể thấy snapshot cũ dù writer đã tạo version mới.
+Key controls placement; locality avoids fan-out; skew creates hot partition.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Two-session query; transaction snapshot/ID khi thực tế; dead-row/version observation; lock evidence để loại blocking.
+Key distribution; partition size; traffic; fan-out.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Assume latest committed row luôn visible; nhầm snapshot với lock owner; long transaction giữ cleanup pressure.
+Hot/unbounded partition or scatter query.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| db-transactions-isolation-anomalies | Frozen graph neighborhood with db-mvcc-visibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
+KEEP as singleton after merge pressure review.
 
 ## lu-db-replication-failover
 
 ### Identity
 
 - **Unit ID:** lu-db-replication-failover
-- **Working title:** Reason primary/replica role, lag và failover mà không coi replica là synchronous truth
+- **Working title:** Reason relational replication and failover
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1801,97 +1901,125 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 |---|---|---|
 | db-replication-failover | Relational Database Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason primary/replica role, lag và failover mà không coi replica là synchronous truth.
+Replica lag/failover happens during a write.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Replication applies state with delay/role transition; client connection và operation history có thể không cùng mốc với promoted node.
+Apply lag and role transition can diverge from client operation history.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Replication lag/position; role; timeline; operation ID; connection target.
+Lag/position; role; operation ID; connection target.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Read-after-write từ lagging replica; stale replica promoted; assumed operation lost/duplicated; client giữ old primary connection.
+Read-after-write from lagging replica.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| dist-replication-leader-quorum | Frozen graph neighborhood with db-replication-failover | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| db-wal-crash-recovery | Frozen graph neighborhood with db-replication-failover | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
-- `db-wal-crash-recovery` remains separate pending its own mechanism/evidence boundary.
+KEEP as singleton after merge pressure review.
 
 ## lu-nosql-cassandra-lsm-compaction-consistency
 
 ### Identity
 
 - **Unit ID:** lu-nosql-cassandra-lsm-compaction-consistency
-- **Working title:** Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost
+- **Working title:** Model Cassandra partitioned LSM writes and reads
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 |
 | nosql-cassandra-partition-model | NoSQL & Specialized Data Systems | L3 |
-| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 |
+| nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost.
+Time-series writes need bounded partitions and readable LSM state.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Writes append to commit log/memtable then flush immutable SSTables; reads merge relevant files and compaction rewrites them, while consistency depends replica response policy. → Partition key routes data; clustering key orders rows inside partition; table design starts from known query not ad-hoc filter. → Decision starts with read/write route, ownership, consistency and recovery needs; product behavior demonstrates fit or mismatch, not popularity.
+Partition/clustering route rows; log→memtable→SSTable; reads merge files; replica policy costs.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-SSTable/compaction metrics; tombstone warnings; read/write latency; replica response behavior.; Partition size/key distribution; request distribution; query shape.; Access matrix; prototype query/profile; data distribution; consistency/failure test; operating cost estimate.
+Key distribution; compaction metrics; tombstones; latency; replica response.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Tombstone-heavy read; compaction backlog; read amplification; inappropriate consistency assumption.; Huge partition; hot partition; unsupported scan query; poor key distribution.; Chọn tool vì trend; bỏ qua source-of-truth; model không hỗ trợ primary query; hide operational cost.
+Hot partition, read amplification or wrong consistency assumption.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `nosql-cassandra-lsm-compaction-consistency`, `nosql-cassandra-partition-model`, `nosql-transfer-storage-choice` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as a coherent multi-capability unit.
 
-### Explicit exclusions
+## lu-nosql-storage-choice-transfer
 
-- `dist-consistency-linearizability` remains separate pending its own mechanism/evidence boundary.
-- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-nosql-storage-choice-transfer
+- **Working title:** Choose storage family from workload evidence
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 |
+
+### Canonical scenario
+
+A new workload needs durable writes, search and low-latency lookup.
+
+### Integrated mechanism / state trace
+
+Compare read/write route, ownership, consistency, recovery and operating cost across families.
+
+### Integrated evidence surface
+
+Access matrix; prototype profile; distribution; failure test; cost estimate.
+
+### Failure and debug loop
+
+Tool chosen by trend instead of rejected evidence.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as singleton after merge pressure review.
 
 ## lu-nosql-model-selection
 
 ### Identity
 
 - **Unit ID:** lu-nosql-model-selection
-- **Working title:** Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding
+- **Working title:** Frame storage selection before product choice
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1899,49 +2027,83 @@ Merged because `nosql-cassandra-lsm-compaction-consistency`, `nosql-cassandra-pa
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | nosql-model-selection | NoSQL & Specialized Data Systems | L3 |
-| nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 |
-| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 |
-| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 |
 
-### Shared problem / need
+### Canonical scenario
 
-Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding.
+Team needs storage framing before product branding.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Mỗi family optimizes different data layout/operation: relational constraints, document aggregate, partition write, key lookup, search projection. → Embedded data updates with one document boundary; references split ownership/lifetime and require later lookup or coordinated update. → String, hash, set, sorted set and stream encode different operations/memory layouts; key cardinality and value size drive RAM need. → Analyzer transforms text into tokens; inverted index maps tokens to documents, so mapping/analyzer determines match semantics.
+Map query, consistency, ownership, growth and recovery needs to family properties.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Access-pattern matrix; query shapes; data growth; consistency/failure requirement.; Document shape/size; query pattern; update boundary; array growth.; Key type/size; memory usage; operation latency; cardinality.; Mapping; analyzed tokens; query explanation/profile; returned scores.
+Access matrix; query shapes; growth; required failure behavior.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Document DB for relational cross-aggregate work; Cassandra without partition query; search as authoritative transactional store; Redis chosen only “fast”.; Unbounded embedded array; assume cross-document update atomic; N+1 reference lookup.; Giant key/value; wrong structure; unbounded collection; memory underestimated.; Text vs keyword mismatch; wrong analyzer; exact match expected from analyzed text; relevance confused with correctness.
+Search used as source of truth; Redis selected only because fast.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `nosql-model-selection`, `nosql-mongo-aggregate-model`, `nosql-redis-structures-memory`, `nosql-search-inverted-index-analysis` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
+## lu-nosql-mongo-aggregate-model
 
-- `nosql-cassandra-partition-model` remains separate pending its own mechanism/evidence boundary.
-- `nosql-transfer-storage-choice` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-nosql-mongo-aggregate-model
+- **Working title:** Model Mongo aggregate boundaries
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 |
+
+### Canonical scenario
+
+Order document grows with unbounded activity.
+
+### Integrated mechanism / state trace
+
+Embed binds one document update; reference separates ownership and lookup.
+
+### Integrated evidence surface
+
+Document shape/size; update boundary; array growth.
+
+### Failure and debug loop
+
+Unbounded embed or cross-document atomicity assumption.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as singleton after merge pressure review.
 
 ## lu-nosql-mongo-index-shard-transaction
 
 ### Identity
 
 - **Unit ID:** lu-nosql-mongo-index-shard-transaction
-- **Working title:** Reason index, shard key and transaction boundary from Mongo query/write pattern
+- **Working title:** Tune Mongo query route and transaction boundary
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -1950,48 +2112,82 @@ Merged because `nosql-model-selection`, `nosql-mongo-aggregate-model`, `nosql-re
 |---|---|---|
 | nosql-mongo-index-shard-transaction | NoSQL & Specialized Data Systems | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason index, shard key and transaction boundary from Mongo query/write pattern.
+Mongo workload grows beyond one shard/aggregate.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Index narrows candidate documents; shard key routes data; multi-document transaction coordinates changes but crosses normal document locality.
+Index narrows documents; shard key routes; transaction crosses normal locality.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Query explain/profile; shard distribution; operation latency; transaction scope.
+Query profile; shard distribution; latency; transaction scope.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Poor shard key/hot chunk; query misses useful index; distributed transaction assumed cheap; scatter-gather query.
+Hot chunk, scatter-gather, costly distributed transaction.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+KEEP as singleton after merge pressure review.
+
+## lu-nosql-redis-structures-memory
+
+### Identity
+
+- **Unit ID:** lu-nosql-redis-structures-memory
+- **Working title:** Choose Redis data structures with memory bounds
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| nosql-mongo-aggregate-model | Frozen graph neighborhood with nosql-mongo-index-shard-transaction | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partitioning-ownership-rebalancing | Frozen graph neighborhood with nosql-mongo-index-shard-transaction | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 |
 
-### Explicit exclusions
+### Canonical scenario
 
-- `nosql-mongo-aggregate-model` remains separate pending its own mechanism/evidence boundary.
-- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
+Leaderboard needs operation semantics without unbounded RAM.
+
+### Integrated mechanism / state trace
+
+Structure and key cardinality/value size determine operation and memory behavior.
+
+### Integrated evidence surface
+
+Key type/size; memory; latency; cardinality.
+
+### Failure and debug loop
+
+Wrong structure or giant/unbounded key.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as singleton after merge pressure review.
 
 ## lu-nosql-redis-persistence-replication-cluster-streams
 
 ### Identity
 
 - **Unit ID:** lu-nosql-redis-persistence-replication-cluster-streams
-- **Working title:** Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth
+- **Working title:** Operate Redis durability, topology and Streams
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -2000,98 +2196,83 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 |---|---|---|
 | nosql-redis-persistence-replication-cluster-streams | NoSQL & Specialized Data Systems | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth.
+Redis state/work must survive restart, lag and slot movement.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Persistence mode controls restart survival; replica apply may lag; hash slot routes keys; Stream group tracks delivered/pending entries per consumer.
+Persistence, replica apply, slot route and pending consumer state have distinct operational effects.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Persistence config/state; replication offset/lag; slot distribution; Streams consumer/pending state.
+Persistence; replication lag; slots; consumer/pending state.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Acknowledged write lost under wrong durability assumption; stale replica; hot slot/key; cross-slot surprise; pending work misunderstood.
+Lost acknowledged write, stale replica, hot slot, misunderstood pending entry.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| nosql-redis-structures-memory | Frozen graph neighborhood with nosql-redis-persistence-replication-cluster-streams | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-replication-leader-quorum | Frozen graph neighborhood with nosql-redis-persistence-replication-cluster-streams | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
-
-- `nosql-redis-structures-memory` remains separate pending its own mechanism/evidence boundary.
-- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
-
-## lu-nosql-search-refresh-shards-pagination
+## lu-nosql-search-projection
 
 ### Identity
 
-- **Unit ID:** lu-nosql-search-refresh-shards-pagination
-- **Working title:** Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection
+- **Unit ID:** lu-nosql-search-projection
+- **Working title:** Build and operate a search projection
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
+| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 |
 | nosql-search-refresh-shards-pagination | NoSQL & Specialized Data Systems | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection.
+Catalog write must become searchable with correct token meaning and bounded deep navigation.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Indexed write becomes searchable on refresh; shard routes work; deep offset asks shards to collect/skip many hits.
+Analyzer→tokens→inverted index; refresh exposes projection; shards collect pages.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Refresh timing; shard distribution; query profile; pagination depth; source-of-truth record.
+Mapping/tokens; refresh timing; shard profile; pagination depth; source record.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Write expected instantly searchable; hot shard; deep offset pagination; search result treated as transactional truth.
+Text/keyword mismatch, refresh expectation, hot shard or deep offset.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| nosql-search-inverted-index-analysis | Frozen graph neighborhood with nosql-search-refresh-shards-pagination | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partitioning-ownership-rebalancing | Frozen graph neighborhood with nosql-search-refresh-shards-pagination | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `nosql-search-inverted-index-analysis` remains separate pending its own mechanism/evidence boundary.
-- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
+KEEP as a coherent multi-capability unit.
 
 ## lu-cache-capacity-eviction-fallback
 
 ### Identity
 
 - **Unit ID:** lu-cache-capacity-eviction-fallback
-- **Working title:** Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin
+- **Working title:** Protect origin when cache capacity or availability fails
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -2099,96 +2280,127 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | cache-capacity-eviction-fallback | Cache Engineering | L3 |
-| cache-need-source-of-truth | Cache Engineering | L2 |
-| cache-evidence-transfer | Cache Engineering | L4 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin.
+Eviction/outage sends traffic to origin.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Cache có capacity/eviction policy; miss hoặc outage chuyển demand về source, nên fallback path là một traffic amplifier tiềm năng. → Cache holds a derived copy keyed to source state; source owns final value/version, cache may be absent/stale and must not become accidental authority. → Hit/miss, TTL, key distribution, source load, freshness and fallback interact; symptom phải được tách bằng timeline/key-level evidence trước mitigation.
+Finite capacity turns eviction/miss into fallback; bounds and shedding protect origin.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Memory; evictions; hit rate; origin QPS; fallback latency/error.; Source row/version; cache key/value/version; request path; miss/read timeline.; Hit/miss by key; TTL age; source load; p95/p99; cache error/fallback trace; version timeline.
+Memory; evictions; hit rate; origin QPS; fallback latency/error.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Eviction gây origin surge; recursive fallback overload source; fail-open/fail-closed sai.; Cache becomes authority; source update succeeds but cache assumption differs; cached absence treated permanently true.; Treat hit rate as full success; optimize latency while serving stale data; add cache node when hot key is bottleneck.
+Recursive fallback creates a cascade.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `cache-capacity-eviction-fallback`, `cache-need-source-of-truth`, `cache-evidence-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
-
-- `nosql-redis-structures-memory` remains separate pending its own mechanism/evidence boundary.
-- `cache-patterns` remains separate pending its own mechanism/evidence boundary.
-
-## lu-cache-invalidation-consistency
+## lu-cache-evidence-transfer
 
 ### Identity
 
-- **Unit ID:** lu-cache-invalidation-consistency
-- **Working title:** Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary
+- **Unit ID:** lu-cache-evidence-transfer
+- **Working title:** Diagnose cache latency, staleness and origin-load symptoms
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| cache-invalidation-consistency | Cache Engineering | L3 |
-| cache-multilayer-coherence | Cache Engineering | L3 |
+| cache-evidence-transfer | Cache Engineering | L4 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary.
+Latency looks fine but stale data or origin overload remains.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Source version/timestamp defines newer state; invalidation/update event may arrive delayed/out of order; reader compares/ages cached copy according to freshness contract. → L1 belongs one instance, L2 is shared, source is authoritative; key/version/schema must let reader locate which layer served stale state.
+Discriminate hit/miss-by-key, TTL age, version, source load and fallback hypotheses.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Source version/timestamp; cache version/TTL; invalidation event; read timeline.; Layer-specific key/version; instance ID; cache age; request trace.
+Hit/miss by key; TTL; version timeline; p95/p99; fallback trace.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Missing invalidation; delayed event; out-of-order update; TTL longer than acceptable freshness.; One layer invalidated while another stale; per-instance divergence; rollout mixes cache-key/schema versions.
+Hit rate is treated as the only success metric.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `cache-invalidation-consistency`, `cache-multilayer-coherence` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as singleton after merge pressure review.
 
-### Explicit exclusions
+## lu-cache-source-of-truth-invalidation
 
-- `cache-need-source-of-truth` remains separate pending its own mechanism/evidence boundary.
-- `cache-evidence-transfer` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-cache-source-of-truth-invalidation
+- **Working title:** Keep cached copies fresh across layers
+- **Learner-facing domain candidate:** Data & Consistency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| cache-need-source-of-truth | Cache Engineering | L2 |
+| cache-invalidation-consistency | Cache Engineering | L3 |
+| cache-multilayer-coherence | Cache Engineering | L3 |
+
+### Canonical scenario
+
+Source changes while L1 and distributed copies remain.
+
+### Integrated mechanism / state trace
+
+Source owns version; delayed/reordered invalidation and layer identity decide accept/replace/reject.
+
+### Integrated evidence surface
+
+Source/cache version; TTL; invalidation; layer key; instance ID; request trace.
+
+### Failure and debug loop
+
+Cache becomes authority or one layer stays stale.
+
+### Shared assessment task
+
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+
+### Transfer variation
+
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+
+### Boundary decision
+
+KEEP as a coherent multi-capability unit.
 
 ## lu-cache-patterns
 
 ### Identity
 
 - **Unit ID:** lu-cache-patterns
-- **Working title:** Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle
+- **Working title:** Choose cache pattern and prevent miss overload
 - **Learner-facing domain candidate:** Data & Consistency
 
 ### Primary capabilities
@@ -2198,38 +2410,33 @@ Merged because `cache-invalidation-consistency`, `cache-multilayer-coherence` sh
 | cache-patterns | Cache Engineering | L2 |
 | cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle.
+Read/write loader design must survive expiry and miss overload.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Pattern allocates responsibility differently: cache-aside caller reads source on miss; read-through loader mediates; write path must define source/cache ordering. → Stampede recomputes one expired/missing key concurrently; penetration repeats invalid misses; avalanche aligns many expiries; hot key concentrates traffic independent of expiry.
+Pattern assigns loader/write responsibility; miss trace distinguishes stampede, penetration, avalanche and hot key.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Request trace; loader call count; source/cache write order; miss/error metrics.; Miss rate; expiry distribution; per-key QPS; origin load; single-flight lock/wait.
+Loader trace; write order; miss/expiry distribution; per-key QPS; origin load.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Write updates cache but not source; cache-aside miss storm; double-write ordering ambiguity.; Origin collapse after expiry; invalid-key probe overload; synchronized TTL burst; one key/slot saturated.
+Cache write without source; miss storm; synchronized TTL; hot key.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change workload, failure mode, topology or data distribution while preserving the mechanism above.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `cache-patterns`, `cache-stampede-penetration-avalanche-hot-key` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `cache-need-source-of-truth` remains separate pending its own mechanism/evidence boundary.
-- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
+KEEP as a coherent multi-capability unit.
 
 ## lu-dist-consensus-coordination-purpose
 
