@@ -8,42 +8,45 @@
 | Metric | Result |
 |---|---:|
 | Frozen capabilities | 163 |
-| Proposed Learning Units | 88 |
+| Proposed Learning Units | 94 |
 | Primary assessment homes | 163 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary assignments | 0 |
 | Unknown capability IDs | 0 |
-| Singleton units | 48 |
-| Multi-capability units | 40 |
-| Single-owner units | 88 |
+| Singleton units | 56 |
+| Multi-capability units | 38 |
+| Single-owner units | 94 |
 | Multi-owner units | 0 |
 
 ## B. Primary-Home Registry
 
 | Capability ID | Canonical owner | Frozen level | Primary Unit | Domain candidate |
 |---|---|---|---|---|
-| prog-api-refactoring-change-safety | Programming & Software Design Foundations | L4 | lu-prog-api-refactoring-change-safety | Runtime & Concurrency |
-| prog-collections-complexity | Programming & Software Design Foundations | L2 | lu-prog-collections-complexity | Runtime & Concurrency |
-| prog-composition-dependencies | Programming & Software Design Foundations | L3 | lu-prog-api-refactoring-change-safety | Runtime & Concurrency |
-| prog-errors-results | Programming & Software Design Foundations | L2 | lu-prog-api-refactoring-change-safety | Runtime & Concurrency |
-| prog-invariants-domain-model | Programming & Software Design Foundations | L3 | lu-prog-api-refactoring-change-safety | Runtime & Concurrency |
-| prog-resource-ownership | Programming & Software Design Foundations | L3 | lu-prog-resource-ownership | Runtime & Concurrency |
-| prog-types-generics | Programming & Software Design Foundations | L2 | lu-prog-types-generics | Runtime & Concurrency |
-| prog-values-identity | Programming & Software Design Foundations | L2 | lu-prog-values-identity | Runtime & Concurrency |
-| runtime-allocation-gc | Runtime & Memory | L3 | lu-runtime-allocation-gc | Runtime & Concurrency |
-| runtime-diagnostics | Runtime & Memory | L3 | lu-runtime-diagnostics | Runtime & Concurrency |
-| runtime-jit-warmup | Runtime & Memory | L2 | lu-runtime-jit-warmup | Runtime & Concurrency |
-| runtime-managed-execution | Runtime & Memory | L2 | lu-runtime-managed-execution | Runtime & Concurrency |
-| runtime-memory-performance-debug | Runtime & Memory | L4 | lu-runtime-diagnostics | Runtime & Concurrency |
-| runtime-memory-roots-lifetime | Runtime & Memory | L2 | lu-runtime-allocation-gc | Runtime & Concurrency |
-| runtime-retention-pooling-large-objects | Runtime & Memory | L3 | lu-runtime-allocation-gc | Runtime & Concurrency |
-| os-blocking-io-waits | Operating Systems & I/O Foundations | L3 | lu-os-blocking-io-waits | Runtime & Concurrency |
-| os-files-handles-sockets-ipc | Operating Systems & I/O Foundations | L2 | lu-os-blocking-io-waits | Runtime & Concurrency |
-| os-process-thread-kernel | Operating Systems & I/O Foundations | L2 | lu-os-process-thread-kernel | Runtime & Concurrency |
-| os-resource-exhaustion | Operating Systems & I/O Foundations | L3 | lu-os-resource-exhaustion | Runtime & Concurrency |
-| os-scheduling-starvation | Operating Systems & I/O Foundations | L3 | lu-os-process-thread-kernel | Runtime & Concurrency |
-| os-termination-graceful-shutdown | Operating Systems & I/O Foundations | L3 | lu-os-process-thread-kernel | Runtime & Concurrency |
-| os-virtual-memory-page-cache | Operating Systems & I/O Foundations | L2 | lu-os-process-thread-kernel | Runtime & Concurrency |
+| api-circuit-bulkhead-rate-limit | API Contracts & Resilience | L3 | lu-api-circuit-bulkhead-rate-limit | Service & Network |
+| api-contract-resource-semantics | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
+| api-deadlines-timeout-cancellation | API Contracts & Resilience | L3 | lu-api-deadlines-timeout-cancellation | Service & Network |
+| api-request-identity-idempotency | API Contracts & Resilience | L3 | lu-api-contract-resource-semantics | Service & Network |
+| api-retry-backoff-jitter | API Contracts & Resilience | L3 | lu-api-deadlines-timeout-cancellation | Service & Network |
+| api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 | lu-api-deadlines-timeout-cancellation | Service & Network |
+| api-validation-errors-pagination | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
+| api-versioning-compatibility | API Contracts & Resilience | L3 | lu-api-contract-resource-semantics | Service & Network |
+| arch-boundaries-ownership | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-consistency-latency-availability | Architecture & System Design | L4 | lu-arch-consistency-latency-availability | Architecture & Engineering Reasoning |
+| arch-cost-complexity-changeability | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
+| arch-data-ownership-source-of-truth | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-decision-communication-transfer | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
+| arch-evolution-migration-strangler | Architecture & System Design | L3 | lu-arch-evolution-migration-strangler | Architecture & Engineering Reasoning |
+| arch-failure-recovery-security-observability | Architecture & System Design | L4 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-requirements-quality-attributes | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-scale-capacity-partitioning | Architecture & System Design | L3 | lu-arch-scale-capacity-partitioning | Architecture & Engineering Reasoning |
+| arch-sync-async-integration | Architecture & System Design | L3 | lu-arch-sync-async-integration | Architecture & Engineering Reasoning |
+| cache-capacity-eviction-fallback | Cache Engineering | L3 | lu-cache-capacity-eviction-fallback | Data & Consistency |
+| cache-evidence-transfer | Cache Engineering | L4 | lu-cache-capacity-eviction-fallback | Data & Consistency |
+| cache-invalidation-consistency | Cache Engineering | L3 | lu-cache-invalidation-consistency | Data & Consistency |
+| cache-multilayer-coherence | Cache Engineering | L3 | lu-cache-invalidation-consistency | Data & Consistency |
+| cache-need-source-of-truth | Cache Engineering | L2 | lu-cache-capacity-eviction-fallback | Data & Consistency |
+| cache-patterns | Cache Engineering | L2 | lu-cache-patterns | Data & Consistency |
+| cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 | lu-cache-patterns | Data & Consistency |
 | concurrency-async-parallelism | Concurrency & Async | L2 | lu-concurrency-async-parallelism | Runtime & Concurrency |
 | concurrency-bounded-backpressure | Concurrency & Async | L3 | lu-concurrency-async-parallelism | Runtime & Concurrency |
 | concurrency-cancellation-lifetime | Concurrency & Async | L3 | lu-concurrency-async-parallelism | Runtime & Concurrency |
@@ -53,14 +56,6 @@
 | concurrency-memory-visibility | Concurrency & Async | L3 | lu-concurrency-memory-visibility | Runtime & Concurrency |
 | concurrency-races-check-then-act | Concurrency & Async | L3 | lu-race-atomicity | Runtime & Concurrency |
 | concurrency-synchronization-atomicity | Concurrency & Async | L3 | lu-race-atomicity | Runtime & Concurrency |
-| net-connection-reuse-pooling | Networking & HTTP | L3 | lu-net-connection-reuse-pooling | Service & Network |
-| net-failure-localization-unknown-outcome | Networking & HTTP | L4 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| net-http-semantics | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 | lu-net-proxy-lb-forwarded-boundary | Service & Network |
-| net-request-path-dns | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| net-streaming-body-cancellation | Networking & HTTP | L3 | lu-net-streaming-body-cancellation | Service & Network |
-| net-tcp-connection-semantics | Networking & HTTP | L2 | lu-net-connection-reuse-pooling | Service & Network |
-| net-tls-trust-handshake | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
 | db-backup-restore | Relational Database Engineering | L3 | lu-db-backup-restore | Data & Consistency |
 | db-buffer-io | Relational Database Engineering | L2 | lu-db-buffer-io | Data & Consistency |
 | db-composite-query-shape | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
@@ -78,23 +73,17 @@
 | db-schema-evolution | Relational Database Engineering | L3 | lu-db-locks-deadlocks-contention | Data & Consistency |
 | db-transactions-isolation-anomalies | Relational Database Engineering | L3 | lu-db-locks-deadlocks-contention | Data & Consistency |
 | db-wal-crash-recovery | Relational Database Engineering | L3 | lu-db-backup-restore | Data & Consistency |
-| nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
-| nosql-cassandra-partition-model | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
-| nosql-model-selection | NoSQL & Specialized Data Systems | L3 | lu-nosql-model-selection | Data & Consistency |
-| nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
-| nosql-mongo-index-shard-transaction | NoSQL & Specialized Data Systems | L3 | lu-nosql-mongo-index-shard-transaction | Data & Consistency |
-| nosql-redis-persistence-replication-cluster-streams | NoSQL & Specialized Data Systems | L3 | lu-nosql-redis-persistence-replication-cluster-streams | Data & Consistency |
-| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
-| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
-| nosql-search-refresh-shards-pagination | NoSQL & Specialized Data Systems | L3 | lu-nosql-search-refresh-shards-pagination | Data & Consistency |
-| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
-| cache-capacity-eviction-fallback | Cache Engineering | L3 | lu-cache-capacity-eviction-fallback | Data & Consistency |
-| cache-evidence-transfer | Cache Engineering | L4 | lu-cache-capacity-eviction-fallback | Data & Consistency |
-| cache-invalidation-consistency | Cache Engineering | L3 | lu-cache-invalidation-consistency | Data & Consistency |
-| cache-multilayer-coherence | Cache Engineering | L3 | lu-cache-invalidation-consistency | Data & Consistency |
-| cache-need-source-of-truth | Cache Engineering | L2 | lu-cache-capacity-eviction-fallback | Data & Consistency |
-| cache-patterns | Cache Engineering | L2 | lu-cache-patterns | Data & Consistency |
-| cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 | lu-cache-patterns | Data & Consistency |
+| delivery-artifact-image-config | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-artifact-image-config | Production Engineering |
+| delivery-autoscaling-signal-boundary | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
+| delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
+| delivery-cloud-responsibility-managed-services | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-cloud-responsibility-managed-services | Production Engineering |
+| delivery-container-process-lifecycle | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-container-process-lifecycle | Production Engineering |
+| delivery-graceful-shutdown-draining | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-container-process-lifecycle | Production Engineering |
+| delivery-platform-evidence-debug | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
+| delivery-platform-transfer | Containers / Kubernetes / Cloud Delivery | L4 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
+| delivery-probes-health | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-container-process-lifecycle | Production Engineering |
+| delivery-resources-cpu-memory | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
+| delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
 | dist-consensus-coordination-purpose | Distributed Systems | L3 | lu-dist-consensus-coordination-purpose | Distributed Systems |
 | dist-consistency-linearizability | Distributed Systems | L3 | lu-dist-consistency-linearizability | Distributed Systems |
 | dist-guarantee-recovery-transfer | Distributed Systems | L4 | lu-dist-consensus-coordination-purpose | Distributed Systems |
@@ -116,14 +105,65 @@
 | msg-replay-backfill | Messaging & Event-Driven Consistency | L3 | lu-msg-consumer-groups-offsets-rebalance | Distributed Systems |
 | msg-schema-evolution-contract-ownership | Messaging & Event-Driven Consistency | L3 | lu-msg-schema-evolution-contract-ownership | Distributed Systems |
 | msg-workflow-saga-compensation | Messaging & Event-Driven Consistency | L3 | lu-msg-workflow-saga-compensation | Distributed Systems |
-| api-circuit-bulkhead-rate-limit | API Contracts & Resilience | L3 | lu-api-circuit-bulkhead-rate-limit | Service & Network |
-| api-contract-resource-semantics | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
-| api-deadlines-timeout-cancellation | API Contracts & Resilience | L3 | lu-api-deadlines-timeout-cancellation | Service & Network |
-| api-request-identity-idempotency | API Contracts & Resilience | L3 | lu-api-contract-resource-semantics | Service & Network |
-| api-retry-backoff-jitter | API Contracts & Resilience | L3 | lu-api-deadlines-timeout-cancellation | Service & Network |
-| api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 | lu-api-deadlines-timeout-cancellation | Service & Network |
-| api-validation-errors-pagination | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
-| api-versioning-compatibility | API Contracts & Resilience | L3 | lu-api-contract-resource-semantics | Service & Network |
+| net-connection-reuse-pooling | Networking & HTTP | L3 | lu-net-connection-reuse-pooling | Service & Network |
+| net-failure-localization-unknown-outcome | Networking & HTTP | L4 | lu-net-failure-localization-unknown-outcome | Service & Network |
+| net-http-semantics | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
+| net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 | lu-net-proxy-lb-forwarded-boundary | Service & Network |
+| net-request-path-dns | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
+| net-streaming-body-cancellation | Networking & HTTP | L3 | lu-net-streaming-body-cancellation | Service & Network |
+| net-tcp-connection-semantics | Networking & HTTP | L2 | lu-net-connection-reuse-pooling | Service & Network |
+| net-tls-trust-handshake | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
+| nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
+| nosql-cassandra-partition-model | NoSQL & Specialized Data Systems | L3 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
+| nosql-model-selection | NoSQL & Specialized Data Systems | L3 | lu-nosql-model-selection | Data & Consistency |
+| nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
+| nosql-mongo-index-shard-transaction | NoSQL & Specialized Data Systems | L3 | lu-nosql-mongo-index-shard-transaction | Data & Consistency |
+| nosql-redis-persistence-replication-cluster-streams | NoSQL & Specialized Data Systems | L3 | lu-nosql-redis-persistence-replication-cluster-streams | Data & Consistency |
+| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
+| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 | lu-nosql-model-selection | Data & Consistency |
+| nosql-search-refresh-shards-pagination | NoSQL & Specialized Data Systems | L3 | lu-nosql-search-refresh-shards-pagination | Data & Consistency |
+| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 | lu-nosql-cassandra-lsm-compaction-consistency | Data & Consistency |
+| obs-cardinality-sampling-cost | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
+| obs-db-io-downstream-attribution | Observability & Performance | L3 | lu-obs-db-io-downstream-attribution | Production Engineering |
+| obs-diagnostic-method | Observability & Performance | L4 | lu-obs-db-io-downstream-attribution | Production Engineering |
+| obs-instrumentation-context | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
+| obs-latency-throughput-saturation | Observability & Performance | L2 | lu-obs-db-io-downstream-attribution | Production Engineering |
+| obs-load-test-benchmark-validity | Observability & Performance | L3 | lu-obs-load-test-benchmark-validity | Production Engineering |
+| obs-logs-structured-correlation | Observability & Performance | L2 | lu-obs-logs-structured-correlation | Production Engineering |
+| obs-profiling-runtime-evidence | Observability & Performance | L3 | lu-obs-profiling-runtime-evidence | Production Engineering |
+| obs-signals-correlation | Observability & Performance | L2 | lu-obs-logs-structured-correlation | Production Engineering |
+| obs-tracing-distributed-evidence | Observability & Performance | L3 | lu-obs-db-io-downstream-attribution | Production Engineering |
+| os-blocking-io-waits | Operating Systems & I/O Foundations | L3 | lu-os-blocking-io-waits | Runtime & Concurrency |
+| os-files-handles-sockets-ipc | Operating Systems & I/O Foundations | L2 | lu-os-blocking-io-waits | Runtime & Concurrency |
+| os-process-thread-kernel | Operating Systems & I/O Foundations | L2 | lu-os-process-thread-kernel | Runtime & Concurrency |
+| os-resource-exhaustion | Operating Systems & I/O Foundations | L3 | lu-os-resource-exhaustion | Runtime & Concurrency |
+| os-scheduling-starvation | Operating Systems & I/O Foundations | L3 | lu-os-scheduling-starvation | Runtime & Concurrency |
+| os-termination-graceful-shutdown | Operating Systems & I/O Foundations | L3 | lu-os-termination-graceful-shutdown | Runtime & Concurrency |
+| os-virtual-memory-page-cache | Operating Systems & I/O Foundations | L2 | lu-os-virtual-memory-page-cache | Runtime & Concurrency |
+| prog-api-refactoring-change-safety | Programming & Software Design Foundations | L4 | lu-prog-api-refactoring-change-safety | Runtime & Concurrency |
+| prog-collections-complexity | Programming & Software Design Foundations | L2 | lu-prog-collections-complexity | Runtime & Concurrency |
+| prog-composition-dependencies | Programming & Software Design Foundations | L3 | lu-prog-composition-dependencies | Runtime & Concurrency |
+| prog-errors-results | Programming & Software Design Foundations | L2 | lu-prog-errors-results | Runtime & Concurrency |
+| prog-invariants-domain-model | Programming & Software Design Foundations | L3 | lu-prog-invariants-domain-model | Runtime & Concurrency |
+| prog-resource-ownership | Programming & Software Design Foundations | L3 | lu-prog-resource-ownership | Runtime & Concurrency |
+| prog-types-generics | Programming & Software Design Foundations | L2 | lu-prog-types-generics | Runtime & Concurrency |
+| prog-values-identity | Programming & Software Design Foundations | L2 | lu-prog-values-identity | Runtime & Concurrency |
+| rel-cascading-failure-queue-capacity | Reliability / SRE | L3 | lu-rel-cascading-failure-queue-capacity | Production Engineering |
+| rel-change-rollout-rollback-risk | Reliability / SRE | L3 | lu-rel-change-rollout-rollback-risk | Production Engineering |
+| rel-dependency-budgets | Reliability / SRE | L3 | lu-rel-cascading-failure-queue-capacity | Production Engineering |
+| rel-disaster-recovery-rpo-rto | Reliability / SRE | L3 | lu-rel-disaster-recovery-rpo-rto | Production Engineering |
+| rel-failure-injection-verification | Reliability / SRE | L4 | lu-rel-failure-injection-verification | Production Engineering |
+| rel-health-readiness-semantics | Reliability / SRE | L3 | lu-rel-health-readiness-semantics | Production Engineering |
+| rel-incident-response-postmortem | Reliability / SRE | L3 | lu-rel-incident-response-postmortem | Production Engineering |
+| rel-overload-load-shedding-degradation | Reliability / SRE | L3 | lu-rel-cascading-failure-queue-capacity | Production Engineering |
+| rel-user-journey-sli-slo-budget | Reliability / SRE | L3 | lu-rel-change-rollout-rollback-risk | Production Engineering |
+| runtime-allocation-gc | Runtime & Memory | L3 | lu-runtime-allocation-gc | Runtime & Concurrency |
+| runtime-diagnostics | Runtime & Memory | L3 | lu-runtime-diagnostics | Runtime & Concurrency |
+| runtime-jit-warmup | Runtime & Memory | L2 | lu-runtime-jit-warmup | Runtime & Concurrency |
+| runtime-managed-execution | Runtime & Memory | L2 | lu-runtime-managed-execution | Runtime & Concurrency |
+| runtime-memory-performance-debug | Runtime & Memory | L4 | lu-runtime-diagnostics | Runtime & Concurrency |
+| runtime-memory-roots-lifetime | Runtime & Memory | L2 | lu-runtime-allocation-gc | Runtime & Concurrency |
+| runtime-retention-pooling-large-objects | Runtime & Memory | L3 | lu-runtime-allocation-gc | Runtime & Concurrency |
 | sec-abuse-bruteforce-resource-business-flow | Security | L3 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
 | sec-audit-detection-evidence | Security | L3 | lu-sec-audit-detection-evidence | Service & Network |
 | sec-auth-session-token | Security | L3 | lu-sec-auth-session-token | Service & Network |
@@ -135,25 +175,6 @@
 | sec-secrets-third-party-trust | Security | L3 | lu-sec-secrets-third-party-trust | Service & Network |
 | sec-trust-boundary-threat-model | Security | L2 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
 | sec-unseen-attack-transfer | Security | L4 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
-| obs-cardinality-sampling-cost | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
-| obs-db-io-downstream-attribution | Observability & Performance | L3 | lu-obs-db-io-downstream-attribution | Production Engineering |
-| obs-diagnostic-method | Observability & Performance | L4 | lu-obs-db-io-downstream-attribution | Production Engineering |
-| obs-instrumentation-context | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
-| obs-latency-throughput-saturation | Observability & Performance | L2 | lu-obs-db-io-downstream-attribution | Production Engineering |
-| obs-load-test-benchmark-validity | Observability & Performance | L3 | lu-obs-load-test-benchmark-validity | Production Engineering |
-| obs-logs-structured-correlation | Observability & Performance | L2 | lu-obs-logs-structured-correlation | Production Engineering |
-| obs-profiling-runtime-evidence | Observability & Performance | L3 | lu-obs-profiling-runtime-evidence | Production Engineering |
-| obs-signals-correlation | Observability & Performance | L2 | lu-obs-logs-structured-correlation | Production Engineering |
-| obs-tracing-distributed-evidence | Observability & Performance | L3 | lu-obs-db-io-downstream-attribution | Production Engineering |
-| rel-cascading-failure-queue-capacity | Reliability / SRE | L3 | lu-rel-cascading-failure-queue-capacity | Production Engineering |
-| rel-change-rollout-rollback-risk | Reliability / SRE | L3 | lu-rel-change-rollout-rollback-risk | Production Engineering |
-| rel-dependency-budgets | Reliability / SRE | L3 | lu-rel-cascading-failure-queue-capacity | Production Engineering |
-| rel-disaster-recovery-rpo-rto | Reliability / SRE | L3 | lu-rel-disaster-recovery-rpo-rto | Production Engineering |
-| rel-failure-injection-verification | Reliability / SRE | L4 | lu-rel-failure-injection-verification | Production Engineering |
-| rel-health-readiness-semantics | Reliability / SRE | L3 | lu-rel-health-readiness-semantics | Production Engineering |
-| rel-incident-response-postmortem | Reliability / SRE | L3 | lu-rel-incident-response-postmortem | Production Engineering |
-| rel-overload-load-shedding-degradation | Reliability / SRE | L3 | lu-rel-cascading-failure-queue-capacity | Production Engineering |
-| rel-user-journey-sli-slo-budget | Reliability / SRE | L3 | lu-rel-change-rollout-rollback-risk | Production Engineering |
 | test-ci-flakiness-repeatability | Testing & Engineering Quality | L3 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
 | test-failure-resilience | Testing & Engineering Quality | L3 | lu-test-failure-resilience | Architecture & Engineering Reasoning |
 | test-migration-compatibility | Testing & Engineering Quality | L3 | lu-test-migration-compatibility | Architecture & Engineering Reasoning |
@@ -164,27 +185,6 @@
 | test-risk-transfer | Testing & Engineering Quality | L4 | lu-test-failure-resilience | Architecture & Engineering Reasoning |
 | test-time-concurrency-determinism | Testing & Engineering Quality | L3 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
 | test-unit-integration-contract | Testing & Engineering Quality | L3 | lu-test-unit-integration-contract | Architecture & Engineering Reasoning |
-| arch-boundaries-ownership | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
-| arch-consistency-latency-availability | Architecture & System Design | L4 | lu-arch-consistency-latency-availability | Architecture & Engineering Reasoning |
-| arch-cost-complexity-changeability | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
-| arch-data-ownership-source-of-truth | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
-| arch-decision-communication-transfer | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
-| arch-evolution-migration-strangler | Architecture & System Design | L3 | lu-arch-evolution-migration-strangler | Architecture & Engineering Reasoning |
-| arch-failure-recovery-security-observability | Architecture & System Design | L4 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
-| arch-requirements-quality-attributes | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
-| arch-scale-capacity-partitioning | Architecture & System Design | L3 | lu-arch-scale-capacity-partitioning | Architecture & Engineering Reasoning |
-| arch-sync-async-integration | Architecture & System Design | L3 | lu-arch-sync-async-integration | Architecture & Engineering Reasoning |
-| delivery-artifact-image-config | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-artifact-image-config | Production Engineering |
-| delivery-autoscaling-signal-boundary | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
-| delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
-| delivery-cloud-responsibility-managed-services | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-cloud-responsibility-managed-services | Production Engineering |
-| delivery-container-process-lifecycle | Containers / Kubernetes / Cloud Delivery | L2 | lu-delivery-container-process-lifecycle | Production Engineering |
-| delivery-graceful-shutdown-draining | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-container-process-lifecycle | Production Engineering |
-| delivery-platform-evidence-debug | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
-| delivery-platform-transfer | Containers / Kubernetes / Cloud Delivery | L4 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
-| delivery-probes-health | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-container-process-lifecycle | Production Engineering |
-| delivery-resources-cpu-memory | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-autoscaling-signal-boundary | Production Engineering |
-| delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
 
 ## C. Unit Composition Registry
 
@@ -194,22 +194,18 @@
 | lu-execution-plan-estimates | db-execution-operators; db-optimizer-cardinality-stats | 2 | Relational Database Engineering | Multi |
 | lu-race-atomicity | concurrency-interleavings-invariants; concurrency-races-check-then-act; concurrency-synchronization-atomicity | 3 | Concurrency & Async | Multi |
 | lu-outbox-duplicate-safe-effect | msg-outbox-db-publish-gap; msg-consumer-idempotency-inbox | 2 | Messaging & Event-Driven Consistency | Multi |
-| lu-prog-api-refactoring-change-safety | prog-api-refactoring-change-safety; prog-errors-results; prog-invariants-domain-model; prog-composition-dependencies | 4 | Programming & Software Design Foundations | Multi |
-| lu-prog-collections-complexity | prog-collections-complexity | 1 | Programming & Software Design Foundations | Singleton |
-| lu-prog-resource-ownership | prog-resource-ownership | 1 | Programming & Software Design Foundations | Singleton |
-| lu-prog-types-generics | prog-types-generics | 1 | Programming & Software Design Foundations | Singleton |
-| lu-prog-values-identity | prog-values-identity | 1 | Programming & Software Design Foundations | Singleton |
+| lu-prog-api-refactoring-change-safety | prog-api-refactoring-change-safety | 1 | Programming & Software Design Foundations | Singleton |
+| lu-prog-errors-results | prog-errors-results | 1 | Programming & Software Design Foundations | Singleton |
+| lu-prog-invariants-domain-model | prog-invariants-domain-model | 1 | Programming & Software Design Foundations | Singleton |
+| lu-prog-composition-dependencies | prog-composition-dependencies | 1 | Programming & Software Design Foundations | Singleton |
 | lu-runtime-allocation-gc | runtime-allocation-gc; runtime-memory-roots-lifetime; runtime-retention-pooling-large-objects | 3 | Runtime & Memory | Multi |
 | lu-runtime-diagnostics | runtime-diagnostics; runtime-memory-performance-debug | 2 | Runtime & Memory | Multi |
-| lu-runtime-jit-warmup | runtime-jit-warmup | 1 | Runtime & Memory | Singleton |
-| lu-runtime-managed-execution | runtime-managed-execution | 1 | Runtime & Memory | Singleton |
 | lu-os-blocking-io-waits | os-blocking-io-waits; os-files-handles-sockets-ipc | 2 | Operating Systems & I/O Foundations | Multi |
-| lu-os-process-thread-kernel | os-process-thread-kernel; os-scheduling-starvation; os-termination-graceful-shutdown; os-virtual-memory-page-cache | 4 | Operating Systems & I/O Foundations | Multi |
-| lu-os-resource-exhaustion | os-resource-exhaustion | 1 | Operating Systems & I/O Foundations | Singleton |
+| lu-os-process-thread-kernel | os-process-thread-kernel | 1 | Operating Systems & I/O Foundations | Singleton |
+| lu-os-scheduling-starvation | os-scheduling-starvation | 1 | Operating Systems & I/O Foundations | Singleton |
+| lu-os-termination-graceful-shutdown | os-termination-graceful-shutdown | 1 | Operating Systems & I/O Foundations | Singleton |
+| lu-os-virtual-memory-page-cache | os-virtual-memory-page-cache | 1 | Operating Systems & I/O Foundations | Singleton |
 | lu-concurrency-async-parallelism | concurrency-async-parallelism; concurrency-cancellation-lifetime; concurrency-bounded-backpressure | 3 | Concurrency & Async | Multi |
-| lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | 1 | Concurrency & Async | Singleton |
-| lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | 1 | Concurrency & Async | Singleton |
-| lu-concurrency-memory-visibility | concurrency-memory-visibility | 1 | Concurrency & Async | Singleton |
 | lu-net-connection-reuse-pooling | net-connection-reuse-pooling; net-tcp-connection-semantics | 2 | Networking & HTTP | Multi |
 | lu-net-failure-localization-unknown-outcome | net-failure-localization-unknown-outcome; net-request-path-dns; net-tls-trust-handshake; net-http-semantics | 4 | Networking & HTTP | Multi |
 | lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | 1 | Networking & HTTP | Singleton |
@@ -283,17 +279,24 @@
 
 | Unit ID | Capability | Strongest merge candidate(s) | Why merge rejected |
 |---|---|---|---|
-| lu-prog-collections-complexity | prog-collections-complexity | none | No material graph-neighborhood merge candidate. |
-| lu-prog-resource-ownership | prog-resource-ownership | concurrency-cancellation-lifetime; net-streaming-body-cancellation | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-prog-types-generics | prog-types-generics | none | No material graph-neighborhood merge candidate. |
-| lu-prog-values-identity | prog-values-identity | none | No material graph-neighborhood merge candidate. |
-| lu-runtime-jit-warmup | runtime-jit-warmup | obs-load-test-benchmark-validity | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-runtime-managed-execution | runtime-managed-execution | runtime-memory-roots-lifetime | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-os-resource-exhaustion | os-resource-exhaustion | os-process-thread-kernel; os-files-handles-sockets-ipc | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | concurrency-synchronization-atomicity; db-locks-deadlocks-contention | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | concurrency-races-check-then-act; dist-partial-failure-uncertainty | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-concurrency-memory-visibility | concurrency-memory-visibility | concurrency-interleavings-invariants | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | net-http-semantics; net-tls-trust-handshake | Different mechanism/evidence boundary prevents one credible assessment policy. |
+| lu-prog-api-refactoring-change-safety | prog-api-refactoring-change-safety | lu-api-contract-resource-semantics | Published-contract compatibility is not the foundation mechanisms split out of this unit. |
+| lu-prog-errors-results | prog-errors-results | lu-prog-api-refactoring-change-safety | Compatibility evidence does not classify expected rejection, unexpected fault and partial outcome. |
+| lu-prog-invariants-domain-model | prog-invariants-domain-model | lu-race-atomicity | Race evidence does not prove the legal domain transition and persistence guard. |
+| lu-prog-composition-dependencies | prog-composition-dependencies | lu-prog-resource-ownership | Wiring direction is not resource lifetime ownership. |
+| lu-prog-collections-complexity | prog-collections-complexity | lu-prog-values-identity | Workload cost evidence differs from alias/mutation evidence. |
+| lu-prog-resource-ownership | prog-resource-ownership | lu-concurrency-async-parallelism; lu-net-streaming-body-cancellation | Final-consumer lifetime differs from admission/cancellation and HTTP-body protocol evidence. |
+| lu-prog-types-generics | prog-types-generics | lu-prog-invariants-domain-model | Compile-time representability differs from transition/persistence enforcement. |
+| lu-prog-values-identity | prog-values-identity | lu-prog-collections-complexity | Alias/mutation evidence differs from access-path cost evidence. |
+| lu-runtime-jit-warmup | runtime-jit-warmup | lu-obs-load-test-benchmark-validity | Runtime first-call/JIT evidence differs from workload/measurement design. |
+| lu-runtime-managed-execution | runtime-managed-execution | lu-runtime-allocation-gc | Layer-responsibility evidence differs from heap/allocation evidence. |
+| lu-os-process-thread-kernel | os-process-thread-kernel | lu-os-resource-exhaustion | Process/thread location differs from finite-quota failure evidence. |
+| lu-os-scheduling-starvation | os-scheduling-starvation | lu-concurrency-async-parallelism | Runnable capacity/forward progress differs from application admission evidence. |
+| lu-os-termination-graceful-shutdown | os-termination-graceful-shutdown | lu-delivery-container-process-lifecycle | Active-work drain/deadline differs from platform probe/container evidence. |
+| lu-os-virtual-memory-page-cache | os-virtual-memory-page-cache | lu-runtime-allocation-gc | OS residency/page-cache evidence differs from managed reachability/allocation evidence. |
+| lu-os-resource-exhaustion | os-resource-exhaustion | lu-os-process-thread-kernel | Specific resource limit/failure evidence differs from execution topology. |
+| lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | lu-race-atomicity; lu-db-locks-deadlocks-contention | Wait-cycle/forward-progress evidence differs from invariant interleaving and transaction locks. |
+| lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | lu-race-atomicity | Cross-replica authority needs replica identity, absent from local race proof. |
+| lu-concurrency-memory-visibility | concurrency-memory-visibility | lu-race-atomicity | Memory-publication ordering differs from an interleaving outcome. || lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | net-http-semantics; net-tls-trust-handshake | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-net-streaming-body-cancellation | net-streaming-body-cancellation | net-http-semantics; concurrency-cancellation-lifetime | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | os-resource-exhaustion; concurrency-bounded-backpressure | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-db-mvcc-visibility | db-mvcc-visibility | db-transactions-isolation-anomalies | Different mechanism/evidence boundary prevents one credible assessment policy. |
@@ -381,11 +384,11 @@
 
 | Candidate neighborhood | Decision | Reason |
 |---|---|---|
-| os-virtual-memory-page-cache → runtime-memory-roots-lifetime | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| prog-invariants-domain-model → concurrency-interleavings-invariants | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| os-blocking-io-waits → concurrency-async-parallelism | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| os-scheduling-starvation → concurrency-async-parallelism | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| prog-resource-ownership → concurrency-cancellation-lifetime | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
+| os-virtual-memory-page-cache → runtime-memory-roots-lifetime | REJECTED | Page cache needs faults/reclaim/cold-warm reads; roots/lifetime needs a managed heap retaining path. |
+| prog-invariants-domain-model → concurrency-interleavings-invariants | REJECTED | Invariant proof follows legal transition plus persistence guard; interleaving proof needs controlled read/check/write and atomicity result. |
+| os-blocking-io-waits → concurrency-async-parallelism | REJECTED | Blocking I/O evidence is external completion and kernel handle/wait; async evidence is task lifetime, cancellation and bounded admission. |
+| os-scheduling-starvation → concurrency-async-parallelism | REJECTED | Scheduler starvation needs runnable-queue/CPU forward-progress evidence; bounded concurrency needs application queue and downstream-pressure evidence. |
+| prog-resource-ownership → concurrency-cancellation-lifetime | REJECTED | Ownership follows final-consumer release; cancellation proves stop-signal observation and side-effect boundary. |
 | os-files-handles-sockets-ipc → net-tcp-connection-semantics | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | concurrency-cancellation-lifetime → net-streaming-body-cancellation | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 | prog-resource-ownership → net-streaming-body-cancellation | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
@@ -439,6 +442,6 @@ None.
 - Production Engineering — PENDING
 - Architecture & Engineering Reasoning — PENDING
 
-## Runtime & Concurrency batch evidence
+## Runtime & Concurrency batch closure
 
-This batch adds concrete scenario/evidence/assessment reasoning to the Stage-1 map for the in-scope units. Cross-owner candidates are rejected for the specific state-owner, evidence-surface or assessment-boundary reasons recorded in the map. REQUIRED and RECOMMENDED projection remains **NOT FINALIZED**.
+**REVIEWED.** All 17 original in-scope units have an explicit disposition: 15 retained (including the four required singleton reviews) and 2 split. Canonical unit sections, Primary-home registry, composition registry, singleton review and cross-owner review hold the final state. REQUIRED and RECOMMENDED projection remains **NOT FINALIZED**.

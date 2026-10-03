@@ -3,19 +3,22 @@
 > **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 163. Proposed Learning Units: 88. Singleton units: 48. Multi-capability units: 40. Single-owner units: 88. Multi-owner units: 0.
+Frozen capabilities: 163. Proposed Learning Units: 94. Singleton units: 56. Multi-capability units: 38. Single-owner units: 94. Multi-owner units: 0.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
 ## Unit Registry
 
-| Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count
-|---|---|---|---|---:|---:|
+| Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count |
+|---|---|---|---|---:|
 | lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
 | lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
 | lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 |
 | lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 |
-| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 4 |
+| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-errors-results | Phân loại lỗi dự đoán được và giữ lỗi bất ngờ có ngữ cảnh | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-invariants-domain-model | Giữ business invariant tại state transition và persistence boundary | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-composition-dependencies | Nối dependency tại composition root mà không làm core phụ thuộc hạ tầng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
 | lu-prog-collections-complexity | Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
 | lu-prog-resource-ownership | Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
 | lu-prog-types-generics | Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
@@ -25,7 +28,10 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-runtime-jit-warmup | Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên | Runtime & Concurrency | Runtime & Memory | 1 |
 | lu-runtime-managed-execution | Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue | Runtime & Concurrency | Runtime & Memory | 1 |
 | lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 2 |
-| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 4 |
+| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-scheduling-starvation | Chẩn đoán runnable work không nhận được CPU hoặc execution capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-termination-graceful-shutdown | Dừng service có deadline mà không nhận thêm work và không mất trạng thái cần giữ | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-virtual-memory-page-cache | Phân biệt virtual memory, working set và page cache khi đọc memory hoặc I/O symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
 | lu-os-resource-exhaustion | Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
 | lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource | Runtime & Concurrency | Concurrency & Async | 3 |
 | lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
@@ -230,15 +236,15 @@ Oversell inventory; duplicate reservation; lost update; negative balance.; Dupli
 
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Given a stock decrement trace with two concurrent requests, require the learner to identify the read/check/write interleaving, name the violated inventory invariant and choose an atomic boundary. The same trace proves the invariant, check-then-act race and synchronization choice.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Change from one process to four replicas; retain the local diagnosis but identify the new owner boundary instead of treating a process lock as a distributed solution.
 
 ### Merge decisions
 
-Merged because `concurrency-interleavings-invariants`, `concurrency-races-check-then-act`, `concurrency-synchronization-atomicity` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+Merged because one inventory reservation trace exposes a violated invariant, the check-then-act race and the atomicity remedy. `concurrency-deadlock-starvation` stays separate because it classifies a wait/progress failure rather than a corrupted transition.
 
 ### Explicit exclusions
 
@@ -306,43 +312,173 @@ Merged because `msg-outbox-db-publish-gap`, `msg-consumer-idempotency-inbox` sha
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | prog-api-refactoring-change-safety | Programming & Software Design Foundations | L4 |
-| prog-errors-results | Programming & Software Design Foundations | L2 |
-| prog-invariants-domain-model | Programming & Software Design Foundations | L3 |
-| prog-composition-dependencies | Programming & Software Design Foundations | L3 |
-
 ### Shared problem / need
 
-Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor.
-
+A public order API must add a cancellation outcome while independently deployed callers still rely on the old contract.
 ### Shared mechanism / state trace
 
-Tách public contract khỏi implementation; thay đổi dữ liệu hoặc error semantics phải đi qua adapter/version hoặc một migration boundary có chủ đích. → Result/domain error là phần contract dự đoán được; exception giữ stack/context cho lỗi bất ngờ; partial state cần được ghi nhận thay vì giả thành success. → Invariant là điều luôn đúng cho aggregate/record; validation gần state transition và DB constraint bảo vệ khi nhiều đường ghi cùng tồn tại. → Dependency chỉ được tạo ở composition root; core code phụ thuộc contract do core sở hữu, không đi ngược vào adapter hạ tầng.
-
+Compare old and new public contracts, find callers observing the changed semantic, then choose an adapter, version or staged migration boundary. Both caller groups need an explicit compatibility path.
 ### Shared observable evidence
 
-Contract test của consumer; golden response; diff OpenAPI; test hành vi trước/sau; telemetry của endpoint cũ.; Call stack; returned error code; audit/result record; log có correlation ID; test mapping ở API boundary.; State before/after; state-machine test; affected-row count; unique/check constraint; concurrent test.; Dependency graph; constructor signatures; architecture test; unit test thay adapter bằng fake.
-
+OpenAPI/contract diff; consumer contract tests for both callers; before/after response trace; endpoint telemetry segmented by contract version.
 ### Shared failure / debug story
 
-Breaking response field; caller còn phụ thuộc hành vi cũ; refactor đổi validation ngầm; test chỉ khớp implementation.; Nuốt exception; map lỗi domain thành 500 hoặc ngược lại; retry một lỗi validation; trả success khi mới làm xong một phần.; Invalid transition; business rule bị copy ở nhiều handler; race vượt qua validation; persisted state vi phạm rule.; Service locator; dependency ẩn; vòng phụ thuộc; domain gọi thẳng database/HTTP adapter.
-
+A mobile caller treats a new cancellation outcome as success because a response semantic changed at the wrong boundary.
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
+Given old/new contracts and two caller behaviors, propose a compatibility plan and test evidence. This directly proves L4 change-safety; it does not prove error classification, invariant protection or dependency composition.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+One caller upgrades now while a mobile release remains pinned for two weeks; preserve both without coupling implementation to either client.
 ### Merge decisions
 
-Merged because `prog-api-refactoring-change-safety`, `prog-errors-results`, `prog-invariants-domain-model`, `prog-composition-dependencies` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
+Split completed: `prog-errors-results`, `prog-invariants-domain-model` and `prog-composition-dependencies` now have their own Primary homes because their evidence surfaces are outcome classification, state-transition protection and dependency wiring, not published-contract compatibility.
 ### Explicit exclusions
 
 - `msg-schema-evolution-contract-ownership` remains separate pending its own mechanism/evidence boundary.
 - `api-versioning-compatibility` remains separate pending its own mechanism/evidence boundary.
 
+## lu-prog-errors-results
+
+### Identity
+
+- **Unit ID:** lu-prog-errors-results
+- **Working title:** Phân loại lỗi dự đoán được và giữ lỗi bất ngờ có ngữ cảnh
+- **Learner-facing domain candidate:** Runtime & Concurrency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| prog-errors-results | Programming & Software Design Foundations | L2 |
+
+### Shared problem / need
+
+A checkout command can be rejected by a business rule, fail unexpectedly, or finish partly; callers need an honest outcome.
+
+### Shared mechanism / state trace
+
+Model expected rejection as explicit result/error, retain stack/context for unexpected faults, and record partial completion rather than report success.
+
+### Shared observable evidence
+
+Returned error payload; exception stack; operation record; API-boundary mapping test.
+
+### Shared failure / debug story
+
+A domain rejection becomes 500, validation is retried, or a partial write is reported as success.
+
+### Assessment-coherence argument
+
+Classify three outcomes and choose the result/API mapping that proves none is hidden. Compatibility tests do not prove this classification mechanism.
+
+### Transfer variation
+
+The command fails after an external callback: distinguish known rejection from unknown infrastructure failure without inventing success.
+
+### Merge decisions
+
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-prog-api-refactoring-change-safety | Direct neighboring concern | Caller compatibility evidence does not prove error/result classification. |
+
+### Explicit exclusions
+
+- The candidate remains a separate Primary boundary; it may be prerequisite or applied context without duplicate coverage.
+## lu-prog-invariants-domain-model
+
+### Identity
+
+- **Unit ID:** lu-prog-invariants-domain-model
+- **Working title:** Giữ business invariant tại state transition và persistence boundary
+- **Learner-facing domain candidate:** Runtime & Concurrency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| prog-invariants-domain-model | Programming & Software Design Foundations | L3 |
+
+### Shared problem / need
+
+Two handlers can both approve an order transition that must happen only once.
+
+### Shared mechanism / state trace
+
+Name the invariant, enforce it at the transition, then use a database constraint or atomic write as final guard across write paths.
+
+### Shared observable evidence
+
+Before/after state; transition test; affected-row count; unique/check constraint; concurrent attempt result.
+
+### Shared failure / debug story
+
+A rule is copied into handlers, a race passes validation, or invalid state persists through another write path.
+
+### Assessment-coherence argument
+
+Repair the transition so the invariant survives both handler paths and concurrent attempts; a contract-diff exercise cannot prove this state-owner mechanism.
+
+### Transfer variation
+
+Move one write path to a background consumer while preserving the same invariant and persistence guard.
+
+### Merge decisions
+
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-race-atomicity | Direct neighboring concern | Race evidence proves an interleaving remedy, not the legal transition and persistence guard. |
+
+### Explicit exclusions
+
+- The candidate remains a separate Primary boundary; it may be prerequisite or applied context without duplicate coverage.
+## lu-prog-composition-dependencies
+
+### Identity
+
+- **Unit ID:** lu-prog-composition-dependencies
+- **Working title:** Nối dependency tại composition root mà không làm core phụ thuộc hạ tầng
+- **Learner-facing domain candidate:** Runtime & Concurrency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| prog-composition-dependencies | Programming & Software Design Foundations | L3 |
+
+### Shared problem / need
+
+A pricing rule needs a rate provider, but domain code must remain testable and not create infrastructure dependencies itself.
+
+### Shared mechanism / state trace
+
+Composition root creates adapters and passes owned contracts inward; core depends on its abstraction and callers supply replacements at the boundary.
+
+### Shared observable evidence
+
+Constructor graph; registration code; architecture test; fake-adapter unit test; dependency direction diagram.
+
+### Shared failure / debug story
+
+Service locator hides dependency, adapter leaks into domain code, or a circular dependency appears after refactor.
+
+### Assessment-coherence argument
+
+Refactor wiring so a fake rate provider proves core dependency direction; API compatibility and invariant tests do not establish the composition graph.
+
+### Transfer variation
+
+Replace an HTTP provider with a cached provider while constructor contracts and core tests stay unchanged.
+
+### Merge decisions
+
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-prog-resource-ownership | Direct neighboring concern | Ownership asks who releases a resource; composition asks where dependencies are assembled and which direction they point. |
+
+### Explicit exclusions
+
+- The candidate remains a separate Primary boundary; it may be prerequisite or applied context without duplicate coverage.
 ## lu-prog-collections-complexity
 
 ### Identity
@@ -375,18 +511,13 @@ Linear scan trên request nóng; nested loop O(n²); giả định thứ tự sa
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Given an endpoint that deduplicates and orders 100k product IDs, choose the collection, predict lookup/insert cost and verify it with benchmark plus ordering/uniqueness assertions.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Change from mostly lookup to frequent middle insertion; justify a different structure from the measured operation mix.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| none | No material graph neighbor exists | No plausible merge candidate found after graph-neighborhood review. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-prog-values-identity | Both affect collection behavior | Equality/aliasing uses an object-state trace; complexity requires operation-count and workload evidence. |
 ### Explicit exclusions
 
 None material.
@@ -423,19 +554,13 @@ Connection/stream leak; dùng resource đã dispose; scope dài hơn request; bu
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Trace a streamed export from creation through the final consumer, assign one owner and release point, and show why early dispose/pool return is unsafe.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Replace an in-memory buffer with a pooled buffer while preserving the final-consumer lifetime rule.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| concurrency-cancellation-lifetime | Frozen graph neighborhood with prog-resource-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| net-streaming-body-cancellation | Frozen graph neighborhood with prog-resource-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-concurrency-async-parallelism | Async carries resources across awaits | Bounded concurrency measures queued work; ownership follows one resource to its final consumer. |`n| lu-net-streaming-body-cancellation | Both touch stream lifetime | HTTP transfer adds protocol cancellation and response semantics. |
 ### Explicit exclusions
 
 - `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
@@ -473,18 +598,13 @@ Invalid state vẫn tạo được; unsafe cast; null đi qua boundary; generic 
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Turn untrusted registration input into a valid internal type and make an invalid generic call fail at compile time.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Add an optional older-client field and show where null is normalized before the internal model.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| none | No material graph neighbor exists | No plausible merge candidate found after graph-neighborhood review. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-prog-invariants-domain-model | Both prevent invalid state | Types constrain representability before runtime; invariants judge a transition and persistence path. |
 ### Explicit exclusions
 
 None material.
@@ -521,18 +641,13 @@ Shared mutation bất ngờ; Equals/GetHashCode không nhất quán; Dictionary/
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Predict mutation through one alias after using the object as a dictionary key, then verify with object IDs and before/after state.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Replace a mutable class with an immutable value object and explain which observable behavior changes.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| none | No material graph neighbor exists | No plausible merge candidate found after graph-neighborhood review. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-prog-collections-complexity | Equality is used by collections | The proof is alias/mutation behavior, while collection selection needs workload cost evidence. |
 ### Explicit exclusions
 
 None material.
@@ -571,16 +686,13 @@ High allocation rate; frequent GC; pause dài; CPU overhead do GC.; Unexpected r
 
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
+Diagnose a large-export latency spike from allocation counters, heap graph and pool counters, then choose mitigation. Each Primary is proved by allocation pressure, retaining path, or pool/large-buffer evidence in one export trace.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Change export from 2 MB rows to occasional 64 MB rows and decide whether streaming, batching or pooling changes the measured risk.
 ### Merge decisions
 
-Merged because `runtime-allocation-gc`, `runtime-memory-roots-lifetime`, `runtime-retention-pooling-large-objects` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
+Merged because one export trace links allocation rate, reachability and retained/pool buffers. `runtime-managed-execution` stays separate because it locates execution responsibility, not a heap lifetime.
 ### Explicit exclusions
 
 - `runtime-managed-execution` remains separate pending its own mechanism/evidence boundary.
@@ -619,16 +731,13 @@ Collecting wrong evidence; dump sau khi symptom biến mất; kết luận leak 
 
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
+Start with “why did p99 rise after deployment?”, choose counter, trace or dump, and use a controlled change to reject a false GC hypothesis. Tool selection and diagnosis share the same hypothesis-to-evidence loop.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+The symptom becomes CPU saturation instead of heap growth; select a profile/trace plan and explain why a heap dump is weak evidence.
 ### Merge decisions
 
-Merged because `runtime-diagnostics`, `runtime-memory-performance-debug` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
+Merged because the same investigation chooses evidence and interprets it against a runtime hypothesis. `obs-profiling-runtime-evidence` owns cross-system production attribution.
 ### Explicit exclusions
 
 - `runtime-retention-pooling-large-objects` remains separate pending its own mechanism/evidence boundary.
@@ -666,18 +775,13 @@ Benchmark đo warm-up như steady workload; first request latency bị che; kế
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Given first-request and steady-state timings plus JIT events, decide whether a regression is warm-up or sustained work.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Run after a deployment that invalidates cache and after process restart; isolate which first-use costs recur.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| obs-load-test-benchmark-validity | Frozen graph neighborhood with runtime-jit-warmup | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-obs-load-test-benchmark-validity | Both concern timing | JIT warm-up needs runtime event/first-call evidence; benchmark validity judges workload and measurement design. |
 ### Explicit exclusions
 
 - `obs-load-test-benchmark-validity` remains separate pending its own mechanism/evidence boundary.
@@ -714,18 +818,13 @@ Gọi mọi latency là “CLR chậm”; nhầm managed thread với OS process
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Given a slow request with managed stack, OS thread view and socket wait, assign the symptom to application, runtime or native/OS before choosing a tool.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Move the workload from a local process to a container and identify which evidence still belongs to runtime versus OS.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| runtime-memory-roots-lifetime | Frozen graph neighborhood with runtime-managed-execution | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-runtime-allocation-gc | Both are runtime investigations | Managed execution locates responsibility across layers; GC traces one heap/allocation mechanism. |
 ### Explicit exclusions
 
 - `runtime-memory-roots-lifetime` remains separate pending its own mechanism/evidence boundary.
@@ -763,16 +862,13 @@ Blocking request path; sync I/O giữ worker; queue growth; timeout do worker st
 
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
+Diagnose request-queue growth with blocked stacks, worker count, socket/handle state and pool state; distinguish external completion wait from kernel-resource leak.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Change the dependency from file read to socket call and explain which wait/handle evidence changes.
 ### Merge decisions
 
-Merged because `os-blocking-io-waits`, `os-files-handles-sockets-ipc` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
+Merged because one request trace connects outstanding I/O, waiting worker and handle/socket lifecycle. Scheduler fairness is runnable-work evidence, not external completion.
 ### Explicit exclusions
 
 - `concurrency-async-parallelism` remains separate pending its own mechanism/evidence boundary.
@@ -791,43 +887,173 @@ Merged because `os-blocking-io-waits`, `os-files-handles-sockets-ipc` share a di
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | os-process-thread-kernel | Operating Systems & I/O Foundations | L2 |
-| os-scheduling-starvation | Operating Systems & I/O Foundations | L3 |
-| os-termination-graceful-shutdown | Operating Systems & I/O Foundations | L3 |
-| os-virtual-memory-page-cache | Operating Systems & I/O Foundations | L2 |
-
 ### Shared problem / need
 
-Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom.
-
+Locate a production symptom in the correct process, thread and user/kernel execution boundary before diagnosing the work itself.
 ### Shared mechanism / state trace
 
-Process có address space/handle table riêng; threads trong một process chia memory; kernel thực hiện privileged I/O/scheduling trên behalf của process. → Scheduler chỉ chạy một số runnable threads theo CPU/time slice; blocking/wait và runnable queue là trạng thái khác nhau, starvation là lack of forward progress. → Termination signal mở một lifetime deadline; service ngừng nhận work mới, hoàn tất hoặc cancel work đang chạy, flush/release owner resources rồi exit trước deadline. → Virtual address space ánh xạ memory; working set là phần resident; OS page cache giữ page file/disk để read sau có thể phục vụ từ RAM.
-
+A process owns an address space and kernel-resource table; threads execute within that process and share memory; user-mode code crosses to kernel for privileged I/O and scheduling.
 ### Shared observable evidence
 
-Process tree; thread list; address-space metrics; stack location user vs kernel.; CPU utilization; runnable/thread queue; runtime queue; blocked stack; no-forward-progress timeline.; Signal timestamp; active request/message count; drain duration; cancellation log; exit code; unfinished work record.; RSS/working set; page faults; file I/O counters; cache reclaim; cold/warm read timing.
-
+Process tree; process ID; thread list; address-space view; user versus kernel stack frames; owning process for an open resource.
 ### Shared failure / debug story
 
-Nhầm process isolation với thread isolation; assume thread crash chỉ ảnh hưởng một request; debug memory ở sai process.; Work tồn tại nhưng không được CPU; thread-pool starvation; priority imbalance; queue tăng dù downstream đã sẵn sàng.; Dropped request/message; half-written file/response; accept work sau drain; process bị kill trước cleanup.; Nhầm page cache với application leak; OOM vì chỉ nhìn managed heap; kỳ vọng cold disk latency sau cache warm.
-
+A symptom is investigated in the wrong process, a thread failure is mistaken for process isolation, or a kernel wait is blamed on application code.
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
+Given a process tree and mixed user/kernel stacks, locate the owning process and execution boundary. Scheduling fairness, shutdown draining and page residency need different state traces and are no longer Primary here.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Move a worker into a helper process and identify which memory, handles and threads are no longer shared.
 ### Merge decisions
 
-Merged because `os-process-thread-kernel`, `os-scheduling-starvation`, `os-termination-graceful-shutdown`, `os-virtual-memory-page-cache` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
+Split completed: scheduler progress, graceful termination and virtual-memory/page-cache diagnosis each have a separate Primary assessment boundary. This retained unit is only process/thread/kernel location.
 ### Explicit exclusions
 
 - `os-files-handles-sockets-ipc` remains separate pending its own mechanism/evidence boundary.
 - `os-resource-exhaustion` remains separate pending its own mechanism/evidence boundary.
 
+## lu-os-scheduling-starvation
+
+### Identity
+
+- **Unit ID:** lu-os-scheduling-starvation
+- **Working title:** Chẩn đoán runnable work không nhận được CPU hoặc execution capacity
+- **Learner-facing domain candidate:** Runtime & Concurrency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| os-scheduling-starvation | Operating Systems & I/O Foundations | L3 |
+
+### Shared problem / need
+
+A queue grows though downstream is healthy; runnable work is not making forward progress.
+
+### Shared mechanism / state trace
+
+Separate runnable from blocked work, inspect scheduler/runtime queues and capacity, then explain how priority, pool exhaustion or unfair admission prevents execution.
+
+### Shared observable evidence
+
+CPU utilization; runnable/thread queue; blocked stacks; queue age; worker count; no-forward-progress timeline.
+
+### Shared failure / debug story
+
+Thread-pool starvation is called I/O latency; priority imbalance leaves work waiting; capacity is raised without finding the runnable bottleneck.
+
+### Assessment-coherence argument
+
+Given queue timeline and stacks, identify blocked versus runnable-but-starved work, then choose capacity/fairness remedy. Shutdown/page-cache traces cannot prove scheduler progress.
+
+### Transfer variation
+
+Move workload from shared pool to dedicated worker pool; state which queue and CPU evidence should improve.
+
+### Merge decisions
+
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-concurrency-async-parallelism | Direct neighboring concern | Bounded concurrency controls application admission; scheduler starvation diagnoses which runnable work receives execution capacity. |
+
+### Explicit exclusions
+
+- The candidate remains a separate Primary boundary; it may be prerequisite or applied context without duplicate coverage.
+## lu-os-termination-graceful-shutdown
+
+### Identity
+
+- **Unit ID:** lu-os-termination-graceful-shutdown
+- **Working title:** Dừng service có deadline mà không nhận thêm work và không mất trạng thái cần giữ
+- **Learner-facing domain candidate:** Runtime & Concurrency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| os-termination-graceful-shutdown | Operating Systems & I/O Foundations | L3 |
+
+### Shared problem / need
+
+A service receives termination while requests and messages are still in flight.
+
+### Shared mechanism / state trace
+
+Signal starts a deadline: stop accepting work, remove readiness, drain or cancel active work, persist/ack/release at the correct boundary, then exit before forced termination.
+
+### Shared observable evidence
+
+Signal time; readiness change; active request/message count; drain duration; cancellation log; durable handoff/ack state; exit code.
+
+### Shared failure / debug story
+
+New work is accepted after drain; a message is acked too early; cleanup exceeds grace; process exits with unfinished durable state.
+
+### Assessment-coherence argument
+
+Given a termination timeline, order readiness removal, drain/cancel and durable handoff, then explain which work can be safely acknowledged. Scheduler/page-fault evidence cannot establish this lifecycle.
+
+### Transfer variation
+
+Shorten grace window and choose which work must be handed off durably instead of drained.
+
+### Merge decisions
+
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-delivery-container-process-lifecycle | Direct neighboring concern | Container lifecycle adds probe/platform semantics; this unit proves the service shutdown deadline and active-work boundary. |
+
+### Explicit exclusions
+
+- The candidate remains a separate Primary boundary; it may be prerequisite or applied context without duplicate coverage.
+## lu-os-virtual-memory-page-cache
+
+### Identity
+
+- **Unit ID:** lu-os-virtual-memory-page-cache
+- **Working title:** Phân biệt virtual memory, working set và page cache khi đọc memory hoặc I/O symptom
+- **Learner-facing domain candidate:** Runtime & Concurrency
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| os-virtual-memory-page-cache | Operating Systems & I/O Foundations | L2 |
+
+### Shared problem / need
+
+A file-heavy service shows high RSS and faster second reads; decide whether it is an application leak or normal OS caching.
+
+### Shared mechanism / state trace
+
+Virtual mappings become resident working-set pages; OS page cache retains reclaimable file pages, so managed heap, RSS and warm-file latency describe different state.
+
+### Shared observable evidence
+
+RSS/working set; page faults; file I/O counters; cache reclaim; managed heap size; cold versus warm read timing.
+
+### Shared failure / debug story
+
+Page cache is diagnosed as managed leak; only heap size is inspected; warm cache is assumed permanent after host pressure.
+
+### Assessment-coherence argument
+
+Given heap, RSS, page-fault and cold/warm-read evidence, classify managed retention, resident mappings or page cache. Process/thread and scheduler traces do not prove residency/reclaim.
+
+### Transfer variation
+
+Run after cache pressure/restart and explain which counters distinguish I/O regression from cache eviction.
+
+### Merge decisions
+
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-runtime-allocation-gc | Direct neighboring concern | Heap-root evidence establishes managed reachability; page-cache assessment needs OS residency and file-I/O evidence. |
+
+### Explicit exclusions
+
+- The candidate remains a separate Primary boundary; it may be prerequisite or applied context without duplicate coverage.
 ## lu-os-resource-exhaustion
 
 ### Identity
@@ -860,19 +1086,13 @@ OOM/kill; thread creation failure; too many open files; socket/ephemeral-port ex
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Given four snapshots, identify whether memory, threads, handles or sockets reached the limit and choose the next discriminating counter.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Run in a container memory limit; distinguish cgroup kill from managed heap growth.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| os-process-thread-kernel | Frozen graph neighborhood with os-resource-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| os-files-handles-sockets-ipc | Frozen graph neighborhood with os-resource-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-os-process-thread-kernel | Both use process inspection | Process/thread assessment explains execution boundaries; exhaustion identifies finite resource quotas from their failures. |
 ### Explicit exclusions
 
 - `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
@@ -912,16 +1132,13 @@ Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelis
 
 ### Assessment-coherence argument
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
+Given a fan-out endpoint and slow downstream, sketch task/thread timeline, propagate cancellation and impose a concurrency limit. Active count, queue depth and outcome state prove async waiting, cancellation and bounded pressure.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Move fan-out from I/O-bound requests to CPU-bound image work and decide which limit and execution model changes.
 ### Merge decisions
 
-Merged because `concurrency-async-parallelism`, `concurrency-cancellation-lifetime`, `concurrency-bounded-backpressure` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
+Merged because one bounded fan-out trace links awaiting completion, stopping unneeded work and limiting in-flight work. OS scheduling diagnoses runnable CPU allocation, not admission.
 ### Explicit exclusions
 
 - `os-blocking-io-waits` remains separate pending its own mechanism/evidence boundary.
@@ -959,19 +1176,13 @@ Lock-order deadlock; sync-over-async deadlock; thread-pool starvation; unfair qu
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Classify a wait trace as circular deadlock or starvation, then choose lock ordering, timeout or capacity/fairness remediation. It remains a singleton with wait-for graph and forward-progress evidence.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Replace one in-process lock with a database lock and explain why the local diagnosis cannot be reused as the database lock model.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| concurrency-synchronization-atomicity | Frozen graph neighborhood with concurrency-deadlock-starvation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| db-locks-deadlocks-contention | Frozen graph neighborhood with concurrency-deadlock-starvation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-race-atomicity | Both mention synchronization | Atomicity proves one invariant across an interleaving; this unit classifies a blocking/progress failure. |`n| lu-db-locks-deadlocks-contention | Both use waits | Database locks require transaction/row-version evidence and a different state owner. |
 ### Explicit exclusions
 
 - `concurrency-synchronization-atomicity` remains separate pending its own mechanism/evidence boundary.
@@ -1009,19 +1220,13 @@ In-process lock không bảo vệ cross-replica; duplicate side effect; split ow
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Run one-coupon-per-customer through four replicas, show four local locks, then select a single cross-replica invariant owner.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Replace database atomic claim with partition ownership and state new failure/recovery evidence.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| concurrency-races-check-then-act | Frozen graph neighborhood with concurrency-local-vs-distributed | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partial-failure-uncertainty | Frozen graph neighborhood with concurrency-local-vs-distributed | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-race-atomicity | Both protect an invariant | This unit requires replica identity and a cross-replica authority; race proof is in one process. |
 ### Explicit exclusions
 
 - `concurrency-races-check-then-act` remains separate pending its own mechanism/evidence boundary.
@@ -1059,18 +1264,13 @@ Spin loop không thấy flag; đọc object half-published; assume field assignm
 
 ### Assessment-coherence argument
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
+Reproduce a published flag/data pair, choose lock/volatile/interlocked, and explain the ordering guarantee that makes consumer observation safe.
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
+Publish an immutable snapshot instead of mutable fields and identify remaining ordering requirement.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| concurrency-interleavings-invariants | Frozen graph neighborhood with concurrency-memory-visibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-race-atomicity | Both expose concurrent incorrectness | Visibility needs memory-publication ordering evidence, not merely an interleaving outcome. |
 ### Explicit exclusions
 
 - `concurrency-interleavings-invariants` remains separate pending its own mechanism/evidence boundary.
@@ -4439,33 +4639,8 @@ Merged because `delivery-container-process-lifecycle`, `delivery-probes-health`,
 - `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
 - `delivery-resources-cpu-memory` remains separate pending its own mechanism/evidence boundary.
 
-## Stage 1A — Runtime & Concurrency semantic boundary evidence
+## Stage 1A — Runtime & Concurrency closure record
 
-This batch reviews only Programming Foundations, Runtime & Memory, Operating Systems & I/O Foundations, and Concurrency & Async. It does not finalize prerequisite projection.
+This batch is **REVIEWED**. Canonical unit sections and audit registries hold the final evidence and membership; this record is not a second registry.
 
-| Unit | Canonical shared scenario | Integrated evidence surface | Integrated failure/debug story | Shared assessment task and proof | Transfer variation | Boundary decision |
-|---|---|---|---|---|---|---|
-| `lu-prog-api-refactoring-change-safety` | A public order API adds a new cancellation outcome while old clients remain live. | Contract diff, consumer contract tests and before/after response trace. | A caller treats the new outcome as success because compatibility was changed at the wrong boundary. | Propose a compatible change plan: identifies affected callers, adapter/version boundary and test evidence. This proves L4 change-safety; errors, invariants and composition remain foundations, not additional Primary mechanisms. | Same API change, but one client is an independently deployed mobile release. | **Split pressure accepted:** retain L4 capability only; foundations are excluded. |
-| `lu-runtime-allocation-gc` | A large export allocates short-lived rows while one retained graph prevents expected memory recovery. | One allocation timeline plus managed-heap snapshot and retaining path. | Throughput falls as allocation rate causes GC work, while a rooted object keeps a large graph alive. | Diagnose the trace, separate allocation pressure from retention, and choose streaming/batching/pooling only where ownership permits. This proves roots/lifetime, allocation/GC and retention/pooling together. | Same export under a long-lived singleton cache. | **Retained multi-unit:** one heap/evidence surface proves the full memory chain. |
-| `lu-runtime-diagnostics` | A service slows after deployment and memory rises only under production-shaped traffic. | Heap dump, allocation profile, GC counters and request latency correlation. | A suspected GC issue is actually allocation churn visible in profile; the learner must test the hypothesis. | Build a ranked diagnosis from the same profile/counters and justify the next measurement. L3 diagnostics and L4 performance-debug are both evidenced by one hypothesis loop. | Repeat under warm JIT versus steady-state load. | **Retained multi-unit:** same evidence-to-hypothesis mechanism. |
-| `lu-os-blocking-io-waits` | A worker holds a file/socket handle while a synchronous read blocks shutdown. | One process/thread/handle timeline with wait state and handle count. | Shutdown hangs because the owning operation still waits on I/O. | Trace resource ownership through open, wait, cancellation and close; identify who can release it. | Replace local file read with a slow socket peer. | **Retained multi-unit:** one resource-operation lifecycle. |
-| `lu-os-process-thread-kernel` | A service receives termination while a busy worker and page pressure delay exit. | Process tree, thread states, shutdown log and memory/page counters. | Scheduler delay, graceful drain and virtual-memory pressure are independent diagnostic loops. | No single task can prove process model, scheduling, termination and page-cache reasoning without separate cases. | N/A — split required. | **Split pressure accepted:** process/thread, scheduling/termination and page-cache stay independent where map boundaries already separate them. |
-| `lu-concurrency-async-parallelism` | A burst of jobs fans out to a bounded worker pool; cancellation arrives while downstream is slow. | One in-flight work timeline: queue depth, active tasks, cancellation signal and completion records. | Unbounded fan-out exhausts capacity; cancellation is ignored after work ownership changes. | Configure bounded concurrency, propagate cancellation, and explain which tasks may start/finish. This proves async execution, lifetime/cancellation and backpressure in one capacity-control case. | Single request becomes burst traffic with downstream latency. | **Retained multi-unit:** one in-flight work/capacity state machine. |
-| `lu-race-atomicity` | Two checkout requests reserve the same stock row concurrently. | Interleaving timeline, row version/affected-row evidence and invariant test. | Check-then-act produces oversell; local lock choice must be rejected or scoped correctly. | Reproduce the race then replace it with atomic transition/conflict handling and prove the invariant. | Same invariant across four replicas. | **Retained frozen dry-run:** concrete contradiction not found. |
-| `lu-concurrency-deadlock-starvation` | Two workers acquire resources in opposite order while a queued task never receives capacity. | Wait-for graph, lock acquisition trace and queue wait time. | Circular wait differs from starvation: one has a cycle, the other has progress unfairness. | Classify the trace and choose ordering/timeout/capacity remedy. | One lock becomes a database plus in-process lock boundary. | **Retained multi-unit:** same waiting/ownership evidence surface. |
-| `lu-concurrency-local-vs-distributed` | Four replicas each hold an in-process lock for the same reservation key. | Replica IDs, concurrent requests and shared-store affected rows. | Local synchronization appears correct in one instance but duplicates side effects across replicas. | Explain the authority mismatch and choose DB atomicity/partition owner rather than a local lock. | Add process restart during an active reservation. | **Singleton retained:** distributed authority has a different state owner and evidence surface. |
-| `lu-concurrency-memory-visibility` | Producer writes a flag/data pair while another execution context observes stale ordering. | Minimal concurrent trace with observed values and synchronization boundary. | Code is race-free in intent but visibility/order is not guaranteed. | Explain the observation and select the correct synchronization primitive. | Move from one thread pair to a task/worker handoff. | **Singleton retained:** visibility proof needs a distinct memory-order case. |
-| `lu-runtime-jit-warmup` | A cold endpoint misses latency SLO only on first requests after rollout. | Startup request timings, compilation events and steady-state comparison. | Cold-path latency is mistaken for steady-state allocation or database regression. | Design a warmup measurement that separates compilation from request work. | New deployment revision with different hot path. | **Singleton retained:** compilation lifecycle differs from heap/state ownership. |
-| `lu-runtime-managed-execution` | A request schedules CPU work while ThreadPool capacity is saturated. | Request/task/thread-pool timeline and queue counters. | Blocking work starves available workers and delays unrelated requests. | Identify execution ownership and choose async I/O versus awaited CPU work. | CPU work shifts to burst fan-out. | **Singleton retained:** execution scheduling is not heap retention or cancellation ownership. |
-| `lu-os-resource-exhaustion` | Handle count grows until new connection opens fail. | Process resource counters, failed-open errors and handle-leak trace. | A leak becomes admission failure rather than a slow I/O wait. | Locate the unreleased owner and set an observable resource budget. | Same leak in a container limit. | **Singleton retained:** exhaustion threshold/operating limit differs from one I/O lifecycle. |
-
-### Cross-owner candidates reviewed
-
-| Candidate | Decision | Concrete grouping reason |
-|---|---|---|
-| `prog-invariants-domain-model` ↔ `concurrency-interleavings-invariants` | REJECTED | Domain invariant defines valid business state; concurrency unit proves which interleaving breaks it. One shared task would use the former as context rather than assess its full domain-transition design. |
-| `prog-resource-ownership` ↔ `concurrency-cancellation-lifetime` | REJECTED | Resource owner/dispose boundary and cancellation propagation have different authoritative state; cancellation unit may recap ownership without duplicating the resource-lifetime mechanism. |
-| `os-blocking-io-waits` ↔ `concurrency-async-parallelism` | REJECTED | I/O wait is a resource-operation lifecycle; bounded concurrency is queue/capacity control. A combined task needs two independent evidence surfaces. |
-| `os-scheduling-starvation` ↔ `concurrency-async-parallelism` | REJECTED | OS scheduling fairness and application-level in-flight capacity are separate control authorities despite similar symptoms. |
-| `os-files-handles-sockets-ipc` ↔ `net-tcp-connection-semantics` | REJECTED | OS handle lifecycle and TCP handshake/connection-state evidence belong to different systems. |
-| `os-virtual-memory-page-cache` ↔ `runtime-memory-roots-lifetime` | REJECTED | Page residency is OS physical-memory evidence; roots/retaining paths are managed-heap reachability evidence. |
+Stage 1 remains DRAFT: every other domain batch is pending and REQUIRED/RECOMMENDED projection is not finalized.
