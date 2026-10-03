@@ -9,96 +9,96 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 
 ## Unit Registry
 
-| Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count | External prerequisite candidate count |
+| Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count
 |---|---|---|---|---:|---:|
-| lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 | 0 |
-| lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 | 0 |
-| lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 | 0 |
-| lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 | 0 |
-| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 4 | 0 |
-| lu-prog-collections-complexity | Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-resource-ownership | Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-types-generics | Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-values-identity | Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu | Runtime & Concurrency | Runtime & Memory | 3 | 0 |
-| lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ | Runtime & Concurrency | Runtime & Memory | 2 | 0 |
-| lu-runtime-jit-warmup | Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-managed-execution | Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 2 | 0 |
-| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 4 | 0 |
-| lu-os-resource-exhaustion | Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource | Runtime & Concurrency | Concurrency & Async | 3 | 0 |
-| lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions | Service & Network | Networking & HTTP | 2 | 0 |
-| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn | Service & Network | Networking & HTTP | 4 | 0 |
-| lu-net-proxy-lb-forwarded-boundary | Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-streaming-body-cancellation | Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-db-backup-restore | Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery | Data & Consistency | Relational Database Engineering | 2 | 0 |
-| lu-db-buffer-io | Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime | Data & Consistency | Relational Database Engineering | 3 | 0 |
-| lu-db-connection-pool-exhaustion | Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-locks-deadlocks-contention | Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock | Data & Consistency | Relational Database Engineering | 3 | 0 |
-| lu-db-modeling-invariants | Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được | Data & Consistency | Relational Database Engineering | 2 | 0 |
-| lu-db-mvcc-visibility | Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-replication-failover | Reason primary/replica role, lag và failover mà không coi replica là synchronous truth | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-nosql-cassandra-lsm-compaction-consistency | Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost | Data & Consistency | NoSQL & Specialized Data Systems | 3 | 0 |
-| lu-nosql-model-selection | Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding | Data & Consistency | NoSQL & Specialized Data Systems | 4 | 0 |
-| lu-nosql-mongo-index-shard-transaction | Reason index, shard key and transaction boundary from Mongo query/write pattern | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-redis-persistence-replication-cluster-streams | Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-search-refresh-shards-pagination | Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-cache-capacity-eviction-fallback | Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin | Data & Consistency | Cache Engineering | 3 | 0 |
-| lu-cache-invalidation-consistency | Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary | Data & Consistency | Cache Engineering | 2 | 0 |
-| lu-cache-patterns | Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle | Data & Consistency | Cache Engineering | 2 | 0 |
-| lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 | 0 |
-| lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn | Distributed Systems | Distributed Systems | 2 | 0 |
-| lu-dist-time-order-causality | Phân biệt wall-clock với causal/business order, không dùng clock như universal total order | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-transactions-2pc-boundary | Explain 2PC atomicity intent across transactional participants and its coordination/failure cost | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect | Distributed Systems | Messaging & Event-Driven Consistency | 4 | 0 |
-| lu-msg-delivery-retry-poison-dlq | Distinguish transient failure from poison message và design bounded retry/quarantine | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-external-side-effect-reconciliation | Handle external side effect with unknown local result and derive safe reconciliation | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-producer-acks-durability | Reason what producer acknowledgement proves and remaining failure possibilities | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-schema-evolution-contract-ownership | Evolve event with old producers/consumers/history still present | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-workflow-saga-compensation | Model multi-step workflow where completed steps may need business compensation, not rollback | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-api-circuit-bulkhead-rate-limit | Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-contract-resource-semantics | Model operation as explicit contract over resource/state, not controller-to-URL mapping | Service & Network | API Contracts & Resilience | 4 | 0 |
-| lu-api-deadlines-timeout-cancellation | Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion | Service & Network | API Contracts & Resilience | 3 | 0 |
-| lu-sec-abuse-bruteforce-resource-business-flow | Detect/limit legitimate-looking request abuse by identity/resource/business state | Service & Network | Security | 3 | 0 |
-| lu-sec-audit-detection-evidence | Produce audit evidence of who did what to which object and which security decision occurred | Service & Network | Security | 1 | 0 |
-| lu-sec-auth-session-token | Distinguish authentication/authorization and reason session/token validation, lifetime, revocation | Service & Network | Security | 3 | 0 |
-| lu-sec-browser-boundaries-cors-csrf-xss | Distinguish CORS, CSRF and XSS to apply correct browser boundary control | Service & Network | Security | 1 | 0 |
-| lu-sec-injection-ssrf-input-output | Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context | Service & Network | Security | 1 | 0 |
-| lu-sec-race-business-logic-abuse | Reproduce concurrent valid requests bypassing invariant and protect atomic owner | Service & Network | Security | 1 | 0 |
-| lu-sec-secrets-third-party-trust | Control secret lifecycle and verify third-party data/action before trusting it | Service & Network | Security | 1 | 0 |
-| lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable | Production Engineering | Observability & Performance | 2 | 0 |
-| lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence | Production Engineering | Observability & Performance | 4 | 0 |
-| lu-obs-load-test-benchmark-validity | Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-logs-structured-correlation | Produce structured queryable logs for significant events/context | Production Engineering | Observability & Performance | 2 | 0 |
-| lu-obs-profiling-runtime-evidence | Use CPU/allocation/stack/runtime evidence to locate actual time/memory work | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-rel-cascading-failure-queue-capacity | Trace one slow dependency into queues/retries/resource exhaustion upstream | Production Engineering | Reliability / SRE | 3 | 0 |
-| lu-rel-change-rollout-rollback-risk | Release incrementally with evidence and rollback/roll-forward boundary defined first | Production Engineering | Reliability / SRE | 2 | 0 |
-| lu-rel-disaster-recovery-rpo-rto | Translate business recovery requirement to RPO/RTO and verify mechanism meets it | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-failure-injection-verification | Design safe bounded fault test for stated reliability assumption and interpret result | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-health-readiness-semantics | Define liveness/readiness semantics so routing/restarts help recovery instead of cascade | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-incident-response-postmortem | During/after incident separate mitigation, diagnosis, evidence preservation and system learning | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test | Architecture & Engineering Reasoning | Testing & Engineering Quality | 4 | 0 |
-| lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure | Architecture & Engineering Reasoning | Testing & Engineering Quality | 2 | 0 |
-| lu-test-migration-compatibility | Prove old/new app and schema/data/event contract coexist during transitional rollout | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-property-boundary-fuzz | Falsify invariant over generated/boundary input, not hand-picked happy examples | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-review-static-analysis-change-safety | Use review/compiler/analyzer/targeted tests as complementary change evidence | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-unit-integration-contract | Choose unit/integration/contract by behavior boundary and state what each cannot prove | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-arch-boundaries-ownership | Choose module/service boundary by invariant, change ownership and operational owner | Architecture & Engineering Reasoning | Architecture & System Design | 4 | 0 |
-| lu-arch-consistency-latency-availability | Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-cost-complexity-changeability | Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change | Architecture & Engineering Reasoning | Architecture & System Design | 2 | 0 |
-| lu-arch-evolution-migration-strangler | Move old to target incrementally while paths coexist safely | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-scale-capacity-partitioning | Estimate bottleneck and choose scale/partition boundary from measurable demand | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-sync-async-integration | Choose sync/async from coupling, completion semantics, latency and recovery | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-delivery-artifact-image-config | Produce reproducible versioned artifact and separate immutable build from runtime config/secret | Production Engineering | Containers / Kubernetes / Cloud Delivery | 4 | 0 |
-| lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 | 0 |
-| lu-delivery-cloud-responsibility-managed-services | State application-team responsibilities when platform component is managed | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 | 0 |
+| lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
+| lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
+| lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 |
+| lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 |
+| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 4 |
+| lu-prog-collections-complexity | Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-resource-ownership | Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-types-generics | Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-values-identity | Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu | Runtime & Concurrency | Runtime & Memory | 3 |
+| lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ | Runtime & Concurrency | Runtime & Memory | 2 |
+| lu-runtime-jit-warmup | Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên | Runtime & Concurrency | Runtime & Memory | 1 |
+| lu-runtime-managed-execution | Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue | Runtime & Concurrency | Runtime & Memory | 1 |
+| lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 2 |
+| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 4 |
+| lu-os-resource-exhaustion | Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource | Runtime & Concurrency | Concurrency & Async | 3 |
+| lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
+| lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 |
+| lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 |
+| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions | Service & Network | Networking & HTTP | 2 |
+| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn | Service & Network | Networking & HTTP | 4 |
+| lu-net-proxy-lb-forwarded-boundary | Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers | Service & Network | Networking & HTTP | 1 |
+| lu-net-streaming-body-cancellation | Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect | Service & Network | Networking & HTTP | 1 |
+| lu-db-backup-restore | Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-buffer-io | Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime | Data & Consistency | Relational Database Engineering | 3 |
+| lu-db-connection-pool-exhaustion | Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-locks-deadlocks-contention | Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock | Data & Consistency | Relational Database Engineering | 3 |
+| lu-db-modeling-invariants | Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-mvcc-visibility | Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-replication-failover | Reason primary/replica role, lag và failover mà không coi replica là synchronous truth | Data & Consistency | Relational Database Engineering | 1 |
+| lu-nosql-cassandra-lsm-compaction-consistency | Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost | Data & Consistency | NoSQL & Specialized Data Systems | 3 |
+| lu-nosql-model-selection | Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding | Data & Consistency | NoSQL & Specialized Data Systems | 4 |
+| lu-nosql-mongo-index-shard-transaction | Reason index, shard key and transaction boundary from Mongo query/write pattern | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-redis-persistence-replication-cluster-streams | Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-search-refresh-shards-pagination | Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-cache-capacity-eviction-fallback | Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin | Data & Consistency | Cache Engineering | 3 |
+| lu-cache-invalidation-consistency | Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary | Data & Consistency | Cache Engineering | 2 |
+| lu-cache-patterns | Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle | Data & Consistency | Cache Engineering | 2 |
+| lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 |
+| lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn | Distributed Systems | Distributed Systems | 2 |
+| lu-dist-time-order-causality | Phân biệt wall-clock với causal/business order, không dùng clock như universal total order | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-transactions-2pc-boundary | Explain 2PC atomicity intent across transactional participants and its coordination/failure cost | Distributed Systems | Distributed Systems | 1 |
+| lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect | Distributed Systems | Messaging & Event-Driven Consistency | 4 |
+| lu-msg-delivery-retry-poison-dlq | Distinguish transient failure from poison message và design bounded retry/quarantine | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-external-side-effect-reconciliation | Handle external side effect with unknown local result and derive safe reconciliation | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-producer-acks-durability | Reason what producer acknowledgement proves and remaining failure possibilities | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-schema-evolution-contract-ownership | Evolve event with old producers/consumers/history still present | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-workflow-saga-compensation | Model multi-step workflow where completed steps may need business compensation, not rollback | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-api-circuit-bulkhead-rate-limit | Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary | Service & Network | API Contracts & Resilience | 1 |
+| lu-api-contract-resource-semantics | Model operation as explicit contract over resource/state, not controller-to-URL mapping | Service & Network | API Contracts & Resilience | 4 |
+| lu-api-deadlines-timeout-cancellation | Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion | Service & Network | API Contracts & Resilience | 3 |
+| lu-sec-abuse-bruteforce-resource-business-flow | Detect/limit legitimate-looking request abuse by identity/resource/business state | Service & Network | Security | 3 |
+| lu-sec-audit-detection-evidence | Produce audit evidence of who did what to which object and which security decision occurred | Service & Network | Security | 1 |
+| lu-sec-auth-session-token | Distinguish authentication/authorization and reason session/token validation, lifetime, revocation | Service & Network | Security | 3 |
+| lu-sec-browser-boundaries-cors-csrf-xss | Distinguish CORS, CSRF and XSS to apply correct browser boundary control | Service & Network | Security | 1 |
+| lu-sec-injection-ssrf-input-output | Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context | Service & Network | Security | 1 |
+| lu-sec-race-business-logic-abuse | Reproduce concurrent valid requests bypassing invariant and protect atomic owner | Service & Network | Security | 1 |
+| lu-sec-secrets-third-party-trust | Control secret lifecycle and verify third-party data/action before trusting it | Service & Network | Security | 1 |
+| lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable | Production Engineering | Observability & Performance | 2 |
+| lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence | Production Engineering | Observability & Performance | 4 |
+| lu-obs-load-test-benchmark-validity | Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim | Production Engineering | Observability & Performance | 1 |
+| lu-obs-logs-structured-correlation | Produce structured queryable logs for significant events/context | Production Engineering | Observability & Performance | 2 |
+| lu-obs-profiling-runtime-evidence | Use CPU/allocation/stack/runtime evidence to locate actual time/memory work | Production Engineering | Observability & Performance | 1 |
+| lu-rel-cascading-failure-queue-capacity | Trace one slow dependency into queues/retries/resource exhaustion upstream | Production Engineering | Reliability / SRE | 3 |
+| lu-rel-change-rollout-rollback-risk | Release incrementally with evidence and rollback/roll-forward boundary defined first | Production Engineering | Reliability / SRE | 2 |
+| lu-rel-disaster-recovery-rpo-rto | Translate business recovery requirement to RPO/RTO and verify mechanism meets it | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-failure-injection-verification | Design safe bounded fault test for stated reliability assumption and interpret result | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-health-readiness-semantics | Define liveness/readiness semantics so routing/restarts help recovery instead of cascade | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-incident-response-postmortem | During/after incident separate mitigation, diagnosis, evidence preservation and system learning | Production Engineering | Reliability / SRE | 1 |
+| lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test | Architecture & Engineering Reasoning | Testing & Engineering Quality | 4 |
+| lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure | Architecture & Engineering Reasoning | Testing & Engineering Quality | 2 |
+| lu-test-migration-compatibility | Prove old/new app and schema/data/event contract coexist during transitional rollout | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-property-boundary-fuzz | Falsify invariant over generated/boundary input, not hand-picked happy examples | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-review-static-analysis-change-safety | Use review/compiler/analyzer/targeted tests as complementary change evidence | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-unit-integration-contract | Choose unit/integration/contract by behavior boundary and state what each cannot prove | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-arch-boundaries-ownership | Choose module/service boundary by invariant, change ownership and operational owner | Architecture & Engineering Reasoning | Architecture & System Design | 4 |
+| lu-arch-consistency-latency-availability | Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-cost-complexity-changeability | Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change | Architecture & Engineering Reasoning | Architecture & System Design | 2 |
+| lu-arch-evolution-migration-strangler | Move old to target incrementally while paths coexist safely | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-scale-capacity-partitioning | Estimate bottleneck and choose scale/partition boundary from measurable demand | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-sync-async-integration | Choose sync/async from coupling, completion semantics, latency and recovery | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-delivery-artifact-image-config | Produce reproducible versioned artifact and separate immutable build from runtime config/secret | Production Engineering | Containers / Kubernetes / Cloud Delivery | 4 |
+| lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 |
+| lu-delivery-cloud-responsibility-managed-services | State application-team responsibilities when platform component is managed | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 |
 
 ## lu-index-query-shape
 
@@ -4438,3 +4438,34 @@ Merged because `delivery-container-process-lifecycle`, `delivery-probes-health`,
 
 - `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
 - `delivery-resources-cpu-memory` remains separate pending its own mechanism/evidence boundary.
+
+## Stage 1A — Runtime & Concurrency semantic boundary evidence
+
+This batch reviews only Programming Foundations, Runtime & Memory, Operating Systems & I/O Foundations, and Concurrency & Async. It does not finalize prerequisite projection.
+
+| Unit | Canonical shared scenario | Integrated evidence surface | Integrated failure/debug story | Shared assessment task and proof | Transfer variation | Boundary decision |
+|---|---|---|---|---|---|---|
+| `lu-prog-api-refactoring-change-safety` | A public order API adds a new cancellation outcome while old clients remain live. | Contract diff, consumer contract tests and before/after response trace. | A caller treats the new outcome as success because compatibility was changed at the wrong boundary. | Propose a compatible change plan: identifies affected callers, adapter/version boundary and test evidence. This proves L4 change-safety; errors, invariants and composition remain foundations, not additional Primary mechanisms. | Same API change, but one client is an independently deployed mobile release. | **Split pressure accepted:** retain L4 capability only; foundations are excluded. |
+| `lu-runtime-allocation-gc` | A large export allocates short-lived rows while one retained graph prevents expected memory recovery. | One allocation timeline plus managed-heap snapshot and retaining path. | Throughput falls as allocation rate causes GC work, while a rooted object keeps a large graph alive. | Diagnose the trace, separate allocation pressure from retention, and choose streaming/batching/pooling only where ownership permits. This proves roots/lifetime, allocation/GC and retention/pooling together. | Same export under a long-lived singleton cache. | **Retained multi-unit:** one heap/evidence surface proves the full memory chain. |
+| `lu-runtime-diagnostics` | A service slows after deployment and memory rises only under production-shaped traffic. | Heap dump, allocation profile, GC counters and request latency correlation. | A suspected GC issue is actually allocation churn visible in profile; the learner must test the hypothesis. | Build a ranked diagnosis from the same profile/counters and justify the next measurement. L3 diagnostics and L4 performance-debug are both evidenced by one hypothesis loop. | Repeat under warm JIT versus steady-state load. | **Retained multi-unit:** same evidence-to-hypothesis mechanism. |
+| `lu-os-blocking-io-waits` | A worker holds a file/socket handle while a synchronous read blocks shutdown. | One process/thread/handle timeline with wait state and handle count. | Shutdown hangs because the owning operation still waits on I/O. | Trace resource ownership through open, wait, cancellation and close; identify who can release it. | Replace local file read with a slow socket peer. | **Retained multi-unit:** one resource-operation lifecycle. |
+| `lu-os-process-thread-kernel` | A service receives termination while a busy worker and page pressure delay exit. | Process tree, thread states, shutdown log and memory/page counters. | Scheduler delay, graceful drain and virtual-memory pressure are independent diagnostic loops. | No single task can prove process model, scheduling, termination and page-cache reasoning without separate cases. | N/A — split required. | **Split pressure accepted:** process/thread, scheduling/termination and page-cache stay independent where map boundaries already separate them. |
+| `lu-concurrency-async-parallelism` | A burst of jobs fans out to a bounded worker pool; cancellation arrives while downstream is slow. | One in-flight work timeline: queue depth, active tasks, cancellation signal and completion records. | Unbounded fan-out exhausts capacity; cancellation is ignored after work ownership changes. | Configure bounded concurrency, propagate cancellation, and explain which tasks may start/finish. This proves async execution, lifetime/cancellation and backpressure in one capacity-control case. | Single request becomes burst traffic with downstream latency. | **Retained multi-unit:** one in-flight work/capacity state machine. |
+| `lu-race-atomicity` | Two checkout requests reserve the same stock row concurrently. | Interleaving timeline, row version/affected-row evidence and invariant test. | Check-then-act produces oversell; local lock choice must be rejected or scoped correctly. | Reproduce the race then replace it with atomic transition/conflict handling and prove the invariant. | Same invariant across four replicas. | **Retained frozen dry-run:** concrete contradiction not found. |
+| `lu-concurrency-deadlock-starvation` | Two workers acquire resources in opposite order while a queued task never receives capacity. | Wait-for graph, lock acquisition trace and queue wait time. | Circular wait differs from starvation: one has a cycle, the other has progress unfairness. | Classify the trace and choose ordering/timeout/capacity remedy. | One lock becomes a database plus in-process lock boundary. | **Retained multi-unit:** same waiting/ownership evidence surface. |
+| `lu-concurrency-local-vs-distributed` | Four replicas each hold an in-process lock for the same reservation key. | Replica IDs, concurrent requests and shared-store affected rows. | Local synchronization appears correct in one instance but duplicates side effects across replicas. | Explain the authority mismatch and choose DB atomicity/partition owner rather than a local lock. | Add process restart during an active reservation. | **Singleton retained:** distributed authority has a different state owner and evidence surface. |
+| `lu-concurrency-memory-visibility` | Producer writes a flag/data pair while another execution context observes stale ordering. | Minimal concurrent trace with observed values and synchronization boundary. | Code is race-free in intent but visibility/order is not guaranteed. | Explain the observation and select the correct synchronization primitive. | Move from one thread pair to a task/worker handoff. | **Singleton retained:** visibility proof needs a distinct memory-order case. |
+| `lu-runtime-jit-warmup` | A cold endpoint misses latency SLO only on first requests after rollout. | Startup request timings, compilation events and steady-state comparison. | Cold-path latency is mistaken for steady-state allocation or database regression. | Design a warmup measurement that separates compilation from request work. | New deployment revision with different hot path. | **Singleton retained:** compilation lifecycle differs from heap/state ownership. |
+| `lu-runtime-managed-execution` | A request schedules CPU work while ThreadPool capacity is saturated. | Request/task/thread-pool timeline and queue counters. | Blocking work starves available workers and delays unrelated requests. | Identify execution ownership and choose async I/O versus awaited CPU work. | CPU work shifts to burst fan-out. | **Singleton retained:** execution scheduling is not heap retention or cancellation ownership. |
+| `lu-os-resource-exhaustion` | Handle count grows until new connection opens fail. | Process resource counters, failed-open errors and handle-leak trace. | A leak becomes admission failure rather than a slow I/O wait. | Locate the unreleased owner and set an observable resource budget. | Same leak in a container limit. | **Singleton retained:** exhaustion threshold/operating limit differs from one I/O lifecycle. |
+
+### Cross-owner candidates reviewed
+
+| Candidate | Decision | Concrete grouping reason |
+|---|---|---|
+| `prog-invariants-domain-model` ↔ `concurrency-interleavings-invariants` | REJECTED | Domain invariant defines valid business state; concurrency unit proves which interleaving breaks it. One shared task would use the former as context rather than assess its full domain-transition design. |
+| `prog-resource-ownership` ↔ `concurrency-cancellation-lifetime` | REJECTED | Resource owner/dispose boundary and cancellation propagation have different authoritative state; cancellation unit may recap ownership without duplicating the resource-lifetime mechanism. |
+| `os-blocking-io-waits` ↔ `concurrency-async-parallelism` | REJECTED | I/O wait is a resource-operation lifecycle; bounded concurrency is queue/capacity control. A combined task needs two independent evidence surfaces. |
+| `os-scheduling-starvation` ↔ `concurrency-async-parallelism` | REJECTED | OS scheduling fairness and application-level in-flight capacity are separate control authorities despite similar symptoms. |
+| `os-files-handles-sockets-ipc` ↔ `net-tcp-connection-semantics` | REJECTED | OS handle lifecycle and TCP handshake/connection-state evidence belong to different systems. |
+| `os-virtual-memory-page-cache` ↔ `runtime-memory-roots-lifetime` | REJECTED | Page residency is OS physical-memory evidence; roots/retaining paths are managed-heap reachability evidence. |

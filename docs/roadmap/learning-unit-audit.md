@@ -429,3 +429,16 @@ REQUIRED and RECOMMENDED projection is **NOT FINALIZED** in Stage 1. The frozen 
 ## H. Architecture Conflicts
 
 None.
+
+## Stage-1 semantic review batches
+
+- Runtime & Concurrency — REVIEWED
+- Data & Consistency — PENDING
+- Service & Network — PENDING
+- Distributed Systems — PENDING
+- Production Engineering — PENDING
+- Architecture & Engineering Reasoning — PENDING
+
+## Runtime & Concurrency batch evidence
+
+This batch adds concrete scenario/evidence/assessment reasoning to the Stage-1 map for the in-scope units. Cross-owner candidates are rejected for the specific state-owner, evidence-surface or assessment-boundary reasons recorded in the map. REQUIRED and RECOMMENDED projection remains **NOT FINALIZED**.
