@@ -40,9 +40,15 @@ npm run check
 
 Do not claim a command passed unless it actually ran successfully.
 
-For curriculum decomposition, Learning Unit grouping, Learning Unit prerequisite mapping, or capability → Learning Unit work, read:
+Before roadmap/curriculum architecture tasks that create, review, split, merge, reassign, project, freeze, or otherwise mutate architecture artifacts, read:
+
+`docs/roadmap/architecture-execution-protocol.md`
+
+For curriculum decomposition, Learning Unit grouping, Learning Unit prerequisite mapping, or capability → Learning Unit work, also read:
 
 `docs/roadmap/lesson-decomposition-contract.md`
+
+`lesson-decomposition-contract.md` defines semantic correctness for Learning Unit decomposition. `architecture-execution-protocol.md` defines execution, propagation, consistency, validation, and completion semantics.
 For lesson authoring/review, use:
 
 `docs/authoring/golden-lesson-checklist.md`
