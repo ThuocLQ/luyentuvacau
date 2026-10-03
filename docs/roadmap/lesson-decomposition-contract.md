@@ -65,18 +65,21 @@ Capabilities should split into different Learning Units when any of the followin
 
 Split for coherence, not for a fixed lesson count. Conversely, do not split a single causal mechanism merely to maximize coverage rows.
 
-## Ownership treatment
+## Capability usage roles / treatments
 
 Every proposed Learning Unit classifies referenced capabilities as:
 
-| Role | Meaning |
+| Role / treatment | Meaning |
 |---|---|
-| **Primary capability** | The unit teaches and assesses the canonical mechanism. |
-| **External Required Prerequisite Candidate** | Earlier compatible evidence is a candidate only when the exact Assumed Slice cannot be taught fairly or safely as a local slice. |
+| **Primary capability** | The unit teaches and assesses the frozen capability's canonical mechanism. |
 | **Local Prerequisite Slice** | The unit introduces or recaps only the exact frozen Assumed Slice needed by its target mechanism. It is not source-capability coverage or evidence. |
-| **Recap / Applied capability** | A mechanism owned elsewhere is briefly recalled or applied to a new domain-specific problem. |
+| **External Required Prerequisite Candidate** | Earlier compatible evidence is a candidate only when the exact Assumed Slice cannot be taught fairly or safely as a local slice. |
+| **Recap / Applied capability** | The capability's mechanism is reused, recalled, transferred or applied here without claiming its Primary coverage; it may share or differ from the unit's canonical owner track. |
+| **RECOMMENDED context** | A direct frozen RECOMMENDED relation is surfaced as explicitly non-blocking context. |
 
-A local prerequisite slice does not transfer canonical ownership, claim the source capability is covered, create `PASSED` evidence for it, or reproduce the full source-owner lesson. If the full source mechanism must be taught and assessed, it must become a deliberately justified Primary capability in a coherent multi-owner unit, or remain in its own unit as an external prerequisite candidate.
+A Local Prerequisite Slice does not transfer canonical ownership, claim the source capability is covered, create `PASSED` evidence for it, or reproduce the full source-owner lesson. If the full source mechanism must be taught and assessed, it must become a deliberately justified Primary capability in a coherent multi-owner unit, or remain in its own unit as an External Required Prerequisite Candidate.
+
+Do not hide a capability required to continue into the target mechanism behind Recap / Applied. Use the frozen REQUIRED-edge treatment instead: Local Prerequisite Slice or External Required Prerequisite Candidate. RECOMMENDED context remains non-blocking.
 
 A consumer domain may apply, transfer or add domain-specific failure evidence. It must not redefine the producer domain's canonical mechanism. Reuse is not duplicate teaching.
 
@@ -90,18 +93,39 @@ For every capability classified as **Primary**, a proposal must inspect **all in
 
 No incoming REQUIRED relation may disappear because a dry-run role table did not list it. Future decomposition validation must require a compact treatment table for every Primary capability. A REQUIRED treatment is a design decision, not an automatic progression lock; RECOMMENDED relations still never hard-lock.
 
+## Global full-decomposition invariants
+
+The future full Learning-Unit map must give every one of the 163 frozen Step-2 capabilities exactly one canonical **Primary assessment home**. A capability may appear elsewhere only as a Local Prerequisite Slice, Recap / Applied capability, RECOMMENDED context or another explicitly non-Primary use. This guarantees complete coverage without equating one capability with one lesson or duplicating canonical mechanism ownership. If a capability cannot obtain one coherent Primary assessment home without violating the grouping/split criteria, flag an architecture conflict; do not silently duplicate Primary coverage.
+
+| Global structural acceptance check | Required result |
+|---|---:|
+| Frozen capability count | 163 |
+| Primary assessment homes | 163 |
+| Missing Primary capabilities | 0 |
+| Duplicate Primary capability assignments | 0 |
+| Unknown capability IDs | 0 |
+| Units without at least one Primary capability | 0 |
+
+The future full map must also classify all 194 frozen REQUIRED relations exactly once as Internal Primary Order, Local Prerequisite Slice or External Required Prerequisite Candidate: 194 classified and 0 unclassified. For every Primary capability, inspect all incoming frozen RECOMMENDED relations as well. Each of the 124 relations is either surfaced as RECOMMENDED context or intentionally not surfaced at Learning-Unit level with a concise rationale. Neither decision can create a learner lock.
+
+Future full-map validation must additionally verify: the required Learning-Unit graph is acyclic; every Local Prerequisite Slice matches the frozen Assumed Slice; every capability owner remains its frozen Step-2 owner; track/document order is not treated as learning order; and multiple roots or parallel progression-eligible units remain possible.
+
 ## Four separate graphs
 
 | Model | Question | Does not mean |
 |---|---|---|
 | Capability dependency | What source mechanism may a target capability assume? | Curriculum or UI order. |
 | Internal learning order | What must be introduced first inside one Learning Unit? | An external prerequisite. |
-| External lesson prerequisite | What completed evidence is genuinely needed before official progression into another unit? | Every REQUIRED capability relation. |
+| External Learning-Unit prerequisite candidate | What compatible evidence may genuinely be needed before official progression into another future Learning Unit? | Every REQUIRED capability relation or a current learner-facing lesson policy. |
 | Learner progression state | Whether a learner is `LOCKED`, `AVAILABLE`, `IN_PROGRESS` or `PASSED`. | Capability ownership or retention/mastery. |
 
 For every incoming REQUIRED relation, first inspect its frozen **Assumed Slice**. It becomes **Internal Primary Order** only when source and target are both Primary in the same unit. It becomes a **Local Prerequisite Slice** when that exact slice can be introduced or recapped locally without teaching the full source mechanism, transferring ownership, claiming source coverage or creating source `PASSED` evidence. It becomes an **External Required Prerequisite Candidate** only when the assumed slice itself needs substantial compatible prior mechanism/evidence and cannot be taught fairly or safely locally. Track separation, unit separation, capability size, convenience and a desire to demonstrate an external prerequisite are not sufficient reasons. RECOMMENDED relations are recap, preparation, optional material, suggested parallel work or `recommended_after`; they never create a hard progression lock.
 
-This preserves the product rule: **QuanNet locks progression, not curiosity.** A future locked unit may still expose learning/reference content; locking concerns official required progression, not reading access.\n\nAn External Required Prerequisite Candidate identifies exact source capability evidence, not automatically `source Learning Unit PASSED → target Learning Unit unlocked`. A later lesson-level mapping may use whole-unit `PASSED` only when it is a fair, compatible proxy without unrelated gating. Otherwise reconsider the grouping, use capability-compatible evidence, or retain a Local Prerequisite Slice. Do not solve dependency mapping by over-gating the learner.
+This preserves the product rule: **QuanNet locks progression, not curiosity.** A future locked unit may still expose learning/reference content; locking concerns official required progression, not reading access.
+
+An External Required Prerequisite Candidate identifies exact source capability evidence, not automatically `source Learning Unit PASSED → target Learning Unit unlocked`. A later lesson-level mapping may use whole-unit `PASSED` only when it is a fair, compatible proxy without unrelated gating. Otherwise reconsider the grouping, use capability-compatible evidence, or retain a Local Prerequisite Slice. Do not solve dependency mapping by over-gating the learner.
+
+After Learning Units and External Required Prerequisite Candidates are derived, validate the resulting required Learning-Unit prerequisite graph. It must be acyclic before it becomes progression policy. If grouping creates mutual unit dependencies, reconsider the grouping or split, or retain an edge as a Local Prerequisite Slice when faithful; never create a circular learner lock or solve it through arbitrary ordering.
 
 ## Semantic Learning-Unit contract
 
@@ -110,7 +134,7 @@ A future unit proposal must contain semantic metadata, not a database schema:
 | Field | Required semantic decision |
 |---|---|
 | Unit ID and working title | Stable planning identity; not a final public catalog promise. |
-| Learner-facing domain | One of the existing six discovery/navigation domains; it does not replace ownership. |
+| Learner-facing domain candidate | One existing discovery/navigation domain that best represents the primary learner problem/surface; it does not replace ownership or drive grouping, dependencies or assessment. |
 | Primary capability records | Each exact frozen capability ID, its frozen canonical owner track and its frozen technical target level. |
 | Local Prerequisite Slice entries | Source capability ID plus the exact frozen Assumed Slice; no source coverage or evidence claim. |
 | External Required Prerequisite Candidate entries | Source ID, exact required assumed slice/evidence, compatible prior evidence and why a local slice is insufficient. |
@@ -139,7 +163,7 @@ Possible gate types remain the existing prediction, knowledge check, interactive
 
 ## Domain architecture and parallelism
 
-Future units remain discoverable in the six learner-facing domains:
+Future units may be associated with one learner-facing domain candidate from the six discovery/navigation domains:
 
 - Data & Consistency
 - Runtime & Concurrency
@@ -148,7 +172,7 @@ Future units remain discoverable in the six learner-facing domains:
 - Production Engineering
 - Architecture & Engineering Reasoning
 
-Domain membership does not define prerequisite order. Multiple roots, concurrent progression-eligible units, convergence from several prerequisites and recommended non-blocking relationships are intentional. Missing labs or uneven domain density are acceptable when no coherent unit is justified.
+Domain classification does not define capability grouping, canonical ownership, prerequisite decisions, assessment boundaries or future unit identity. It may be adjusted later for navigation without changing those semantics. Multi-owner grouping does not require multiple learner-facing domains. Multiple roots, concurrent progression-eligible units, convergence from several prerequisites and recommended non-blocking relationships are intentional. Missing labs or uneven domain density are acceptable when no coherent unit is justified.
 
 ## Dry-run A — database/index region
 
@@ -160,7 +184,7 @@ These two possible units are deliberately separate. Topic proximity is not enoug
 |---|---|---|
 | Primary capability | `db-index-structures`, `db-composite-query-shape` | One access-path story: an ordered search structure narrows candidate rows, then composite key order determines which predicate/order path is usable. |
 | RECOMMENDED context | `db-physical-storage-pages` | Optional page-locality recap; `db-physical-storage-pages → db-index-structures` is RECOMMENDED and never a lock. |
-| Optional indirect context | `db-buffer-io` | May help a later performance discussion, but has no direct frozen relation to either Primary capability. |
+
 
 | Primary target | Incoming REQUIRED source | Exact frozen Assumed Slice | Lesson-level treatment | Reason |
 |---|---|---|---|---|
