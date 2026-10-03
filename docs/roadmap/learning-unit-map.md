@@ -11,31 +11,34 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 
 | Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count |
 |---|---|---|---|---:|
-| lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
-| lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
-| lu-db-backup-restore | Verify backup and point-in-time restore | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-wal-crash-recovery | Explain WAL crash recovery | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-buffer-io | Separate buffer access from physical page I/O | Data & Consistency | Relational Database Engineering | 2 |
-| lu-db-production-diagnosis-transfer | Diagnose database symptoms across competing hypotheses | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-connection-pool-exhaustion | Diagnose database connection-pool exhaustion | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-locks-deadlocks-contention | Diagnose locks, contention and deadlocks | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-transactions-mvcc-isolation | Choose isolation from visible versions and invariants | Data & Consistency | Relational Database Engineering | 2 |
-| lu-db-schema-evolution | Evolve schema safely across mixed app versions | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-modeling-invariants | Enforce database modeling invariants | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-partitioning-sharding-boundary | Choose partition or shard key from access locality | Data & Consistency | Relational Database Engineering | 1 |
-| lu-db-replication-failover | Reason relational replication and failover | Data & Consistency | Relational Database Engineering | 1 |
-| lu-nosql-cassandra-lsm-compaction-consistency | Model Cassandra partitioned LSM writes and reads | Data & Consistency | NoSQL & Specialized Data Systems | 2 |
-| lu-nosql-storage-choice-transfer | Choose storage family from workload evidence | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-model-selection | Frame storage selection before product choice | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-mongo-aggregate-model | Model Mongo aggregate boundaries | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-mongo-index-shard-transaction | Tune Mongo query route and transaction boundary | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-redis-structures-memory | Choose Redis data structures with memory bounds | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-redis-persistence-replication-cluster-streams | Operate Redis durability, topology and Streams | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
-| lu-nosql-search-projection | Build and operate a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 2 |
-| lu-cache-capacity-eviction-fallback | Protect origin when cache capacity or availability fails | Data & Consistency | Cache Engineering | 1 |
-| lu-cache-evidence-transfer | Diagnose cache latency, staleness and origin-load symptoms | Data & Consistency | Cache Engineering | 1 |
-| lu-cache-source-of-truth-invalidation | Keep cached copies fresh across layers | Data & Consistency | Cache Engineering | 3 |
-| lu-cache-patterns | Choose cache pattern and prevent miss overload | Data & Consistency | Cache Engineering | 2 |
+| lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 |
+| lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 |
+| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-errors-results | Phân loại lỗi dự đoán được và giữ lỗi bất ngờ có ngữ cảnh | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-invariants-domain-model | Giữ business invariant tại state transition và persistence boundary | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-composition-dependencies | Nối dependency tại composition root mà không làm core phụ thuộc hạ tầng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-collections-complexity | Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-resource-ownership | Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-types-generics | Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-prog-values-identity | Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
+| lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu | Runtime & Concurrency | Runtime & Memory | 3 |
+| lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ | Runtime & Concurrency | Runtime & Memory | 2 |
+| lu-runtime-jit-warmup | Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên | Runtime & Concurrency | Runtime & Memory | 1 |
+| lu-runtime-managed-execution | Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue | Runtime & Concurrency | Runtime & Memory | 1 |
+| lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 2 |
+| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-scheduling-starvation | Chẩn đoán runnable work không nhận được CPU hoặc execution capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-termination-graceful-shutdown | Dừng service có deadline mà không nhận thêm work và không mất trạng thái cần giữ | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-virtual-memory-page-cache | Phân biệt virtual memory, working set và page cache khi đọc memory hoặc I/O symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-os-resource-exhaustion | Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 |
+| lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource | Runtime & Concurrency | Concurrency & Async | 3 |
+| lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
+| lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 |
+| lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 |
+| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions | Service & Network | Networking & HTTP | 2 |
+| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn | Service & Network | Networking & HTTP | 4 |
+| lu-net-proxy-lb-forwarded-boundary | Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers | Service & Network | Networking & HTTP | 1 |
+| lu-net-streaming-body-cancellation | Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect | Service & Network | Networking & HTTP | 1 |
 | lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 |
 | lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 |
 | lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 |
@@ -85,6 +88,31 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 |
 | lu-delivery-cloud-responsibility-managed-services | State application-team responsibilities when platform component is managed | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
 | lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 |
+| lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
+| lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-backup-restore | Verify backup and point-in-time restore | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-wal-crash-recovery | Explain WAL crash recovery | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-buffer-io | Separate buffer access from physical page I/O | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-production-diagnosis-transfer | Diagnose database symptoms across competing hypotheses | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-connection-pool-exhaustion | Diagnose database connection-pool exhaustion | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-locks-deadlocks-contention | Diagnose locks, contention and deadlocks | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-transactions-mvcc-isolation | Choose isolation from visible versions and invariants | Data & Consistency | Relational Database Engineering | 2 |
+| lu-db-schema-evolution | Evolve schema safely across mixed app versions | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-modeling-invariants | Enforce database modeling invariants | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-partitioning-sharding-boundary | Choose partition or shard key from access locality | Data & Consistency | Relational Database Engineering | 1 |
+| lu-db-replication-failover | Reason relational replication and failover | Data & Consistency | Relational Database Engineering | 1 |
+| lu-nosql-cassandra-lsm-compaction-consistency | Model Cassandra partitioned LSM writes and reads | Data & Consistency | NoSQL & Specialized Data Systems | 2 |
+| lu-nosql-storage-choice-transfer | Choose storage family from workload evidence | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-model-selection | Frame storage selection before product choice | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-mongo-aggregate-model | Model Mongo aggregate boundaries | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-mongo-index-shard-transaction | Tune Mongo query route and transaction boundary | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-redis-structures-memory | Choose Redis data structures with memory bounds | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-redis-persistence-replication-cluster-streams | Operate Redis durability, topology and Streams | Data & Consistency | NoSQL & Specialized Data Systems | 1 |
+| lu-nosql-search-projection | Build and operate a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 2 |
+| lu-cache-capacity-eviction-fallback | Protect origin when cache capacity or availability fails | Data & Consistency | Cache Engineering | 1 |
+| lu-cache-evidence-transfer | Diagnose cache latency, staleness and origin-load symptoms | Data & Consistency | Cache Engineering | 1 |
+| lu-cache-source-of-truth-invalidation | Keep cached copies fresh across layers | Data & Consistency | Cache Engineering | 3 |
+| lu-cache-patterns | Choose cache pattern and prevent miss overload | Data & Consistency | Cache Engineering | 2 |
 
 ## lu-index-query-shape
 
@@ -119,11 +147,16 @@ Changing predicate/order makes the index no longer searchable.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Choose one composite index for tenant/status/date ordering, run the query, and explain access path plus residual sort.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| db-index-structures | Plan access node/candidate reduction proves index navigation. |
+| db-composite-query-shape | Predicate/order and Sort prove key-path fit. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+equality lookup → equality + range + ORDER BY + LIMIT
 
 ### Boundary decision
 
@@ -162,11 +195,16 @@ Skew/stale stats produce a plausible but bad plan.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Compare two report plans, locate operator work, explain estimate error from statistics/skew, and choose a correction.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| db-execution-operators | Actual rows, loops and timing locate operator work. |
+| db-optimizer-cardinality-stats | Estimated/actual rows and statistics explain plan choice. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+uniform test data → production-like skew
 
 ### Boundary decision
 
@@ -1497,11 +1535,11 @@ A backup that was never restored is unproven.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Inspect backup metadata/logs, choose the recoverable point, then accept or reject the drill from rows, checksum and duration.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+small local restore → production-sized point-in-time restore
 
 ### Boundary decision
 
@@ -1539,11 +1577,11 @@ Commit does not mean every data page was flushed.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Use WAL position, commit/restart result and recovery log to explain which state survives a crash.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+controlled restart → crash immediately after commit
 
 ### Boundary decision
 
@@ -1582,11 +1620,16 @@ Buffer hit is incorrectly called disk I/O.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Run one indexed query cold and warm; explain pages, buffer hits/reads, relation size and storage I/O.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| db-buffer-io | Buffer reads/hits and cold/warm timing prove buffer behavior. |
+| db-physical-storage-pages | Relation/index size and page stats prove physical page work. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+working set fits RAM → working set exceeds RAM
 
 ### Boundary decision
 
@@ -1624,11 +1667,11 @@ Add index before proving the cause.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Rank plan, I/O, lock and pool hypotheses from timelines; name the next discriminating observation and safe mitigation.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+PostgreSQL incident → equivalent Oracle/MySQL/SQL Server symptom
 
 ### Boundary decision
 
@@ -1666,11 +1709,11 @@ Increasing pool overloads the database.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Inspect acquisition wait, active/idle sessions, DB count and query duration; distinguish pool wait from slow SQL.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+one app replica → several replicas sharing DB capacity
 
 ### Boundary decision
 
@@ -1708,11 +1751,11 @@ Long transaction or inconsistent lock order.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Reconstruct a blocking/deadlock wait graph and propose lock-order or transaction-scope change with trade-off.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+two sessions → hot account row across replicas
 
 ### Boundary decision
 
@@ -1751,11 +1794,16 @@ Snapshot confused with blocking; write skew/lost update.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Interpret a two-session reservation trace, state visible versions, identify anomaly, then choose isolation or invariant guard.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| db-transactions-isolation-anomalies | Two-session anomaly/result proves the isolation choice. |
+| db-mvcc-visibility | Snapshot/version observation proves visibility. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+simple read/write → concurrent reservation/write-skew
 
 ### Boundary decision
 
@@ -1793,11 +1841,11 @@ Destructive migration or incompatible rollback.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Plan expand/backfill/cleanup for mixed old/new versions; use lock, compatibility and backfill evidence to decide cleanup.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+single-version deploy → rolling mixed-version deploy
 
 ### Boundary decision
 
@@ -1835,11 +1883,11 @@ Application-only validation is bypassed.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Choose database enforcement for a rule with concurrent writers and demonstrate the rejected invalid write.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+one service-owned schema → legacy DB with multiple writers
 
 ### Boundary decision
 
@@ -1877,11 +1925,11 @@ Hot/unbounded partition or scatter query.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Choose a key from measured access distribution, quantify locality/fan-out and name a repartition trigger.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+uniform tenants → one dominant hot tenant
 
 ### Boundary decision
 
@@ -1919,11 +1967,11 @@ Read-after-write from lagging replica.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Use lag/position, role, connection target and operation ID to decide safe recovery during failover.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+replica read scale → failover during in-flight write
 
 ### Boundary decision
 
@@ -1962,11 +2010,16 @@ Hot partition, read amplification or wrong consistency assumption.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Design a Cassandra key then trace write/read through memtable, SSTables, compaction and replica response.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| nosql-cassandra-partition-model | Query route, key distribution and partition size prove the model. |
+| nosql-cassandra-lsm-compaction-consistency | Compaction/tombstone/replica evidence proves LSM consistency cost. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+uniform partitions → hot tenant plus tombstone-heavy history
 
 ### Boundary decision
 
@@ -2004,11 +2057,11 @@ Tool chosen by trend instead of rejected evidence.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Compare at least two storage families for an unseen workload and reject one by access, consistency, recovery and cost evidence.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+document-heavy workload → append-by-partition plus search projection
 
 ### Boundary decision
 
@@ -2046,11 +2099,11 @@ Search used as source of truth; Redis selected only because fast.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Classify storage family fit from access, growth, source-of-truth and failure needs before naming a product.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+document aggregate → append/read-by-partition workload
 
 ### Boundary decision
 
@@ -2088,11 +2141,11 @@ Unbounded embed or cross-document atomicity assumption.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Model embed/reference for the given document and defend it from size, array growth and update-boundary evidence.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+bounded order aggregate → unbounded activity history
 
 ### Boundary decision
 
@@ -2130,11 +2183,11 @@ Hot chunk, scatter-gather, costly distributed transaction.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Select Mongo index/shard key and justify multi-document transaction from route, profile and latency evidence.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+single-shard update → cross-shard report/transaction
 
 ### Boundary decision
 
@@ -2172,11 +2225,11 @@ Wrong structure or giant/unbounded key.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Choose Redis structures, estimate memory from cardinality/value size and reject an unbounded option.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+bounded small keys → high-cardinality large-value workload
 
 ### Boundary decision
 
@@ -2214,11 +2267,11 @@ Lost acknowledged write, stale replica, hot slot, misunderstood pending entry.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Use persistence, replication, slots and pending state to explain restart/failover and recover Stream work.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+standalone cache → clustered Stream consumer group with failover
 
 ### Boundary decision
 
@@ -2257,11 +2310,16 @@ Text/keyword mismatch, refresh expectation, hot shard or deep offset.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Index a catalog change, inspect analyzed tokens/output, then trace refresh visibility and shard/pagination cost.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| nosql-search-inverted-index-analysis | Mapping, tokens and result prove inverted-index semantics. |
+| nosql-search-refresh-shards-pagination | Refresh, shard profile and page depth prove visibility/cost. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+shallow search → deep pagination on skewed shards
 
 ### Boundary decision
 
@@ -2299,11 +2357,11 @@ Recursive fallback creates a cascade.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Use eviction, hit/miss, origin QPS and fallback traces to choose bounded origin protection.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+healthy cache → widespread eviction/outage with origin pressure
 
 ### Boundary decision
 
@@ -2341,11 +2399,11 @@ Hit rate is treated as the only success metric.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The strongest neighboring units were tested; they require a different mechanism/evidence boundary, so this remains a singleton.
+Use key-level hit/miss, TTL, source load, p95 and versions to distinguish stale, hot-key, eviction and invalidation hypotheses.
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+high hit-rate latency case → stale-version incident with good hit rate
 
 ### Boundary decision
 
@@ -2385,11 +2443,17 @@ Cache becomes authority or one layer stays stale.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Update one source record while L1/L2 copies exist; use version, age and layer evidence to decide which copy may serve.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| cache-need-source-of-truth | Source row/version and cached copy identify authority. |
+| cache-invalidation-consistency | Event, version/TTL and timeline prove freshness decision. |
+| cache-multilayer-coherence | Layer key, instance ID and age locate divergence. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+one distributed cache → L1 + distributed cache with delayed invalidation
 
 ### Boundary decision
 
@@ -2428,11 +2492,16 @@ Cache write without source; miss storm; synchronized TTL; hot key.
 
 ### Shared assessment task
 
-Use the captured evidence to explain the state trace, identify the broken assumption and choose a change that preserves the production boundary. The same task has explicit proof for every listed Primary capability.
+Trace cache-aside/read-through and write ordering, inject expiry/miss pressure, then select defense for the overload mode.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| cache-patterns | Loader calls and source/cache write order prove pattern ownership. |
+| cache-stampede-penetration-avalanche-hot-key | Expiry, per-key QPS and origin load identify overload mode. |
 
 ### Transfer variation
 
-Change workload, failure mode, topology or data distribution while preserving the mechanism above.
+normal misses → synchronized TTL expiry/hot-key burst
 
 ### Boundary decision
 

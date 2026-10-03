@@ -347,23 +347,23 @@
 | lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | arch-requirements-quality-attributes; obs-latency-throughput-saturation | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-arch-sync-async-integration | arch-sync-async-integration | arch-requirements-quality-attributes; net-http-semantics | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-delivery-cloud-responsibility-managed-services | delivery-cloud-responsibility-managed-services | sec-secrets-third-party-trust; rel-disaster-recovery-rpo-rto | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-db-backup-restore | db-backup-restore | strongest data boundary | WAL crash replay and DR policy use different recovery horizons/evidence. |
-| lu-db-wal-crash-recovery | db-wal-crash-recovery | strongest data boundary | Crash-window recovery is not a restore drill or replica promotion. |
-| lu-db-production-diagnosis-transfer | db-production-diagnosis-transfer | strongest data boundary | L4 synthesis compares causes; a foundation trace cannot prove it. |
-| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | strongest data boundary | Pool acquisition evidence differs from OS resource and app backpressure evidence. |
-| lu-db-locks-deadlocks-contention | db-locks-deadlocks-contention | strongest data boundary | Wait graph/cycle evidence differs from visibility and isolation evidence. |
-| lu-db-schema-evolution | db-schema-evolution | strongest data boundary | Compatibility/backfill state differs from lock or invariant state. |
-| lu-db-modeling-invariants | db-modeling-invariants | strongest data boundary | Legal persisted state differs from routing/locality evidence. |
-| lu-db-partitioning-sharding-boundary | db-partitioning-sharding-boundary | strongest data boundary | Distribution/fan-out evidence differs from modeling constraints. |
-| lu-db-replication-failover | db-replication-failover | strongest data boundary | Engine role/lag differs from generic quorum or WAL evidence. |
-| lu-nosql-storage-choice-transfer | nosql-transfer-storage-choice | strongest data boundary | L4 comparison uses foundations but does not teach one shared mechanism. |
-| lu-nosql-model-selection | nosql-model-selection | strongest data boundary | Family framing is distinct from product mechanisms and L4 transfer. |
-| lu-nosql-mongo-aggregate-model | nosql-mongo-aggregate-model | strongest data boundary | Aggregate boundary differs from route/shard/transaction tuning. |
-| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | strongest data boundary | Mongo route/transaction evidence differs from generic partitioning. |
-| lu-nosql-redis-structures-memory | nosql-redis-structures-memory | strongest data boundary | Structure/memory choice differs from durability/topology evidence. |
-| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | strongest data boundary | Topology/consumer state differs from data structure evidence. |
-| lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | strongest data boundary | Eviction-to-origin containment differs from loader and Redis-memory evidence. |
-| lu-cache-evidence-transfer | cache-evidence-transfer | strongest data boundary | L4 cache diagnosis spans foundations and has its own evidence policy. |
+| lu-db-backup-restore | db-backup-restore | lu-db-wal-crash-recovery; lu-rel-disaster-recovery-rpo-rto | Recovery point/duration differs from WAL replay and DR policy. |
+| lu-db-wal-crash-recovery | db-wal-crash-recovery | lu-db-backup-restore; lu-db-replication-failover | Crash-window log evidence differs from restore and replica role/lag. |
+| lu-db-production-diagnosis-transfer | db-production-diagnosis-transfer | lu-db-buffer-io; lu-execution-plan-estimates; lu-db-locks-deadlocks-contention; lu-db-connection-pool-exhaustion | L4 competing-hypothesis transfer spans foundations; no foundation trace can assess it. |
+| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | lu-os-resource-exhaustion; lu-concurrency-async-parallelism | Pool acquisition/session ownership differs from OS quota and admission evidence. |
+| lu-db-locks-deadlocks-contention | db-locks-deadlocks-contention | lu-db-transactions-mvcc-isolation; lu-concurrency-deadlock-starvation | Lock wait-cycle evidence differs from MVCC/isolation and scheduler evidence. |
+| lu-db-schema-evolution | db-schema-evolution | lu-db-modeling-invariants; lu-rel-change-rollout-rollback-risk | Compatibility/backfill state differs from invariant and rollout policy evidence. |
+| lu-db-modeling-invariants | db-modeling-invariants | lu-db-partitioning-sharding-boundary; lu-prog-invariants-domain-model | Legal persisted state differs from locality/fan-out and domain-transition proof. |
+| lu-db-partitioning-sharding-boundary | db-partitioning-sharding-boundary | lu-db-modeling-invariants; lu-dist-partitioning-ownership-rebalancing | Distribution/routing/fan-out differs from constraint and ownership evidence. |
+| lu-db-replication-failover | db-replication-failover | lu-db-wal-crash-recovery; lu-dist-replication-leader-quorum | Relational role/lag/client outcome differs from WAL and quorum evidence. |
+| lu-nosql-storage-choice-transfer | nosql-transfer-storage-choice | lu-nosql-model-selection; lu-nosql-cassandra-lsm-compaction-consistency | L4 comparison applies foundations but teaches no one product mechanism. |
+| lu-nosql-model-selection | nosql-model-selection | lu-nosql-mongo-aggregate-model; lu-nosql-redis-structures-memory; lu-nosql-search-projection | Family framing differs from product mechanisms and L4 comparison. |
+| lu-nosql-mongo-aggregate-model | nosql-mongo-aggregate-model | lu-nosql-mongo-index-shard-transaction | Aggregate ownership/growth differs from route, shard and transaction evidence. |
+| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | lu-nosql-mongo-aggregate-model; lu-dist-partitioning-ownership-rebalancing | Route/transaction scope differs from aggregate modeling and generic rebalance proof. |
+| lu-nosql-redis-structures-memory | nosql-redis-structures-memory | lu-nosql-redis-persistence-replication-cluster-streams; lu-cache-capacity-eviction-fallback | Structure/memory evidence differs from topology and cache fallback. |
+| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | lu-nosql-redis-structures-memory; lu-msg-consumer-groups-offsets-rebalance | Topology/pending-work evidence differs from structures and broker assignment. |
+| lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | lu-cache-patterns; lu-nosql-redis-structures-memory | Eviction-to-origin containment differs from loader/write and Redis layout evidence. |
+| lu-cache-evidence-transfer | cache-evidence-transfer | lu-cache-capacity-eviction-fallback; lu-cache-source-of-truth-invalidation; lu-cache-patterns | L4 diagnosis spans capacity, freshness, layers and miss-overload. |
 
 ## E. Multi-Capability Grouping Review
 
@@ -396,14 +396,14 @@
 | lu-delivery-artifact-image-config | Produce reproducible versioned artifact and separate immutable build from runtime config/secret. | Build creates versioned image; runtime injects config; same digest promotes environments. → CI builds once; registry stores immutable artifact; CD promotes exact reference. → Platform moves traffic/version sets over time; strategy controls coexistence/exposure. → Platform state/events cover scheduling, startup, probes, resources/restarts; app logs alone omit not-running cause. | Digest/tag; Git SHA; config source; SBOM/provenance; deployed identity.; SHA; pipeline run; digest; registry metadata; deployment record; approval.; Replica/version; deployment status; traffic; readiness; digest; rollback history.; Workload status; events; exit; metrics; logs; config refs; endpoints; revision. | Rebuild production differently; latest tag lost provenance; secret baked image; config drift; unknown rollback artifact.; Separate prod rebuild; tag moves digest; no source tie; manual bypass; rollback artifact absent.; Old/new incompatible; availability gap; irreversible schema/event; unrepresentative canary; readiness stall.; CrashLoop no exit reason; pending pod app-log only; OOMKill normal crash; mount ignored; selector mismatch. | One bounded trace observes all Primary mechanisms. |
 | lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help. | Autoscaler observes signal then changes replicas after delay; scale helps parallel app work but can increase downstream pressure. → Scheduler uses requests; CPU may throttle and memory policy may kill/evict workload. → Artifact/config/resource/health/shutdown/network/telemetry are portable requirements; platform implementations differ. | Signal; replicas; CPU/queue/concurrency; downstream; events; p95/p99.; Requests/limits; throttle; RSS; OOM; restart; node/pod metrics.; Requirement matrix; platform config; lifecycle behavior; deployment/failure result. | CPU for I/O bottleneck; consumers beyond DB; burst faster scale; hot partition; cold scale violates latency.; Throttle called lock; OOM only GC; no request; excessive reservation; limit ignores working/native/page cache.; YAML treated architecture; health shifts; filesystem assumption; CPU/memory change; debug evidence hidden. | One bounded trace observes all Primary mechanisms. |
 | lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM. | Runtime starts process with filesystem/network/resource boundaries; container lifetime follows primary process. → Platform calls probe and converts result to routing/restart by configured type. → Termination → readiness removal → signal → grace window → drain/cancel/ack/release → exit. | Process tree; state/restart; mounts; exit code; runtime events.; Probe config/result; K8s events; ready condition; restarts; routing.; Termination/readiness time; endpoints; active work; signal; grace; exit. | Child lifecycle wrong; PID assumption; durable data ephemeral FS; restart equals recovery.; Readiness wired liveness; outage restart loop; early warmup; expensive probe; terminating still routed.; Still routed after SIGTERM; ack after lost work; grace short; LB delay ignored; no durable handoff. | One bounded trace observes all Primary mechanisms. |
-| lu-index-query-shape | One canonical scenario defined in map. | One state trace joins db-index-structures; db-composite-query-shape. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-execution-plan-estimates | One canonical scenario defined in map. | One state trace joins db-execution-operators; db-optimizer-cardinality-stats. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-db-buffer-io | One canonical scenario defined in map. | One state trace joins db-buffer-io; db-physical-storage-pages. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-db-transactions-mvcc-isolation | One canonical scenario defined in map. | One state trace joins db-transactions-isolation-anomalies; db-mvcc-visibility. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-nosql-cassandra-lsm-compaction-consistency | One canonical scenario defined in map. | One state trace joins nosql-cassandra-partition-model; nosql-cassandra-lsm-compaction-consistency. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-nosql-search-projection | One canonical scenario defined in map. | One state trace joins nosql-search-inverted-index-analysis; nosql-search-refresh-shards-pagination. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-cache-source-of-truth-invalidation | One canonical scenario defined in map. | One state trace joins cache-need-source-of-truth; cache-invalidation-consistency; cache-multilayer-coherence. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
-| lu-cache-patterns | One canonical scenario defined in map. | One state trace joins cache-patterns; cache-stampede-penetration-avalanche-hot-key. | Integrated evidence and one debug loop are recorded in canonical detail. | Shared assessment must prove each Primary. | One bounded assessment is coherent. |
+| lu-index-query-shape | Tenant ordered lookup | composite prefix/range/order | plan/rows/Sort | unusable path | one plan proves index navigation and key-path fit. |
+| lu-execution-plan-estimates | Skewed report | operator/estimate trace | rows/loops/stats | bad plan | one plan proves both. |
+| lu-db-buffer-io | Cold/warm query | page-buffer-storage | buffers/size/timing | buffer-hit confusion | one trace proves both. |
+| lu-db-transactions-mvcc-isolation | Concurrent reservation | visible version/isolation | snapshots/conflict | write skew | one trace proves both. |
+| lu-nosql-cassandra-lsm-compaction-consistency | Time series | partition-to-LSM-to-replica | distribution/compaction | hot/tombstones | one query proves both. |
+| lu-nosql-search-projection | Catalog projection | analyzer-refresh-shard-page | tokens/profile | wrong analyzer/deep offset | one task proves both. |
+| lu-cache-source-of-truth-invalidation | Source update with L1/L2 | version/invalidation/layer | version/age/instance | stale layer | one task proves all. |
+| lu-cache-patterns | Read/write and expiry | loader-to-miss mode | loader/expiry/key-QPS | stampede/hot key | one task proves both. |
 
 ## F. Cross-Owner Review
 
@@ -473,14 +473,14 @@ None.
 
 ## Data & Consistency batch closure
 
-**REVIEWED.** The 17 original in-scope units have explicit dispositions: 9 KEEP, 7 SPLIT and 1 MERGE. Final Data & Consistency state has 25 units. The three L4 transfer capabilities are independent synthesis units. Required cross-owner neighborhoods were rejected with mechanism/evidence-specific reasons; no cross-owner merge was accepted.
+**REVIEWED.** The Decision Ledger below accounts for all 17 original units: **7 KEEP, 7 SPLIT, 3 MERGE**. Final state is 25 Data & Consistency units.
 
 ## Data & Consistency Decision Ledger
 
-| Original unit | Disposition | Final canonical state |
+| Original unit | Primary disposition | Final canonical state |
 |---|---|---|
-| lu-index-query-shape | KEEP | unchanged composition; scenario/evidence hardened |
-| lu-execution-plan-estimates | KEEP | unchanged composition; scenario/evidence hardened |
+| lu-index-query-shape | KEEP | unchanged composition; evidence hardened |
+| lu-execution-plan-estimates | KEEP | unchanged composition; evidence hardened |
 | lu-db-backup-restore | SPLIT | lu-db-backup-restore; lu-db-wal-crash-recovery |
 | lu-db-buffer-io | SPLIT | lu-db-buffer-io; lu-db-production-diagnosis-transfer |
 | lu-db-connection-pool-exhaustion | KEEP | singleton retained |
@@ -493,6 +493,6 @@ None.
 | lu-nosql-mongo-index-shard-transaction | KEEP | singleton retained |
 | lu-nosql-redis-persistence-replication-cluster-streams | KEEP | singleton retained |
 | lu-nosql-search-refresh-shards-pagination | MERGE | lu-nosql-search-projection |
-| lu-cache-capacity-eviction-fallback | SPLIT | lu-cache-capacity-eviction-fallback; lu-cache-evidence-transfer |
-| lu-cache-invalidation-consistency | MERGE / REASSIGN | lu-cache-source-of-truth-invalidation |
+| lu-cache-capacity-eviction-fallback | SPLIT | lu-cache-capacity-eviction-fallback; lu-cache-evidence-transfer; `cache-need-source-of-truth` moves to lu-cache-source-of-truth-invalidation |
+| lu-cache-invalidation-consistency | MERGE | lu-cache-source-of-truth-invalidation |
 | lu-cache-patterns | KEEP | unchanged composition |
