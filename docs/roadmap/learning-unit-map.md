@@ -517,7 +517,9 @@ Given an endpoint that deduplicates and orders 100k product IDs, choose the coll
 Change from mostly lookup to frequent middle insertion; justify a different structure from the measured operation mix.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-prog-values-identity | Both affect collection behavior | Equality/aliasing uses an object-state trace; complexity requires operation-count and workload evidence. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-prog-values-identity | Both affect collection behavior | Equality/aliasing uses an object-state trace; complexity requires operation-count and workload evidence. |
 ### Explicit exclusions
 
 None material.
@@ -560,7 +562,10 @@ Trace a streamed export from creation through the final consumer, assign one own
 Replace an in-memory buffer with a pooled buffer while preserving the final-consumer lifetime rule.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-concurrency-async-parallelism | Async carries resources across awaits | Bounded concurrency measures queued work; ownership follows one resource to its final consumer. |`n| lu-net-streaming-body-cancellation | Both touch stream lifetime | HTTP transfer adds protocol cancellation and response semantics. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-concurrency-async-parallelism | Async carries resources across awaits | Bounded concurrency measures queued work; ownership follows one resource to its final consumer. |
+| lu-net-streaming-body-cancellation | Both touch stream lifetime | HTTP transfer adds protocol cancellation and response semantics. |
 ### Explicit exclusions
 
 - `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
@@ -604,7 +609,9 @@ Turn untrusted registration input into a valid internal type and make an invalid
 Add an optional older-client field and show where null is normalized before the internal model.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-prog-invariants-domain-model | Both prevent invalid state | Types constrain representability before runtime; invariants judge a transition and persistence path. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-prog-invariants-domain-model | Both prevent invalid state | Types constrain representability before runtime; invariants judge a transition and persistence path. |
 ### Explicit exclusions
 
 None material.
@@ -647,7 +654,9 @@ Predict mutation through one alias after using the object as a dictionary key, t
 Replace a mutable class with an immutable value object and explain which observable behavior changes.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-prog-collections-complexity | Equality is used by collections | The proof is alias/mutation behavior, while collection selection needs workload cost evidence. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-prog-collections-complexity | Equality is used by collections | The proof is alias/mutation behavior, while collection selection needs workload cost evidence. |
 ### Explicit exclusions
 
 None material.
@@ -781,7 +790,9 @@ Given first-request and steady-state timings plus JIT events, decide whether a r
 Run after a deployment that invalidates cache and after process restart; isolate which first-use costs recur.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-obs-load-test-benchmark-validity | Both concern timing | JIT warm-up needs runtime event/first-call evidence; benchmark validity judges workload and measurement design. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-obs-load-test-benchmark-validity | Both concern timing | JIT warm-up needs runtime event/first-call evidence; benchmark validity judges workload and measurement design. |
 ### Explicit exclusions
 
 - `obs-load-test-benchmark-validity` remains separate pending its own mechanism/evidence boundary.
@@ -824,7 +835,9 @@ Given a slow request with managed stack, OS thread view and socket wait, assign 
 Move the workload from a local process to a container and identify which evidence still belongs to runtime versus OS.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-runtime-allocation-gc | Both are runtime investigations | Managed execution locates responsibility across layers; GC traces one heap/allocation mechanism. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-runtime-allocation-gc | Both are runtime investigations | Managed execution locates responsibility across layers; GC traces one heap/allocation mechanism. |
 ### Explicit exclusions
 
 - `runtime-memory-roots-lifetime` remains separate pending its own mechanism/evidence boundary.
@@ -1092,7 +1105,9 @@ Given four snapshots, identify whether memory, threads, handles or sockets reach
 Run in a container memory limit; distinguish cgroup kill from managed heap growth.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-os-process-thread-kernel | Both use process inspection | Process/thread assessment explains execution boundaries; exhaustion identifies finite resource quotas from their failures. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-os-process-thread-kernel | Both use process inspection | Process/thread assessment explains execution boundaries; exhaustion identifies finite resource quotas from their failures. |
 ### Explicit exclusions
 
 - `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
@@ -1182,7 +1197,10 @@ Classify a wait trace as circular deadlock or starvation, then choose lock order
 Replace one in-process lock with a database lock and explain why the local diagnosis cannot be reused as the database lock model.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-race-atomicity | Both mention synchronization | Atomicity proves one invariant across an interleaving; this unit classifies a blocking/progress failure. |`n| lu-db-locks-deadlocks-contention | Both use waits | Database locks require transaction/row-version evidence and a different state owner. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-race-atomicity | Both mention synchronization | Atomicity proves one invariant across an interleaving; this unit classifies a blocking/progress failure. |
+| lu-db-locks-deadlocks-contention | Both use waits | Database locks require transaction/row-version evidence and a different state owner. |
 ### Explicit exclusions
 
 - `concurrency-synchronization-atomicity` remains separate pending its own mechanism/evidence boundary.
@@ -1226,7 +1244,9 @@ Run one-coupon-per-customer through four replicas, show four local locks, then s
 Replace database atomic claim with partition ownership and state new failure/recovery evidence.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-race-atomicity | Both protect an invariant | This unit requires replica identity and a cross-replica authority; race proof is in one process. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-race-atomicity | Both protect an invariant | This unit requires replica identity and a cross-replica authority; race proof is in one process. |
 ### Explicit exclusions
 
 - `concurrency-races-check-then-act` remains separate pending its own mechanism/evidence boundary.
@@ -1270,7 +1290,9 @@ Reproduce a published flag/data pair, choose lock/volatile/interlocked, and expl
 Publish an immutable snapshot instead of mutable fields and identify remaining ordering requirement.
 ### Merge decisions
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |`n|---|---|---|`n| lu-race-atomicity | Both expose concurrent incorrectness | Visibility needs memory-publication ordering evidence, not merely an interleaving outcome. |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| lu-race-atomicity | Both expose concurrent incorrectness | Visibility needs memory-publication ordering evidence, not merely an interleaving outcome. |
 ### Explicit exclusions
 
 - `concurrency-interleavings-invariants` remains separate pending its own mechanism/evidence boundary.

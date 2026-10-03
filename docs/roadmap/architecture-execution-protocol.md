@@ -199,3 +199,16 @@ Before committing, ask:
 10. Does the final report describe actual state rather than intent?
 
 Any failed answer blocks completion. Generate the final report from the final canonical state, listing actual counts, IDs, assignments, validation, and unresolved blockers.
+## Derived registry exactness
+
+After an architecture mutation, derive the final canonical entity set from the authoritative assignment state. Every derived registry must have exact set equality with that state: no missing entity, stale entity, or pre-split/pre-merge classification is allowed.
+
+For current Learning-Unit work, derive unit membership from the Primary-Home Registry, then require:
+
+- Unit Composition Registry unit set = derived unit set;
+- Singleton Review Registry unit set = every unit whose Primary count is 1; and
+- Multi-Capability Grouping Review unit set = every unit whose Primary count is greater than 1.
+
+Row counts must match derived counts, each row must use final canonical membership, no singleton may remain in the Multi registry, and no multi unit may appear in the Singleton registry. A stale classification blocks REVIEWED.
+
+Canonical-registry Markdown tables must also be machine-checked for expected column count, one physical row per entity, no concatenated rows, and no literal newline escape artifacts such as backslash-n or PowerShell-style backtick-n inside table structure. Content validation does not replace this structural check.
