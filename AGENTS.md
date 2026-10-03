@@ -40,6 +40,9 @@ npm run check
 
 Do not claim a command passed unless it actually ran successfully.
 
+For curriculum decomposition, Learning Unit grouping, Learning Unit prerequisite mapping, or capability → Learning Unit work, read:
+
+`docs/roadmap/lesson-decomposition-contract.md`
 For lesson authoring/review, use:
 
 `docs/authoring/golden-lesson-checklist.md`

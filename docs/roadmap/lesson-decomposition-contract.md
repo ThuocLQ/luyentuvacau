@@ -1,6 +1,6 @@
 # Post-Step-3 Lesson Decomposition Contract
 
-> **Status:** Draft for human / architecture review.
+> **Status:** FROZEN — Post-Step-3 canonical Lesson Decomposition Contract.
 > **Scope:** semantic bridge from frozen capabilities and their dependency graph to future QuanNet Learning Units. This is not a lesson catalog, roadmap, schedule, UI, schema, case bank, or time estimate.
 
 ## Purpose and frozen inputs
@@ -10,7 +10,7 @@ This contract translates two frozen inputs into a future authoring decision:
 ```text
 frozen capability nodes + frozen capability dependency relations
 → coherent Learning Units
-→ explicit lesson-prerequisite candidates
+→ explicit Learning-Unit prerequisite candidates
 → future cases, gates and evidence
 → learner-facing authoring
 ```
@@ -81,7 +81,7 @@ A Local Prerequisite Slice does not transfer canonical ownership, claim the sour
 
 Do not hide a capability required to continue into the target mechanism behind Recap / Applied. Use the frozen REQUIRED-edge treatment instead: Local Prerequisite Slice or External Required Prerequisite Candidate. RECOMMENDED context remains non-blocking.
 
-A consumer domain may apply, transfer or add domain-specific failure evidence. It must not redefine the producer domain's canonical mechanism. Reuse is not duplicate teaching.
+A consumer track or Learning Unit may recap, apply, transfer or add domain-specific failure evidence, but it must not redefine the canonical owner's mechanism. Reuse is not duplicate teaching.
 
 ## REQUIRED-edge completeness invariant
 
@@ -95,7 +95,7 @@ No incoming REQUIRED relation may disappear because a dry-run role table did not
 
 ## Global full-decomposition invariants
 
-The future full Learning-Unit map must give every one of the 163 frozen Step-2 capabilities exactly one canonical **Primary assessment home**. A capability may appear elsewhere only as a Local Prerequisite Slice, Recap / Applied capability, RECOMMENDED context or another explicitly non-Primary use. This guarantees complete coverage without equating one capability with one lesson or duplicating canonical mechanism ownership. If a capability cannot obtain one coherent Primary assessment home without violating the grouping/split criteria, flag an architecture conflict; do not silently duplicate Primary coverage.
+The future full Learning-Unit map must give every one of the 163 frozen Step-2 capabilities exactly one canonical **Primary assessment home**. A capability may appear elsewhere only through the defined taxonomy: Local Prerequisite Slice, External Required Prerequisite Candidate, Recap / Applied capability or RECOMMENDED context. This guarantees complete coverage without equating one capability with one lesson or duplicating canonical mechanism ownership. If a capability cannot obtain one coherent Primary assessment home without violating the grouping/split criteria, flag an architecture conflict; do not silently duplicate Primary coverage.
 
 | Global structural acceptance check | Required result |
 |---|---:|
@@ -291,6 +291,6 @@ None in this contract. Learning Unit semantic boundary, canonical ownership repr
 
 These questions require later architecture/product review; this document does not settle them for convenience.
 
-## Future freeze closure
+## Freeze discoverability
 
-This document remains a draft for human / architecture review. When it is later accepted and marked FROZEN, that same freeze task must make it discoverable from the repository entrypoint, for example with a scoped `AGENTS.md` rule requiring curriculum / Learning Unit decomposition work to read this contract. Do not make a draft artifact canonical prematurely.
+This contract is FROZEN. `AGENTS.md` carries the scoped repository-entrypoint rule for future curriculum / Learning Unit decomposition work; ordinary lesson editing continues to follow the existing authoring workflow and need not read this contract unless it changes decomposition semantics.
