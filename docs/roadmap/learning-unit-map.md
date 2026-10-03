@@ -1,11 +1,11 @@
-# QuanNet Full Learning-Unit Map
+# QuanNet Learning-Unit Map — Stage 1
 
-> **Status:** DRAFT — architecture review required.
+> **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-This is semantic architecture only: not lesson authoring, source-map research, detailed cases, assessment variants, UI, progression/backend implementation, sequencing or hour estimation. File order is **not** curriculum order.
+Frozen capabilities: 163. Proposed Learning Units: 88. Singleton units: 48. Multi-capability units: 40. Single-owner units: 88. Multi-owner units: 0.
 
-**Discovered Learning Units:** 158. No External Required Prerequisite Candidate is declared; parallel eligibility remains possible.
+File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
 ## Unit Registry
 
@@ -15,305 +15,196 @@ This is semantic architecture only: not lesson authoring, source-map research, d
 | lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 | 0 |
 | lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 | 0 |
 | lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 | 0 |
-| lu-prog-api-refactoring-change-safety | prog-api-refactoring-change-safety | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-collections-complexity | prog-collections-complexity | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-composition-dependencies | prog-composition-dependencies | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-errors-results | prog-errors-results | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-invariants-domain-model | prog-invariants-domain-model | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-resource-ownership | prog-resource-ownership | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-types-generics | prog-types-generics | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-prog-values-identity | prog-values-identity | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
-| lu-runtime-allocation-gc | runtime-allocation-gc | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-diagnostics | runtime-diagnostics | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-jit-warmup | runtime-jit-warmup | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-managed-execution | runtime-managed-execution | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-memory-performance-debug | runtime-memory-performance-debug | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-memory-roots-lifetime | runtime-memory-roots-lifetime | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-runtime-retention-pooling-large-objects | runtime-retention-pooling-large-objects | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
-| lu-os-blocking-io-waits | os-blocking-io-waits | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-os-files-handles-sockets-ipc | os-files-handles-sockets-ipc | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-os-process-thread-kernel | os-process-thread-kernel | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-os-resource-exhaustion | os-resource-exhaustion | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-os-scheduling-starvation | os-scheduling-starvation | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-os-termination-graceful-shutdown | os-termination-graceful-shutdown | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-os-virtual-memory-page-cache | os-virtual-memory-page-cache | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
-| lu-concurrency-async-parallelism | concurrency-async-parallelism | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-bounded-backpressure | concurrency-bounded-backpressure | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-cancellation-lifetime | concurrency-cancellation-lifetime | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-concurrency-memory-visibility | concurrency-memory-visibility | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
-| lu-net-connection-reuse-pooling | net-connection-reuse-pooling | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-failure-localization-unknown-outcome | net-failure-localization-unknown-outcome | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-http-semantics | net-http-semantics | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-request-path-dns | net-request-path-dns | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-streaming-body-cancellation | net-streaming-body-cancellation | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-tcp-connection-semantics | net-tcp-connection-semantics | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-net-tls-trust-handshake | net-tls-trust-handshake | Service & Network | Networking & HTTP | 1 | 0 |
-| lu-db-backup-restore | db-backup-restore | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-buffer-io | db-buffer-io | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-connection-pool-exhaustion | db-connection-pool-exhaustion | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-locks-deadlocks-contention | db-locks-deadlocks-contention | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-modeling-invariants | db-modeling-invariants | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-mvcc-visibility | db-mvcc-visibility | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-partitioning-sharding-boundary | db-partitioning-sharding-boundary | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-physical-storage-pages | db-physical-storage-pages | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-production-diagnosis-transfer | db-production-diagnosis-transfer | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-replication-failover | db-replication-failover | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-schema-evolution | db-schema-evolution | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-transactions-isolation-anomalies | db-transactions-isolation-anomalies | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-db-wal-crash-recovery | db-wal-crash-recovery | Data & Consistency | Relational Database Engineering | 1 | 0 |
-| lu-nosql-cassandra-lsm-compaction-consistency | nosql-cassandra-lsm-compaction-consistency | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-cassandra-partition-model | nosql-cassandra-partition-model | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-model-selection | nosql-model-selection | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-mongo-aggregate-model | nosql-mongo-aggregate-model | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-mongo-index-shard-transaction | nosql-mongo-index-shard-transaction | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-redis-structures-memory | nosql-redis-structures-memory | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-search-inverted-index-analysis | nosql-search-inverted-index-analysis | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-search-refresh-shards-pagination | nosql-search-refresh-shards-pagination | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-nosql-transfer-storage-choice | nosql-transfer-storage-choice | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
-| lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-cache-evidence-transfer | cache-evidence-transfer | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-cache-invalidation-consistency | cache-invalidation-consistency | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-cache-multilayer-coherence | cache-multilayer-coherence | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-cache-need-source-of-truth | cache-need-source-of-truth | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-cache-patterns | cache-patterns | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-cache-stampede-penetration-avalanche-hot-key | cache-stampede-penetration-avalanche-hot-key | Data & Consistency | Cache Engineering | 1 | 0 |
-| lu-dist-consensus-coordination-purpose | dist-consensus-coordination-purpose | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-consistency-linearizability | dist-consistency-linearizability | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-guarantee-recovery-transfer | dist-guarantee-recovery-transfer | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-partial-failure-uncertainty | dist-partial-failure-uncertainty | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-reconciliation-convergence | dist-reconciliation-convergence | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-replication-leader-quorum | dist-replication-leader-quorum | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-rpc-unknown-completion | dist-rpc-unknown-completion | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-time-order-causality | dist-time-order-causality | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-dist-transactions-2pc-boundary | dist-transactions-2pc-boundary | Distributed Systems | Distributed Systems | 1 | 0 |
-| lu-msg-consumer-groups-offsets-rebalance | msg-consumer-groups-offsets-rebalance | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-delivery-retry-poison-dlq | msg-delivery-retry-poison-dlq | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-external-side-effect-reconciliation | msg-external-side-effect-reconciliation | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-lag-backpressure-evidence | msg-lag-backpressure-evidence | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-model-queue-topic-partition-order | msg-model-queue-topic-partition-order | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-producer-acks-durability | msg-producer-acks-durability | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-replay-backfill | msg-replay-backfill | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
-| lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-contract-resource-semantics | api-contract-resource-semantics | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-deadlines-timeout-cancellation | api-deadlines-timeout-cancellation | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-request-identity-idempotency | api-request-identity-idempotency | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-retry-backoff-jitter | api-retry-backoff-jitter | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-unknown-outcome-reconciliation | api-unknown-outcome-reconciliation | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-validation-errors-pagination | api-validation-errors-pagination | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-api-versioning-compatibility | api-versioning-compatibility | Service & Network | API Contracts & Resilience | 1 | 0 |
-| lu-sec-abuse-bruteforce-resource-business-flow | sec-abuse-bruteforce-resource-business-flow | Service & Network | Security | 1 | 0 |
-| lu-sec-audit-detection-evidence | sec-audit-detection-evidence | Service & Network | Security | 1 | 0 |
-| lu-sec-auth-session-token | sec-auth-session-token | Service & Network | Security | 1 | 0 |
-| lu-sec-authorization-object-tenant | sec-authorization-object-tenant | Service & Network | Security | 1 | 0 |
-| lu-sec-browser-boundaries-cors-csrf-xss | sec-browser-boundaries-cors-csrf-xss | Service & Network | Security | 1 | 0 |
-| lu-sec-injection-ssrf-input-output | sec-injection-ssrf-input-output | Service & Network | Security | 1 | 0 |
-| lu-sec-oauth-oidc-awareness | sec-oauth-oidc-awareness | Service & Network | Security | 1 | 0 |
-| lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | Service & Network | Security | 1 | 0 |
-| lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | Service & Network | Security | 1 | 0 |
-| lu-sec-trust-boundary-threat-model | sec-trust-boundary-threat-model | Service & Network | Security | 1 | 0 |
-| lu-sec-unseen-attack-transfer | sec-unseen-attack-transfer | Service & Network | Security | 1 | 0 |
-| lu-obs-cardinality-sampling-cost | obs-cardinality-sampling-cost | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-db-io-downstream-attribution | obs-db-io-downstream-attribution | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-diagnostic-method | obs-diagnostic-method | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-instrumentation-context | obs-instrumentation-context | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-latency-throughput-saturation | obs-latency-throughput-saturation | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-load-test-benchmark-validity | obs-load-test-benchmark-validity | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-logs-structured-correlation | obs-logs-structured-correlation | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-profiling-runtime-evidence | obs-profiling-runtime-evidence | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-signals-correlation | obs-signals-correlation | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-obs-tracing-distributed-evidence | obs-tracing-distributed-evidence | Production Engineering | Observability & Performance | 1 | 0 |
-| lu-rel-cascading-failure-queue-capacity | rel-cascading-failure-queue-capacity | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-change-rollout-rollback-risk | rel-change-rollout-rollback-risk | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-dependency-budgets | rel-dependency-budgets | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-disaster-recovery-rpo-rto | rel-disaster-recovery-rpo-rto | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-failure-injection-verification | rel-failure-injection-verification | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-health-readiness-semantics | rel-health-readiness-semantics | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-incident-response-postmortem | rel-incident-response-postmortem | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-overload-load-shedding-degradation | rel-overload-load-shedding-degradation | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-rel-user-journey-sli-slo-budget | rel-user-journey-sli-slo-budget | Production Engineering | Reliability / SRE | 1 | 0 |
-| lu-test-ci-flakiness-repeatability | test-ci-flakiness-repeatability | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-failure-resilience | test-failure-resilience | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-migration-compatibility | test-migration-compatibility | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-property-boundary-fuzz | test-property-boundary-fuzz | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-real-dependency-fixtures | test-real-dependency-fixtures | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-review-static-analysis-change-safety | test-review-static-analysis-change-safety | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-risk-strategy-boundaries | test-risk-strategy-boundaries | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-risk-transfer | test-risk-transfer | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-time-concurrency-determinism | test-time-concurrency-determinism | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-test-unit-integration-contract | test-unit-integration-contract | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
-| lu-arch-boundaries-ownership | arch-boundaries-ownership | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-consistency-latency-availability | arch-consistency-latency-availability | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-cost-complexity-changeability | arch-cost-complexity-changeability | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-data-ownership-source-of-truth | arch-data-ownership-source-of-truth | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-decision-communication-transfer | arch-decision-communication-transfer | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-evolution-migration-strangler | arch-evolution-migration-strangler | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-failure-recovery-security-observability | arch-failure-recovery-security-observability | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-requirements-quality-attributes | arch-requirements-quality-attributes | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-arch-sync-async-integration | arch-sync-async-integration | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
-| lu-delivery-artifact-image-config | delivery-artifact-image-config | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-autoscaling-signal-boundary | delivery-autoscaling-signal-boundary | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-cicd-promotion-provenance | delivery-cicd-promotion-provenance | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-cloud-responsibility-managed-services | delivery-cloud-responsibility-managed-services | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-container-process-lifecycle | delivery-container-process-lifecycle | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-graceful-shutdown-draining | delivery-graceful-shutdown-draining | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-platform-evidence-debug | delivery-platform-evidence-debug | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-platform-transfer | delivery-platform-transfer | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-probes-health | delivery-probes-health | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-resources-cpu-memory | delivery-resources-cpu-memory | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
-| lu-delivery-rollout-rollback-strategies | delivery-rollout-rollback-strategies | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
+| lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 4 | 0 |
+| lu-prog-collections-complexity | Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
+| lu-prog-resource-ownership | Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
+| lu-prog-types-generics | Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
+| lu-prog-values-identity | Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation | Runtime & Concurrency | Programming & Software Design Foundations | 1 | 0 |
+| lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu | Runtime & Concurrency | Runtime & Memory | 3 | 0 |
+| lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ | Runtime & Concurrency | Runtime & Memory | 2 | 0 |
+| lu-runtime-jit-warmup | Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
+| lu-runtime-managed-execution | Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue | Runtime & Concurrency | Runtime & Memory | 1 | 0 |
+| lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity | Runtime & Concurrency | Operating Systems & I/O Foundations | 2 | 0 |
+| lu-os-process-thread-kernel | Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom | Runtime & Concurrency | Operating Systems & I/O Foundations | 4 | 0 |
+| lu-os-resource-exhaustion | Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource | Runtime & Concurrency | Operating Systems & I/O Foundations | 1 | 0 |
+| lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource | Runtime & Concurrency | Concurrency & Async | 3 | 0 |
+| lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
+| lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
+| lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 | 0 |
+| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions | Service & Network | Networking & HTTP | 2 | 0 |
+| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn | Service & Network | Networking & HTTP | 4 | 0 |
+| lu-net-proxy-lb-forwarded-boundary | Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers | Service & Network | Networking & HTTP | 1 | 0 |
+| lu-net-streaming-body-cancellation | Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect | Service & Network | Networking & HTTP | 1 | 0 |
+| lu-db-backup-restore | Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery | Data & Consistency | Relational Database Engineering | 2 | 0 |
+| lu-db-buffer-io | Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime | Data & Consistency | Relational Database Engineering | 3 | 0 |
+| lu-db-connection-pool-exhaustion | Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity | Data & Consistency | Relational Database Engineering | 1 | 0 |
+| lu-db-locks-deadlocks-contention | Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock | Data & Consistency | Relational Database Engineering | 3 | 0 |
+| lu-db-modeling-invariants | Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được | Data & Consistency | Relational Database Engineering | 2 | 0 |
+| lu-db-mvcc-visibility | Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking | Data & Consistency | Relational Database Engineering | 1 | 0 |
+| lu-db-replication-failover | Reason primary/replica role, lag và failover mà không coi replica là synchronous truth | Data & Consistency | Relational Database Engineering | 1 | 0 |
+| lu-nosql-cassandra-lsm-compaction-consistency | Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost | Data & Consistency | NoSQL & Specialized Data Systems | 3 | 0 |
+| lu-nosql-model-selection | Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding | Data & Consistency | NoSQL & Specialized Data Systems | 4 | 0 |
+| lu-nosql-mongo-index-shard-transaction | Reason index, shard key and transaction boundary from Mongo query/write pattern | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
+| lu-nosql-redis-persistence-replication-cluster-streams | Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
+| lu-nosql-search-refresh-shards-pagination | Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection | Data & Consistency | NoSQL & Specialized Data Systems | 1 | 0 |
+| lu-cache-capacity-eviction-fallback | Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin | Data & Consistency | Cache Engineering | 3 | 0 |
+| lu-cache-invalidation-consistency | Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary | Data & Consistency | Cache Engineering | 2 | 0 |
+| lu-cache-patterns | Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle | Data & Consistency | Cache Engineering | 2 | 0 |
+| lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 | 0 |
+| lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 | 0 |
+| lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 | 0 |
+| lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn | Distributed Systems | Distributed Systems | 2 | 0 |
+| lu-dist-time-order-causality | Phân biệt wall-clock với causal/business order, không dùng clock như universal total order | Distributed Systems | Distributed Systems | 1 | 0 |
+| lu-dist-transactions-2pc-boundary | Explain 2PC atomicity intent across transactional participants and its coordination/failure cost | Distributed Systems | Distributed Systems | 1 | 0 |
+| lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect | Distributed Systems | Messaging & Event-Driven Consistency | 4 | 0 |
+| lu-msg-delivery-retry-poison-dlq | Distinguish transient failure from poison message và design bounded retry/quarantine | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
+| lu-msg-external-side-effect-reconciliation | Handle external side effect with unknown local result and derive safe reconciliation | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
+| lu-msg-producer-acks-durability | Reason what producer acknowledgement proves and remaining failure possibilities | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
+| lu-msg-schema-evolution-contract-ownership | Evolve event with old producers/consumers/history still present | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
+| lu-msg-workflow-saga-compensation | Model multi-step workflow where completed steps may need business compensation, not rollback | Distributed Systems | Messaging & Event-Driven Consistency | 1 | 0 |
+| lu-api-circuit-bulkhead-rate-limit | Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary | Service & Network | API Contracts & Resilience | 1 | 0 |
+| lu-api-contract-resource-semantics | Model operation as explicit contract over resource/state, not controller-to-URL mapping | Service & Network | API Contracts & Resilience | 4 | 0 |
+| lu-api-deadlines-timeout-cancellation | Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion | Service & Network | API Contracts & Resilience | 3 | 0 |
+| lu-sec-abuse-bruteforce-resource-business-flow | Detect/limit legitimate-looking request abuse by identity/resource/business state | Service & Network | Security | 3 | 0 |
+| lu-sec-audit-detection-evidence | Produce audit evidence of who did what to which object and which security decision occurred | Service & Network | Security | 1 | 0 |
+| lu-sec-auth-session-token | Distinguish authentication/authorization and reason session/token validation, lifetime, revocation | Service & Network | Security | 3 | 0 |
+| lu-sec-browser-boundaries-cors-csrf-xss | Distinguish CORS, CSRF and XSS to apply correct browser boundary control | Service & Network | Security | 1 | 0 |
+| lu-sec-injection-ssrf-input-output | Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context | Service & Network | Security | 1 | 0 |
+| lu-sec-race-business-logic-abuse | Reproduce concurrent valid requests bypassing invariant and protect atomic owner | Service & Network | Security | 1 | 0 |
+| lu-sec-secrets-third-party-trust | Control secret lifecycle and verify third-party data/action before trusting it | Service & Network | Security | 1 | 0 |
+| lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable | Production Engineering | Observability & Performance | 2 | 0 |
+| lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence | Production Engineering | Observability & Performance | 4 | 0 |
+| lu-obs-load-test-benchmark-validity | Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim | Production Engineering | Observability & Performance | 1 | 0 |
+| lu-obs-logs-structured-correlation | Produce structured queryable logs for significant events/context | Production Engineering | Observability & Performance | 2 | 0 |
+| lu-obs-profiling-runtime-evidence | Use CPU/allocation/stack/runtime evidence to locate actual time/memory work | Production Engineering | Observability & Performance | 1 | 0 |
+| lu-rel-cascading-failure-queue-capacity | Trace one slow dependency into queues/retries/resource exhaustion upstream | Production Engineering | Reliability / SRE | 3 | 0 |
+| lu-rel-change-rollout-rollback-risk | Release incrementally with evidence and rollback/roll-forward boundary defined first | Production Engineering | Reliability / SRE | 2 | 0 |
+| lu-rel-disaster-recovery-rpo-rto | Translate business recovery requirement to RPO/RTO and verify mechanism meets it | Production Engineering | Reliability / SRE | 1 | 0 |
+| lu-rel-failure-injection-verification | Design safe bounded fault test for stated reliability assumption and interpret result | Production Engineering | Reliability / SRE | 1 | 0 |
+| lu-rel-health-readiness-semantics | Define liveness/readiness semantics so routing/restarts help recovery instead of cascade | Production Engineering | Reliability / SRE | 1 | 0 |
+| lu-rel-incident-response-postmortem | During/after incident separate mitigation, diagnosis, evidence preservation and system learning | Production Engineering | Reliability / SRE | 1 | 0 |
+| lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test | Architecture & Engineering Reasoning | Testing & Engineering Quality | 4 | 0 |
+| lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure | Architecture & Engineering Reasoning | Testing & Engineering Quality | 2 | 0 |
+| lu-test-migration-compatibility | Prove old/new app and schema/data/event contract coexist during transitional rollout | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
+| lu-test-property-boundary-fuzz | Falsify invariant over generated/boundary input, not hand-picked happy examples | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
+| lu-test-review-static-analysis-change-safety | Use review/compiler/analyzer/targeted tests as complementary change evidence | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
+| lu-test-unit-integration-contract | Choose unit/integration/contract by behavior boundary and state what each cannot prove | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 | 0 |
+| lu-arch-boundaries-ownership | Choose module/service boundary by invariant, change ownership and operational owner | Architecture & Engineering Reasoning | Architecture & System Design | 4 | 0 |
+| lu-arch-consistency-latency-availability | Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
+| lu-arch-cost-complexity-changeability | Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change | Architecture & Engineering Reasoning | Architecture & System Design | 2 | 0 |
+| lu-arch-evolution-migration-strangler | Move old to target incrementally while paths coexist safely | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
+| lu-arch-scale-capacity-partitioning | Estimate bottleneck and choose scale/partition boundary from measurable demand | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
+| lu-arch-sync-async-integration | Choose sync/async from coupling, completion semantics, latency and recovery | Architecture & Engineering Reasoning | Architecture & System Design | 1 | 0 |
+| lu-delivery-artifact-image-config | Produce reproducible versioned artifact and separate immutable build from runtime config/secret | Production Engineering | Containers / Kubernetes / Cloud Delivery | 4 | 0 |
+| lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 | 0 |
+| lu-delivery-cloud-responsibility-managed-services | State application-team responsibilities when platform component is managed | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 | 0 |
+| lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 | 0 |
 
 ## lu-index-query-shape
 
 ### Identity
 
+- **Unit ID:** lu-index-query-shape
 - **Working title:** Choose a usable index key path
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-index-structures | Relational Database Engineering | L3 |
 | db-composite-query-shape | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-Frozen dry-run grouping preserves one shared causal mechanism and assessment boundary.
+Giải thích index như ordered/search structure thu hẹp candidate rows và cân read benefit với write/storage cost.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Index có nhưng predicate path không dùng; low selectivity; redundant index; write amplification.
+Index giữ key-to-row navigation; useful predicate/order cho phép engine prune vùng dữ liệu thay vì scan toàn bộ. → B-tree có prefix order; equality prefix thu hẹp vùng trước, range/order phía sau quyết định scan/sort còn lại.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Index giữ key-to-row navigation; useful predicate/order cho phép engine prune vùng dữ liệu thay vì scan toàn bộ.
+Plan access node; rows; buffers; index usage; index size/write behavior.; Predicate/order thực; plan; actual rows; Sort node; buffers.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-index-structures | db-composite-query-shape | an ordered/searchable index only narrows rows according to the key path the query can use. | INTERNAL | Both Primary capabilities share one mechanism/evidence boundary. |
+Index có nhưng predicate path không dùng; low selectivity; redundant index; write amplification.; Coi (A,B) như (B,A); range đứng trước equality hữu ích; ORDER BY/LIMIT lệch index; function/cast phá searchability.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Plan access node; rows; buffers; index usage; index size/write behavior.
-
-### Production boundary / trade-off
-
-Read pruning đổi lấy index maintenance/storage khi insert/update/delete.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ PostgreSQL B-tree sang clustered/secondary-index khác biệt của SQL Server/InnoDB.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `db-index-structures`, `db-composite-query-shape` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-physical-storage-pages` remains separate pending its own mechanism/evidence boundary.
+- `db-execution-operators` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-execution-plan-estimates
 
 ### Identity
 
+- **Unit ID:** lu-execution-plan-estimates
 - **Working title:** Read execution pipeline and judge estimates
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-execution-operators | Relational Database Engineering | L3 |
 | db-optimizer-cardinality-stats | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-Frozen dry-run grouping preserves one shared causal mechanism and assessment boundary.
+Đọc plan như execution pipeline và xác định operator nào làm rows, loops hay work tăng.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Nested loop trên input lớn; large/spilled sort; row explosion trước aggregate; đọc operator theo thứ tự câu SQL.
+Scan tạo input; join kết hợp; sort/aggregate materialize/consume rows; limit có thể dừng sớm, nên SQL text không phải execution order. → Optimizer ước lượng rows từ statistics/distribution; estimate dẫn chi phí và operator choice, sai estimate kéo theo plan sai.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Scan tạo input; join kết hợp; sort/aggregate materialize/consume rows; limit có thể dừng sớm, nên SQL text không phải execution order.
+EXPLAIN ANALYZE; actual rows; loops; timing; memory/temp work.; Estimated vs actual rows; statistics; distribution/skew; chosen operator.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-execution-operators | db-optimizer-cardinality-stats | the optimizer chooses among physical execution operators. | INTERNAL | Both Primary capabilities share one mechanism/evidence boundary. |
+Nested loop trên input lớn; large/spilled sort; row explosion trước aggregate; đọc operator theo thứ tự câu SQL.; Stale statistics; skew; correlated predicates; estimate/actual mismatch; poor join/access choice.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-EXPLAIN ANALYZE; actual rows; loops; timing; memory/temp work.
-
-### Production boundary / trade-off
-
-Operator phù hợp phụ thuộc cardinality/input, không có “join tốt nhất” tách khỏi dữ liệu.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ lookup join nhỏ sang join với estimate sai và input lớn.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `db-execution-operators`, `db-optimizer-cardinality-stats` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-index-structures` remains separate pending its own mechanism/evidence boundary.
+- `obs-db-io-downstream-attribution` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-race-atomicity
 
 ### Identity
 
+- **Unit ID:** lu-race-atomicity
 - **Working title:** Protect an invariant across unsafe interleaving
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
@@ -321,10584 +212,4229 @@ Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
 | concurrency-races-check-then-act | Concurrency & Async | L3 |
 | concurrency-synchronization-atomicity | Concurrency & Async | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-Frozen dry-run grouping preserves one shared causal mechanism and assessment boundary.
+Viết state transition và các interleaving có thể xảy ra để chứng minh invariant có thể bị phá ở đâu.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Oversell inventory; duplicate reservation; lost update; negative balance.
+Khi hai operation overlap, read/validate/write có thể xen kẽ; invariant chỉ giữ nếu transition được atomically protected ở đúng owner. → Check tách khỏi act tạo cửa sổ để state đổi; correctness nằm ở compare-and-swap/conditional write/unique constraint chứ không chỉ validation trước đó. → Lock, Interlocked hoặc transactional conditional update serializes/atomically applies state transition theo scope của primitive.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Khi hai operation overlap, read/validate/write có thể xen kẽ; invariant chỉ giữ nếu transition được atomically protected ở đúng owner.
+Step trace; concurrent test barrier; before/after state; affected-row count; audit sequence.; Interleaving trace; concurrent integration test; conditional affected rows; unique violation; version conflict.; Critical-section trace; contention time; affected rows; invariant test dưới parallel load.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-invariants-domain-model | concurrency-interleavings-invariants | state invariant under transition | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| concurrency-interleavings-invariants | concurrency-synchronization-atomicity | unsafe interleaving and critical transition | INTERNAL | Both Primary capabilities share one mechanism/evidence boundary. |
-| concurrency-interleavings-invariants | concurrency-races-check-then-act | interleaved shared-state change | INTERNAL | Both Primary capabilities share one mechanism/evidence boundary. |
+Oversell inventory; duplicate reservation; lost update; negative balance.; Duplicate creation; lost update; TOCTOU authorization; negative stock.; Read-modify-write lost update; lock sai scope; double release; atomic increment dùng cho invariant nhiều field.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `prog-invariants-domain-model`: **state invariant under transition**; introduced only for `concurrency-interleavings-invariants`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Step trace; concurrent test barrier; before/after state; affected-row count; audit sequence.
-
-### Production boundary / trade-off
-
-Single-thread reasoning đơn giản nhưng không còn đúng khi request overlap; chọn serialization hoặc atomic store operation theo invariant scope.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ in-memory counter sang order reservation trong database.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `concurrency-interleavings-invariants`, `concurrency-races-check-then-act`, `concurrency-synchronization-atomicity` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
+- `concurrency-memory-visibility` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-outbox-duplicate-safe-effect
 
 ### Identity
 
+- **Unit ID:** lu-outbox-duplicate-safe-effect
 - **Working title:** Persist producer intent and make consumer effect duplicate-safe
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-outbox-db-publish-gap | Messaging & Event-Driven Consistency | L3 |
 | msg-consumer-idempotency-inbox | Messaging & Event-Driven Consistency | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-Frozen dry-run grouping preserves one shared causal mechanism and assessment boundary.
+Explain DB commit/broker publish gap and recover it without direct dual-write loss.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-DB commit but no publish; broker accepts but relay timeout; retry duplicate; outbox stuck.
+Business state and broker are separate transactional systems; crash can happen between commit, relay publish and relay acknowledgement. → Stable message/operation ID is recorded with local effect atomically or recoverably so replay is recognized.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Business state and broker are separate transactional systems; crash can happen between commit, relay publish and relay acknowledgement.
+Business row; outbox status; relay attempt; broker metadata; consumer ledger.; Message ID; inbox row; business row; transaction record; duplicate/replay test.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-delivery-retry-poison-dlq | msg-consumer-idempotency-inbox | repeated delivery of one logical message after failure or retry | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| db-transactions-isolation-anomalies | msg-consumer-idempotency-inbox | one local database transaction can atomically bind deduplication record and business state | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| msg-model-queue-topic-partition-order | msg-outbox-db-publish-gap | broker publication boundary is distinct from local database commit | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| db-transactions-isolation-anomalies | msg-outbox-db-publish-gap | atomic local database commit boundary | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-partial-failure-uncertainty | msg-outbox-db-publish-gap | one component or communication step may fail independently between two effects | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+DB commit but no publish; broker accepts but relay timeout; retry duplicate; outbox stuck.; Crash between dedup check/write; business write succeeds inbox fails; unstable key; duplicate external effect.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `msg-delivery-retry-poison-dlq`: **repeated delivery of one logical message after failure or retry**; introduced only for `msg-consumer-idempotency-inbox`, without source coverage or `PASSED` evidence.
-- `db-transactions-isolation-anomalies`: **one local database transaction can atomically bind deduplication record and business state**; introduced only for `msg-consumer-idempotency-inbox`, without source coverage or `PASSED` evidence.
-- `msg-model-queue-topic-partition-order`: **broker publication boundary is distinct from local database commit**; introduced only for `msg-outbox-db-publish-gap`, without source coverage or `PASSED` evidence.
-- `db-transactions-isolation-anomalies`: **atomic local database commit boundary**; introduced only for `msg-outbox-db-publish-gap`, without source coverage or `PASSED` evidence.
-- `dist-partial-failure-uncertainty`: **one component or communication step may fail independently between two effects**; introduced only for `msg-outbox-db-publish-gap`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Business row; outbox status; relay attempt; broker metadata; consumer ledger.
-
-### Production boundary / trade-off
-
-Eventual relay/retry complexity trades for removing dual-write loss window.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Kafka relay → RabbitMQ while DB/broker boundary remains.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `msg-outbox-db-publish-gap`, `msg-consumer-idempotency-inbox` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
+- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-prog-api-refactoring-change-safety
 
 ### Identity
 
-- **Working title:** prog-api-refactoring-change-safety
+- **Unit ID:** lu-prog-api-refactoring-change-safety
+- **Working title:** Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | prog-api-refactoring-change-safety | Programming & Software Design Foundations | L4 |
+| prog-errors-results | Programming & Software Design Foundations | L2 |
+| prog-invariants-domain-model | Programming & Software Design Foundations | L3 |
+| prog-composition-dependencies | Programming & Software Design Foundations | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Breaking response field; caller còn phụ thuộc hành vi cũ; refactor đổi validation ngầm; test chỉ khớp implementation.
+Tách public contract khỏi implementation; thay đổi dữ liệu hoặc error semantics phải đi qua adapter/version hoặc một migration boundary có chủ đích. → Result/domain error là phần contract dự đoán được; exception giữ stack/context cho lỗi bất ngờ; partial state cần được ghi nhận thay vì giả thành success. → Invariant là điều luôn đúng cho aggregate/record; validation gần state transition và DB constraint bảo vệ khi nhiều đường ghi cùng tồn tại. → Dependency chỉ được tạo ở composition root; core code phụ thuộc contract do core sở hữu, không đi ngược vào adapter hạ tầng.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Tách public contract khỏi implementation; thay đổi dữ liệu hoặc error semantics phải đi qua adapter/version hoặc một migration boundary có chủ đích.
+Contract test của consumer; golden response; diff OpenAPI; test hành vi trước/sau; telemetry của endpoint cũ.; Call stack; returned error code; audit/result record; log có correlation ID; test mapping ở API boundary.; State before/after; state-machine test; affected-row count; unique/check constraint; concurrent test.; Dependency graph; constructor signatures; architecture test; unit test thay adapter bằng fake.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-errors-results | prog-api-refactoring-change-safety | observable error/result contract and failure semantics | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| prog-invariants-domain-model | prog-api-refactoring-change-safety | valid state and behavior invariant | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Breaking response field; caller còn phụ thuộc hành vi cũ; refactor đổi validation ngầm; test chỉ khớp implementation.; Nuốt exception; map lỗi domain thành 500 hoặc ngược lại; retry một lỗi validation; trả success khi mới làm xong một phần.; Invalid transition; business rule bị copy ở nhiều handler; race vượt qua validation; persisted state vi phạm rule.; Service locator; dependency ẩn; vòng phụ thuộc; domain gọi thẳng database/HTTP adapter.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `prog-errors-results`: **observable error/result contract and failure semantics**; introduced only for `prog-api-refactoring-change-safety`, without source coverage or `PASSED` evidence.
-- `prog-invariants-domain-model`: **valid state and behavior invariant**; introduced only for `prog-api-refactoring-change-safety`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Contract test của consumer; golden response; diff OpenAPI; test hành vi trước/sau; telemetry của endpoint cũ.
-
-### Production boundary / trade-off
-
-Giữ compatibility làm tăng thời gian duy trì và test matrix; cắt ngay chỉ hợp lý khi caller được kiểm soát và migration có kế hoạch.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ API nội bộ cùng repo sang public API có client độc lập và rollout từng nhóm.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `prog-api-refactoring-change-safety`, `prog-errors-results`, `prog-invariants-domain-model`, `prog-composition-dependencies` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `msg-schema-evolution-contract-ownership` remains separate pending its own mechanism/evidence boundary.
+- `api-versioning-compatibility` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-prog-collections-complexity
 
 ### Identity
 
-- **Working title:** prog-collections-complexity
+- **Unit ID:** lu-prog-collections-complexity
+- **Working title:** Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | prog-collections-complexity | Programming & Software Design Foundations | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chọn collection theo đường truy cập, kích thước input và thao tác chiếm chi phí trong hot path.
 
-### Working canonical problem / case anchor
-
-Linear scan trên request nóng; nested loop O(n²); giả định thứ tự sai; duplicate key bị bỏ qua.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Mỗi cấu trúc đổi chi phí lookup, insert, remove, ordering và memory; đo thao tác thực tế thay vì suy từ tên collection.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Kích thước input; số lần lookup; benchmark/profile; assertion về ordering và uniqueness.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-List đơn giản, ít overhead; Dictionary/HashSet nhanh hơn cho lookup nhưng tốn memory và không tự có order nghiệp vụ.
+Linear scan trên request nóng; nested loop O(n²); giả định thứ tự sai; duplicate key bị bỏ qua.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ danh sách nhỏ trong memory sang lookup theo key của batch lớn hoặc read model.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-prog-composition-dependencies
-
-### Identity
-
-- **Working title:** prog-composition-dependencies
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| prog-composition-dependencies | Programming & Software Design Foundations | L3 |
+| none | No material graph neighbor exists | No plausible merge candidate found after graph-neighborhood review. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Service locator; dependency ẩn; vòng phụ thuộc; domain gọi thẳng database/HTTP adapter.
-
-### State / data / mechanism trace
-
-Dependency chỉ được tạo ở composition root; core code phụ thuộc contract do core sở hữu, không đi ngược vào adapter hạ tầng.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Dependency graph; constructor signatures; architecture test; unit test thay adapter bằng fake.
-
-### Production boundary / trade-off
-
-Thêm interface chỉ có giá trị ở boundary có biến thể/test seam; quá nhiều abstraction che mất flow và tăng chi phí thay đổi.
-
-### Transfer variation
-
-Từ monolith một process sang module có adapter message broker hoặc persistence riêng.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-prog-errors-results
-
-### Identity
-
-- **Working title:** prog-errors-results
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| prog-errors-results | Programming & Software Design Foundations | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Nuốt exception; map lỗi domain thành 500 hoặc ngược lại; retry một lỗi validation; trả success khi mới làm xong một phần.
-
-### State / data / mechanism trace
-
-Result/domain error là phần contract dự đoán được; exception giữ stack/context cho lỗi bất ngờ; partial state cần được ghi nhận thay vì giả thành success.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Call stack; returned error code; audit/result record; log có correlation ID; test mapping ở API boundary.
-
-### Production boundary / trade-off
-
-Expose error chi tiết giúp caller xử lý nhưng có thể lộ implementation; normalize ở trust boundary, giữ nguyên nhân nội bộ cho trace.
-
-### Transfer variation
-
-Từ validation trong process sang payment call timeout với kết quả chưa chắc chắn.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-prog-invariants-domain-model
-
-### Identity
-
-- **Working title:** prog-invariants-domain-model
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| prog-invariants-domain-model | Programming & Software Design Foundations | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Invalid transition; business rule bị copy ở nhiều handler; race vượt qua validation; persisted state vi phạm rule.
-
-### State / data / mechanism trace
-
-Invariant là điều luôn đúng cho aggregate/record; validation gần state transition và DB constraint bảo vệ khi nhiều đường ghi cùng tồn tại.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-State before/after; state-machine test; affected-row count; unique/check constraint; concurrent test.
-
-### Production boundary / trade-off
-
-Domain guard diễn đạt nghiệp vụ rõ; database constraint bảo vệ cuối cùng nhưng không thay thế message lỗi và flow ở domain.
-
-### Transfer variation
-
-Từ object trong memory sang nhiều request cùng đổi một order trong database.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+None material.
 
 ## lu-prog-resource-ownership
 
 ### Identity
 
-- **Working title:** prog-resource-ownership
+- **Unit ID:** lu-prog-resource-ownership
+- **Working title:** Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | prog-resource-ownership | Programming & Software Design Foundations | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chỉ ra ai tạo, ai sở hữu, ai dispose/release và lúc nào resource không còn hợp lệ để dùng.
 
-### Working canonical problem / case anchor
-
-Connection/stream leak; dùng resource đã dispose; scope dài hơn request; buffer trả pool khi còn consumer.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Owner chịu trách nhiệm lifetime; borrower không dispose resource không tạo; async flow phải giữ resource sống đến khi consumer cuối hoàn thành.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Open handle/connection count; dispose/finalization trace; connection-pool state; test double ghi lifetime.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Scope ngắn giảm leak nhưng không được dispose tài nguyên caller vẫn dùng; ownership rõ quan trọng hơn “dispose ở mọi chỗ”.
+Connection/stream leak; dùng resource đã dispose; scope dài hơn request; buffer trả pool khi còn consumer.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ FileStream cục bộ sang response stream và pooled buffer qua async pipeline.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| concurrency-cancellation-lifetime | Frozen graph neighborhood with prog-resource-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| net-streaming-body-cancellation | Frozen graph neighborhood with prog-resource-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
+- `net-streaming-body-cancellation` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-prog-types-generics
 
 ### Identity
 
-- **Working title:** prog-types-generics
+- **Unit ID:** lu-prog-types-generics
+- **Working title:** Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | prog-types-generics | Programming & Software Design Foundations | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Thiết kế type contract khiến invalid state khó biểu diễn, generic bị ràng buộc đúng và null boundary được xử lý rõ.
 
-### Working canonical problem / case anchor
-
-Invalid state vẫn tạo được; unsafe cast; null đi qua boundary; generic API quá rộng và caller hiểu sai capability.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Type, nullability và generic constraint mô tả tập giá trị/operation hợp lệ trước runtime; boundary chuyển input không tin cậy thành type nội bộ hợp lệ.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Compiler/nullability diagnostics; API-boundary tests; generic constraint compile test; invalid-input test.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Type chặt giúp loại lỗi sớm nhưng có thể tăng số model/mapper; không dùng generic để che các operation khác nghĩa.
+Invalid state vẫn tạo được; unsafe cast; null đi qua boundary; generic API quá rộng và caller hiểu sai capability.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ C# nullable reference types và constraint sang Java generics/nullable annotation khác nhau.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| none | No material graph neighbor exists | No plausible merge candidate found after graph-neighborhood review. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+None material.
 
 ## lu-prog-values-identity
 
 ### Identity
 
-- **Working title:** prog-values-identity
+- **Unit ID:** lu-prog-values-identity
+- **Working title:** Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | prog-values-identity | Programming & Software Design Foundations | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt value equality với object/reference identity để dự đoán aliasing và mutation.
 
-### Working canonical problem / case anchor
-
-Shared mutation bất ngờ; Equals/GetHashCode không nhất quán; Dictionary/Set identity surprise; cache key dùng sai equality.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Hai biến có thể cùng trỏ một mutable object; equality có thể dựa value còn identity dựa instance, nên mutation qua một alias đổi state nhìn thấy ở alias kia.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Object-state trace; unit test trước/sau mutation; debugger object ID/reference; collection lookup result.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Mutable reference tiện cập nhật chung nhưng khó kiểm soát alias; value/immutable design dễ suy luận hơn nhưng có allocation/copy cost.
+Shared mutation bất ngờ; Equals/GetHashCode không nhất quán; Dictionary/Set identity surprise; cache key dùng sai equality.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ DTO mutable dùng chung sang value object/record immutable trong domain.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| none | No material graph neighbor exists | No plausible merge candidate found after graph-neighborhood review. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+None material.
 
 ## lu-runtime-allocation-gc
 
 ### Identity
 
-- **Working title:** runtime-allocation-gc
+- **Unit ID:** lu-runtime-allocation-gc
+- **Working title:** Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | runtime-allocation-gc | Runtime & Memory | L3 |
+| runtime-memory-roots-lifetime | Runtime & Memory | L2 |
+| runtime-retention-pooling-large-objects | Runtime & Memory | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-High allocation rate; frequent GC; pause dài; CPU overhead do GC.
+Allocation tạo object trên managed heap; khi vùng nhớ cần thu hồi, GC tìm object còn reachable rồi dọn phần còn lại, nên tốc độ cấp phát quyết định tần suất và chi phí collection. → Object sống khi có đường reference từ GC root như stack, static, handle hoặc long-lived collection; scope source code không đồng nghĩa object hết reachable. → Retention là object còn reachable; pool chủ động giữ object để reuse; buffer lớn có allocation/lifetime cost riêng, và pool có thể biến allocation pressure thành retained heap.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Allocation tạo object trên managed heap; khi vùng nhớ cần thu hồi, GC tìm object còn reachable rồi dọn phần còn lại, nên tốc độ cấp phát quyết định tần suất và chi phí collection.
+Allocation rate; GC count/time; heap size; generation size; request latency lúc collection.; Heap graph; retaining path; root type; object count/size theo thời gian.; Heap dump; generation/size distribution; pool counters; allocation trace của large buffer.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| runtime-memory-roots-lifetime | runtime-allocation-gc | reachability from GC roots | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+High allocation rate; frequent GC; pause dài; CPU overhead do GC.; Unexpected retention; event handler giữ subscriber; cache/list vô hạn; closure giữ graph lớn.; Pool retains too much; large buffers repeatedly allocated; long-lived owner giữ object graph; wrong-size buffer reuse.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `runtime-memory-roots-lifetime`: **reachability from GC roots**; introduced only for `runtime-allocation-gc`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Allocation rate; GC count/time; heap size; generation size; request latency lúc collection.
-
-### Production boundary / trade-off
-
-Reuse chỉ đáng giá khi allocation thật sự chi phối; pooling sai có thể giữ memory lâu hơn và làm latency xấu hơn.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ request nhỏ ổn định sang batch serialization lớn có burst allocation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `runtime-allocation-gc`, `runtime-memory-roots-lifetime`, `runtime-retention-pooling-large-objects` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `runtime-managed-execution` remains separate pending its own mechanism/evidence boundary.
+- `os-virtual-memory-page-cache` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-runtime-diagnostics
 
 ### Identity
 
-- **Working title:** runtime-diagnostics
+- **Unit ID:** lu-runtime-diagnostics
+- **Working title:** Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | runtime-diagnostics | Runtime & Memory | L3 |
+| runtime-memory-performance-debug | Runtime & Memory | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Collecting wrong evidence; dump sau khi symptom biến mất; kết luận leak từ heap size đơn lẻ.
+Counter trả lời xu hướng; trace cho timeline/causal activity; dump/profile cho object hoặc stack tại thời điểm; tool phải khớp câu hỏi. → Allocation, GC và retention tạo các dấu hiệu khác nhau; thay một biến rồi đo lại mới phân biệt causal effect.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Counter trả lời xu hướng; trace cho timeline/causal activity; dump/profile cho object hoặc stack tại thời điểm; tool phải khớp câu hỏi.
+Hypothesis viết trước; counter time series; trace span/stack; heap dump; profile hotspot.; Symptom timeline; allocation/GC counters; retaining path; controlled before/after experiment; post-change latency.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Collecting wrong evidence; dump sau khi symptom biến mất; kết luận leak từ heap size đơn lẻ.; Treating retention as GC tuning; pooling để che leak; mitigation giảm allocation nhưng tăng retained heap.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Hypothesis viết trước; counter time series; trace span/stack; heap dump; profile hotspot.
-
-### Production boundary / trade-off
-
-Trace/dump có overhead và dữ liệu nhạy cảm; bắt đầu bằng tín hiệu rẻ, escalates khi cần state chi tiết.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ CPU tăng cục bộ sang incident memory leak trên pod đã restart nhiều lần.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `runtime-diagnostics`, `runtime-memory-performance-debug` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `runtime-retention-pooling-large-objects` remains separate pending its own mechanism/evidence boundary.
+- `obs-profiling-runtime-evidence` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-runtime-jit-warmup
 
 ### Identity
 
-- **Working title:** runtime-jit-warmup
+- **Unit ID:** lu-runtime-jit-warmup
+- **Working title:** Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | runtime-jit-warmup | Runtime & Memory | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt cold execution, JIT compilation/optimization và steady-state trước khi tin benchmark hoặc SLO đầu phiên.
 
-### Working canonical problem / case anchor
-
-Benchmark đo warm-up như steady workload; first request latency bị che; kết luận sai từ một lần chạy.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Lần gọi đầu có thể kích hoạt load, JIT và cache initialization; repeated run mới gần steady state.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 First-request latency; repeated-run timing; JIT counters/events; startup trace.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Pre-warm giảm cold latency nhưng tốn startup work và không thay thế capacity planning.
+Benchmark đo warm-up như steady workload; first request latency bị che; kết luận sai từ một lần chạy.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ CLI chạy một lần sang web service vừa scale-out nhiều instance.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| obs-load-test-benchmark-validity | Frozen graph neighborhood with runtime-jit-warmup | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `obs-load-test-benchmark-validity` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-runtime-managed-execution
 
 ### Identity
 
-- **Working title:** runtime-managed-execution
+- **Unit ID:** lu-runtime-managed-execution
+- **Working title:** Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | runtime-managed-execution | Runtime & Memory | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Mô tả ranh giới trách nhiệm giữa application code, managed runtime và native/OS khi debug runtime issue.
 
-### Working canonical problem / case anchor
-
-Gọi mọi latency là “CLR chậm”; nhầm managed thread với OS process; sửa code khi bottleneck là native I/O.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Application tạo managed work; runtime quản lý execution/memory; native/OS cung cấp thread, virtual memory, socket/file scheduling nên symptom có thể vượt lớp application.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Managed stack; runtime counters; OS process/thread view; native wait/sockets.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Managed runtime che nhiều detail nhưng không xoá giới hạn OS; chọn evidence từ lớp tạo ra symptom.
+Gọi mọi latency là “CLR chậm”; nhầm managed thread với OS process; sửa code khi bottleneck là native I/O.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ .NET service sang JVM service chạy cùng Linux/container boundary.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-runtime-memory-performance-debug
-
-### Identity
-
-- **Working title:** runtime-memory-performance-debug
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| runtime-memory-performance-debug | Runtime & Memory | L4 |
+| runtime-memory-roots-lifetime | Frozen graph neighborhood with runtime-managed-execution | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Treating retention as GC tuning; pooling để che leak; mitigation giảm allocation nhưng tăng retained heap.
-
-### State / data / mechanism trace
-
-Allocation, GC và retention tạo các dấu hiệu khác nhau; thay một biến rồi đo lại mới phân biệt causal effect.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| runtime-diagnostics | runtime-memory-performance-debug | hypothesis-driven evidence selection | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| runtime-retention-pooling-large-objects | runtime-memory-performance-debug | allocation vs pooling vs retention | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `runtime-diagnostics`: **hypothesis-driven evidence selection**; introduced only for `runtime-memory-performance-debug`, without source coverage or `PASSED` evidence.
-- `runtime-retention-pooling-large-objects`: **allocation vs pooling vs retention**; introduced only for `runtime-memory-performance-debug`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Symptom timeline; allocation/GC counters; retaining path; controlled before/after experiment; post-change latency.
-
-### Production boundary / trade-off
-
-Giảm allocation không tự động giảm tail latency; mitigation phải giữ correctness và resource ceiling.
-
-### Transfer variation
-
-Chuyển cách chẩn đoán sang JVM: allocation profiler, GC log và retaining path tương đương.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-runtime-memory-roots-lifetime
-
-### Identity
-
-- **Working title:** runtime-memory-roots-lifetime
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| runtime-memory-roots-lifetime | Runtime & Memory | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Unexpected retention; event handler giữ subscriber; cache/list vô hạn; closure giữ graph lớn.
-
-### State / data / mechanism trace
-
-Object sống khi có đường reference từ GC root như stack, static, handle hoặc long-lived collection; scope source code không đồng nghĩa object hết reachable.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| runtime-managed-execution | runtime-memory-roots-lifetime | managed runtime/process boundary | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `runtime-managed-execution`: **managed runtime/process boundary**; introduced only for `runtime-memory-roots-lifetime`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Heap graph; retaining path; root type; object count/size theo thời gian.
-
-### Production boundary / trade-off
-
-Cache có thể là retention có chủ đích; phải đặt size/TTL/eviction thay vì gọi mọi object sống là leak.
-
-### Transfer variation
-
-Từ List static sang subscription registry hoặc scoped service bị capture bởi singleton.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-runtime-retention-pooling-large-objects
-
-### Identity
-
-- **Working title:** runtime-retention-pooling-large-objects
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| runtime-retention-pooling-large-objects | Runtime & Memory | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Pool retains too much; large buffers repeatedly allocated; long-lived owner giữ object graph; wrong-size buffer reuse.
-
-### State / data / mechanism trace
-
-Retention là object còn reachable; pool chủ động giữ object để reuse; buffer lớn có allocation/lifetime cost riêng, và pool có thể biến allocation pressure thành retained heap.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| runtime-allocation-gc | runtime-retention-pooling-large-objects | allocation pressure and collection behavior | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `runtime-allocation-gc`: **allocation pressure and collection behavior**; introduced only for `runtime-retention-pooling-large-objects`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Heap dump; generation/size distribution; pool counters; allocation trace của large buffer.
-
-### Production boundary / trade-off
-
-Pool giảm churn khi reuse thực; cần limit và return discipline, còn buffer hiếm khi dùng nên để GC có thể đơn giản hơn.
-
-### Transfer variation
-
-Từ byte[] export lớn sang HTTP streaming với buffer size và concurrency khác.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `runtime-memory-roots-lifetime` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-os-blocking-io-waits
 
 ### Identity
 
-- **Working title:** os-blocking-io-waits
+- **Unit ID:** lu-os-blocking-io-waits
+- **Working title:** Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | os-blocking-io-waits | Operating Systems & I/O Foundations | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Blocking request path; sync I/O giữ worker; queue growth; timeout do worker starvation.
-
-### State / data / mechanism trace
-
-File/socket/database operation hoàn tất qua kernel/external system; blocking giữ execution thread chờ, async cho phép thread làm work khác trong khi completion chưa tới.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-files-handles-sockets-ipc | os-blocking-io-waits | finite OS resource operation and external completion | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-files-handles-sockets-ipc`: **finite OS resource operation and external completion**; introduced only for `os-blocking-io-waits`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Blocked stack; wait time; worker/runtime queue; thread count; request queue growth.
-
-### Production boundary / trade-off
-
-Sync đơn giản trong batch thấp tải; request path concurrent cần tránh giữ finite worker khi chủ yếu chờ I/O.
-
-### Transfer variation
-
-Từ file read trong worker sang outbound HTTP/database call dưới tải.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-os-files-handles-sockets-ipc
-
-### Identity
-
-- **Working title:** os-files-handles-sockets-ipc
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | os-files-handles-sockets-ipc | Operating Systems & I/O Foundations | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-FD/handle leak; socket exhaustion; close quá sớm; IPC endpoint không được release.
+File/socket/database operation hoàn tất qua kernel/external system; blocking giữ execution thread chờ, async cho phép thread làm work khác trong khi completion chưa tới. → Process giữ handle trỏ tới kernel resource; dispose/close giải phóng reference/quota, còn connection pool là owner layer khác với raw socket.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Process giữ handle trỏ tới kernel resource; dispose/close giải phóng reference/quota, còn connection pool là owner layer khác với raw socket.
+Blocked stack; wait time; worker/runtime queue; thread count; request queue growth.; Open handle count; socket states; per-process limits; connection-pool state; OS error code.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-process-thread-kernel | os-files-handles-sockets-ipc | process resource context and user/kernel boundary | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Blocking request path; sync I/O giữ worker; queue growth; timeout do worker starvation.; FD/handle leak; socket exhaustion; close quá sớm; IPC endpoint không được release.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `os-process-thread-kernel`: **process resource context and user/kernel boundary**; introduced only for `os-files-handles-sockets-ipc`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Open handle count; socket states; per-process limits; connection-pool state; OS error code.
-
-### Production boundary / trade-off
-
-Reuse giảm setup cost nhưng giữ handle lâu; close per operation giảm retention nhưng có thể cạn ephemeral port.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ local file handle sang HttpClient socket pool hoặc Unix/Named Pipe IPC.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `os-blocking-io-waits`, `os-files-handles-sockets-ipc` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-async-parallelism` remains separate pending its own mechanism/evidence boundary.
+- `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-os-process-thread-kernel
 
 ### Identity
 
-- **Working title:** os-process-thread-kernel
+- **Unit ID:** lu-os-process-thread-kernel
+- **Working title:** Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | os-process-thread-kernel | Operating Systems & I/O Foundations | L2 |
+| os-scheduling-starvation | Operating Systems & I/O Foundations | L3 |
+| os-termination-graceful-shutdown | Operating Systems & I/O Foundations | L3 |
+| os-virtual-memory-page-cache | Operating Systems & I/O Foundations | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt process/address space, thread execution unit và user/kernel boundary khi theo symptom.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Nhầm process isolation với thread isolation; assume thread crash chỉ ảnh hưởng một request; debug memory ở sai process.
+Process có address space/handle table riêng; threads trong một process chia memory; kernel thực hiện privileged I/O/scheduling trên behalf của process. → Scheduler chỉ chạy một số runnable threads theo CPU/time slice; blocking/wait và runnable queue là trạng thái khác nhau, starvation là lack of forward progress. → Termination signal mở một lifetime deadline; service ngừng nhận work mới, hoàn tất hoặc cancel work đang chạy, flush/release owner resources rồi exit trước deadline. → Virtual address space ánh xạ memory; working set là phần resident; OS page cache giữ page file/disk để read sau có thể phục vụ từ RAM.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Process có address space/handle table riêng; threads trong một process chia memory; kernel thực hiện privileged I/O/scheduling trên behalf của process.
+Process tree; thread list; address-space metrics; stack location user vs kernel.; CPU utilization; runnable/thread queue; runtime queue; blocked stack; no-forward-progress timeline.; Signal timestamp; active request/message count; drain duration; cancellation log; exit code; unfinished work record.; RSS/working set; page faults; file I/O counters; cache reclaim; cold/warm read timing.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Nhầm process isolation với thread isolation; assume thread crash chỉ ảnh hưởng một request; debug memory ở sai process.; Work tồn tại nhưng không được CPU; thread-pool starvation; priority imbalance; queue tăng dù downstream đã sẵn sàng.; Dropped request/message; half-written file/response; accept work sau drain; process bị kill trước cleanup.; Nhầm page cache với application leak; OOM vì chỉ nhìn managed heap; kỳ vọng cold disk latency sau cache warm.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Process tree; thread list; address-space metrics; stack location user vs kernel.
-
-### Production boundary / trade-off
-
-Tách process tăng isolation nhưng tăng IPC/deployment overhead; thêm thread không tạo process boundary mới.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ worker đơn process sang container nhiều process hoặc sidecar.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `os-process-thread-kernel`, `os-scheduling-starvation`, `os-termination-graceful-shutdown`, `os-virtual-memory-page-cache` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-files-handles-sockets-ipc` remains separate pending its own mechanism/evidence boundary.
+- `os-resource-exhaustion` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-os-resource-exhaustion
 
 ### Identity
 
-- **Working title:** os-resource-exhaustion
+- **Unit ID:** lu-os-resource-exhaustion
+- **Working title:** Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | os-resource-exhaustion | Operating Systems & I/O Foundations | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt memory, thread, handle và socket exhaustion bằng failure/evidence phù hợp từng resource.
 
-### Working canonical problem / case anchor
-
-OOM/kill; thread creation failure; too many open files; socket/ephemeral-port exhaustion.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Mỗi resource có quota và reclaim path khác: memory pressure/working set, finite runnable threads, kernel handles, socket/port state.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-process-thread-kernel | os-resource-exhaustion | finite thread/process/memory resources | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| os-files-handles-sockets-ipc | os-resource-exhaustion | handle/socket capacity and lifetime | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-process-thread-kernel`: **finite thread/process/memory resources**; introduced only for `os-resource-exhaustion`, without source coverage or `PASSED` evidence.
-- `os-files-handles-sockets-ipc`: **handle/socket capacity and lifetime**; introduced only for `os-resource-exhaustion`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 RSS/working set and OOM event; thread count/queue; handle count/limit; socket state/port count.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Tăng limit chỉ trì hoãn leak hoặc overload; cap concurrency/lifetime trước, rồi capacity plan theo resource thực sự cạn.
+OOM/kill; thread creation failure; too many open files; socket/ephemeral-port exhaustion.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ bare process có OS limit sang container cgroup memory và orchestrator restart.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-os-scheduling-starvation
-
-### Identity
-
-- **Working title:** os-scheduling-starvation
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| os-scheduling-starvation | Operating Systems & I/O Foundations | L3 |
+| os-process-thread-kernel | Frozen graph neighborhood with os-resource-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| os-files-handles-sockets-ipc | Frozen graph neighborhood with os-resource-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Work tồn tại nhưng không được CPU; thread-pool starvation; priority imbalance; queue tăng dù downstream đã sẵn sàng.
-
-### State / data / mechanism trace
-
-Scheduler chỉ chạy một số runnable threads theo CPU/time slice; blocking/wait và runnable queue là trạng thái khác nhau, starvation là lack of forward progress.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-process-thread-kernel | os-scheduling-starvation | runnable execution unit and scheduling boundary | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-process-thread-kernel`: **runnable execution unit and scheduling boundary**; introduced only for `os-scheduling-starvation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-CPU utilization; runnable/thread queue; runtime queue; blocked stack; no-forward-progress timeline.
-
-### Production boundary / trade-off
-
-Tăng thread không sửa CPU-bound saturation; giới hạn parallelism bảo vệ latency nhưng giảm peak throughput.
-
-### Transfer variation
-
-Từ single worker CPU-bound sang nhiều tasks trong container CPU limit.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-os-termination-graceful-shutdown
-
-### Identity
-
-- **Working title:** os-termination-graceful-shutdown
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| os-termination-graceful-shutdown | Operating Systems & I/O Foundations | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Dropped request/message; half-written file/response; accept work sau drain; process bị kill trước cleanup.
-
-### State / data / mechanism trace
-
-Termination signal mở một lifetime deadline; service ngừng nhận work mới, hoàn tất hoặc cancel work đang chạy, flush/release owner resources rồi exit trước deadline.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-process-thread-kernel | os-termination-graceful-shutdown | process lifetime and termination | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-process-thread-kernel`: **process lifetime and termination**; introduced only for `os-termination-graceful-shutdown`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Signal timestamp; active request/message count; drain duration; cancellation log; exit code; unfinished work record.
-
-### Production boundary / trade-off
-
-Drain dài tăng graceful chance nhưng chậm rollout; deadline bắt buộc force exit nên critical work cần durable handoff trước đó.
-
-### Transfer variation
-
-Từ bare process SIGTERM/CTRL+C sang container preStop/termination grace period.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-os-virtual-memory-page-cache
-
-### Identity
-
-- **Working title:** os-virtual-memory-page-cache
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| os-virtual-memory-page-cache | Operating Systems & I/O Foundations | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Nhầm page cache với application leak; OOM vì chỉ nhìn managed heap; kỳ vọng cold disk latency sau cache warm.
-
-### State / data / mechanism trace
-
-Virtual address space ánh xạ memory; working set là phần resident; OS page cache giữ page file/disk để read sau có thể phục vụ từ RAM.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-process-thread-kernel | os-virtual-memory-page-cache | virtual address-space boundary | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-process-thread-kernel`: **virtual address-space boundary**; introduced only for `os-virtual-memory-page-cache`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-RSS/working set; page faults; file I/O counters; cache reclaim; cold/warm read timing.
-
-### Production boundary / trade-off
-
-Page cache tăng tốc disk-backed read nhưng cạnh tranh RAM với process; không pin cache như một application source of truth.
-
-### Transfer variation
-
-Từ local file scan sang database/data volume trên container host.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
+- `os-files-handles-sockets-ipc` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-concurrency-async-parallelism
 
 ### Identity
 
-- **Working title:** concurrency-async-parallelism
+- **Unit ID:** lu-concurrency-async-parallelism
+- **Working title:** Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | concurrency-async-parallelism | Concurrency & Async | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelism vô hạn cho downstream I/O.
-
-### State / data / mechanism trace
-
-Async không tự tạo thread; concurrency là overlap lifetime; parallelism là nhiều work thực sự chạy đồng thời khi CPU/capacity cho phép.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-blocking-io-waits | concurrency-async-parallelism | external I/O wait lifetime | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-blocking-io-waits`: **external I/O wait lifetime**; introduced only for `concurrency-async-parallelism`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Timeline task/thread; CPU; active operations; request latency; queue depth.
-
-### Production boundary / trade-off
-
-Async giúp không giữ thread khi chờ I/O nhưng không thay capacity; parallel CPU-bound work bị giới hạn core/CPU quota.
-
-### Transfer variation
-
-Từ một HTTP call async sang CPU transform trong consumer nhiều partition.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-concurrency-bounded-backpressure
-
-### Identity
-
-- **Working title:** concurrency-bounded-backpressure
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
+| concurrency-cancellation-lifetime | Concurrency & Async | L3 |
 | concurrency-bounded-backpressure | Concurrency & Async | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Unbounded in-flight tasks; queue/memory growth; pool exhaustion; p99 tăng dù throughput không tăng.
+Async không tự tạo thread; concurrency là overlap lifetime; parallelism là nhiều work thực sự chạy đồng thời khi CPU/capacity cho phép. → CancellationToken báo owner rằng result không còn cần hoặc deadline đã hết; code phải observe signal, stop safely và không coi cancel là rollback của side effect đã commit. → Arrival rate lớn hơn service rate làm in-flight work tích tụ; bounded queue/semaphore buộc producer wait, reject hoặc shed thay vì giữ work vô hạn.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Arrival rate lớn hơn service rate làm in-flight work tích tụ; bounded queue/semaphore buộc producer wait, reject hoặc shed thay vì giữ work vô hạn.
+Timeline task/thread; CPU; active operations; request latency; queue depth.; Token propagation trace; active operation count; cancellation log; audit state; cleanup/timeout test.; In-flight count; queue depth; pool usage; throughput; p95/p99; rejection/wait time.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-async-parallelism | concurrency-bounded-backpressure | concurrent in-flight operations | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelism vô hạn cho downstream I/O.; Token không được forward; continue expensive work sau disconnect; cancel giữa side effect gây unknown outcome; dispose khi child còn dùng.; Unbounded in-flight tasks; queue/memory growth; pool exhaustion; p99 tăng dù throughput không tăng.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `concurrency-async-parallelism`: **concurrent in-flight operations**; introduced only for `concurrency-bounded-backpressure`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-In-flight count; queue depth; pool usage; throughput; p95/p99; rejection/wait time.
-
-### Production boundary / trade-off
-
-Parallelism cao có thể tăng throughput trước khi làm downstream quá tải; bound hy sinh burst acceptance để giữ resource and latency predictable.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ một worker sang nhiều replicas cùng chia database/partner quota.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `concurrency-async-parallelism`, `concurrency-cancellation-lifetime`, `concurrency-bounded-backpressure` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-concurrency-cancellation-lifetime
-
-### Identity
-
-- **Working title:** concurrency-cancellation-lifetime
-- **Learner-facing domain candidate:** Runtime & Concurrency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| concurrency-cancellation-lifetime | Concurrency & Async | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Token không được forward; continue expensive work sau disconnect; cancel giữa side effect gây unknown outcome; dispose khi child còn dùng.
-
-### State / data / mechanism trace
-
-CancellationToken báo owner rằng result không còn cần hoặc deadline đã hết; code phải observe signal, stop safely và không coi cancel là rollback của side effect đã commit.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-async-parallelism | concurrency-cancellation-lifetime | async operation lifetime | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| prog-resource-ownership | concurrency-cancellation-lifetime | ownership and authority to end lifetime | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-async-parallelism`: **async operation lifetime**; introduced only for `concurrency-cancellation-lifetime`, without source coverage or `PASSED` evidence.
-- `prog-resource-ownership`: **ownership and authority to end lifetime**; introduced only for `concurrency-cancellation-lifetime`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Token propagation trace; active operation count; cancellation log; audit state; cleanup/timeout test.
-
-### Production boundary / trade-off
-
-Cancellation nhanh giảm waste nhưng cleanup cần bounded; critical durable operation cần recovery path thay vì giả định cancel hoàn tác.
-
-### Transfer variation
-
-Từ request-aborted sang hosted worker shutdown và message lease expiry.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-blocking-io-waits` remains separate pending its own mechanism/evidence boundary.
+- `os-scheduling-starvation` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-concurrency-deadlock-starvation
 
 ### Identity
 
-- **Working title:** concurrency-deadlock-starvation
+- **Unit ID:** lu-concurrency-deadlock-starvation
+- **Working title:** Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | concurrency-deadlock-starvation | Concurrency & Async | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress.
 
-### Working canonical problem / case anchor
-
-Lock-order deadlock; sync-over-async deadlock; thread-pool starvation; unfair queue.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Deadlock là cycle wait không actor nào tự đi tiếp; starvation là work sẵn sàng nhưng mãi không được capacity/resource.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-synchronization-atomicity | concurrency-deadlock-starvation | synchronization ownership and wait | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-synchronization-atomicity`: **synchronization ownership and wait**; introduced only for `concurrency-deadlock-starvation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Wait graph; blocked stacks; lock ownership; queue age; no-forward-progress timeline.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Serialization giảm race nhưng tăng contention; timeout chỉ phát hiện/thoát một số case, không thay lock order/capacity design.
+Lock-order deadlock; sync-over-async deadlock; thread-pool starvation; unfair queue.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ two-lock code path sang thread-pool starvation sau synchronous external call.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| concurrency-synchronization-atomicity | Frozen graph neighborhood with concurrency-deadlock-starvation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| db-locks-deadlocks-contention | Frozen graph neighborhood with concurrency-deadlock-starvation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-synchronization-atomicity` remains separate pending its own mechanism/evidence boundary.
+- `db-locks-deadlocks-contention` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-concurrency-local-vs-distributed
 
 ### Identity
 
-- **Working title:** concurrency-local-vs-distributed
+- **Unit ID:** lu-concurrency-local-vs-distributed
+- **Working title:** Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | concurrency-local-vs-distributed | Concurrency & Async | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas.
 
-### Working canonical problem / case anchor
-
-In-process lock không bảo vệ cross-replica; duplicate side effect; split ownership; coordinator unavailable.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Lock trong process chỉ serializes threads cùng address space; bốn replicas có bốn lock, nên shared state cần DB atomicity, partition owner hoặc distributed coordination có explicit failure model.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-races-check-then-act | concurrency-local-vs-distributed | synchronization authority scope | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-races-check-then-act`: **synchronization authority scope**; introduced only for `concurrency-local-vs-distributed`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Replica IDs trong trace; concurrent calls tới bốn instance; DB affected rows/constraint; ownership metrics.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-DB atomic operation đơn giản khi state ở DB; distributed lock thêm lease/failure complexity và không tự tạo business idempotency.
+In-process lock không bảo vệ cross-replica; duplicate side effect; split ownership; coordinator unavailable.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Chuyển từ local lock sang DB atomicity hoặc partitioned distributed ownership.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| concurrency-races-check-then-act | Frozen graph neighborhood with concurrency-local-vs-distributed | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partial-failure-uncertainty | Frozen graph neighborhood with concurrency-local-vs-distributed | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-races-check-then-act` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-concurrency-memory-visibility
 
 ### Identity
 
-- **Working title:** concurrency-memory-visibility
+- **Unit ID:** lu-concurrency-memory-visibility
+- **Working title:** Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết
 - **Learner-facing domain candidate:** Runtime & Concurrency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | concurrency-memory-visibility | Concurrency & Async | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết.
 
-### Working canonical problem / case anchor
-
-Spin loop không thấy flag; đọc object half-published; assume field assignment đủ synchronization.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 CPU/compiler có thể reorder/cache reads; volatile, lock hoặc interlocked tạo memory-order guarantees phù hợp để published state được quan sát đúng.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-interleavings-invariants | concurrency-memory-visibility | shared state across execution contexts | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-interleavings-invariants`: **shared state across execution contexts**; introduced only for `concurrency-memory-visibility`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Controlled repro; trace timestamps; thread dump; code review primitive; memory model documentation.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Stronger synchronization có cost/contention; không dùng volatile để biến compound transition thành atomic.
+Spin loop không thấy flag; đọc object half-published; assume field assignment đủ synchronization.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-So sánh .NET memory semantics với JMM về visibility và happens-before.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| concurrency-interleavings-invariants | Frozen graph neighborhood with concurrency-memory-visibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-interleavings-invariants` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-net-connection-reuse-pooling
 
 ### Identity
 
-- **Working title:** net-connection-reuse-pooling
+- **Unit ID:** lu-net-connection-reuse-pooling
+- **Working title:** Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | net-connection-reuse-pooling | Networking & HTTP | L3 |
+| net-tcp-connection-semantics | Networking & HTTP | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.
+Mỗi connection có handshake/socket/port cost; pool giữ connection usable theo lifetime/limit, nhưng network peer có thể đóng connection ngoài kiến thức client. → TCP connection được establish rồi giữ state đến close/reset; HTTP request có thể reuse connection nhưng peer/network có thể refuse/reset hoặc capacity cạn trước HTTP.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Mỗi connection có handshake/socket/port cost; pool giữ connection usable theo lifetime/limit, nhưng network peer có thể đóng connection ngoài kiến thức client.
+Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.; Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| net-tcp-connection-semantics | net-connection-reuse-pooling | establishment, lifetime and closure | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.; Connection refused; reset; handshake timeout; connection exhaustion.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `net-tcp-connection-semantics`: **establishment, lifetime and closure**; introduced only for `net-connection-reuse-pooling`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.
-
-### Production boundary / trade-off
-
-Reuse giảm setup cost nhưng giữ resource và cần lifetime/rotation; pool limit bảo vệ downstream nhưng có thể tạo wait queue.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ one outbound dependency sang nhiều replicas cùng mở connection tới một partner.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `net-connection-reuse-pooling`, `net-tcp-connection-semantics` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-files-handles-sockets-ipc` remains separate pending its own mechanism/evidence boundary.
+- `net-tls-trust-handshake` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-net-failure-localization-unknown-outcome
 
 ### Identity
 
-- **Working title:** net-failure-localization-unknown-outcome
+- **Unit ID:** lu-net-failure-localization-unknown-outcome
+- **Working title:** Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | net-failure-localization-unknown-outcome | Networking & HTTP | L4 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Retry duplicate after unknown outcome; gán TLS lỗi thành HTTP 500; treat DNS failure as server rejection; mất correlation qua proxy.
-
-### State / data / mechanism trace
-
-Request path qua nhiều layer; timeout sau write không chứng minh server chưa tạo side effect, nên retry cần status query/idempotency contract chứ không chỉ exception type.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| net-request-path-dns | net-failure-localization-unknown-outcome | name-resolution failure stage | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| net-tcp-connection-semantics | net-failure-localization-unknown-outcome | connection establishment and reset stage | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| net-tls-trust-handshake | net-failure-localization-unknown-outcome | TLS negotiation and trust stage | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| net-http-semantics | net-failure-localization-unknown-outcome | response semantics as stage evidence | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `net-request-path-dns`: **name-resolution failure stage**; introduced only for `net-failure-localization-unknown-outcome`, without source coverage or `PASSED` evidence.
-- `net-tcp-connection-semantics`: **connection establishment and reset stage**; introduced only for `net-failure-localization-unknown-outcome`, without source coverage or `PASSED` evidence.
-- `net-tls-trust-handshake`: **TLS negotiation and trust stage**; introduced only for `net-failure-localization-unknown-outcome`, without source coverage or `PASSED` evidence.
-- `net-http-semantics`: **response semantics as stage evidence**; introduced only for `net-failure-localization-unknown-outcome`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-DNS result/timing; socket/TLS error; HTTP status/header; client/server/proxy trace; operation ID and audit state.
-
-### Production boundary / trade-off
-
-Retry nhanh cải thiện transient failure nhưng có thể nhân side effect; recovery contract phải định nghĩa query/reconcile before repeat.
-
-### Transfer variation
-
-Từ local function failure sang remote service call qua proxy/LB và async callback.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-net-http-semantics
-
-### Identity
-
-- **Working title:** net-http-semantics
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
+| net-request-path-dns | Networking & HTTP | L2 |
+| net-tls-trust-handshake | Networking & HTTP | L2 |
 | net-http-semantics | Networking & HTTP | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng.
+Request path qua nhiều layer; timeout sau write không chứng minh server chưa tạo side effect, nên retry cần status query/idempotency contract chứ không chỉ exception type. → DNS maps hostname to record/address with cache/TTL; connection chỉ bắt đầu sau khi client có usable destination. → TLS handshake xác thực certificate/name/validity và thương lượng protected channel; HTTP starts only after this boundary succeeds. → Method nêu intent; status nêu kết quả ở boundary; headers điều khiển metadata/caching/auth/content negotiation; body mang representation có lifecycle riêng.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Method nêu intent; status nêu kết quả ở boundary; headers điều khiển metadata/caching/auth/content negotiation; body mang representation có lifecycle riêng.
+DNS result/timing; socket/TLS error; HTTP status/header; client/server/proxy trace; operation ID and audit state.; Resolution result; resolver timing; TTL/cache state; address attempted; DNS error code.; Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.; Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Retry duplicate after unknown outcome; gán TLS lỗi thành HTTP 500; treat DNS failure as server rejection; mất correlation qua proxy.; NXDOMAIN/misconfigured record; slow resolver; stale cached address; IPv6/IPv4 mismatch.; Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.; GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection.
-
-### Production boundary / trade-off
-
-REST convention giúp interoperability nhưng không thay domain contract; thêm status/header không bù cho error body mơ hồ.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ internal API sang public endpoint có cache/proxy/client khác version.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `net-failure-localization-unknown-outcome`, `net-request-path-dns`, `net-tls-trust-handshake`, `net-http-semantics` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `net-tcp-connection-semantics` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-net-proxy-lb-forwarded-boundary
 
 ### Identity
 
-- **Working title:** net-proxy-lb-forwarded-boundary
+- **Unit ID:** lu-net-proxy-lb-forwarded-boundary
+- **Working title:** Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers.
 
-### Working canonical problem / case anchor
-
-Blind trust forwarded headers; spoofed client IP/scheme; redirect loop; auth/rate-limit dùng sai identity.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 App chỉ nên tin forwarded metadata khi request đến từ known proxy/LB đã strip/append đúng; client bên ngoài có thể tự gửi header giả.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| net-http-semantics | net-proxy-lb-forwarded-boundary | request and header semantics | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `net-http-semantics`: **request and header semantics**; introduced only for `net-proxy-lb-forwarded-boundary`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Proxy config; remote IP; raw forwarded headers; trusted-network list; app/proxy access logs.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Forwarded metadata cần cho HTTPS redirect/client IP nhưng mở trust surface; trust exact proxy network, không trust mọi header.
+Blind trust forwarded headers; spoofed client IP/scheme; redirect loop; auth/rate-limit dùng sai identity.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ local reverse proxy sang cloud load balancer và multi-hop ingress.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-net-request-path-dns
-
-### Identity
-
-- **Working title:** net-request-path-dns
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| net-request-path-dns | Networking & HTTP | L2 |
+| net-http-semantics | Frozen graph neighborhood with net-proxy-lb-forwarded-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| net-tls-trust-handshake | Frozen graph neighborhood with net-proxy-lb-forwarded-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-NXDOMAIN/misconfigured record; slow resolver; stale cached address; IPv6/IPv4 mismatch.
-
-### State / data / mechanism trace
-
-DNS maps hostname to record/address with cache/TTL; connection chỉ bắt đầu sau khi client có usable destination.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Resolution result; resolver timing; TTL/cache state; address attempted; DNS error code.
-
-### Production boundary / trade-off
-
-Caching giảm lookup cost nhưng trì hoãn record change; retry HTTP không sửa name-resolution failure chưa qua được boundary.
-
-### Transfer variation
-
-Từ localhost/static host sang service discovery hoặc cloud DNS failover.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
+- `net-tls-trust-handshake` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-net-streaming-body-cancellation
 
 ### Identity
 
-- **Working title:** net-streaming-body-cancellation
+- **Unit ID:** lu-net-streaming-body-cancellation
+- **Working title:** Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | net-streaming-body-cancellation | Networking & HTTP | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect.
 
-### Working canonical problem / case anchor
-
-Buffer entire payload; continue expensive work after disconnect; partial upload treated complete; response stream disposed too early.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Request/response body là stream; consumer đọc dần và must observe cancellation, còn buffering materializes toàn bộ payload và kéo dài memory/lifetime.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| net-http-semantics | net-streaming-body-cancellation | HTTP body and transfer lifetime | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| concurrency-cancellation-lifetime | net-streaming-body-cancellation | cooperative cancellation and lifetime | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `net-http-semantics`: **HTTP body and transfer lifetime**; introduced only for `net-streaming-body-cancellation`, without source coverage or `PASSED` evidence.
-- `concurrency-cancellation-lifetime`: **cooperative cancellation and lifetime**; introduced only for `net-streaming-body-cancellation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Bytes in/out; cancellation/request-aborted trace; memory allocation; stream read/write duration; completion status.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Streaming hạ memory/first-byte latency nhưng làm retry/validation partial phức tạp; full buffer chỉ hợp payload nhỏ cần toàn bộ trước processing.
+Buffer entire payload; continue expensive work after disconnect; partial upload treated complete; response stream disposed too early.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ file upload local sang proxy streaming to a remote service with client disconnect.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-net-tcp-connection-semantics
-
-### Identity
-
-- **Working title:** net-tcp-connection-semantics
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| net-tcp-connection-semantics | Networking & HTTP | L2 |
+| net-http-semantics | Frozen graph neighborhood with net-streaming-body-cancellation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| concurrency-cancellation-lifetime | Frozen graph neighborhood with net-streaming-body-cancellation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Connection refused; reset; handshake timeout; connection exhaustion.
-
-### State / data / mechanism trace
-
-TCP connection được establish rồi giữ state đến close/reset; HTTP request có thể reuse connection nhưng peer/network có thể refuse/reset hoặc capacity cạn trước HTTP.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-files-handles-sockets-ipc | net-tcp-connection-semantics | socket state, lifetime and resource | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-files-handles-sockets-ipc`: **socket state, lifetime and resource**; introduced only for `net-tcp-connection-semantics`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count.
-
-### Production boundary / trade-off
-
-Long-lived connection giảm setup nhưng cần handle reset; opening per request tăng port/socket pressure và tail latency.
-
-### Transfer variation
-
-Từ local same-host call sang remote availability zone with NAT/proxy.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-net-tls-trust-handshake
-
-### Identity
-
-- **Working title:** net-tls-trust-handshake
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| net-tls-trust-handshake | Networking & HTTP | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.
-
-### State / data / mechanism trace
-
-TLS handshake xác thực certificate/name/validity và thương lượng protected channel; HTTP starts only after this boundary succeeds.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.
-
-### Production boundary / trade-off
-
-Strict validation bảo vệ identity nhưng cần rotation and correct hostname; bypass certificate validation chỉ hợp local test, không production.
-
-### Transfer variation
-
-Từ direct service certificate sang TLS termination at proxy with upstream trust split.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
+- `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-backup-restore
 
 ### Identity
 
-- **Working title:** db-backup-restore
+- **Unit ID:** lu-db-backup-restore
+- **Working title:** Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-backup-restore | Relational Database Engineering | L3 |
+| db-wal-crash-recovery | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chứng minh backup khôi phục được dữ liệu cần thiết và đo được thời gian recovery.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Backup chưa từng restore; thiếu log cần thiết; recovered point không đạt yêu cầu; restore lâu hơn giả định.
+Backup là bản dữ liệu/log tại mốc xác định; restore tái tạo state theo phạm vi và point-in-time contract, không phải chỉ file tồn tại. → WAL records durable change intent before data page write; recovery can redo/resolve state based on log ordering.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Backup là bản dữ liệu/log tại mốc xác định; restore tái tạo state theo phạm vi và point-in-time contract, không phải chỉ file tồn tại.
+Backup metadata; restore test; recovered timestamp/rows; duration; checksum/validation result.; WAL/log position khi thực tế; commit/restart experiment; recovery log; persisted rows after crash simulation.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Backup chưa từng restore; thiếu log cần thiết; recovered point không đạt yêu cầu; restore lâu hơn giả định.; Assume committed data means every page sync write; unsafe durability setting; expect recovery without required log.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Backup metadata; restore test; recovered timestamp/rows; duration; checksum/validation result.
-
-### Production boundary / trade-off
-
-Backup dày giảm data loss nhưng tăng storage/IO; Database owns recovery mechanism còn Reliability owns RPO/RTO policy.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ full backup test local sang point-in-time restore của production-sized dataset.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `db-backup-restore`, `db-wal-crash-recovery` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `rel-disaster-recovery-rpo-rto` remains separate pending its own mechanism/evidence boundary.
+- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-buffer-io
 
 ### Identity
 
-- **Working title:** db-buffer-io
+- **Unit ID:** lu-db-buffer-io
+- **Working title:** Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-buffer-io | Relational Database Engineering | L2 |
+| db-physical-storage-pages | Relational Database Engineering | L2 |
+| db-production-diagnosis-transfer | Relational Database Engineering | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt logical buffer access với physical storage I/O khi giải thích query runtime.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Benchmark cold/warm không nhất quán; gọi mọi buffer hit là disk I/O; memory pressure làm runtime đổi nhưng bị bỏ qua.
+Database buffer/cache có thể phục vụ page đã resident; working set và access pattern quyết định khi nào cần đọc storage. → Rows nằm trong storage pages; scan/index eventually reference pages, nên row width/physical relation size ảnh hưởng amount of work. → Query shape, plan, cardinality, buffers/I/O, locks, transaction và pool tạo symptom khác nhau; thay đổi chỉ sau khi evidence loại hypothesis khác.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Database buffer/cache có thể phục vụ page đã resident; working set và access pattern quyết định khi nào cần đọc storage.
+EXPLAIN BUFFERS; cache hits/reads; OS/database I/O; cold/warm timing.; Page/buffer statistics; relation/index size; EXPLAIN BUFFERS khi phù hợp.; Hypothesis matrix; measured plan/rows/buffers; lock/pool timeline; before/after experiment.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-physical-storage-pages | db-buffer-io | database data is accessed in page-sized physical units. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Benchmark cold/warm không nhất quán; gọi mọi buffer hit là disk I/O; memory pressure làm runtime đổi nhưng bị bỏ qua.; Assume one-row lookup là one disk operation; wide row tăng page work; bỏ qua table/index size.; Nhảy từ “slow SQL” sang add index; sửa plan khi problem là pool/lock; áp dụng engine detail sai.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `db-physical-storage-pages`: **database data is accessed in page-sized physical units.**; introduced only for `db-buffer-io`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-EXPLAIN BUFFERS; cache hits/reads; OS/database I/O; cold/warm timing.
-
-### Production boundary / trade-off
-
-Cache warm làm query nhanh nhưng không đảm bảo production working set luôn fit memory.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ hot dataset nhỏ sang working set lớn hơn memory sẵn có.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `db-buffer-io`, `db-physical-storage-pages`, `db-production-diagnosis-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-virtual-memory-page-cache` remains separate pending its own mechanism/evidence boundary.
+- `db-index-structures` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-connection-pool-exhaustion
 
 ### Identity
 
-- **Working title:** db-connection-pool-exhaustion
+- **Unit ID:** lu-db-connection-pool-exhaustion
+- **Working title:** Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-connection-pool-exhaustion | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt chờ connection với slow query hoặc quá nhiều concurrent request dùng cùng database capacity.
 
-### Working canonical problem / case anchor
-
-Leaked connection; transaction giữ connection quá lâu; pool nhỏ hơn concurrency không bound; tăng pool làm DB overload thêm.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Pool giới hạn số session; acquisition wait xảy ra trước query khi active connection bị leak, giữ transaction lâu hoặc demand vượt capacity.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-resource-exhaustion | db-connection-pool-exhaustion | connections are finite resources and waiting grows when demand exceeds available capacity. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-resource-exhaustion`: **connections are finite resources and waiting grows when demand exceeds available capacity.**; introduced only for `db-connection-pool-exhaustion`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Pool active/idle/wait; acquisition latency; DB session count; query duration; request queue.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Tăng pool chỉ có lợi khi DB còn capacity; concurrency limit đôi khi bảo vệ latency tốt hơn.
+Leaked connection; transaction giữ connection quá lâu; pool nhỏ hơn concurrency không bound; tăng pool làm DB overload thêm.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ single instance sang nhiều replicas chia cùng DB pool/capacity.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| os-resource-exhaustion | Frozen graph neighborhood with db-connection-pool-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| concurrency-bounded-backpressure | Frozen graph neighborhood with db-connection-pool-exhaustion | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-resource-exhaustion` remains separate pending its own mechanism/evidence boundary.
+- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-locks-deadlocks-contention
 
 ### Identity
 
-- **Working title:** db-locks-deadlocks-contention
+- **Unit ID:** lu-db-locks-deadlocks-contention
+- **Working title:** Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-locks-deadlocks-contention | Relational Database Engineering | L3 |
+| db-transactions-isolation-anomalies | Relational Database Engineering | L3 |
+| db-schema-evolution | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Xác định resource/operation nào đang wait trên owner nào, rồi tách contention khỏi deadlock.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Long transaction giữ lock; inconsistent lock order; hot-row serialization; deadlock cycle.
+Lock serializes conflicting access; contention có owner sẽ release, deadlock là cycle wait cần one transaction abort. → Isolation defines visibility/conflict behavior của concurrent transactions; invariant có thể cần conditional write, serialization hoặc redesign scope. → Expand/backfill/dual-read or compatibility boundary cho phép state/schema đổi dần trước contract cleanup.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Lock serializes conflicting access; contention có owner sẽ release, deadlock là cycle wait cần one transaction abort.
+Lock/wait view; blocked/blocking session; deadlock report; transaction duration.; Two-session timeline; before/after rows; isolation setting; conflict/result.; Schema version; migration history; lock duration; old/new compatibility test; backfill progress.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-transactions-isolation-anomalies | db-locks-deadlocks-contention | transaction scope and concurrent operations over shared database state. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Long transaction giữ lock; inconsistent lock order; hot-row serialization; deadlock cycle.; Lost update; non-repeatable observation; write skew/equivalent anomaly; transaction scope quá lớn.; Destructive column change sớm; long blocking migration; rollback incompatible; backfill race with writes.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `db-transactions-isolation-anomalies`: **transaction scope and concurrent operations over shared database state.**; introduced only for `db-locks-deadlocks-contention`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Lock/wait view; blocked/blocking session; deadlock report; transaction duration.
-
-### Production boundary / trade-off
-
-Strong serialization bảo vệ invariant nhưng giảm concurrency/tăng latency; retry deadlock cần idempotent flow.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ two-session update sang hot account row trong nhiều app replicas.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `db-locks-deadlocks-contention`, `db-transactions-isolation-anomalies`, `db-schema-evolution` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-deadlock-starvation` remains separate pending its own mechanism/evidence boundary.
+- `db-production-diagnosis-transfer` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-modeling-invariants
 
 ### Identity
 
-- **Working title:** db-modeling-invariants
+- **Unit ID:** lu-db-modeling-invariants
+- **Working title:** Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-modeling-invariants | Relational Database Engineering | L3 |
+| db-partitioning-sharding-boundary | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Model entity/relationship và đặt invariant đúng ở domain/database boundary để state không hợp lệ không persist được.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Duplicate logical entity; invalid relationship; nullable field trái domain assumption; invariant chỉ ở app; race bypass validation.
+Schema, key, constraint và transaction boundary quyết định state nào có thể persist; application validation không là guard cuối khi có nhiều writer. → Key quyết định row nằm ở partition nào; targeted query giữ locality còn key lệch tạo hot partition/fan-out.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Schema, key, constraint và transaction boundary quyết định state nào có thể persist; application validation không là guard cuối khi có nhiều writer.
+Schema/constraints; failing insert/update; concurrent test; constraint violation; persisted rows.; Key distribution; partition size; per-partition traffic; fan-out count.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-invariants-domain-model | db-modeling-invariants | business-valid state and invariant ownership. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Duplicate logical entity; invalid relationship; nullable field trái domain assumption; invariant chỉ ở app; race bypass validation.; Hot partition; unbounded partition; query fan-out toàn shard; bỏ qua repartitioning.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `prog-invariants-domain-model`: **business-valid state and invariant ownership.**; introduced only for `db-modeling-invariants`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Schema/constraints; failing insert/update; concurrent test; constraint violation; persisted rows.
-
-### Production boundary / trade-off
-
-Strict constraint tăng correctness nhưng giảm migration/write flexibility; migration cần làm rõ legacy state.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ PostgreSQL schema do một service sở hữu sang shared/legacy DB có nhiều writer.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `db-modeling-invariants`, `db-partitioning-sharding-boundary` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
+- `db-schema-evolution` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-mvcc-visibility
 
 ### Identity
 
-- **Working title:** db-mvcc-visibility
+- **Unit ID:** lu-db-mvcc-visibility
+- **Working title:** Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-mvcc-visibility | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason version nào transaction nhìn thấy và phân biệt snapshot visibility với lock blocking.
 
-### Working canonical problem / case anchor
-
-Assume latest committed row luôn visible; nhầm snapshot với lock owner; long transaction giữ cleanup pressure.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Multiple logical row versions cùng visibility rules cho transaction; reader có thể thấy snapshot cũ dù writer đã tạo version mới.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-transactions-isolation-anomalies | db-mvcc-visibility | transaction boundary, isolation semantics and concurrent visibility requirements. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `db-transactions-isolation-anomalies`: **transaction boundary, isolation semantics and concurrent visibility requirements.**; introduced only for `db-mvcc-visibility`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Two-session query; transaction snapshot/ID khi thực tế; dead-row/version observation; lock evidence để loại blocking.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-MVCC giảm read/write blocking ở nhiều workload nhưng long transactions có cleanup/storage cost.
+Assume latest committed row luôn visible; nhầm snapshot với lock owner; long transaction giữ cleanup pressure.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ PostgreSQL MVCC sang SQL Server/Oracle/InnoDB khác implementation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-db-partitioning-sharding-boundary
-
-### Identity
-
-- **Working title:** db-partitioning-sharding-boundary
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| db-partitioning-sharding-boundary | Relational Database Engineering | L3 |
+| db-transactions-isolation-anomalies | Frozen graph neighborhood with db-mvcc-visibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Hot partition; unbounded partition; query fan-out toàn shard; bỏ qua repartitioning.
-
-### State / data / mechanism trace
-
-Key quyết định row nằm ở partition nào; targeted query giữ locality còn key lệch tạo hot partition/fan-out.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-partitioning-ownership-rebalancing | db-partitioning-sharding-boundary | state/key ranges are assigned to owners and ownership may change. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `dist-partitioning-ownership-rebalancing`: **state/key ranges are assigned to owners and ownership may change.**; introduced only for `db-partitioning-sharding-boundary`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Key distribution; partition size; per-partition traffic; fan-out count.
-
-### Production boundary / trade-off
-
-Partition giúp manage/route data nhưng tăng operational/query complexity khi access không theo key.
-
-### Transfer variation
-
-Từ table partition nội bộ sang service shard nhiều owner.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-db-physical-storage-pages
-
-### Identity
-
-- **Working title:** db-physical-storage-pages
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| db-physical-storage-pages | Relational Database Engineering | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Assume one-row lookup là one disk operation; wide row tăng page work; bỏ qua table/index size.
-
-### State / data / mechanism trace
-
-Rows nằm trong storage pages; scan/index eventually reference pages, nên row width/physical relation size ảnh hưởng amount of work.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Page/buffer statistics; relation/index size; EXPLAIN BUFFERS khi phù hợp.
-
-### Production boundary / trade-off
-
-Đây là trực giác backend, không phải database-engine implementation internals.
-
-### Transfer variation
-
-Từ narrow lookup table sang wide event table và large index.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-db-production-diagnosis-transfer
-
-### Identity
-
-- **Working title:** db-production-diagnosis-transfer
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| db-production-diagnosis-transfer | Relational Database Engineering | L4 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Nhảy từ “slow SQL” sang add index; sửa plan khi problem là pool/lock; áp dụng engine detail sai.
-
-### State / data / mechanism trace
-
-Query shape, plan, cardinality, buffers/I/O, locks, transaction và pool tạo symptom khác nhau; thay đổi chỉ sau khi evidence loại hypothesis khác.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-buffer-io | db-production-diagnosis-transfer | buffer hit/read behavior distinguishes memory access from physical I/O. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| db-optimizer-cardinality-stats | db-production-diagnosis-transfer | estimated vs actual cardinality and plan-choice evidence. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| db-locks-deadlocks-contention | db-production-diagnosis-transfer | blocking/lock evidence as an alternative explanation for latency. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| db-connection-pool-exhaustion | db-production-diagnosis-transfer | connection acquisition wait can dominate request latency independently of query execution. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `db-buffer-io`: **buffer hit/read behavior distinguishes memory access from physical I/O.**; introduced only for `db-production-diagnosis-transfer`, without source coverage or `PASSED` evidence.
-- `db-optimizer-cardinality-stats`: **estimated vs actual cardinality and plan-choice evidence.**; introduced only for `db-production-diagnosis-transfer`, without source coverage or `PASSED` evidence.
-- `db-locks-deadlocks-contention`: **blocking/lock evidence as an alternative explanation for latency.**; introduced only for `db-production-diagnosis-transfer`, without source coverage or `PASSED` evidence.
-- `db-connection-pool-exhaustion`: **connection acquisition wait can dominate request latency independently of query execution.**; introduced only for `db-production-diagnosis-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Hypothesis matrix; measured plan/rows/buffers; lock/pool timeline; before/after experiment.
-
-### Production boundary / trade-off
-
-Mitigation phải giữ invariant và rollout safety, không chỉ giảm một metric.
-
-### Transfer variation
-
-Từ PostgreSQL incident sang SQL Server/MySQL/Oracle với physical implementation khác.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-db-replication-failover
 
 ### Identity
 
-- **Working title:** db-replication-failover
+- **Unit ID:** lu-db-replication-failover
+- **Working title:** Reason primary/replica role, lag và failover mà không coi replica là synchronous truth
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | db-replication-failover | Relational Database Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason primary/replica role, lag và failover mà không coi replica là synchronous truth.
 
-### Working canonical problem / case anchor
-
-Read-after-write từ lagging replica; stale replica promoted; assumed operation lost/duplicated; client giữ old primary connection.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Replication applies state with delay/role transition; client connection và operation history có thể không cùng mốc với promoted node.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-replication-leader-quorum | db-replication-failover | portable replication roles, acknowledgement and stale-copy semantics. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `dist-replication-leader-quorum`: **portable replication roles, acknowledgement and stale-copy semantics.**; introduced only for `db-replication-failover`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Replication lag/position; role; timeline; operation ID; connection target.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-General replication mechanism belongs Distributed Systems; node này owns relational engine evidence and behavior.
+Read-after-write từ lagging replica; stale replica promoted; assumed operation lost/duplicated; client giữ old primary connection.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ primary/replica read scale sang failover during in-flight write.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-db-schema-evolution
-
-### Identity
-
-- **Working title:** db-schema-evolution
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| db-schema-evolution | Relational Database Engineering | L3 |
+| dist-replication-leader-quorum | Frozen graph neighborhood with db-replication-failover | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| db-wal-crash-recovery | Frozen graph neighborhood with db-replication-failover | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Destructive column change sớm; long blocking migration; rollback incompatible; backfill race with writes.
-
-### State / data / mechanism trace
-
-Expand/backfill/dual-read or compatibility boundary cho phép state/schema đổi dần trước contract cleanup.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-modeling-invariants | db-schema-evolution | schema structure, keys, constraints and invariants that migration must preserve. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| db-locks-deadlocks-contention | db-schema-evolution | DDL/data migration can acquire locks and block concurrent work. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `db-modeling-invariants`: **schema structure, keys, constraints and invariants that migration must preserve.**; introduced only for `db-schema-evolution`, without source coverage or `PASSED` evidence.
-- `db-locks-deadlocks-contention`: **DDL/data migration can acquire locks and block concurrent work.**; introduced only for `db-schema-evolution`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Schema version; migration history; lock duration; old/new compatibility test; backfill progress.
-
-### Production boundary / trade-off
-
-Compatibility kéo dài migration cost nhưng giảm deploy risk; cleanup chỉ sau khi callers đã rời contract cũ.
-
-### Transfer variation
-
-Từ deploy một version sang rolling deploy mixed app versions.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-db-transactions-isolation-anomalies
-
-### Identity
-
-- **Working title:** db-transactions-isolation-anomalies
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| db-transactions-isolation-anomalies | Relational Database Engineering | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Lost update; non-repeatable observation; write skew/equivalent anomaly; transaction scope quá lớn.
-
-### State / data / mechanism trace
-
-Isolation defines visibility/conflict behavior của concurrent transactions; invariant có thể cần conditional write, serialization hoặc redesign scope.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-interleavings-invariants | db-transactions-isolation-anomalies | concurrent operations may interleave around shared state and violate an invariant. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-interleavings-invariants`: **concurrent operations may interleave around shared state and violate an invariant.**; introduced only for `db-transactions-isolation-anomalies`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Two-session timeline; before/after rows; isolation setting; conflict/result.
-
-### Production boundary / trade-off
-
-Higher isolation/serialization tăng correctness nhưng có retry/contention cost; không học như bảng thuộc lòng.
-
-### Transfer variation
-
-Từ single transfer transaction sang concurrent capacity reservation.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-db-wal-crash-recovery
-
-### Identity
-
-- **Working title:** db-wal-crash-recovery
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| db-wal-crash-recovery | Relational Database Engineering | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Assume committed data means every page sync write; unsafe durability setting; expect recovery without required log.
-
-### State / data / mechanism trace
-
-WAL records durable change intent before data page write; recovery can redo/resolve state based on log ordering.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-transactions-isolation-anomalies | db-wal-crash-recovery | commit/durability boundary of a transaction. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `db-transactions-isolation-anomalies`: **commit/durability boundary of a transaction.**; introduced only for `db-wal-crash-recovery`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-WAL/log position khi thực tế; commit/restart experiment; recovery log; persisted rows after crash simulation.
-
-### Production boundary / trade-off
-
-Durability setting đổi latency vs data-loss window; không implement WAL engine.
-
-### Transfer variation
-
-Từ controlled restart sang crash/failover with durability policy.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
+- `db-wal-crash-recovery` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-nosql-cassandra-lsm-compaction-consistency
 
 ### Identity
 
-- **Working title:** nosql-cassandra-lsm-compaction-consistency
+- **Unit ID:** lu-nosql-cassandra-lsm-compaction-consistency
+- **Working title:** Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | nosql-cassandra-lsm-compaction-consistency | NoSQL & Specialized Data Systems | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Tombstone-heavy read; compaction backlog; read amplification; inappropriate consistency assumption.
-
-### State / data / mechanism trace
-
-Writes append to commit log/memtable then flush immutable SSTables; reads merge relevant files and compaction rewrites them, while consistency depends replica response policy.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| nosql-cassandra-partition-model | nosql-cassandra-lsm-compaction-consistency | partition/clustering organization determines which data is read/written together. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-consistency-linearizability | nosql-cassandra-lsm-compaction-consistency | consistency model constrains which replica observations/acknowledgements are acceptable. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `nosql-cassandra-partition-model`: **partition/clustering organization determines which data is read/written together.**; introduced only for `nosql-cassandra-lsm-compaction-consistency`, without source coverage or `PASSED` evidence.
-- `dist-consistency-linearizability`: **consistency model constrains which replica observations/acknowledgements are acceptable.**; introduced only for `nosql-cassandra-lsm-compaction-consistency`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-SSTable/compaction metrics; tombstone warnings; read/write latency; replica response behavior.
-
-### Production boundary / trade-off
-
-Write-friendly immutable storage trades for read/compaction amplification and operational tuning.
-
-### Transfer variation
-
-Từ write-heavy time series sang read-heavy range/query workload với tombstone history.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-nosql-cassandra-partition-model
-
-### Identity
-
-- **Working title:** nosql-cassandra-partition-model
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | nosql-cassandra-partition-model | NoSQL & Specialized Data Systems | L3 |
+| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Trace commit log → memtable → SSTable → compaction/read merge và reason write/read consistency cost.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Huge partition; hot partition; unsupported scan query; poor key distribution.
+Writes append to commit log/memtable then flush immutable SSTables; reads merge relevant files and compaction rewrites them, while consistency depends replica response policy. → Partition key routes data; clustering key orders rows inside partition; table design starts from known query not ad-hoc filter. → Decision starts with read/write route, ownership, consistency and recovery needs; product behavior demonstrates fit or mismatch, not popularity.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Partition key routes data; clustering key orders rows inside partition; table design starts from known query not ad-hoc filter.
+SSTable/compaction metrics; tombstone warnings; read/write latency; replica response behavior.; Partition size/key distribution; request distribution; query shape.; Access matrix; prototype query/profile; data distribution; consistency/failure test; operating cost estimate.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Tombstone-heavy read; compaction backlog; read amplification; inappropriate consistency assumption.; Huge partition; hot partition; unsupported scan query; poor key distribution.; Chọn tool vì trend; bỏ qua source-of-truth; model không hỗ trợ primary query; hide operational cost.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Partition size/key distribution; request distribution; query shape.
-
-### Production boundary / trade-off
-
-Denormalized tables speed known queries nhưng tăng write/model maintenance and reduce query flexibility.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ per-tenant uniform traffic sang one tenant/hot device dominates writes.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `nosql-cassandra-lsm-compaction-consistency`, `nosql-cassandra-partition-model`, `nosql-transfer-storage-choice` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `dist-consistency-linearizability` remains separate pending its own mechanism/evidence boundary.
+- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-nosql-model-selection
 
 ### Identity
 
-- **Working title:** nosql-model-selection
+- **Unit ID:** lu-nosql-model-selection
+- **Working title:** Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | nosql-model-selection | NoSQL & Specialized Data Systems | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Document DB for relational cross-aggregate work; Cassandra without partition query; search as authoritative transactional store; Redis chosen only “fast”.
-
-### State / data / mechanism trace
-
-Mỗi family optimizes different data layout/operation: relational constraints, document aggregate, partition write, key lookup, search projection.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| nosql-mongo-aggregate-model | nosql-model-selection | document/aggregate storage model and its query/update boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| nosql-cassandra-partition-model | nosql-model-selection | wide-column access-pattern-first partition model. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| nosql-redis-structures-memory | nosql-model-selection | in-memory key/value structure and memory boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| nosql-search-inverted-index-analysis | nosql-model-selection | inverted-index/search projection model. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `nosql-mongo-aggregate-model`: **document/aggregate storage model and its query/update boundary.**; introduced only for `nosql-model-selection`, without source coverage or `PASSED` evidence.
-- `nosql-cassandra-partition-model`: **wide-column access-pattern-first partition model.**; introduced only for `nosql-model-selection`, without source coverage or `PASSED` evidence.
-- `nosql-redis-structures-memory`: **in-memory key/value structure and memory boundary.**; introduced only for `nosql-model-selection`, without source coverage or `PASSED` evidence.
-- `nosql-search-inverted-index-analysis`: **inverted-index/search projection model.**; introduced only for `nosql-model-selection`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Access-pattern matrix; query shapes; data growth; consistency/failure requirement.
-
-### Production boundary / trade-off
-
-Specialized fit improves one workload but adds operational, consistency or query-flexibility cost.
-
-### Transfer variation
-
-Từ document-heavy aggregate sang append/read-by-partition workload or transactional source to search projection.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-nosql-mongo-aggregate-model
-
-### Identity
-
-- **Working title:** nosql-mongo-aggregate-model
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | nosql-mongo-aggregate-model | NoSQL & Specialized Data Systems | L2 |
+| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 |
+| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chọn storage model từ access pattern, consistency need, query shape và ownership thay vì product branding.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Unbounded embedded array; assume cross-document update atomic; N+1 reference lookup.
+Mỗi family optimizes different data layout/operation: relational constraints, document aggregate, partition write, key lookup, search projection. → Embedded data updates with one document boundary; references split ownership/lifetime and require later lookup or coordinated update. → String, hash, set, sorted set and stream encode different operations/memory layouts; key cardinality and value size drive RAM need. → Analyzer transforms text into tokens; inverted index maps tokens to documents, so mapping/analyzer determines match semantics.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Embedded data updates with one document boundary; references split ownership/lifetime and require later lookup or coordinated update.
+Access-pattern matrix; query shapes; data growth; consistency/failure requirement.; Document shape/size; query pattern; update boundary; array growth.; Key type/size; memory usage; operation latency; cardinality.; Mapping; analyzed tokens; query explanation/profile; returned scores.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Document DB for relational cross-aggregate work; Cassandra without partition query; search as authoritative transactional store; Redis chosen only “fast”.; Unbounded embedded array; assume cross-document update atomic; N+1 reference lookup.; Giant key/value; wrong structure; unbounded collection; memory underestimated.; Text vs keyword mismatch; wrong analyzer; exact match expected from analyzed text; relevance confused with correctness.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Document shape/size; query pattern; update boundary; array growth.
-
-### Production boundary / trade-off
-
-Embed reduces round trips for bounded aggregate; reference contains growth and reuse but adds joins/lookups/consistency handling.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ order with bounded line items sang customer activity history growing without bound.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `nosql-model-selection`, `nosql-mongo-aggregate-model`, `nosql-redis-structures-memory`, `nosql-search-inverted-index-analysis` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `nosql-cassandra-partition-model` remains separate pending its own mechanism/evidence boundary.
+- `nosql-transfer-storage-choice` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-nosql-mongo-index-shard-transaction
 
 ### Identity
 
-- **Working title:** nosql-mongo-index-shard-transaction
+- **Unit ID:** lu-nosql-mongo-index-shard-transaction
+- **Working title:** Reason index, shard key and transaction boundary from Mongo query/write pattern
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | nosql-mongo-index-shard-transaction | NoSQL & Specialized Data Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason index, shard key and transaction boundary from Mongo query/write pattern.
 
-### Working canonical problem / case anchor
-
-Poor shard key/hot chunk; query misses useful index; distributed transaction assumed cheap; scatter-gather query.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Index narrows candidate documents; shard key routes data; multi-document transaction coordinates changes but crosses normal document locality.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| nosql-mongo-aggregate-model | nosql-mongo-index-shard-transaction | document/aggregate boundary and expected access pattern. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `nosql-mongo-aggregate-model`: **document/aggregate boundary and expected access pattern.**; introduced only for `nosql-mongo-index-shard-transaction`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Query explain/profile; shard distribution; operation latency; transaction scope.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Shard key optimizes route/distribution but constrains future queries; transaction correctness may cost latency/coordination.
+Poor shard key/hot chunk; query misses useful index; distributed transaction assumed cheap; scatter-gather query.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ single-shard aggregate update sang cross-shard reporting or transaction.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| nosql-mongo-aggregate-model | Frozen graph neighborhood with nosql-mongo-index-shard-transaction | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partitioning-ownership-rebalancing | Frozen graph neighborhood with nosql-mongo-index-shard-transaction | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `nosql-mongo-aggregate-model` remains separate pending its own mechanism/evidence boundary.
+- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-nosql-redis-persistence-replication-cluster-streams
 
 ### Identity
 
-- **Working title:** nosql-redis-persistence-replication-cluster-streams
+- **Unit ID:** lu-nosql-redis-persistence-replication-cluster-streams
+- **Working title:** Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | nosql-redis-persistence-replication-cluster-streams | NoSQL & Specialized Data Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason Redis durability, replica lag, cluster slot ownership và Streams consumer pending work at backend-user depth.
 
-### Working canonical problem / case anchor
-
-Acknowledged write lost under wrong durability assumption; stale replica; hot slot/key; cross-slot surprise; pending work misunderstood.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Persistence mode controls restart survival; replica apply may lag; hash slot routes keys; Stream group tracks delivered/pending entries per consumer.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| nosql-redis-structures-memory | nosql-redis-persistence-replication-cluster-streams | Redis state lives in concrete key/value data structures with finite memory behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-replication-leader-quorum | nosql-redis-persistence-replication-cluster-streams | portable replication, lag and failover semantics. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `nosql-redis-structures-memory`: **Redis state lives in concrete key/value data structures with finite memory behavior.**; introduced only for `nosql-redis-persistence-replication-cluster-streams`, without source coverage or `PASSED` evidence.
-- `dist-replication-leader-quorum`: **portable replication, lag and failover semantics.**; introduced only for `nosql-redis-persistence-replication-cluster-streams`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Persistence config/state; replication offset/lag; slot distribution; Streams consumer/pending state.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Redis speed does not equal durable source of truth; stronger persistence/replication choices cost latency/availability.
+Acknowledged write lost under wrong durability assumption; stale replica; hot slot/key; cross-slot surprise; pending work misunderstood.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ standalone cache to cluster stream consumer group with failover.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-nosql-redis-structures-memory
-
-### Identity
-
-- **Working title:** nosql-redis-structures-memory
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| nosql-redis-structures-memory | NoSQL & Specialized Data Systems | L2 |
+| nosql-redis-structures-memory | Frozen graph neighborhood with nosql-redis-persistence-replication-cluster-streams | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-replication-leader-quorum | Frozen graph neighborhood with nosql-redis-persistence-replication-cluster-streams | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Giant key/value; wrong structure; unbounded collection; memory underestimated.
-
-### State / data / mechanism trace
-
-String, hash, set, sorted set and stream encode different operations/memory layouts; key cardinality and value size drive RAM need.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Key type/size; memory usage; operation latency; cardinality.
-
-### Production boundary / trade-off
-
-A compact structure for one access pattern may be poor for another; memory must be bounded/observed, not assumed.
-
-### Transfer variation
-
-Từ simple key lookup sang leaderboard or bounded per-user collection.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-nosql-search-inverted-index-analysis
-
-### Identity
-
-- **Working title:** nosql-search-inverted-index-analysis
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| nosql-search-inverted-index-analysis | NoSQL & Specialized Data Systems | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Text vs keyword mismatch; wrong analyzer; exact match expected from analyzed text; relevance confused with correctness.
-
-### State / data / mechanism trace
-
-Analyzer transforms text into tokens; inverted index maps tokens to documents, so mapping/analyzer determines match semantics.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Mapping; analyzed tokens; query explanation/profile; returned scores.
-
-### Production boundary / trade-off
-
-Search ranking improves discovery but is not transactional correctness or authoritative source.
-
-### Transfer variation
-
-Từ exact product code lookup sang natural-language product search.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `nosql-redis-structures-memory` remains separate pending its own mechanism/evidence boundary.
+- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-nosql-search-refresh-shards-pagination
 
 ### Identity
 
-- **Working title:** nosql-search-refresh-shards-pagination
+- **Unit ID:** lu-nosql-search-refresh-shards-pagination
+- **Working title:** Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | nosql-search-refresh-shards-pagination | NoSQL & Specialized Data Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason refresh/eventual visibility, shard distribution và pagination cost in a search projection.
 
-### Working canonical problem / case anchor
-
-Write expected instantly searchable; hot shard; deep offset pagination; search result treated as transactional truth.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Indexed write becomes searchable on refresh; shard routes work; deep offset asks shards to collect/skip many hits.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| nosql-search-inverted-index-analysis | nosql-search-refresh-shards-pagination | documents and terms are represented in an inverted index whose visibility differs from source-of-truth storage. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `nosql-search-inverted-index-analysis`: **documents and terms are represented in an inverted index whose visibility differs from source-of-truth storage.**; introduced only for `nosql-search-refresh-shards-pagination`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Refresh timing; shard distribution; query profile; pagination depth; source-of-truth record.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Faster refresh costs resources; cursor/search-after pattern changes navigation semantics but avoids deep offset cost.
+Write expected instantly searchable; hot shard; deep offset pagination; search result treated as transactional truth.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Từ small catalog offset page sang high-cardinality search with deep navigation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-nosql-transfer-storage-choice
-
-### Identity
-
-- **Working title:** nosql-transfer-storage-choice
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| nosql-transfer-storage-choice | NoSQL & Specialized Data Systems | L4 |
+| nosql-search-inverted-index-analysis | Frozen graph neighborhood with nosql-search-refresh-shards-pagination | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partitioning-ownership-rebalancing | Frozen graph neighborhood with nosql-search-refresh-shards-pagination | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Chọn tool vì trend; bỏ qua source-of-truth; model không hỗ trợ primary query; hide operational cost.
-
-### State / data / mechanism trace
-
-Decision starts with read/write route, ownership, consistency and recovery needs; product behavior demonstrates fit or mismatch, not popularity.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| nosql-model-selection | nosql-transfer-storage-choice | choose storage family from workload/access/consistency requirements. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `nosql-model-selection`: **choose storage family from workload/access/consistency requirements.**; introduced only for `nosql-transfer-storage-choice`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Access matrix; prototype query/profile; data distribution; consistency/failure test; operating cost estimate.
-
-### Production boundary / trade-off
-
-A best local model may create global reconciliation/operational cost; choose smallest model meeting required properties.
-
-### Transfer variation
-
-Document aggregate → append partition workload; transactional source → search projection; cache lookup → durable stream.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `nosql-search-inverted-index-analysis` remains separate pending its own mechanism/evidence boundary.
+- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-cache-capacity-eviction-fallback
 
 ### Identity
 
-- **Working title:** cache-capacity-eviction-fallback
+- **Unit ID:** lu-cache-capacity-eviction-fallback
+- **Working title:** Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | cache-capacity-eviction-fallback | Cache Engineering | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Eviction gây origin surge; recursive fallback overload source; fail-open/fail-closed sai.
-
-### State / data / mechanism trace
-
-Cache có capacity/eviction policy; miss hoặc outage chuyển demand về source, nên fallback path là một traffic amplifier tiềm năng.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| cache-need-source-of-truth | cache-capacity-eviction-fallback | evicted/unavailable cache must fall back to an authoritative source. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `cache-need-source-of-truth`: **evicted/unavailable cache must fall back to an authoritative source.**; introduced only for `cache-capacity-eviction-fallback`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Memory; evictions; hit rate; origin QPS; fallback latency/error.
-
-### Production boundary / trade-off
-
-Cache capacity tăng cost không xoá need for origin protection; fallback must have bound/timeout/load-shed behavior.
-
-### Transfer variation
-
-Từ one cache node sang eviction burst trên distributed cluster with origin rate limit.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-cache-evidence-transfer
-
-### Identity
-
-- **Working title:** cache-evidence-transfer
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
+| cache-need-source-of-truth | Cache Engineering | L2 |
 | cache-evidence-transfer | Cache Engineering | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason finite cache memory và behavior khi key bị evict hoặc cache unavailable mà không đánh sập origin.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Treat hit rate as full success; optimize latency while serving stale data; add cache node when hot key is bottleneck.
+Cache có capacity/eviction policy; miss hoặc outage chuyển demand về source, nên fallback path là một traffic amplifier tiềm năng. → Cache holds a derived copy keyed to source state; source owns final value/version, cache may be absent/stale and must not become accidental authority. → Hit/miss, TTL, key distribution, source load, freshness and fallback interact; symptom phải được tách bằng timeline/key-level evidence trước mitigation.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Hit/miss, TTL, key distribution, source load, freshness and fallback interact; symptom phải được tách bằng timeline/key-level evidence trước mitigation.
+Memory; evictions; hit rate; origin QPS; fallback latency/error.; Source row/version; cache key/value/version; request path; miss/read timeline.; Hit/miss by key; TTL age; source load; p95/p99; cache error/fallback trace; version timeline.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| cache-invalidation-consistency | cache-evidence-transfer | staleness/invalidation as one candidate cause. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| cache-stampede-penetration-avalanche-hot-key | cache-evidence-transfer | load-distribution and miss/expiry overload modes. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| cache-capacity-eviction-fallback | cache-evidence-transfer | finite cache memory, eviction and origin fallback behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| cache-multilayer-coherence | cache-evidence-transfer | layer-specific freshness/version divergence. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Eviction gây origin surge; recursive fallback overload source; fail-open/fail-closed sai.; Cache becomes authority; source update succeeds but cache assumption differs; cached absence treated permanently true.; Treat hit rate as full success; optimize latency while serving stale data; add cache node when hot key is bottleneck.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `cache-invalidation-consistency`: **staleness/invalidation as one candidate cause.**; introduced only for `cache-evidence-transfer`, without source coverage or `PASSED` evidence.
-- `cache-stampede-penetration-avalanche-hot-key`: **load-distribution and miss/expiry overload modes.**; introduced only for `cache-evidence-transfer`, without source coverage or `PASSED` evidence.
-- `cache-capacity-eviction-fallback`: **finite cache memory, eviction and origin fallback behavior.**; introduced only for `cache-evidence-transfer`, without source coverage or `PASSED` evidence.
-- `cache-multilayer-coherence`: **layer-specific freshness/version divergence.**; introduced only for `cache-evidence-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Hit/miss by key; TTL age; source load; p95/p99; cache error/fallback trace; version timeline.
-
-### Production boundary / trade-off
-
-Correctness freshness and origin stability can conflict; choose explicit stale window and degradation behavior.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-100 QPS uniform → 10k QPS hot key; one cache node → cluster; Redis → CDN/in-process cache.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `cache-capacity-eviction-fallback`, `cache-need-source-of-truth`, `cache-evidence-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `nosql-redis-structures-memory` remains separate pending its own mechanism/evidence boundary.
+- `cache-patterns` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-cache-invalidation-consistency
 
 ### Identity
 
-- **Working title:** cache-invalidation-consistency
+- **Unit ID:** lu-cache-invalidation-consistency
+- **Working title:** Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | cache-invalidation-consistency | Cache Engineering | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Missing invalidation; delayed event; out-of-order update; TTL longer than acceptable freshness.
-
-### State / data / mechanism trace
-
-Source version/timestamp defines newer state; invalidation/update event may arrive delayed/out of order; reader compares/ages cached copy according to freshness contract.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| cache-need-source-of-truth | cache-invalidation-consistency | cached value may diverge from authoritative state. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `cache-need-source-of-truth`: **cached value may diverge from authoritative state.**; introduced only for `cache-invalidation-consistency`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Source version/timestamp; cache version/TTL; invalidation event; read timeline.
-
-### Production boundary / trade-off
-
-Strong freshness raises coordination/latency/complexity; TTL is bounded staleness policy, not proof of immediate correctness.
-
-### Transfer variation
-
-Từ one writer/invalidation tới multi-writer event order and delayed delivery.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-cache-multilayer-coherence
-
-### Identity
-
-- **Working title:** cache-multilayer-coherence
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | cache-multilayer-coherence | Cache Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason cached copy becomes stale và dùng event/version/TTL để replace hoặc reject data đúng boundary.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-One layer invalidated while another stale; per-instance divergence; rollout mixes cache-key/schema versions.
+Source version/timestamp defines newer state; invalidation/update event may arrive delayed/out of order; reader compares/ages cached copy according to freshness contract. → L1 belongs one instance, L2 is shared, source is authoritative; key/version/schema must let reader locate which layer served stale state.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-L1 belongs one instance, L2 is shared, source is authoritative; key/version/schema must let reader locate which layer served stale state.
+Source version/timestamp; cache version/TTL; invalidation event; read timeline.; Layer-specific key/version; instance ID; cache age; request trace.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| cache-invalidation-consistency | cache-multilayer-coherence | one cached copy can become stale relative to source. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Missing invalidation; delayed event; out-of-order update; TTL longer than acceptable freshness.; One layer invalidated while another stale; per-instance divergence; rollout mixes cache-key/schema versions.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `cache-invalidation-consistency`: **one cached copy can become stale relative to source.**; introduced only for `cache-multilayer-coherence`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Layer-specific key/version; instance ID; cache age; request trace.
-
-### Production boundary / trade-off
-
-L1 reduces latency but increases invalidation surface; coordinated versioning may be simpler than trying to purge every layer synchronously.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ one distributed cache sang in-process + Redis + CDN-like layer.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `cache-invalidation-consistency`, `cache-multilayer-coherence` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-cache-need-source-of-truth
-
-### Identity
-
-- **Working title:** cache-need-source-of-truth
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| cache-need-source-of-truth | Cache Engineering | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Cache becomes authority; source update succeeds but cache assumption differs; cached absence treated permanently true.
-
-### State / data / mechanism trace
-
-Cache holds a derived copy keyed to source state; source owns final value/version, cache may be absent/stale and must not become accidental authority.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Source row/version; cache key/value/version; request path; miss/read timeline.
-
-### Production boundary / trade-off
-
-Cache is justified only when it saves known source work or latency; add no cache without source/freshness contract.
-
-### Transfer variation
-
-Từ positive value cache sang negative cache and source record created later.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `cache-need-source-of-truth` remains separate pending its own mechanism/evidence boundary.
+- `cache-evidence-transfer` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-cache-patterns
 
 ### Identity
 
-- **Working title:** cache-patterns
+- **Unit ID:** lu-cache-patterns
+- **Working title:** Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle
 - **Learner-facing domain candidate:** Data & Consistency
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | cache-patterns | Cache Engineering | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Write updates cache but not source; cache-aside miss storm; double-write ordering ambiguity.
-
-### State / data / mechanism trace
-
-Pattern allocates responsibility differently: cache-aside caller reads source on miss; read-through loader mediates; write path must define source/cache ordering.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| cache-need-source-of-truth | cache-patterns | cache is a duplicate/derived copy and another system remains authoritative. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `cache-need-source-of-truth`: **cache is a duplicate/derived copy and another system remains authoritative.**; introduced only for `cache-patterns`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Request trace; loader call count; source/cache write order; miss/error metrics.
-
-### Production boundary / trade-off
-
-Hiding pattern behind library does not remove ownership; simple cache-aside is flexible but callers must manage miss/invalidation.
-
-### Transfer variation
-
-Từ read-only catalog cache sang write-heavy profile update.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-cache-stampede-penetration-avalanche-hot-key
-
-### Identity
-
-- **Working title:** cache-stampede-penetration-avalanche-hot-key
-- **Learner-facing domain candidate:** Data & Consistency
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Distinguish cache-aside, read-through and write interaction by who loads/writes and what failure behavior caller must handle.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Origin collapse after expiry; invalid-key probe overload; synchronized TTL burst; one key/slot saturated.
+Pattern allocates responsibility differently: cache-aside caller reads source on miss; read-through loader mediates; write path must define source/cache ordering. → Stampede recomputes one expired/missing key concurrently; penetration repeats invalid misses; avalanche aligns many expiries; hot key concentrates traffic independent of expiry.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Stampede recomputes one expired/missing key concurrently; penetration repeats invalid misses; avalanche aligns many expiries; hot key concentrates traffic independent of expiry.
+Request trace; loader call count; source/cache write order; miss/error metrics.; Miss rate; expiry distribution; per-key QPS; origin load; single-flight lock/wait.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| cache-patterns | cache-stampede-penetration-avalanche-hot-key | cache miss/population/expiry behavior and origin fallback path. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Write updates cache but not source; cache-aside miss storm; double-write ordering ambiguity.; Origin collapse after expiry; invalid-key probe overload; synchronized TTL burst; one key/slot saturated.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `cache-patterns`: **cache miss/population/expiry behavior and origin fallback path.**; introduced only for `cache-stampede-penetration-avalanche-hot-key`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Miss rate; expiry distribution; per-key QPS; origin load; single-flight lock/wait.
-
-### Production boundary / trade-off
-
-Jitter/single-flight/negative cache/sharding solve different modes; applying one blindly can hide freshness or contention problem.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Từ ordinary misses to adversarial invalid-key traffic, then a single viral key.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `cache-patterns`, `cache-stampede-penetration-avalanche-hot-key` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `cache-need-source-of-truth` remains separate pending its own mechanism/evidence boundary.
+- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-dist-consensus-coordination-purpose
 
 ### Identity
 
-- **Working title:** dist-consensus-coordination-purpose
+- **Unit ID:** lu-dist-consensus-coordination-purpose
+- **Working title:** Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | dist-consensus-coordination-purpose | Distributed Systems | L3 |
+| dist-partial-failure-uncertainty | Distributed Systems | L3 |
+| dist-replication-leader-quorum | Distributed Systems | L3 |
+| dist-guarantee-recovery-transfer | Distributed Systems | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-No quorum; stale epoch; two actors believe exclusive ownership; coordination service dependency.
+Participants cần agree decision/order despite failure; safe progress cần đủ reachable members theo protocol rule. → Không có shared failure state; caller observes message/reply/timeout through network, not remote internal truth. → Replicas copy state; leader/quorum rule controls acceptance and when value is sufficiently replicated. → Partial failure, RPC uncertainty, consistency, replication, ownership and reconciliation compose; timeline phải gắn operation identity/state owner.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Participants cần agree decision/order despite failure; safe progress cần đủ reachable members theo protocol rule.
+Leader/epoch/term; membership; quorum availability; committed decision/version; ownership record.; Per-node health/state; operation ID; request timings; dependency error rate; trace hop completion.; Leader/role; replica lag/position; ack count/state; operation version; failover timeline.; Timeline; per-system state; operation ID; ownership/version records; recovery result.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-partial-failure-uncertainty | dist-consensus-coordination-purpose | participants can fail or become mutually unreachable while agreement is still required | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+No quorum; stale epoch; two actors believe exclusive ownership; coordination service dependency.; One dependency unreachable; slow mistaken dead; retry amplification; local success inferred global success.; Stale replica read; leader fails during operation; insufficient ack assumed durable; stale node promoted.; Claim guarantee không có; recovery duplicates unknown effect; topology invalidates assumption.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `dist-partial-failure-uncertainty`: **participants can fail or become mutually unreachable while agreement is still required**; introduced only for `dist-consensus-coordination-purpose`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Leader/epoch/term; membership; quorum availability; committed decision/version; ownership record.
-
-### Production boundary / trade-off
-
-Agreement mạnh đổi latency và không progress an toàn ở một số partition.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Single scheduler → replicated scheduler có một active owner.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `dist-consensus-coordination-purpose`, `dist-partial-failure-uncertainty`, `dist-replication-leader-quorum`, `dist-guarantee-recovery-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-local-vs-distributed` remains separate pending its own mechanism/evidence boundary.
+- `net-failure-localization-unknown-outcome` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-dist-consistency-linearizability
 
 ### Identity
 
-- **Working title:** dist-consistency-linearizability
+- **Unit ID:** lu-dist-consistency-linearizability
+- **Working title:** Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | dist-consistency-linearizability | Distributed Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không.
 
-### Working canonical problem / case anchor
-
-Stale read violates expectation; writers observe incompatible state; assume global latest under eventual convergence.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Consistency model giới hạn ordering/visibility history được phép giữa replicas/processes.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Timestamp/sequence-tagged history; versions; read-after-write result; replica/source record.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Stronger coordination/visibility costs latency, partition availability hoặc throughput.
+Stale read violates expectation; writers observe incompatible state; assume global latest under eventual convergence.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Catalog read tolerates stale → balance/reservation needs stronger ordering.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-dist-guarantee-recovery-transfer
-
-### Identity
-
-- **Working title:** dist-guarantee-recovery-transfer
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| dist-guarantee-recovery-transfer | Distributed Systems | L4 |
+| nosql-cassandra-lsm-compaction-consistency | Frozen graph neighborhood with dist-consistency-linearizability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| cache-multilayer-coherence | Frozen graph neighborhood with dist-consistency-linearizability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Claim guarantee không có; recovery duplicates unknown effect; topology invalidates assumption.
-
-### State / data / mechanism trace
-
-Partial failure, RPC uncertainty, consistency, replication, ownership and reconciliation compose; timeline phải gắn operation identity/state owner.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-rpc-unknown-completion | dist-guarantee-recovery-transfer | ambiguous remote completion states | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-replication-leader-quorum | dist-guarantee-recovery-transfer | replica, acknowledgement, stale-read and failover semantics | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-consensus-coordination-purpose | dist-guarantee-recovery-transfer | agreement, quorum and exclusive-coordination guarantee | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-time-order-causality | dist-guarantee-recovery-transfer | wall-clock timestamps do not by themselves define causal or total order | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-reconciliation-convergence | dist-guarantee-recovery-transfer | compare actual state with authority and apply repeatable repair | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `dist-rpc-unknown-completion`: **ambiguous remote completion states**; introduced only for `dist-guarantee-recovery-transfer`, without source coverage or `PASSED` evidence.
-- `dist-replication-leader-quorum`: **replica, acknowledgement, stale-read and failover semantics**; introduced only for `dist-guarantee-recovery-transfer`, without source coverage or `PASSED` evidence.
-- `dist-consensus-coordination-purpose`: **agreement, quorum and exclusive-coordination guarantee**; introduced only for `dist-guarantee-recovery-transfer`, without source coverage or `PASSED` evidence.
-- `dist-time-order-causality`: **wall-clock timestamps do not by themselves define causal or total order**; introduced only for `dist-guarantee-recovery-transfer`, without source coverage or `PASSED` evidence.
-- `dist-reconciliation-convergence`: **compare actual state with authority and apply repeatable repair**; introduced only for `dist-guarantee-recovery-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Timeline; per-system state; operation ID; ownership/version records; recovery result.
-
-### Production boundary / trade-off
-
-Stronger guarantee/coordination costs latency, availability, complexity và recovery burden.
-
-### Transfer variation
-
-Single-region replicated service → multi-region or temporary partition.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-dist-partial-failure-uncertainty
-
-### Identity
-
-- **Working title:** dist-partial-failure-uncertainty
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-partial-failure-uncertainty | Distributed Systems | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-One dependency unreachable; slow mistaken dead; retry amplification; local success inferred global success.
-
-### State / data / mechanism trace
-
-Không có shared failure state; caller observes message/reply/timeout through network, not remote internal truth.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Per-node health/state; operation ID; request timings; dependency error rate; trace hop completion.
-
-### Production boundary / trade-off
-
-Short timeout detects quickly but false-timeout risk; long timeout consumes resource/delays recovery.
-
-### Transfer variation
-
-One downstream → replicas where only one path impaired.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `nosql-cassandra-lsm-compaction-consistency` remains separate pending its own mechanism/evidence boundary.
+- `cache-multilayer-coherence` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-dist-partitioning-ownership-rebalancing
 
 ### Identity
 
-- **Working title:** dist-partitioning-ownership-rebalancing
+- **Unit ID:** lu-dist-partitioning-ownership-rebalancing
+- **Working title:** Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | dist-partitioning-ownership-rebalancing | Distributed Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại.
 
-### Working canonical problem / case anchor
-
-Hot owner; stale router; zero/double ownership; duplicate in-flight work.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Assignment maps partition to owner; epoch/rebalance moves responsibility while router and workers converge.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Assignment; owner/epoch; traffic per partition; rebalance events; lag/in-flight count.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-More partitions improve parallelism but add metadata, rebalance and coordination cost.
+Hot owner; stale router; zero/double ownership; duplicate in-flight work.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Static ownership → replicas added/removed under traffic.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| db-partitioning-sharding-boundary | Frozen graph neighborhood with dist-partitioning-ownership-rebalancing | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| nosql-mongo-index-shard-transaction | Frozen graph neighborhood with dist-partitioning-ownership-rebalancing | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-partitioning-sharding-boundary` remains separate pending its own mechanism/evidence boundary.
+- `nosql-mongo-index-shard-transaction` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-dist-reconciliation-convergence
 
 ### Identity
 
-- **Working title:** dist-reconciliation-convergence
+- **Unit ID:** lu-dist-reconciliation-convergence
+- **Working title:** Detect divergent state và repair idempotently toward source/invariant đã chọn
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | dist-reconciliation-convergence | Distributed Systems | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Non-idempotent repair; endless loop; wrong truth source; missing record never emitted.
-
-### State / data / mechanism trace
-
-Reconciliation compares actual against authoritative state/invariant then applies repeatable correction until mismatch converges.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-invariants-domain-model | dist-reconciliation-convergence | valid target state and invariant ownership | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-partial-failure-uncertainty | dist-reconciliation-convergence | partial failure can leave durable incomplete or divergent state | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `prog-invariants-domain-model`: **valid target state and invariant ownership**; introduced only for `dist-reconciliation-convergence`, without source coverage or `PASSED` evidence.
-- `dist-partial-failure-uncertainty`: **partial failure can leave durable incomplete or divergent state**; introduced only for `dist-reconciliation-convergence`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Source-vs-derived diff; audit/event history; job result; repair operation ID; mismatch count.
-
-### Production boundary / trade-off
-
-Accept temporary divergence/operational work to recover missed or ambiguous effects.
-
-### Transfer variation
-
-Event projection mismatch → payment/provider reconciliation.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-dist-replication-leader-quorum
-
-### Identity
-
-- **Working title:** dist-replication-leader-quorum
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-replication-leader-quorum | Distributed Systems | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Stale replica read; leader fails during operation; insufficient ack assumed durable; stale node promoted.
-
-### State / data / mechanism trace
-
-Replicas copy state; leader/quorum rule controls acceptance and when value is sufficiently replicated.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-consistency-linearizability | dist-replication-leader-quorum | allowed read/write histories and required visibility guarantee | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-partial-failure-uncertainty | dist-replication-leader-quorum | independent replica or network-path failure and uncertainty | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `dist-consistency-linearizability`: **allowed read/write histories and required visibility guarantee**; introduced only for `dist-replication-leader-quorum`, without source coverage or `PASSED` evidence.
-- `dist-partial-failure-uncertainty`: **independent replica or network-path failure and uncertainty**; introduced only for `dist-replication-leader-quorum`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Leader/role; replica lag/position; ack count/state; operation version; failover timeline.
-
-### Production boundary / trade-off
-
-More synchronous ack improves guarantee but adds latency and reduces availability.
-
-### Transfer variation
-
-Single primary async replica → majority acknowledgement topology.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-dist-rpc-unknown-completion
-
-### Identity
-
-- **Working title:** dist-rpc-unknown-completion
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | dist-rpc-unknown-completion | Distributed Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Detect divergent state và repair idempotently toward source/invariant đã chọn.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Side effect succeeded but client timeout; retry duplicates; server continues after client abandoned.
+Reconciliation compares actual against authoritative state/invariant then applies repeatable correction until mismatch converges. → Execution and response delivery are independent events.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Execution and response delivery are independent events.
+Source-vs-derived diff; audit/event history; job result; repair operation ID; mismatch count.; Operation/idempotency ID; server audit; client timing; status query; trace span.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-partial-failure-uncertainty | dist-rpc-unknown-completion | a remote component may execute, fail, slow or become unreachable independently of the caller | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| net-failure-localization-unknown-outcome | dist-rpc-unknown-completion | transport-stage evidence and the fact that absence of an HTTP response does not prove absence of remote execution | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Non-idempotent repair; endless loop; wrong truth source; missing record never emitted.; Side effect succeeded but client timeout; retry duplicates; server continues after client abandoned.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `dist-partial-failure-uncertainty`: **a remote component may execute, fail, slow or become unreachable independently of the caller**; introduced only for `dist-rpc-unknown-completion`, without source coverage or `PASSED` evidence.
-- `net-failure-localization-unknown-outcome`: **transport-stage evidence and the fact that absence of an HTTP response does not prove absence of remote execution**; introduced only for `dist-rpc-unknown-completion`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Operation/idempotency ID; server audit; client timing; status query; trace span.
-
-### Production boundary / trade-off
-
-Automatic retry helps transient failure but unsafe without idempotency/reconciliation under unknown completion.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Read-only RPC → payment/order mutation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `dist-reconciliation-convergence`, `dist-rpc-unknown-completion` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-dist-time-order-causality
 
 ### Identity
 
-- **Working title:** dist-time-order-causality
+- **Unit ID:** lu-dist-time-order-causality
+- **Working title:** Phân biệt wall-clock với causal/business order, không dùng clock như universal total order
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | dist-time-order-causality | Distributed Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Phân biệt wall-clock với causal/business order, không dùng clock như universal total order.
 
-### Working canonical problem / case anchor
-
-Last-write-wins on skewed clock; arrival time assumed event time; timeout logic assumes perfect clocks.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Nodes have independent clocks/delay; version/causal relation can be meaningful when timestamps skew or delivery reorders.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Operation IDs; sequence/version; producer/receive timestamps; trace/audit causality.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Sequence metadata adds state/protocol complexity but avoids false clock ordering.
+Last-write-wins on skewed clock; arrival time assumed event time; timeout logic assumes perfect clocks.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Single-process callbacks → multi-service/region events.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| dist-guarantee-recovery-transfer | Frozen graph neighborhood with dist-time-order-causality | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `dist-guarantee-recovery-transfer` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-dist-transactions-2pc-boundary
 
 ### Identity
 
-- **Working title:** dist-transactions-2pc-boundary
+- **Unit ID:** lu-dist-transactions-2pc-boundary
+- **Working title:** Explain 2PC atomicity intent across transactional participants and its coordination/failure cost
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | dist-transactions-2pc-boundary | Distributed Systems | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Explain 2PC atomicity intent across transactional participants and its coordination/failure cost.
 
-### Working canonical problem / case anchor
-
-Prepared participant with unavailable coordinator; long-held resources; prepare failure; assume 2PC covers external side effect.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Prepare makes participants commit-capable; coordinator later records commit/abort decision.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-transactions-isolation-anomalies | dist-transactions-2pc-boundary | atomic commit or abort within one transactional resource | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-partial-failure-uncertainty | dist-transactions-2pc-boundary | independent participant/coordinator failure during a multi-step distributed decision | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `db-transactions-isolation-anomalies`: **atomic commit or abort within one transactional resource**; introduced only for `dist-transactions-2pc-boundary`, without source coverage or `PASSED` evidence.
-- `dist-partial-failure-uncertainty`: **independent participant/coordinator failure during a multi-step distributed decision**; introduced only for `dist-transactions-2pc-boundary`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Coordinator/participant state; prepare/commit record; locks held; recovery log.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Cross-resource atomicity trades for blocking, coordination latency, recovery complexity and availability.
+Prepared participant with unavailable coordinator; long-held resources; prepare failure; assume 2PC covers external side effect.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Local DB transaction → two transactional resource managers.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| db-transactions-isolation-anomalies | Frozen graph neighborhood with dist-transactions-2pc-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partial-failure-uncertainty | Frozen graph neighborhood with dist-transactions-2pc-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-msg-consumer-groups-offsets-rebalance
 
 ### Identity
 
-- **Working title:** msg-consumer-groups-offsets-rebalance
+- **Unit ID:** lu-msg-consumer-groups-offsets-rebalance
+- **Working title:** Reason separately partition assignment, offset position và business side effect
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-consumer-groups-offsets-rebalance | Messaging & Event-Driven Consistency | L3 |
+| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 |
+| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 |
+| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason separately partition assignment, offset position và business side effect.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Offset commit before effect; effect succeeds then offset fails; rebalance interrupts work; stale ownership assumption.
+Group assigns partitions; offset marks broker read position, not durable business effect. → Records route to queue/topic/partition; parallel consumers preserve order only where broker contract/key assignment does. → Reprocess records from selected offset/range; projection work differs from side effects that must be suppressed/idempotent. → Lag grows when arrival exceeds effective consumption or work is unevenly distributed/blocked.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Group assigns partitions; offset marks broker read position, not durable business effect.
+Assignment; current/committed offset; generation/member; processing/audit record; rebalance event.; Topic/queue config; partition/key; offset/sequence; consumer assignment.; Replay range; offsets; IDs/schema version; inbox ledger; derived before/after.; Per-partition lag; arrival/consume rate; handler duration; retry rate; assignment; downstream pool/latency.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-model-queue-topic-partition-order | msg-consumer-groups-offsets-rebalance | partitions, destination model and ordering scope | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Offset commit before effect; effect succeeds then offset fails; rebalance interrupts work; stale ownership assumption.; Assume global partition order; wrong key; queue treated broadcast; partitions changed without order review.; Payment/email replayed; live/backfill race; old schema unreadable; wrong starting offset.; Hot partition; slow handler/downstream; retry storm; rebalance pause; consumers exceed shared capacity.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `msg-model-queue-topic-partition-order`: **partitions, destination model and ordering scope**; introduced only for `msg-consumer-groups-offsets-rebalance`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Assignment; current/committed offset; generation/member; processing/audit record; rebalance event.
-
-### Production boundary / trade-off
-
-Early commit risks lost work; late commit raises duplicate replay risk.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-One consumer → group scaling/rebalance with in-flight messages.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `msg-consumer-groups-offsets-rebalance`, `msg-model-queue-topic-partition-order`, `msg-replay-backfill`, `msg-lag-backpressure-evidence` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
+- `nosql-redis-persistence-replication-cluster-streams` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-msg-delivery-retry-poison-dlq
 
 ### Identity
 
-- **Working title:** msg-delivery-retry-poison-dlq
+- **Unit ID:** lu-msg-delivery-retry-poison-dlq
+- **Working title:** Distinguish transient failure from poison message và design bounded retry/quarantine
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-delivery-retry-poison-dlq | Messaging & Event-Driven Consistency | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Distinguish transient failure from poison message và design bounded retry/quarantine.
 
-### Working canonical problem / case anchor
-
-Infinite poison retry blocks partition; retry storm; DLQ graveyard; transient sent DLQ early.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Failed delivery retries; permanently invalid record repeats until classified/quarantined/skipped by explicit policy.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-model-queue-topic-partition-order | msg-delivery-retry-poison-dlq | broker-delivered record identity and ordering boundary | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `msg-model-queue-topic-partition-order`: **broker-delivered record identity and ordering boundary**; introduced only for `msg-delivery-retry-poison-dlq`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Attempt count; error class; message ID; retry timestamps; lag; DLQ reason.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Retry increases recovery chance but burns capacity; DLQ preserves progress but needs owner/reprocess policy.
+Infinite poison retry blocks partition; retry storm; DLQ graveyard; transient sent DLQ early.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-One bad message → downstream-wide outage.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-delivery-retry-poison-dlq | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partial-failure-uncertainty | Frozen graph neighborhood with msg-delivery-retry-poison-dlq | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-msg-external-side-effect-reconciliation
 
 ### Identity
 
-- **Working title:** msg-external-side-effect-reconciliation
+- **Unit ID:** lu-msg-external-side-effect-reconciliation
+- **Working title:** Handle external side effect with unknown local result and derive safe reconciliation
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-external-side-effect-reconciliation | Messaging & Event-Driven Consistency | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Handle external side effect with unknown local result and derive safe reconciliation.
 
-### Working canonical problem / case anchor
-
-Charged but locally timeout-failed; retry double charge; callback lost; permanent divergence.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Provider may commit while response lost; local DB/event cannot prove provider state.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| dist-rpc-unknown-completion | msg-external-side-effect-reconciliation | remote side effect may have completed despite a timeout or lost response | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-reconciliation-convergence | msg-external-side-effect-reconciliation | authoritative state comparison and idempotent reconciliation | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `dist-rpc-unknown-completion`: **remote side effect may have completed despite a timeout or lost response**; introduced only for `msg-external-side-effect-reconciliation`, without source coverage or `PASSED` evidence.
-- `dist-reconciliation-convergence`: **authoritative state comparison and idempotent reconciliation**; introduced only for `msg-external-side-effect-reconciliation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 External operation/idempotency ID; status query; local audit; callback history; reconciliation result.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Immediate retry lowers wait but risks duplicate; status query/reconciliation adds delay/complexity to reduce ambiguity.
+Charged but locally timeout-failed; retry double charge; callback lost; permanent divergence.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Tolerable duplicate email → payment/refund unacceptable duplicate.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-msg-lag-backpressure-evidence
-
-### Identity
-
-- **Working title:** msg-lag-backpressure-evidence
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 |
+| dist-rpc-unknown-completion | Frozen graph neighborhood with msg-external-side-effect-reconciliation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-reconciliation-convergence | Frozen graph neighborhood with msg-external-side-effect-reconciliation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Hot partition; slow handler/downstream; retry storm; rebalance pause; consumers exceed shared capacity.
-
-### State / data / mechanism trace
-
-Lag grows when arrival exceeds effective consumption or work is unevenly distributed/blocked.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-consumer-groups-offsets-rebalance | msg-lag-backpressure-evidence | current and committed offsets per partition and consumer assignment | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| concurrency-bounded-backpressure | msg-lag-backpressure-evidence | finite downstream capacity and bounded concurrent work | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `msg-consumer-groups-offsets-rebalance`: **current and committed offsets per partition and consumer assignment**; introduced only for `msg-lag-backpressure-evidence`, without source coverage or `PASSED` evidence.
-- `concurrency-bounded-backpressure`: **finite downstream capacity and bounded concurrent work**; introduced only for `msg-lag-backpressure-evidence`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Per-partition lag; arrival/consume rate; handler duration; retry rate; assignment; downstream pool/latency.
-
-### Production boundary / trade-off
-
-More consumers may drain backlog but overload DB/downstream; bounds respect shared capacity.
-
-### Transfer variation
-
-Uniform partitions → hot partition or degraded database.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-msg-model-queue-topic-partition-order
-
-### Identity
-
-- **Working title:** msg-model-queue-topic-partition-order
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Assume global partition order; wrong key; queue treated broadcast; partitions changed without order review.
-
-### State / data / mechanism trace
-
-Records route to queue/topic/partition; parallel consumers preserve order only where broker contract/key assignment does.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Topic/queue config; partition/key; offset/sequence; consumer assignment.
-
-### Production boundary / trade-off
-
-More partitions improve parallelism but increase ordering/rebalance complexity.
-
-### Transfer variation
-
-Single queue/consumer → partitioned topic/group.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `dist-rpc-unknown-completion` remains separate pending its own mechanism/evidence boundary.
+- `dist-reconciliation-convergence` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-msg-producer-acks-durability
 
 ### Identity
 
-- **Working title:** msg-producer-acks-durability
+- **Unit ID:** lu-msg-producer-acks-durability
+- **Working title:** Reason what producer acknowledgement proves and remaining failure possibilities
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-producer-acks-durability | Messaging & Event-Driven Consistency | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reason what producer acknowledgement proves and remaining failure possibilities.
 
-### Working canonical problem / case anchor
-
-Ack weaker than assumed; timeout after accept; retry duplicate; leader changes during send.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Broker acceptance/replication policy decides when ack returns; client timeout can overlap accepted record.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-model-queue-topic-partition-order | msg-producer-acks-durability | queue, topic or partition publication boundary and ordering scope | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-replication-leader-quorum | msg-producer-acks-durability | replica acknowledgement, leader and failover semantics | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `msg-model-queue-topic-partition-order`: **queue, topic or partition publication boundary and ordering scope**; introduced only for `msg-producer-acks-durability`, without source coverage or `PASSED` evidence.
-- `dist-replication-leader-quorum`: **replica acknowledgement, leader and failover semantics**; introduced only for `msg-producer-acks-durability`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Producer result/error; message key/ID; broker offset; replica/leader state; retry attempt.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Stronger ack improves durability but adds latency/unavailability during replica failure.
+Ack weaker than assumed; timeout after accept; retry duplicate; leader changes during send.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Local broker → replicated leader failover.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-msg-replay-backfill
-
-### Identity
-
-- **Working title:** msg-replay-backfill
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 |
+| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-producer-acks-durability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-replication-leader-quorum | Frozen graph neighborhood with msg-producer-acks-durability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Payment/email replayed; live/backfill race; old schema unreadable; wrong starting offset.
-
-### State / data / mechanism trace
-
-Reprocess records from selected offset/range; projection work differs from side effects that must be suppressed/idempotent.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-consumer-groups-offsets-rebalance | msg-replay-backfill | partition offsets, committed position and consumer assignment | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `msg-consumer-groups-offsets-rebalance`: **partition offsets, committed position and consumer assignment**; introduced only for `msg-replay-backfill`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Replay range; offsets; IDs/schema version; inbox ledger; derived before/after.
-
-### Production boundary / trade-off
-
-Replayability needs durable history, compatible contracts and replay-safe consumers.
-
-### Transfer variation
-
-Rebuild read model → backfill after bug while live traffic continues.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
+- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-msg-schema-evolution-contract-ownership
 
 ### Identity
 
-- **Working title:** msg-schema-evolution-contract-ownership
+- **Unit ID:** lu-msg-schema-evolution-contract-ownership
+- **Working title:** Evolve event with old producers/consumers/history still present
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-schema-evolution-contract-ownership | Messaging & Event-Driven Consistency | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Evolve event with old producers/consumers/history still present.
 
-### Working canonical problem / case anchor
-
-Required field removed; meaning changes silently; consumer cannot read history; producer assumes synchronized deploy.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Event contract has syntax and semantic meaning; compatibility includes deployed consumers and retained history replay.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-model-queue-topic-partition-order | msg-schema-evolution-contract-ownership | message contract, producer ownership and independently deployed consumers | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `msg-model-queue-topic-partition-order`: **message contract, producer ownership and independently deployed consumers**; introduced only for `msg-schema-evolution-contract-ownership`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Schema/event version; compatibility test; historical sample; consumer error; ownership doc.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Compatibility discipline costs version work but enables independent deploy/replay safety.
+Required field removed; meaning changes silently; consumer cannot read history; producer assumes synchronized deploy.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Single-team event → multiple independent services.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| msg-replay-backfill | Frozen graph neighborhood with msg-schema-evolution-contract-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-schema-evolution-contract-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `msg-replay-backfill` remains separate pending its own mechanism/evidence boundary.
+- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-msg-workflow-saga-compensation
 
 ### Identity
 
-- **Working title:** msg-workflow-saga-compensation
+- **Unit ID:** lu-msg-workflow-saga-compensation
+- **Working title:** Model multi-step workflow where completed steps may need business compensation, not rollback
 - **Learner-facing domain candidate:** Distributed Systems
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | msg-workflow-saga-compensation | Messaging & Event-Driven Consistency | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Model multi-step workflow where completed steps may need business compensation, not rollback.
 
-### Working canonical problem / case anchor
-
-Compensation fails; duplicate step/compensation; out-of-order transition; irreversible effect treated rollbackable.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Workflow persists progress; each step has outcome/possible compensation; compensation is new business operation.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| msg-model-queue-topic-partition-order | msg-workflow-saga-compensation | messages or commands represent independently processed workflow steps | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-partial-failure-uncertainty | msg-workflow-saga-compensation | partial completion across independently failing participants | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `msg-model-queue-topic-partition-order`: **messages or commands represent independently processed workflow steps**; introduced only for `msg-workflow-saga-compensation`, without source coverage or `PASSED` evidence.
-- `dist-partial-failure-uncertainty`: **partial completion across independently failing participants**; introduced only for `msg-workflow-saga-compensation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Workflow state; step IDs; commands/events; compensation attempt; business records.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Avoid global transaction but accept temporary inconsistency/state-machine complexity.
+Compensation fails; duplicate step/compensation; out-of-order transition; irreversible effect treated rollbackable.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Reserve inventory + payment → add irreversible notification/shipment.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-workflow-saga-compensation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partial-failure-uncertainty | Frozen graph neighborhood with msg-workflow-saga-compensation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-api-circuit-bulkhead-rate-limit
 
 ### Identity
 
-- **Working title:** api-circuit-bulkhead-rate-limit
+- **Unit ID:** lu-api-circuit-bulkhead-rate-limit
+- **Working title:** Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | api-circuit-bulkhead-rate-limit | API Contracts & Resilience | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary.
 
-### Working canonical problem / case anchor
-
-Circuit opens on caller error; tenant exhausts shared concurrency; global limit punishes other tenant; unbounded bulkhead queue.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Circuit tạm tránh dependency failing; bulkhead caps concurrent blast radius; rate limit controls admission by quota/identity.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-bounded-backpressure | api-circuit-bulkhead-rate-limit | finite capacity, bounded concurrent work and overload protection. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-bounded-backpressure`: **finite capacity, bounded concurrent work and overload protection.**; introduced only for `api-circuit-bulkhead-rate-limit`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Circuit state/reason; queue/concurrency; admitted/rejected rate; tenant identity; dependency latency/errors; probe result.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Intentionally reject/degrade some work to avoid shared collapse; Concurrency owns generic bound while API owns boundary policy.
+Circuit opens on caller error; tenant exhausts shared concurrency; global limit punishes other tenant; unbounded bulkhead queue.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-One dependency → multiple tenants/dependencies with isolated budgets.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| concurrency-bounded-backpressure | Frozen graph neighborhood with api-circuit-bulkhead-rate-limit | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-partial-failure-uncertainty | Frozen graph neighborhood with api-circuit-bulkhead-rate-limit | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
+- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-api-contract-resource-semantics
 
 ### Identity
 
-- **Working title:** api-contract-resource-semantics
+- **Unit ID:** lu-api-contract-resource-semantics
+- **Working title:** Model operation as explicit contract over resource/state, not controller-to-URL mapping
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | api-contract-resource-semantics | API Contracts & Resilience | L2 |
+| api-validation-errors-pagination | API Contracts & Resilience | L2 |
+| api-versioning-compatibility | API Contracts & Resilience | L3 |
+| api-request-identity-idempotency | API Contracts & Resilience | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Model operation as explicit contract over resource/state, not controller-to-URL mapping.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Endpoint hides state transition; GET-like side effect; ambiguous update; caller cannot distinguish accepted/completed/rejected.
+Request expresses intent/input; server evaluates state/invariant; response conveys accepted/completed/rejected stable semantics. → Validation blocks unsafe transition; error contract separates classes; pagination defines traversal of changing collection. → Compatibility includes syntax and meaning; additive change/version/migration supports independent deploy. → Key/fingerprint/outcome record separates same-operation retry from a new similar request.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Request expresses intent/input; server evaluates state/invariant; response conveys accepted/completed/rejected stable semantics.
+Request/response examples; OpenAPI; persisted before/after; contract tests.; Contract tests; ProblemDetails payload; cursor/offset; query/order; boundary tests.; Contract/OpenAPI diff; consumer tests; version telemetry; old requests.; Idempotency key; fingerprint; operation record; business row; stored response; retry test.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| net-http-semantics | api-contract-resource-semantics | HTTP request/response operation semantics and externally observable protocol behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Endpoint hides state transition; GET-like side effect; ambiguous update; caller cannot distinguish accepted/completed/rejected.; Invalid input mapped 500; exception leaks; offset skips/duplicates; unbounded page; field failure unclear.; Required field removed; meaning changes; enum breaks client; assume simultaneous upgrade; rollback incompatible.; Random retry key; same key different payload; crash after effect before record; dedup expiry too short; HTTP method assumed safe.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `net-http-semantics`: **HTTP request/response operation semantics and externally observable protocol behavior.**; introduced only for `api-contract-resource-semantics`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Request/response examples; OpenAPI; persisted before/after; contract tests.
-
-### Production boundary / trade-off
-
-Precise contract exposes more states/errors but removes caller assumptions.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Internal CRUD endpoint → business operation consumed by independent clients.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `api-contract-resource-semantics`, `api-validation-errors-pagination`, `api-versioning-compatibility`, `api-request-identity-idempotency` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
+- `sec-authorization-object-tenant` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-api-deadlines-timeout-cancellation
 
 ### Identity
 
-- **Working title:** api-deadlines-timeout-cancellation
+- **Unit ID:** lu-api-deadlines-timeout-cancellation
+- **Working title:** Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | api-deadlines-timeout-cancellation | API Contracts & Resilience | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Every hop full timeout; child outlives request; token not forwarded; timeout treated as no remote effect.
-
-### State / data / mechanism trace
-
-Remaining deadline is split across hops; cancellation signals no useful caller lifetime but does not prove remote side effect absent.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-cancellation-lifetime | api-deadlines-timeout-cancellation | cooperative cancellation and logical operation lifetime. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-rpc-unknown-completion | api-deadlines-timeout-cancellation | missing response and remote business completion are separate facts. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-cancellation-lifetime`: **cooperative cancellation and logical operation lifetime.**; introduced only for `api-deadlines-timeout-cancellation`, without source coverage or `PASSED` evidence.
-- `dist-rpc-unknown-completion`: **missing response and remote business completion are separate facts.**; introduced only for `api-deadlines-timeout-cancellation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Request deadline; CancellationToken trace; span durations; downstream timeout; active work after disconnect; audit state.
-
-### Production boundary / trade-off
-
-Short budget bounds tail/resource but rejects slow valid work; long budget amplifies overload.
-
-### Transfer variation
-
-One downstream call → three-service deadline chain.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-api-request-identity-idempotency
-
-### Identity
-
-- **Working title:** api-request-identity-idempotency
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| api-request-identity-idempotency | API Contracts & Resilience | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Random retry key; same key different payload; crash after effect before record; dedup expiry too short; HTTP method assumed safe.
-
-### State / data / mechanism trace
-
-Key/fingerprint/outcome record separates same-operation retry from a new similar request.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| api-contract-resource-semantics | api-request-identity-idempotency | logical API operation and its intended business effect. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `api-contract-resource-semantics`: **logical API operation and its intended business effect.**; introduced only for `api-request-identity-idempotency`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Idempotency key; fingerprint; operation record; business row; stored response; retry test.
-
-### Production boundary / trade-off
-
-Persistent idempotency/retention costs state but enables safe retry; distinct from messaging inbox.
-
-### Transfer variation
-
-Create order retry → payment response lost.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-api-retry-backoff-jitter
-
-### Identity
-
-- **Working title:** api-retry-backoff-jitter
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | api-retry-backoff-jitter | API Contracts & Resilience | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Retry non-idempotent mutation; nested retries multiply; immediate storm; retry auth/validation; budget exceeds deadline.
-
-### State / data / mechanism trace
-
-Retry creates another attempt; backoff spaces it; jitter prevents synchronized retry wave.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| api-deadlines-timeout-cancellation | api-retry-backoff-jitter | finite end-to-end deadline and propagated cancellation budget. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| api-request-identity-idempotency | api-retry-backoff-jitter | stable logical operation identity and duplicate-effect protection. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `api-deadlines-timeout-cancellation`: **finite end-to-end deadline and propagated cancellation budget.**; introduced only for `api-retry-backoff-jitter`, without source coverage or `PASSED` evidence.
-- `api-request-identity-idempotency`: **stable logical operation identity and duplicate-effect protection.**; introduced only for `api-retry-backoff-jitter`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Attempt count; error class; timing; downstream rate; operation ID; remaining deadline.
-
-### Production boundary / trade-off
-
-Retry improves transient recovery but adds latency/load/unknown-effect risk.
-
-### Transfer variation
-
-One reset → thousands clients hitting degraded dependency.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-api-unknown-outcome-reconciliation
-
-### Identity
-
-- **Working title:** api-unknown-outcome-reconciliation
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Timeout called failed though committed; blind duplicate retry; status uses other ID; cache trusted as authority; contradictory status.
+Remaining deadline is split across hops; cancellation signals no useful caller lifetime but does not prove remote side effect absent. → Retry creates another attempt; backoff spaces it; jitter prevents synchronized retry wave. → Transport failure and business completion are separate; API needs status/outcome mechanism.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Transport failure and business completion are separate; API needs status/outcome mechanism.
+Request deadline; CancellationToken trace; span durations; downstream timeout; active work after disconnect; audit state.; Attempt count; error class; timing; downstream rate; operation ID; remaining deadline.; Operation ID; business/audit record; provider status; attempts; idempotency outcome; reconciliation result.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| api-request-identity-idempotency | api-unknown-outcome-reconciliation | stable logical operation key and persisted operation outcome. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-rpc-unknown-completion | api-unknown-outcome-reconciliation | remote execution may succeed even when the caller observes timeout or lost response. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-reconciliation-convergence | api-unknown-outcome-reconciliation | authoritative-state comparison and idempotent reconciliation. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Every hop full timeout; child outlives request; token not forwarded; timeout treated as no remote effect.; Retry non-idempotent mutation; nested retries multiply; immediate storm; retry auth/validation; budget exceeds deadline.; Timeout called failed though committed; blind duplicate retry; status uses other ID; cache trusted as authority; contradictory status.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `api-request-identity-idempotency`: **stable logical operation key and persisted operation outcome.**; introduced only for `api-unknown-outcome-reconciliation`, without source coverage or `PASSED` evidence.
-- `dist-rpc-unknown-completion`: **remote execution may succeed even when the caller observes timeout or lost response.**; introduced only for `api-unknown-outcome-reconciliation`, without source coverage or `PASSED` evidence.
-- `dist-reconciliation-convergence`: **authoritative-state comparison and idempotent reconciliation.**; introduced only for `api-unknown-outcome-reconciliation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Operation ID; business/audit record; provider status; attempts; idempotency outcome; reconciliation result.
-
-### Production boundary / trade-off
-
-Async status model adds state/API work but safely handles long/ambiguous effects.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Fast internal order write → slow external provider operation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `api-deadlines-timeout-cancellation`, `api-retry-backoff-jitter`, `api-unknown-outcome-reconciliation` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-api-validation-errors-pagination
-
-### Identity
-
-- **Working title:** api-validation-errors-pagination
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| api-validation-errors-pagination | API Contracts & Resilience | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Invalid input mapped 500; exception leaks; offset skips/duplicates; unbounded page; field failure unclear.
-
-### State / data / mechanism trace
-
-Validation blocks unsafe transition; error contract separates classes; pagination defines traversal of changing collection.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-errors-results | api-validation-errors-pagination | expected failure versus unexpected exception and failure propagation. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| api-contract-resource-semantics | api-validation-errors-pagination | request intent, response meaning and externally visible API behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `prog-errors-results`: **expected failure versus unexpected exception and failure propagation.**; introduced only for `api-validation-errors-pagination`, without source coverage or `PASSED` evidence.
-- `api-contract-resource-semantics`: **request intent, response meaning and externally visible API behavior.**; introduced only for `api-validation-errors-pagination`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Contract tests; ProblemDetails payload; cursor/offset; query/order; boundary tests.
-
-### Production boundary / trade-off
-
-Richer contract improves client behavior but increases compatibility surface.
-
-### Transfer variation
-
-Small list → large mutable independent-client dataset.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-api-versioning-compatibility
-
-### Identity
-
-- **Working title:** api-versioning-compatibility
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| api-versioning-compatibility | API Contracts & Resilience | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Required field removed; meaning changes; enum breaks client; assume simultaneous upgrade; rollback incompatible.
-
-### State / data / mechanism trace
-
-Compatibility includes syntax and meaning; additive change/version/migration supports independent deploy.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| api-contract-resource-semantics | api-versioning-compatibility | current externally observable API contract and resource semantics. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `api-contract-resource-semantics`: **current externally observable API contract and resource semantics.**; introduced only for `api-versioning-compatibility`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Contract/OpenAPI diff; consumer tests; version telemetry; old requests.
-
-### Production boundary / trade-off
-
-Version support increases test/maintenance matrix but permits independent rollout.
-
-### Transfer variation
-
-One frontend deploy → public/mobile/partner clients.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
+- `dist-rpc-unknown-completion` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-abuse-bruteforce-resource-business-flow
 
 ### Identity
 
-- **Working title:** sec-abuse-bruteforce-resource-business-flow
+- **Unit ID:** lu-sec-abuse-bruteforce-resource-business-flow
+- **Working title:** Detect/limit legitimate-looking request abuse by identity/resource/business state
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-abuse-bruteforce-resource-business-flow | Security | L3 |
+| sec-trust-boundary-threat-model | Security | L2 |
+| sec-unseen-attack-transfer | Security | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Detect/limit legitimate-looking request abuse by identity/resource/business state.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Credential stuffing; OTP abuse; expensive export; scalping; IP-only limit bypass.
+Valid endpoints/credentials can still be abused; budgets/signals need account/device/IP/resource/operation dimensions. → Less-trusted data/identity crossing into trusted decision requires authz/validation/constraint proportional to risk. → Authentication, authorization, input trust, resource abuse, race and audit compose through attacker capability and state transition.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Valid endpoints/credentials can still be abused; budgets/signals need account/device/IP/resource/operation dimensions.
+Attempt rate; account/device/IP/session; success ratio; resource cost; operation history; limit decision.; Data-flow diagram; identity/source; asset/operation; boundary notes; abuse cases.; Request/audit timeline; auth decision; state transition; resource usage; exploit/regression test.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-trust-boundary-threat-model | sec-abuse-bruteforce-resource-business-flow | actor, protected asset and abuse path across a trust boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Credential stuffing; OTP abuse; expensive export; scalping; IP-only limit bypass.; Internal network assumed trusted; callback authoritative; tenant ID ownership proof; hidden admin endpoint missed.; Patch one payload; UI-only control; symptom block leaves path; fix breaks legitimate tenant flow.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `sec-trust-boundary-threat-model`: **actor, protected asset and abuse path across a trust boundary.**; introduced only for `sec-abuse-bruteforce-resource-business-flow`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Attempt rate; account/device/IP/session; success ratio; resource cost; operation history; limit decision.
-
-### Production boundary / trade-off
-
-Aggressive limits reduce abuse but false-positive shared NAT/legitimate high volume.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Login brute force → authenticated costly business operation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `sec-abuse-bruteforce-resource-business-flow`, `sec-trust-boundary-threat-model`, `sec-unseen-attack-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `api-circuit-bulkhead-rate-limit` remains separate pending its own mechanism/evidence boundary.
+- `sec-auth-session-token` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-audit-detection-evidence
 
 ### Identity
 
-- **Working title:** sec-audit-detection-evidence
+- **Unit ID:** lu-sec-audit-detection-evidence
+- **Working title:** Produce audit evidence of who did what to which object and which security decision occurred
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-audit-detection-evidence | Security | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Produce audit evidence of who did what to which object and which security decision occurred.
 
-### Working canonical problem / case anchor
-
-Success/deny indistinguishable; no tenant target; token logged; audit mutable; noise hides sensitive action.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Audit records subject/action/target/outcome/correlation at trust/business boundary; detection derives signal from it.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-trust-boundary-threat-model | sec-audit-detection-evidence | security-relevant actor, action, asset and trust boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-trust-boundary-threat-model`: **security-relevant actor, action, asset and trust boundary.**; introduced only for `sec-audit-detection-evidence`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Subject/action/object/tenant; decision/reason; operation ID; timestamp/source; controlled destination.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Detail helps investigation but increases privacy/storage/sensitive-data exposure.
+Success/deny indistinguishable; no tenant target; token logged; audit mutable; noise hides sensitive action.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Login audit → privileged export or tenant-admin change.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-audit-detection-evidence | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| obs-logs-structured-correlation | Frozen graph neighborhood with sec-audit-detection-evidence | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
+- `obs-logs-structured-correlation` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-auth-session-token
 
 ### Identity
 
-- **Working title:** sec-auth-session-token
+- **Unit ID:** lu-sec-auth-session-token
+- **Working title:** Distinguish authentication/authorization and reason session/token validation, lifetime, revocation
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-auth-session-token | Security | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Expired accepted; wrong issuer/audience; fixation/reuse; logout assumed instant stateless revoke; token exposure.
-
-### State / data / mechanism trace
-
-Credential/session/token establishes identity only after issuer/signature/audience/lifetime/state checks as applicable.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-trust-boundary-threat-model | sec-auth-session-token | actor, asset and trust-boundary identification. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-trust-boundary-threat-model`: **actor, asset and trust-boundary identification.**; introduced only for `sec-auth-session-token`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Token/session metadata; issuer/audience/expiry; auth logs; revocation store; claims.
-
-### Production boundary / trade-off
-
-Self-contained token reduces lookup but makes immediate revoke/claim lifetime harder.
-
-### Transfer variation
-
-Server session → signed bearer token across services.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-sec-authorization-object-tenant
-
-### Identity
-
-- **Working title:** sec-authorization-object-tenant
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | sec-authorization-object-tenant | Security | L3 |
+| sec-oauth-oidc-awareness | Security | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Distinguish authentication/authorization and reason session/token validation, lifetime, revocation.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-BOLA/IDOR; tenant request value trusted; admin UI-only guard; filter after data exposed.
+Credential/session/token establishes identity only after issuer/signature/audience/lifetime/state checks as applicable. → Authorization evaluates subject + action + resource tenant/owner + policy, not just login. → OAuth delegates access to resource; OIDC adds identity info; client/resource/auth server roles differ.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Authorization evaluates subject + action + resource tenant/owner + policy, not just login.
+Token/session metadata; issuer/audience/expiry; auth logs; revocation store; claims.; Subject; policy decision; authoritative owner/tenant; negative tests; audit event.; Token type; issuer; audience; scope; client/resource IDs; AS metadata.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-auth-session-token | sec-authorization-object-tenant | authenticated subject and trusted identity claims. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| api-contract-resource-semantics | sec-authorization-object-tenant | requested action, target resource and operation semantics. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Expired accepted; wrong issuer/audience; fixation/reuse; logout assumed instant stateless revoke; token exposure.; BOLA/IDOR; tenant request value trusted; admin UI-only guard; filter after data exposed.; ID token used API token; wrong audience; code/token exposed; OAuth assumed arbitrary attribute proof.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `sec-auth-session-token`: **authenticated subject and trusted identity claims.**; introduced only for `sec-authorization-object-tenant`, without source coverage or `PASSED` evidence.
-- `api-contract-resource-semantics`: **requested action, target resource and operation semantics.**; introduced only for `sec-authorization-object-tenant`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Subject; policy decision; authoritative owner/tenant; negative tests; audit event.
-
-### Production boundary / trade-off
-
-Central policy improves consistency but needs resource data; duplicated checks drift.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-User account → operator subset across tenant roles.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `sec-auth-session-token`, `sec-authorization-object-tenant`, `sec-oauth-oidc-awareness` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
+- `api-contract-resource-semantics` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-browser-boundaries-cors-csrf-xss
 
 ### Identity
 
-- **Working title:** sec-browser-boundaries-cors-csrf-xss
+- **Unit ID:** lu-sec-browser-boundaries-cors-csrf-xss
+- **Working title:** Distinguish CORS, CSRF and XSS to apply correct browser boundary control
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-browser-boundaries-cors-csrf-xss | Security | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Distinguish CORS, CSRF and XSS to apply correct browser boundary control.
 
-### Working canonical problem / case anchor
-
-CORS assumed CSRF defense; wildcard credentials; cookie mutation no CSRF; unsafe content rendered HTML.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 CORS controls browser cross-origin access; CSRF abuses ambient credentials; XSS executes attacker script in trusted origin.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-trust-boundary-threat-model | sec-browser-boundaries-cors-csrf-xss | trusted versus untrusted actor/origin and protected asset/action. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| net-http-semantics | sec-browser-boundaries-cors-csrf-xss | HTTP request/response headers and credential-bearing request behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-trust-boundary-threat-model`: **trusted versus untrusted actor/origin and protected asset/action.**; introduced only for `sec-browser-boundaries-cors-csrf-xss`, without source coverage or `PASSED` evidence.
-- `net-http-semantics`: **HTTP request/response headers and credential-bearing request behavior.**; introduced only for `sec-browser-boundaries-cors-csrf-xss`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Origin; CORS headers; cookie attributes; CSRF token; output context; browser test.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Controls depend on auth architecture; no blind CSRF defense on non-cookie token API.
+CORS assumed CSRF defense; wildcard credentials; cookie mutation no CSRF; unsafe content rendered HTML.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Cookie app → bearer-token SPA/API.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-browser-boundaries-cors-csrf-xss | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| net-http-semantics | Frozen graph neighborhood with sec-browser-boundaries-cors-csrf-xss | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
+- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-injection-ssrf-input-output
 
 ### Identity
 
-- **Working title:** sec-injection-ssrf-input-output
+- **Unit ID:** lu-sec-injection-ssrf-input-output
+- **Working title:** Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-injection-ssrf-input-output | Security | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context.
 
-### Working canonical problem / case anchor
-
-Concatenated SQL; NoSQL operator injection; metadata/internal fetch; shell composition; wrong-context encoding.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Injection changes command syntax; SSRF lets attacker choose server destination; typed binding/allow-list separates data/control.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-trust-boundary-threat-model | sec-injection-ssrf-input-output | untrusted input crossing a trust boundary into a privileged action. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-trust-boundary-threat-model`: **untrusted input crossing a trust boundary into a privileged action.**; introduced only for `sec-injection-ssrf-input-output`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Constructed query; parameter binding; destination policy; DNS/IP resolution; test payload; egress logs.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Strict allow-list reduces flexibility but enforces boundary; blacklist brittle.
+Concatenated SQL; NoSQL operator injection; metadata/internal fetch; shell composition; wrong-context encoding.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-SQL parameterization → dynamic filter → server-side URL fetch.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-sec-oauth-oidc-awareness
-
-### Identity
-
-- **Working title:** sec-oauth-oidc-awareness
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| sec-oauth-oidc-awareness | Security | L2 |
+| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-injection-ssrf-input-output | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| net-request-path-dns | Frozen graph neighborhood with sec-injection-ssrf-input-output | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-ID token used API token; wrong audience; code/token exposed; OAuth assumed arbitrary attribute proof.
-
-### State / data / mechanism trace
-
-OAuth delegates access to resource; OIDC adds identity info; client/resource/auth server roles differ.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-auth-session-token | sec-oauth-oidc-awareness | authentication identity, token validation and caller session/token lifecycle. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-auth-session-token`: **authentication identity, token validation and caller session/token lifecycle.**; introduced only for `sec-oauth-oidc-awareness`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Token type; issuer; audience; scope; client/resource IDs; AS metadata.
-
-### Production boundary / trade-off
-
-Delegation avoids local credentials but adds token/redirect/config trust boundary.
-
-### Transfer variation
-
-First-party SPA/API → external IdP or machine-to-machine API.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
+- `net-request-path-dns` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-race-business-logic-abuse
 
 ### Identity
 
-- **Working title:** sec-race-business-logic-abuse
+- **Unit ID:** lu-sec-race-business-logic-abuse
+- **Working title:** Reproduce concurrent valid requests bypassing invariant and protect atomic owner
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-race-business-logic-abuse | Security | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reproduce concurrent valid requests bypassing invariant and protect atomic owner.
 
-### Working canonical problem / case anchor
-
-Coupon redeemed twice; concurrent spend; duplicate reservation; limit check before insert.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Attacker widens race window; pre-transition authorization/validation cannot protect non-atomic state change.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-races-check-then-act | sec-race-business-logic-abuse | check-then-act interleaving and non-atomic state transition. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-races-check-then-act`: **check-then-act interleaving and non-atomic state transition.**; introduced only for `sec-race-business-logic-abuse`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Parallel timeline; operation IDs; before/after state; DB constraint/conditional result; audit sequence.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Atomic storage/serialization costs contention/retry; Security owns adversarial application.
+Coupon redeemed twice; concurrent spend; duplicate reservation; limit check before insert.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Accidental race → intentional exploit.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| concurrency-races-check-then-act | Frozen graph neighborhood with sec-race-business-logic-abuse | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| sec-unseen-attack-transfer | Frozen graph neighborhood with sec-race-business-logic-abuse | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `concurrency-races-check-then-act` remains separate pending its own mechanism/evidence boundary.
+- `sec-unseen-attack-transfer` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-sec-secrets-third-party-trust
 
 ### Identity
 
-- **Working title:** sec-secrets-third-party-trust
+- **Unit ID:** lu-sec-secrets-third-party-trust
+- **Working title:** Control secret lifecycle and verify third-party data/action before trusting it
 - **Learner-facing domain candidate:** Service & Network
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-secrets-third-party-trust | Security | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Control secret lifecycle and verify third-party data/action before trusting it.
 
-### Working canonical problem / case anchor
-
-Secret repo/log; shared long-lived credential; unverified webhook/replay; upstream field trusted; rotation breaks fleet.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Secrets grant authority; callbacks cross boundary and need identity/integrity/schema/business validation.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-trust-boundary-threat-model | sec-secrets-third-party-trust | authority-bearing asset and external trust boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-trust-boundary-threat-model`: **authority-bearing asset and external trust boundary.**; introduced only for `sec-secrets-third-party-trust`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Secret rotation/scope/audit; signature/timestamp; provider request/response; replay record.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Scoped short credential shrinks blast radius but increases rotation/dependency complexity.
+Secret repo/log; shared long-lived credential; unverified webhook/replay; upstream field trusted; rotation breaks fleet.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Static API key → workload identity/signed webhook.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-sec-trust-boundary-threat-model
-
-### Identity
-
-- **Working title:** sec-trust-boundary-threat-model
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| sec-trust-boundary-threat-model | Security | L2 |
+| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-secrets-third-party-trust | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| sec-unseen-attack-transfer | Frozen graph neighborhood with sec-secrets-third-party-trust | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Internal network assumed trusted; callback authoritative; tenant ID ownership proof; hidden admin endpoint missed.
-
-### State / data / mechanism trace
-
-Less-trusted data/identity crossing into trusted decision requires authz/validation/constraint proportional to risk.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Data-flow diagram; identity/source; asset/operation; boundary notes; abuse cases.
-
-### Production boundary / trade-off
-
-More isolation/control costs delivery; model meaningful assets not fear list.
-
-### Transfer variation
-
-Public API → API + worker + webhook callback.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-sec-unseen-attack-transfer
-
-### Identity
-
-- **Working title:** sec-unseen-attack-transfer
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| sec-unseen-attack-transfer | Security | L4 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Patch one payload; UI-only control; symptom block leaves path; fix breaks legitimate tenant flow.
-
-### State / data / mechanism trace
-
-Authentication, authorization, input trust, resource abuse, race and audit compose through attacker capability and state transition.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| sec-authorization-object-tenant | sec-unseen-attack-transfer | subject-action-resource authorization using server-trusted ownership or tenant state. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| sec-injection-ssrf-input-output | sec-unseen-attack-transfer | untrusted input must remain data rather than control over a privileged sink or destination. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| sec-abuse-bruteforce-resource-business-flow | sec-unseen-attack-transfer | identity/resource/business-flow aware abuse reasoning. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| sec-race-business-logic-abuse | sec-unseen-attack-transfer | adversarial exploitation of a non-atomic business transition. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| sec-audit-detection-evidence | sec-unseen-attack-transfer | security audit timeline and evidence needed to investigate an action. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `sec-authorization-object-tenant`: **subject-action-resource authorization using server-trusted ownership or tenant state.**; introduced only for `sec-unseen-attack-transfer`, without source coverage or `PASSED` evidence.
-- `sec-injection-ssrf-input-output`: **untrusted input must remain data rather than control over a privileged sink or destination.**; introduced only for `sec-unseen-attack-transfer`, without source coverage or `PASSED` evidence.
-- `sec-abuse-bruteforce-resource-business-flow`: **identity/resource/business-flow aware abuse reasoning.**; introduced only for `sec-unseen-attack-transfer`, without source coverage or `PASSED` evidence.
-- `sec-race-business-logic-abuse`: **adversarial exploitation of a non-atomic business transition.**; introduced only for `sec-unseen-attack-transfer`, without source coverage or `PASSED` evidence.
-- `sec-audit-detection-evidence`: **security audit timeline and evidence needed to investigate an action.**; introduced only for `sec-unseen-attack-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Request/audit timeline; auth decision; state transition; resource usage; exploit/regression test.
-
-### Production boundary / trade-off
-
-Restriction reduces attack surface but adds false positives/friction/compatibility cost.
-
-### Transfer variation
-
-Known IDOR/race/SSRF → unlabeled production incident.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
+- `sec-unseen-attack-transfer` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-obs-cardinality-sampling-cost
 
 ### Identity
 
-- **Working title:** obs-cardinality-sampling-cost
+- **Unit ID:** lu-obs-cardinality-sampling-cost
+- **Working title:** Control dimensions/sampling so telemetry remains useful and affordable
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | obs-cardinality-sampling-cost | Observability & Performance | L3 |
+| obs-instrumentation-context | Observability & Performance | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Control dimensions/sampling so telemetry remains useful and affordable.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-User/order ID label; rare failure sampled away; head sampling loses slow trace; cost grows faster than traffic.
+Metric label combinations create time-series cardinality; sampling retains subset by policy. → Events/spans at meaningful transitions; propagated context links calls/tasks/messages.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Metric label combinations create time-series cardinality; sampling retains subset by policy.
+Series count; ingest/storage; sample rate; retained slow/error traces; cost.; Parent/child tree; operation ID; semantic attributes; structured log; headers/message metadata.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-instrumentation-context | obs-cardinality-sampling-cost | instrumented attributes/context become metric dimensions or trace/log fields retained by telemetry systems. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+User/order ID label; rare failure sampled away; head sampling loses slow trace; cost grows faster than traffic.; Span ends before async work; state transition missing; context lost in worker; token/payload logged.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `obs-instrumentation-context`: **instrumented attributes/context become metric dimensions or trace/log fields retained by telemetry systems.**; introduced only for `obs-cardinality-sampling-cost`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Series count; ingest/storage; sample rate; retained slow/error traces; cost.
-
-### Production boundary / trade-off
-
-Fidelity trades CPU/network/storage/privacy cost; sample is not full population truth.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Low volume API → multi-tenant traffic with user dimensions.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `obs-cardinality-sampling-cost`, `obs-instrumentation-context` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `obs-signals-correlation` remains separate pending its own mechanism/evidence boundary.
+- `obs-tracing-distributed-evidence` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-obs-db-io-downstream-attribution
 
 ### Identity
 
-- **Working title:** obs-db-io-downstream-attribution
+- **Unit ID:** lu-obs-db-io-downstream-attribution
+- **Working title:** Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | obs-db-io-downstream-attribution | Observability & Performance | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Slow endpoint blamed SQL; pool wait omitted; timeout called app processing; N+1 hidden aggregate.
-
-### State / data / mechanism trace
-
-End-to-end latency composes work/wait across boundaries; correlation compares candidates.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-latency-throughput-saturation | obs-db-io-downstream-attribution | latency distribution, throughput and saturation represent different observable workload symptoms. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| obs-tracing-distributed-evidence | obs-db-io-downstream-attribution | span/dependency timing and causal boundaries across an operation. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `obs-latency-throughput-saturation`: **latency distribution, throughput and saturation represent different observable workload symptoms.**; introduced only for `obs-db-io-downstream-attribution`, without source coverage or `PASSED` evidence.
-- `obs-tracing-distributed-evidence`: **span/dependency timing and causal boundaries across an operation.**; introduced only for `obs-db-io-downstream-attribution`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Trace timing; query/plan; acquisition wait; socket/downstream timing; queue wait; profile.
-
-### Production boundary / trade-off
-
-Fine attribution costs instrumentation; measure only decision boundaries.
-
-### Transfer variation
-
-Slow request → shared DB/downstream saturation.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-obs-diagnostic-method
-
-### Identity
-
-- **Working title:** obs-diagnostic-method
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
+| obs-latency-throughput-saturation | Observability & Performance | L2 |
+| obs-tracing-distributed-evidence | Observability & Performance | L3 |
 | obs-diagnostic-method | Observability & Performance | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Dashboard-first guess; correlation as cause; confirmation bias; many variables changed; metric improves but user symptom remains.
+End-to-end latency composes work/wait across boundaries; correlation compares candidates. → Throughput is completed work, latency distribution measures wait/work, saturation approaches finite capacity, errors are failed work. → Spans represent timed operations with parent/causal relation; context links downstream when possible. → Evidence changes confidence between plausible causes; dashboards without hypothesis are not diagnosis.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Evidence changes confidence between plausible causes; dashboards without hypothesis are not diagnosis.
+Trace timing; query/plan; acquisition wait; socket/downstream timing; queue wait; profile.; p50/p95/p99; rates; success/error; CPU; queue; pool; concurrency.; Span timeline; parent/link; duration; status; dependency attrs; retry attempts.; Trace/profile; allocation/GC; queue/pool; DB wait/plan; network timing; before/after.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-signals-correlation | obs-diagnostic-method | different telemetry signals answer different questions and need shared operation/resource context. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| obs-latency-throughput-saturation | obs-diagnostic-method | interpret latency distribution, rates, errors and finite-resource saturation as symptoms rather than root causes. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Slow endpoint blamed SQL; pool wait omitted; timeout called app processing; N+1 hidden aggregate.; Average hides p99; throughput stable while queue grows; low CPU masks pool bottleneck; reject improves latency but errors ignored.; Missing child span; retry opaque; message link absent; trace assumed business completion; wrong attribution.; Dashboard-first guess; correlation as cause; confirmation bias; many variables changed; metric improves but user symptom remains.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `obs-signals-correlation`: **different telemetry signals answer different questions and need shared operation/resource context.**; introduced only for `obs-diagnostic-method`, without source coverage or `PASSED` evidence.
-- `obs-latency-throughput-saturation`: **interpret latency distribution, rates, errors and finite-resource saturation as symptoms rather than root causes.**; introduced only for `obs-diagnostic-method`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Trace/profile; allocation/GC; queue/pool; DB wait/plan; network timing; before/after.
-
-### Production boundary / trade-off
-
-Certainty may need invasive evidence; experiment balances value and production risk.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-HTTP p99 → worker throughput collapse.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `obs-db-io-downstream-attribution`, `obs-latency-throughput-saturation`, `obs-tracing-distributed-evidence`, `obs-diagnostic-method` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-obs-instrumentation-context
-
-### Identity
-
-- **Working title:** obs-instrumentation-context
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| obs-instrumentation-context | Observability & Performance | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Span ends before async work; state transition missing; context lost in worker; token/payload logged.
-
-### State / data / mechanism trace
-
-Events/spans at meaningful transitions; propagated context links calls/tasks/messages.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-signals-correlation | obs-instrumentation-context | metrics, logs and traces represent different evidence views connected by operation/context identity. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `obs-signals-correlation`: **metrics, logs and traces represent different evidence views connected by operation/context identity.**; introduced only for `obs-instrumentation-context`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Parent/child tree; operation ID; semantic attributes; structured log; headers/message metadata.
-
-### Production boundary / trade-off
-
-Attributes aid diagnosis but raise overhead/cardinality/privacy risk.
-
-### Transfer variation
-
-HTTP request → background consumer same operation.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-obs-latency-throughput-saturation
-
-### Identity
-
-- **Working title:** obs-latency-throughput-saturation
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| obs-latency-throughput-saturation | Observability & Performance | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Average hides p99; throughput stable while queue grows; low CPU masks pool bottleneck; reject improves latency but errors ignored.
-
-### State / data / mechanism trace
-
-Throughput is completed work, latency distribution measures wait/work, saturation approaches finite capacity, errors are failed work.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-p50/p95/p99; rates; success/error; CPU; queue; pool; concurrency.
-
-### Production boundary / trade-off
-
-High utilization may improve efficiency but drives queue/tail latency near capacity.
-
-### Transfer variation
-
-100 RPS steady → burst plateaus throughput and raises queue/p99.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-execution-operators` remains separate pending its own mechanism/evidence boundary.
+- `db-connection-pool-exhaustion` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-obs-load-test-benchmark-validity
 
 ### Identity
 
-- **Working title:** obs-load-test-benchmark-validity
+- **Unit ID:** lu-obs-load-test-benchmark-validity
+- **Working title:** Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | obs-load-test-benchmark-validity | Observability & Performance | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim.
 
-### Working canonical problem / case anchor
-
-Cold startup claimed steady; tiny uniform data; generator bottleneck; microbenchmark claims throughput; no dependency failure.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Result is valid only for experiment conditions: concurrency, data, warm-up, environment.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-latency-throughput-saturation | obs-load-test-benchmark-validity | throughput, p50/p95/p99 and saturation are workload-dependent measured properties. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `obs-latency-throughput-saturation`: **throughput, p50/p95/p99 and saturation are workload-dependent measured properties.**; introduced only for `obs-load-test-benchmark-validity`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Workload model; arrival/concurrency; dataset; warm-up; saturation; generator metrics; latency distribution.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Realism costs environment/time; simple benchmark only supports narrow claim.
+Cold startup claimed steady; tiny uniform data; generator bottleneck; microbenchmark claims throughput; no dependency failure.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Method microbenchmark → API load → skew/hot-key scenario.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| obs-latency-throughput-saturation | Frozen graph neighborhood with obs-load-test-benchmark-validity | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| runtime-jit-warmup | Frozen graph neighborhood with obs-load-test-benchmark-validity | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
+- `runtime-jit-warmup` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-obs-logs-structured-correlation
 
 ### Identity
 
-- **Working title:** obs-logs-structured-correlation
+- **Unit ID:** lu-obs-logs-structured-correlation
+- **Working title:** Produce structured queryable logs for significant events/context
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | obs-logs-structured-correlation | Observability & Performance | L2 |
+| obs-signals-correlation | Observability & Performance | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Produce structured queryable logs for significant events/context.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-String-only regex; inconsistent field types; secret/PII; no resource/operation; noisy duplicates.
+Stable fields make events queryable/correlatable instead of prose parsing. → Metrics aggregate behavior, logs discrete structured events, traces causal path; context connects views.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Stable fields make events queryable/correlatable instead of prose parsing.
+Event schema; correlation ID; query result; volume.; Trace/span; operation ID; metric dimensions/time; fields; request timeline.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-signals-correlation | obs-logs-structured-correlation | logs are discrete telemetry events and correlation links them to the same logical operation/resource. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+String-only regex; inconsistent field types; secret/PII; no resource/operation; noisy duplicates.; Metric spike lacks context; logs uncorrelated; trace ID lost async; collect all signals no question.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `obs-signals-correlation`: **logs are discrete telemetry events and correlation links them to the same logical operation/resource.**; introduced only for `obs-logs-structured-correlation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Event schema; correlation ID; query result; volume.
-
-### Production boundary / trade-off
-
-More logs not more observability; use semantic events.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-One logfile → centralized multi-replica/service logs.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `obs-logs-structured-correlation`, `obs-signals-correlation` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-audit-detection-evidence` remains separate pending its own mechanism/evidence boundary.
+- `obs-diagnostic-method` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-obs-profiling-runtime-evidence
 
 ### Identity
 
-- **Working title:** obs-profiling-runtime-evidence
+- **Unit ID:** lu-obs-profiling-runtime-evidence
+- **Working title:** Use CPU/allocation/stack/runtime evidence to locate actual time/memory work
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | obs-profiling-runtime-evidence | Observability & Performance | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Use CPU/allocation/stack/runtime evidence to locate actual time/memory work.
 
-### Working canonical problem / case anchor
-
-Optimize without profile; CPU blamed GC; latency blamed CPU while I/O wait; non-representative capture.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Profiler/runtime diagnostics sample execution/allocation and reveal hotspot/wait unseen by endpoint metric.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| runtime-diagnostics | obs-profiling-runtime-evidence | hypothesis-driven selection of runtime diagnostic evidence. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `runtime-diagnostics`: **hypothesis-driven selection of runtime diagnostic evidence.**; introduced only for `obs-profiling-runtime-evidence`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 CPU samples; allocation; GC; stacks; ThreadPool queue; wait trace.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Deep profile has overhead and needs representative window.
+Optimize without profile; CPU blamed GC; latency blamed CPU while I/O wait; non-representative capture.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-CPU worker → ASP.NET p99 sync blocking/starvation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-obs-signals-correlation
-
-### Identity
-
-- **Working title:** obs-signals-correlation
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| obs-signals-correlation | Observability & Performance | L2 |
+| runtime-diagnostics | Frozen graph neighborhood with obs-profiling-runtime-evidence | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| obs-diagnostic-method | Frozen graph neighborhood with obs-profiling-runtime-evidence | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Metric spike lacks context; logs uncorrelated; trace ID lost async; collect all signals no question.
-
-### State / data / mechanism trace
-
-Metrics aggregate behavior, logs discrete structured events, traces causal path; context connects views.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Trace/span; operation ID; metric dimensions/time; fields; request timeline.
-
-### Production boundary / trade-off
-
-Correlation improves diagnosis but costs instrumentation/storage/privacy/cardinality.
-
-### Transfer variation
-
-Single request → async workflow across services.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-obs-tracing-distributed-evidence
-
-### Identity
-
-- **Working title:** obs-tracing-distributed-evidence
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| obs-tracing-distributed-evidence | Observability & Performance | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Missing child span; retry opaque; message link absent; trace assumed business completion; wrong attribution.
-
-### State / data / mechanism trace
-
-Spans represent timed operations with parent/causal relation; context links downstream when possible.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-instrumentation-context | obs-tracing-distributed-evidence | propagate operation/trace context across an execution or service boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `obs-instrumentation-context`: **propagate operation/trace context across an execution or service boundary.**; introduced only for `obs-tracing-distributed-evidence`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Span timeline; parent/link; duration; status; dependency attrs; retry attempts.
-
-### Production boundary / trade-off
-
-Detail costs instrumentation/sample/storage.
-
-### Transfer variation
-
-HTTP chain → producer/consumer span links.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `runtime-diagnostics` remains separate pending its own mechanism/evidence boundary.
+- `obs-diagnostic-method` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-rel-cascading-failure-queue-capacity
 
 ### Identity
 
-- **Working title:** rel-cascading-failure-queue-capacity
+- **Unit ID:** lu-rel-cascading-failure-queue-capacity
+- **Working title:** Trace one slow dependency into queues/retries/resource exhaustion upstream
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | rel-cascading-failure-queue-capacity | Reliability / SRE | L3 |
+| rel-overload-load-shedding-degradation | Reliability / SRE | L3 |
+| rel-dependency-budgets | Reliability / SRE | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Trace one slow dependency into queues/retries/resource exhaustion upstream.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Long timeout holds workers; retries multiply; unbounded queue; shared pool starvation.
+Slow dependency extends in-flight lifetime; queues/retries consume finite caller resources and propagate pressure. → Demand beyond capacity grows queue/resource use; admission/degradation bounds work. → User journey has finite time/error capacity; each dependency/retry consumes a portion.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Slow dependency extends in-flight lifetime; queues/retries consume finite caller resources and propagate pressure.
+Dependency latency; in-flight; queue age; retry rate; pools; error timeline.; Rates; queue/in-flight; saturation; rejection; critical latency; user impact.; Deadline; per-hop timeout; retries; dependency latency/error; critical trace; budget.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| rel-overload-load-shedding-degradation | rel-cascading-failure-queue-capacity | demand beyond sustainable capacity causes queue/resource growth and requires bounded admission/degradation. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Long timeout holds workers; retries multiply; unbounded queue; shared pool starvation.; Accept until OOM; shed after expensive work; fallback equally costly; batch starves interactive; degradation incorrect.; Child timeout exceeds caller; nested retries; optional blocks critical; dependency reliability insufficient.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `rel-overload-load-shedding-degradation`: **demand beyond sustainable capacity causes queue/resource growth and requires bounded admission/degradation.**; introduced only for `rel-cascading-failure-queue-capacity`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Dependency latency; in-flight; queue age; retry rate; pools; error timeline.
-
-### Production boundary / trade-off
-
-Buffer absorbs burst but excess queue turns slowdown into long-tail cascade.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Slow DB → service chain sharing resources.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `rel-cascading-failure-queue-capacity`, `rel-overload-load-shedding-degradation`, `rel-dependency-budgets` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `api-retry-backoff-jitter` remains separate pending its own mechanism/evidence boundary.
+- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-rel-change-rollout-rollback-risk
 
 ### Identity
 
-- **Working title:** rel-change-rollout-rollback-risk
+- **Unit ID:** lu-rel-change-rollout-rollback-risk
+- **Working title:** Release incrementally with evidence and rollback/roll-forward boundary defined first
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | rel-change-rollout-rollback-risk | Reliability / SRE | L3 |
+| rel-user-journey-sli-slo-budget | Reliability / SRE | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Release incrementally with evidence and rollback/roll-forward boundary defined first.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-100% deploy; schema rollback incompatibility; unrepresentative canary; flag doesn’t undo effect; health misses business failure.
+Progressive exposure limits blast radius; rollback works only while code/data/config compatible. → SLI measures behavior; SLO target over window; budget is allowed gap from perfect.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Progressive exposure limits blast radius; rollback works only while code/data/config compatible.
+Version; traffic percentage; SLI/error by version; schema/config; business KPI; rollback result.; Journey; good/total; latency/success; window; budget; failures.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+100% deploy; schema rollback incompatibility; unrepresentative canary; flag doesn’t undo effect; health misses business failure.; Uptime hides broken journey; arbitrary SLO; wrong denominator; equal criticality; 100% policy.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Version; traffic percentage; SLI/error by version; schema/config; business KPI; rollback result.
-
-### Production boundary / trade-off
-
-Staging slows delivery but limits blast radius/provides evidence.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Stateless API → schema/event mixed-version change.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `rel-change-rollout-rollback-risk`, `rel-user-journey-sli-slo-budget` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-rel-dependency-budgets
-
-### Identity
-
-- **Working title:** rel-dependency-budgets
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| rel-dependency-budgets | Reliability / SRE | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Child timeout exceeds caller; nested retries; optional blocks critical; dependency reliability insufficient.
-
-### State / data / mechanism trace
-
-User journey has finite time/error capacity; each dependency/retry consumes a portion.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| api-deadlines-timeout-cancellation | rel-dependency-budgets | remaining time budget and propagated deadline/cancellation boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `api-deadlines-timeout-cancellation`: **remaining time budget and propagated deadline/cancellation boundary.**; introduced only for `rel-dependency-budgets`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Deadline; per-hop timeout; retries; dependency latency/error; critical trace; budget.
-
-### Production boundary / trade-off
-
-More child budget helps slow success but leaves less fallback time.
-
-### Transfer variation
-
-One dependency → fan-out varied criticality.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `api-versioning-compatibility` remains separate pending its own mechanism/evidence boundary.
+- `db-schema-evolution` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-rel-disaster-recovery-rpo-rto
 
 ### Identity
 
-- **Working title:** rel-disaster-recovery-rpo-rto
+- **Unit ID:** lu-rel-disaster-recovery-rpo-rto
+- **Working title:** Translate business recovery requirement to RPO/RTO and verify mechanism meets it
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | rel-disaster-recovery-rpo-rto | Reliability / SRE | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Translate business recovery requirement to RPO/RTO and verify mechanism meets it.
 
-### Working canonical problem / case anchor
-
-Restore slower RTO; replica assumed backup; restore point misses RPO; config/secrets missing; no drill.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 RPO bounds loss window; RTO restoration time; capability depends backup/replication/rebuild and dependencies.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| db-backup-restore | rel-disaster-recovery-rpo-rto | backup/restore mechanism, recovered data point and measured restore duration. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `db-backup-restore`: **backup/restore mechanism, recovered data point and measured restore duration.**; introduced only for `rel-disaster-recovery-rpo-rto`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Restore result; recovered time; data delta; duration; checklist; exercise report.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Lower RPO/RTO needs more replication, automation, capacity/cost.
+Restore slower RTO; replica assumed backup; restore point misses RPO; config/secrets missing; no drill.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-DB restore → service recovery including broker/read models/config.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| db-backup-restore | Frozen graph neighborhood with rel-disaster-recovery-rpo-rto | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| dist-replication-leader-quorum | Frozen graph neighborhood with rel-disaster-recovery-rpo-rto | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `db-backup-restore` remains separate pending its own mechanism/evidence boundary.
+- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-rel-failure-injection-verification
 
 ### Identity
 
-- **Working title:** rel-failure-injection-verification
+- **Unit ID:** lu-rel-failure-injection-verification
+- **Working title:** Design safe bounded fault test for stated reliability assumption and interpret result
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | rel-failure-injection-verification | Reliability / SRE | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Design safe bounded fault test for stated reliability assumption and interpret result.
 
-### Working canonical problem / case anchor
-
-Chaos no hypothesis; too broad blast; unrealistic fault; infra survives user journey fails; recovery unverified.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Inject one controlled fault, predict, observe user/system evidence, compare outcome and stop safely.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-failure-resilience | rel-failure-injection-verification | controlled failure injection, expected invariant/outcome and repeatable post-failure verification. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| rel-user-journey-sli-slo-budget | rel-failure-injection-verification | user-impact reliability target and observable SLI for the experiment. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `test-failure-resilience`: **controlled failure injection, expected invariant/outcome and repeatable post-failure verification.**; introduced only for `rel-failure-injection-verification`, without source coverage or `PASSED` evidence.
-- `rel-user-journey-sli-slo-budget`: **user-impact reliability target and observable SLI for the experiment.**; introduced only for `rel-failure-injection-verification`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Hypothesis; fault; scope; SLI; queues; recovery; stop condition; state.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Realism yields confidence but introduces controlled risk/cost.
+Chaos no hypothesis; too broad blast; unrealistic fault; infra survives user journey fails; recovery unverified.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Local dependency kill → shared dependency degradation under load.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| test-failure-resilience | Frozen graph neighborhood with rel-failure-injection-verification | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| rel-user-journey-sli-slo-budget | Frozen graph neighborhood with rel-failure-injection-verification | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `test-failure-resilience` remains separate pending its own mechanism/evidence boundary.
+- `rel-user-journey-sli-slo-budget` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-rel-health-readiness-semantics
 
 ### Identity
 
-- **Working title:** rel-health-readiness-semantics
+- **Unit ID:** lu-rel-health-readiness-semantics
+- **Working title:** Define liveness/readiness semantics so routing/restarts help recovery instead of cascade
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | rel-health-readiness-semantics | Reliability / SRE | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Define liveness/readiness semantics so routing/restarts help recovery instead of cascade.
 
-### Working canonical problem / case anchor
-
-DB outage restarts fleet; ready before warmup; ready while incapable; expensive probe; transient removal.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Liveness means no useful progress; readiness means traffic eligibility; dependency signal need not trigger death.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Probe reason; restart count; ready endpoints; dependency state; routing; startup/drain.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Sensitive probes remove bad nodes quickly but amplify shared failure.
+DB outage restarts fleet; ready before warmup; ready while incapable; expensive probe; transient removal.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Process health → Kubernetes service/LB deployment.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| obs-signals-correlation | Frozen graph neighborhood with rel-health-readiness-semantics | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| delivery-probes-health | Frozen graph neighborhood with rel-health-readiness-semantics | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `obs-signals-correlation` remains separate pending its own mechanism/evidence boundary.
+- `delivery-probes-health` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-rel-incident-response-postmortem
 
 ### Identity
 
-- **Working title:** rel-incident-response-postmortem
+- **Unit ID:** lu-rel-incident-response-postmortem
+- **Working title:** During/after incident separate mitigation, diagnosis, evidence preservation and system learning
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | rel-incident-response-postmortem | Reliability / SRE | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+During/after incident separate mitigation, diagnosis, evidence preservation and system learning.
 
-### Working canonical problem / case anchor
-
-Risky experiment pre-mitigation; many changes destroy evidence; blame; vague action; prevention unverified.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Contain user impact first; root cause follows stabilization; timeline prevents hindsight.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Timeline; impact; actions; snapshots; hypothesis; mitigation; owner/test.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Fast mitigation may reduce feature/capacity; impact boundary beats diagnostic purity.
+Risky experiment pre-mitigation; many changes destroy evidence; blame; vague action; prevention unverified.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-One outage → multi-service cascade.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-rel-overload-load-shedding-degradation
-
-### Identity
-
-- **Working title:** rel-overload-load-shedding-degradation
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| rel-overload-load-shedding-degradation | Reliability / SRE | L3 |
+| obs-diagnostic-method | Frozen graph neighborhood with rel-incident-response-postmortem | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| rel-user-journey-sli-slo-budget | Frozen graph neighborhood with rel-incident-response-postmortem | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Accept until OOM; shed after expensive work; fallback equally costly; batch starves interactive; degradation incorrect.
-
-### State / data / mechanism trace
-
-Demand beyond capacity grows queue/resource use; admission/degradation bounds work.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-bounded-backpressure | rel-overload-load-shedding-degradation | finite service/downstream capacity and bounded in-flight work. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| obs-latency-throughput-saturation | rel-overload-load-shedding-degradation | observable saturation and latency/throughput behavior near finite capacity. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-bounded-backpressure`: **finite service/downstream capacity and bounded in-flight work.**; introduced only for `rel-overload-load-shedding-degradation`, without source coverage or `PASSED` evidence.
-- `obs-latency-throughput-saturation`: **observable saturation and latency/throughput behavior near finite capacity.**; introduced only for `rel-overload-load-shedding-degradation`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Rates; queue/in-flight; saturation; rejection; critical latency; user impact.
-
-### Production boundary / trade-off
-
-Partial rejection trades for avoiding total failure; Concurrency owns portable bound.
-
-### Transfer variation
-
-One endpoint → several services overload shared DB.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-rel-user-journey-sli-slo-budget
-
-### Identity
-
-- **Working title:** rel-user-journey-sli-slo-budget
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| rel-user-journey-sli-slo-budget | Reliability / SRE | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Uptime hides broken journey; arbitrary SLO; wrong denominator; equal criticality; 100% policy.
-
-### State / data / mechanism trace
-
-SLI measures behavior; SLO target over window; budget is allowed gap from perfect.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-latency-throughput-saturation | rel-user-journey-sli-slo-budget | latency distribution, success/error rate and workload measurements can represent user-observable service behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `obs-latency-throughput-saturation`: **latency distribution, success/error rate and workload measurements can represent user-observable service behavior.**; introduced only for `rel-user-journey-sli-slo-budget`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Journey; good/total; latency/success; window; budget; failures.
-
-### Production boundary / trade-off
-
-Stricter SLO costs engineering/slows change; looser violates expectation.
-
-### Transfer variation
-
-Endpoint availability → multi-step journey with dependency/latency.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `obs-diagnostic-method` remains separate pending its own mechanism/evidence boundary.
+- `rel-user-journey-sli-slo-budget` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-test-ci-flakiness-repeatability
 
 ### Identity
 
-- **Working title:** test-ci-flakiness-repeatability
+- **Unit ID:** lu-test-ci-flakiness-repeatability
+- **Working title:** Diagnose CI failure as product defect, environment dependency or nondeterministic test
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | test-ci-flakiness-repeatability | Testing & Engineering Quality | L3 |
+| test-risk-strategy-boundaries | Testing & Engineering Quality | L2 |
+| test-time-concurrency-determinism | Testing & Engineering Quality | L3 |
+| test-real-dependency-fixtures | Testing & Engineering Quality | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Diagnose CI failure as product defect, environment dependency or nondeterministic test.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Order dependency; shared DB/static; port collision; external network; timing race; retry hides flake.
+Trustworthy test gives same verdict for same state; hidden clock/order/network/shared state breaks repeatability. → Test value falsifies risky assumption at narrowest boundary that retains actual mechanism. → Clock, barrier, scheduling point and test-data ownership intentionally reach desired state. → Fixture provides controlled real instance/state, observing constraint/transaction/serialization/broker behavior.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Trustworthy test gives same verdict for same state; hidden clock/order/network/shared state breaks repeatability.
+Repeat history; seed; test order; worker/env; resource owner; timing; failure artifact.; Risk statement; boundary; reproduced failure; invariant assertion; escaped defect history.; Gate events; controlled clock; task completion; captured interleaving; repeated stability.; Version; migration; seed; health; persisted/message result; cleanup/isolation.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-risk-strategy-boundaries | test-ci-flakiness-repeatability | relevant test state, intended invariant and trustworthy verdict boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Order dependency; shared DB/static; port collision; external network; timing race; retry hides flake.; Mock removes mechanism; E2E for pure logic; coverage misses path; implementation-shaped test.; Thread.Sleep; occasional race pass; assertion before work done; wall-clock expiry flake; shared mutable tests.; In-memory differs PostgreSQL; mock broker misses redelivery; shared DB leak; version mismatch; wrong migration.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `test-risk-strategy-boundaries`: **relevant test state, intended invariant and trustworthy verdict boundary.**; introduced only for `test-ci-flakiness-repeatability`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Repeat history; seed; test order; worker/env; resource owner; timing; failure artifact.
-
-### Production boundary / trade-off
-
-Quarantine unblocks temporarily but reduces protection; retry never proves health.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Local stable → parallel constrained CI workers.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `test-ci-flakiness-repeatability`, `test-risk-strategy-boundaries`, `test-time-concurrency-determinism`, `test-real-dependency-fixtures` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
+- `test-unit-integration-contract` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-test-failure-resilience
 
 ### Identity
 
-- **Working title:** test-failure-resilience
+- **Unit ID:** lu-test-failure-resilience
+- **Working title:** Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | test-failure-resilience | Testing & Engineering Quality | L3 |
+| test-risk-transfer | Testing & Engineering Quality | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Timeout only exception checked; retry duplicates; partial DB write; wrong fallback authority; stub always success.
+Inject known boundary failure then assert observable result and post-recovery state. → Strategy derives from risk/mechanism, not copied feature test structure.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Inject known boundary failure then assert observable result and post-recovery state.
+Injected fault; attempts; persisted/audit state; operation ID; result; recovery state.; Risk matrix; boundary; failing/passing fixture; real state; rejected alternative rationale.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-risk-strategy-boundaries | test-failure-resilience | identify the risky boundary, expected behavior and invariant under failure. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Timeout only exception checked; retry duplicates; partial DB write; wrong fallback authority; stub always success.; Copy old shape after boundary moved; mock removes new failure; E2E no localization; green proves untested assumption.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `test-risk-strategy-boundaries`: **identify the risky boundary, expected behavior and invariant under failure.**; introduced only for `test-failure-resilience`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Injected fault; attempts; persisted/audit state; operation ID; result; recovery state.
-
-### Production boundary / trade-off
-
-Setup cost directly falsifies production assumptions happy path misses.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-HTTP timeout → broker redelivery → DB deadlock retry.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `test-failure-resilience`, `test-risk-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `rel-failure-injection-verification` remains separate pending its own mechanism/evidence boundary.
+- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-test-migration-compatibility
 
 ### Identity
 
-- **Working title:** test-migration-compatibility
+- **Unit ID:** lu-test-migration-compatibility
+- **Working title:** Prove old/new app and schema/data/event contract coexist during transitional rollout
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | test-migration-compatibility | Testing & Engineering Quality | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Prove old/new app and schema/data/event contract coexist during transitional rollout.
 
-### Working canonical problem / case anchor
-
-New reads column before migration; old cannot read new state; destructive early change; rollback incompatible; old fixture fails.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Test production transitional states, not only final migration state.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-risk-strategy-boundaries | test-migration-compatibility | derive test boundary and failure risk from a change that spans multiple versions or persisted representations. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `test-risk-strategy-boundaries`: **derive test boundary and failure risk from a change that spans multiple versions or persisted representations.**; introduced only for `test-migration-compatibility`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Old/new fixture; schema version; old data/event/request; migration; rollback test.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Matrix costs fixtures/time but catches release defect invisible final state.
+New reads column before migration; old cannot read new state; destructive early change; rollback incompatible; old fixture fails.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-DB migration → DB + API/event rolling migration.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| test-risk-strategy-boundaries | Frozen graph neighborhood with test-migration-compatibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| api-versioning-compatibility | Frozen graph neighborhood with test-migration-compatibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
+- `api-versioning-compatibility` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-test-property-boundary-fuzz
 
 ### Identity
 
-- **Working title:** test-property-boundary-fuzz
+- **Unit ID:** lu-test-property-boundary-fuzz
+- **Working title:** Falsify invariant over generated/boundary input, not hand-picked happy examples
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | test-property-boundary-fuzz | Testing & Engineering Quality | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Falsify invariant over generated/boundary input, not hand-picked happy examples.
 
-### Working canonical problem / case anchor
-
-Size boundary; malformed parser combination; rare sequence violates invariant; weak property; seed lost.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Property states behavior over many input; boundary targets transitions; fuzz explores omitted combinations.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-invariants-domain-model | test-property-boundary-fuzz | state or behavior invariant that all valid executions/inputs must preserve. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `prog-invariants-domain-model`: **state or behavior invariant that all valid executions/inputs must preserve.**; introduced only for `test-property-boundary-fuzz`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Property; seed/input; shrunk example; boundary values; reproducible case.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Broad exploration finds unknowns but needs reproducible diagnosis.
+Size boundary; malformed parser combination; rare sequence violates invariant; weak property; seed lost.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Numeric boundary → nested API/message payload.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-test-real-dependency-fixtures
-
-### Identity
-
-- **Working title:** test-real-dependency-fixtures
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| test-real-dependency-fixtures | Testing & Engineering Quality | L3 |
+| prog-invariants-domain-model | Frozen graph neighborhood with test-property-boundary-fuzz | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| test-risk-strategy-boundaries | Frozen graph neighborhood with test-property-boundary-fuzz | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-In-memory differs PostgreSQL; mock broker misses redelivery; shared DB leak; version mismatch; wrong migration.
-
-### State / data / mechanism trace
-
-Fixture provides controlled real instance/state, observing constraint/transaction/serialization/broker behavior.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-unit-integration-contract | test-real-dependency-fixtures | difference between local isolated behavior and an integration boundary whose real semantics matter. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `test-unit-integration-contract`: **difference between local isolated behavior and an integration boundary whose real semantics matter.**; introduced only for `test-real-dependency-fixtures`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Version; migration; seed; health; persisted/message result; cleanup/isolation.
-
-### Production boundary / trade-off
-
-Fidelity trades startup/infra/cleanup cost.
-
-### Transfer variation
-
-Mock repo → disposable PostgreSQL → DB + broker fixture.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
+- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-test-review-static-analysis-change-safety
 
 ### Identity
 
-- **Working title:** test-review-static-analysis-change-safety
+- **Unit ID:** lu-test-review-static-analysis-change-safety
+- **Working title:** Use review/compiler/analyzer/targeted tests as complementary change evidence
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | test-review-static-analysis-change-safety | Testing & Engineering Quality | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Use review/compiler/analyzer/targeted tests as complementary change evidence.
 
-### Working canonical problem / case anchor
-
-Style-only review; unexplained suppression; AI diff accepted green; test old requirement; risky diff no regression.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Static finds non-executed classes; review assesses intent/boundary; tests exercise dynamic behavior.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-risk-strategy-boundaries | test-review-static-analysis-change-safety | identify changed invariant, contract or failure boundary that deserves evidence. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `test-risk-strategy-boundaries`: **identify changed invariant, contract or failure boundary that deserves evidence.**; introduced only for `test-review-static-analysis-change-safety`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Diff; review rationale; analyzer; invariant/contract; regression test; before/after.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Strong gates slow change but catch pre-runtime risk; noisy rules lose signal.
+Style-only review; unexplained suppression; AI diff accepted green; test old requirement; risky diff no regression.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Hand patch → broad AI refactor across boundaries.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-test-risk-strategy-boundaries
-
-### Identity
-
-- **Working title:** test-risk-strategy-boundaries
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| test-risk-strategy-boundaries | Testing & Engineering Quality | L2 |
+| test-risk-strategy-boundaries | Frozen graph neighborhood with test-review-static-analysis-change-safety | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| prog-api-refactoring-change-safety | Frozen graph neighborhood with test-review-static-analysis-change-safety | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Mock removes mechanism; E2E for pure logic; coverage misses path; implementation-shaped test.
-
-### State / data / mechanism trace
-
-Test value falsifies risky assumption at narrowest boundary that retains actual mechanism.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Risk statement; boundary; reproduced failure; invariant assertion; escaped defect history.
-
-### Production boundary / trade-off
-
-Narrow fast/local vs wider real-boundary confidence.
-
-### Transfer variation
-
-Pure domain rule → PostgreSQL transaction behavior.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-test-risk-transfer
-
-### Identity
-
-- **Working title:** test-risk-transfer
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-risk-transfer | Testing & Engineering Quality | L4 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Copy old shape after boundary moved; mock removes new failure; E2E no localization; green proves untested assumption.
-
-### State / data / mechanism trace
-
-Strategy derives from risk/mechanism, not copied feature test structure.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-unit-integration-contract | test-risk-transfer | choose unit, integration or contract boundary according to where the behavior can actually fail. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| test-failure-resilience | test-risk-transfer | inject a controlled failure and verify durable state, outcome and recovery invariant. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `test-unit-integration-contract`: **choose unit, integration or contract boundary according to where the behavior can actually fail.**; introduced only for `test-risk-transfer`, without source coverage or `PASSED` evidence.
-- `test-failure-resilience`: **inject a controlled failure and verify durable state, outcome and recovery invariant.**; introduced only for `test-risk-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Risk matrix; boundary; failing/passing fixture; real state; rejected alternative rationale.
-
-### Production boundary / trade-off
-
-Breadth/depth raises confidence and maintenance; focus unique high-risk mechanism.
-
-### Transfer variation
-
-Monolith write → event/projection eventual consistency.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-test-time-concurrency-determinism
-
-### Identity
-
-- **Working title:** test-time-concurrency-determinism
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-time-concurrency-determinism | Testing & Engineering Quality | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Thread.Sleep; occasional race pass; assertion before work done; wall-clock expiry flake; shared mutable tests.
-
-### State / data / mechanism trace
-
-Clock, barrier, scheduling point and test-data ownership intentionally reach desired state.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| concurrency-races-check-then-act | test-time-concurrency-determinism | check-then-act race window and concrete unsafe interleaving. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `concurrency-races-check-then-act`: **check-then-act race window and concrete unsafe interleaving.**; introduced only for `test-time-concurrency-determinism`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Gate events; controlled clock; task completion; captured interleaving; repeated stability.
-
-### Production boundary / trade-off
-
-Seam adds design surface but converts probabilistic failure to evidence.
-
-### Transfer variation
-
-TTL → race → cancellation/shutdown.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
+- `prog-api-refactoring-change-safety` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-test-unit-integration-contract
 
 ### Identity
 
-- **Working title:** test-unit-integration-contract
+- **Unit ID:** lu-test-unit-integration-contract
+- **Working title:** Choose unit/integration/contract by behavior boundary and state what each cannot prove
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | test-unit-integration-contract | Testing & Engineering Quality | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Choose unit/integration/contract by behavior boundary and state what each cannot prove.
 
-### Working canonical problem / case anchor
-
-Mock repo claimed SQL; HTTP 200 DB wrong; semantic provider change missed; duplicate layers no evidence.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Unit isolates deterministic logic; integration runs real collaborator; contract verifies external compatibility.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| test-risk-strategy-boundaries | test-unit-integration-contract | identify the risky assumption and the narrowest trustworthy boundary that still contains the real mechanism. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `test-risk-strategy-boundaries`: **identify the risky assumption and the narrowest trustworthy boundary that still contains the real mechanism.**; introduced only for `test-unit-integration-contract`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Real dependency state; contract; DB rows; double boundary; failure lost when wrong layer mocked.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Real boundary confidence costs setup/debug; isolation cannot prove omitted semantics.
+Mock repo claimed SQL; HTTP 200 DB wrong; semantic provider change missed; duplicate layers no evidence.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Single-repo API → independent consumer/provider.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| test-risk-strategy-boundaries | Frozen graph neighborhood with test-unit-integration-contract | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| test-real-dependency-fixtures | Frozen graph neighborhood with test-unit-integration-contract | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
+- `test-real-dependency-fixtures` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-arch-boundaries-ownership
 
 ### Identity
 
-- **Working title:** arch-boundaries-ownership
+- **Unit ID:** lu-arch-boundaries-ownership
+- **Working title:** Choose module/service boundary by invariant, change ownership and operational owner
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | arch-boundaries-ownership | Architecture & System Design | L3 |
+| arch-requirements-quality-attributes | Architecture & System Design | L3 |
+| arch-data-ownership-source-of-truth | Architecture & System Design | L3 |
+| arch-failure-recovery-security-observability | Architecture & System Design | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Choose module/service boundary by invariant, change ownership and operational owner.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Service per table; shared DB mutation; split invariant; chatty arbitrary decomposition; no owner.
+Boundary grants one owner authority over state/rules; crossing it needs explicit contract. → Decisions only matter against correctness, latency, availability, throughput, durability, security, operability, changeability and cost needs. → One owner accepts transition; derived systems copy/calculate with different freshness. → Critical transition needs failure behavior, recovery owner, trust path and diagnostic evidence.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Boundary grants one owner authority over state/rules; crossing it needs explicit contract.
+State owner; write paths; invariant; API/event dependencies; coupling; deployment owner.; Requirement list; quality scenario; traffic/data estimates; constraints; assumption register.; Write paths; source version; update flow; derived copy; rebuild/reconcile.; Failure table; recovery owner; data flow; telemetry path; RPO/RTO/SLO; operation ID.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| prog-invariants-domain-model | arch-boundaries-ownership | business-valid state, invariant and the authority responsible for preserving it. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Service per table; shared DB mutation; split invariant; chatty arbitrary decomposition; no owner.; Technology-first; scale no number; conflict implicit; optional feature drives core; imagined hyperscale.; Two authorities; cache/search mutated as source; reporting write leaks; unrebuildable projection; migration ambiguity.; No timeout/recovery owner; unmodeled trust path; async uncorrelated; dependency collapse; no recovery plan.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `prog-invariants-domain-model`: **business-valid state, invariant and the authority responsible for preserving it.**; introduced only for `arch-boundaries-ownership`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-State owner; write paths; invariant; API/event dependencies; coupling; deployment owner.
-
-### Production boundary / trade-off
-
-Finer boundary enables isolation/change but adds contracts/network/consistency.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Modular monolith → extract one independently owned capability.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `arch-boundaries-ownership`, `arch-requirements-quality-attributes`, `arch-data-ownership-source-of-truth`, `arch-failure-recovery-security-observability` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
+- `prog-composition-dependencies` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-arch-consistency-latency-availability
 
 ### Identity
 
-- **Working title:** arch-consistency-latency-availability
+- **Unit ID:** lu-arch-consistency-latency-availability
+- **Working title:** Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | arch-consistency-latency-availability | Architecture & System Design | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions.
 
-### Working canonical problem / case anchor
-
-Eventual for atomic invariant; strong for harmless report; CAP slogan; stale window undefined.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Operations need different visibility/order; stronger coordination affects latency/availability.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-requirements-quality-attributes | arch-consistency-latency-availability | required correctness and quality-attribute scenario. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| prog-invariants-domain-model | arch-consistency-latency-availability | business invariant and valid state transition. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-consistency-linearizability | arch-consistency-latency-availability | allowed read/write histories and the coordination implications of stronger visibility guarantees. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-requirements-quality-attributes`: **required correctness and quality-attribute scenario.**; introduced only for `arch-consistency-latency-availability`, without source coverage or `PASSED` evidence.
-- `prog-invariants-domain-model`: **business invariant and valid state transition.**; introduced only for `arch-consistency-latency-availability`, without source coverage or `PASSED` evidence.
-- `dist-consistency-linearizability`: **allowed read/write histories and the coordination implications of stronger visibility guarantees.**; introduced only for `arch-consistency-latency-availability`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Invariant; history; source/replica role; SLO; failure assumption; reconciliation path.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Coordination buys correctness at latency/availability/operational cost.
+Eventual for atomic invariant; strong for harmless report; CAP slogan; stale window undefined.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Catalog projection → balance/inventory reservation.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| arch-requirements-quality-attributes | Frozen graph neighborhood with arch-consistency-latency-availability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| prog-invariants-domain-model | Frozen graph neighborhood with arch-consistency-latency-availability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
+- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-arch-cost-complexity-changeability
 
 ### Identity
 
-- **Working title:** arch-cost-complexity-changeability
+- **Unit ID:** lu-arch-cost-complexity-changeability
+- **Working title:** Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | arch-cost-complexity-changeability | Architecture & System Design | L4 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Microservices no change need; résumé Kafka/Redis/K8s; irrelevant optimization; lock-in ignored.
-
-### State / data / mechanism trace
-
-Component/boundary creates deploy, failure, data movement, skills, cloud and migration cost.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-requirements-quality-attributes | arch-cost-complexity-changeability | explicit quality attribute or constraint that a mechanism is intended to buy. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-requirements-quality-attributes`: **explicit quality attribute or constraint that a mechanism is intended to buy.**; introduced only for `arch-cost-complexity-changeability`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Component count; ownership/incident burden; cost; latency/capacity; change frequency.
-
-### Production boundary / trade-off
-
-Extra mechanism justified only for required property worth lifecycle cost.
-
-### Transfer variation
-
-Startup → growth constraints or simplify after shrink.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-arch-data-ownership-source-of-truth
-
-### Identity
-
-- **Working title:** arch-data-ownership-source-of-truth
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-data-ownership-source-of-truth | Architecture & System Design | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Two authorities; cache/search mutated as source; reporting write leaks; unrebuildable projection; migration ambiguity.
-
-### State / data / mechanism trace
-
-One owner accepts transition; derived systems copy/calculate with different freshness.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-boundaries-ownership | arch-data-ownership-source-of-truth | one boundary owns state/rules and crossing that boundary requires an explicit contract. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-boundaries-ownership`: **one boundary owns state/rules and crossing that boundary requires an explicit contract.**; introduced only for `arch-data-ownership-source-of-truth`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Write paths; source version; update flow; derived copy; rebuild/reconcile.
-
-### Production boundary / trade-off
-
-Single authority simplifies correctness but can require async stale views.
-
-### Transfer variation
-
-DB source → Redis + search + analytics projection.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-arch-decision-communication-transfer
-
-### Identity
-
-- **Working title:** arch-decision-communication-transfer
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
 | arch-decision-communication-transfer | Architecture & System Design | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Diagram no rationale; universal best practice; rejected choices hidden; stale decision persists.
+Component/boundary creates deploy, failure, data movement, skills, cloud and migration cost. → Explicit assumptions let future engineer know why/when decision changes.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Explicit assumptions let future engineer know why/when decision changes.
+Component count; ownership/incident burden; cost; latency/capacity; change frequency.; ADR; capacity evidence; option comparison; risk; revisit condition; outcome.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-requirements-quality-attributes | arch-decision-communication-transfer | requirements, constraints and assumptions that define decision context. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Microservices no change need; résumé Kafka/Redis/K8s; irrelevant optimization; lock-in ignored.; Diagram no rationale; universal best practice; rejected choices hidden; stale decision persists.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `arch-requirements-quality-attributes`: **requirements, constraints and assumptions that define decision context.**; introduced only for `arch-decision-communication-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-ADR; capacity evidence; option comparison; risk; revisit condition; outcome.
-
-### Production boundary / trade-off
-
-Documentation costs time but prevents repeated debate/cargo cult.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-10x traffic, compliance, team split or weaker latency need.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `arch-cost-complexity-changeability`, `arch-decision-communication-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
+- `arch-boundaries-ownership` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-arch-evolution-migration-strangler
 
 ### Identity
 
-- **Working title:** arch-evolution-migration-strangler
+- **Unit ID:** lu-arch-evolution-migration-strangler
+- **Working title:** Move old to target incrementally while paths coexist safely
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | arch-evolution-migration-strangler | Architecture & System Design | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Move old to target incrementally while paths coexist safely.
 
-### Working canonical problem / case anchor
-
-Big bang; dual write no reconcile; divergence; rollback impossible; seam permanent.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Add seam, route subset, keep compatibility/ownership, observe then remove old.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-boundaries-ownership | arch-evolution-migration-strangler | state/rule owner and explicit contract across the migration seam. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| prog-api-refactoring-change-safety | arch-evolution-migration-strangler | change-safe refactoring preserves required behavior and makes compatibility impact explicit. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-boundaries-ownership`: **state/rule owner and explicit contract across the migration seam.**; introduced only for `arch-evolution-migration-strangler`, without source coverage or `PASSED` evidence.
-- `prog-api-refactoring-change-safety`: **change-safe refactoring preserves required behavior and makes compatibility impact explicit.**; introduced only for `arch-evolution-migration-strangler`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Traffic split; old/new comparison; compatibility; progress; reconcile; rollback.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Temporary duplication reduces blast radius but costs complexity.
+Big bang; dual write no reconcile; divergence; rollback impossible; seam permanent.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Legacy module → service or old datastore → new live.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-arch-failure-recovery-security-observability
-
-### Identity
-
-- **Working title:** arch-failure-recovery-security-observability
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
 |---|---|---|
-| arch-failure-recovery-security-observability | Architecture & System Design | L4 |
+| arch-boundaries-ownership | Frozen graph neighborhood with arch-evolution-migration-strangler | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| prog-api-refactoring-change-safety | Frozen graph neighborhood with arch-evolution-migration-strangler | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Why these capabilities belong together
+### Explicit exclusions
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-No timeout/recovery owner; unmodeled trust path; async uncorrelated; dependency collapse; no recovery plan.
-
-### State / data / mechanism trace
-
-Critical transition needs failure behavior, recovery owner, trust path and diagnostic evidence.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-boundaries-ownership | arch-failure-recovery-security-observability | component/state owner and explicit cross-boundary contracts. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| dist-partial-failure-uncertainty | arch-failure-recovery-security-observability | independent component/path failure and uncertainty. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| sec-trust-boundary-threat-model | arch-failure-recovery-security-observability | trust boundary, protected asset and untrusted actor/input path. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| obs-signals-correlation | arch-failure-recovery-security-observability | telemetry signals can be correlated around a logical operation or resource. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| rel-user-journey-sli-slo-budget | arch-failure-recovery-security-observability | meaningful user journey and measurable reliability target. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-boundaries-ownership`: **component/state owner and explicit cross-boundary contracts.**; introduced only for `arch-failure-recovery-security-observability`, without source coverage or `PASSED` evidence.
-- `dist-partial-failure-uncertainty`: **independent component/path failure and uncertainty.**; introduced only for `arch-failure-recovery-security-observability`, without source coverage or `PASSED` evidence.
-- `sec-trust-boundary-threat-model`: **trust boundary, protected asset and untrusted actor/input path.**; introduced only for `arch-failure-recovery-security-observability`, without source coverage or `PASSED` evidence.
-- `obs-signals-correlation`: **telemetry signals can be correlated around a logical operation or resource.**; introduced only for `arch-failure-recovery-security-observability`, without source coverage or `PASSED` evidence.
-- `rel-user-journey-sli-slo-budget`: **meaningful user journey and measurable reliability target.**; introduced only for `arch-failure-recovery-security-observability`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Failure table; recovery owner; data flow; telemetry path; RPO/RTO/SLO; operation ID.
-
-### Production boundary / trade-off
-
-Operability adds implementation/operating cost; mechanisms stay owned by their tracks.
-
-### Transfer variation
-
-Normal dependency → outage/security/recovery case.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-arch-requirements-quality-attributes
-
-### Identity
-
-- **Working title:** arch-requirements-quality-attributes
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-requirements-quality-attributes | Architecture & System Design | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Technology-first; scale no number; conflict implicit; optional feature drives core; imagined hyperscale.
-
-### State / data / mechanism trace
-
-Decisions only matter against correctness, latency, availability, throughput, durability, security, operability, changeability and cost needs.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Requirement list; quality scenario; traffic/data estimates; constraints; assumption register.
-
-### Production boundary / trade-off
-
-Explicitness improves decision until speculative precision becomes theatre.
-
-### Transfer variation
-
-100-user internal → burst/SLO/compliance external.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `arch-boundaries-ownership` remains separate pending its own mechanism/evidence boundary.
+- `prog-api-refactoring-change-safety` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-arch-scale-capacity-partitioning
 
 ### Identity
 
-- **Working title:** arch-scale-capacity-partitioning
+- **Unit ID:** lu-arch-scale-capacity-partitioning
+- **Working title:** Estimate bottleneck and choose scale/partition boundary from measurable demand
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | arch-scale-capacity-partitioning | Architecture & System Design | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Estimate bottleneck and choose scale/partition boundary from measurable demand.
 
-### Working canonical problem / case anchor
-
-Add replicas while DB saturated; shard without pattern; skew; late autoscale; ignore burst/concurrency.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Scale-out helps only distributable work and cannot remove shared bottleneck.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-requirements-quality-attributes | arch-scale-capacity-partitioning | traffic/data estimates, quality constraints and explicit scale assumptions. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| obs-latency-throughput-saturation | arch-scale-capacity-partitioning | throughput, concurrency, latency and saturation reveal a capacity boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-requirements-quality-attributes`: **traffic/data estimates, quality constraints and explicit scale assumptions.**; introduced only for `arch-scale-capacity-partitioning`, without source coverage or `PASSED` evidence.
-- `obs-latency-throughput-saturation`: **throughput, concurrency, latency and saturation reveal a capacity boundary.**; introduced only for `arch-scale-capacity-partitioning`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Rate; concurrency; CPU/memory; downstream capacity; key distribution; queue/latency.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Partitions/replicas add capacity but routing/coordination/cost.
+Add replicas while DB saturated; shard without pattern; skew; late autoscale; ignore burst/concurrency.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Service/DB → replicas → sharded ownership after bottleneck known.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| arch-requirements-quality-attributes | Frozen graph neighborhood with arch-scale-capacity-partitioning | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| obs-latency-throughput-saturation | Frozen graph neighborhood with arch-scale-capacity-partitioning | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
+- `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-arch-sync-async-integration
 
 ### Identity
 
-- **Working title:** arch-sync-async-integration
+- **Unit ID:** lu-arch-sync-async-integration
+- **Working title:** Choose sync/async from coupling, completion semantics, latency and recovery
 - **Learner-facing domain candidate:** Architecture & Engineering Reasoning
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | arch-sync-async-integration | Architecture & System Design | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Choose sync/async from coupling, completion semantics, latency and recovery.
 
-### Working canonical problem / case anchor
-
-Async for scale only; long workflow blocks chain; immediate answer via event; sync cascade; async no status.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Sync couples caller lifetime to response; async decouples time but needs durable state/retry/completion model.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| arch-requirements-quality-attributes | arch-sync-async-integration | required response/completion behavior and relevant quality constraints. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| net-http-semantics | arch-sync-async-integration | request/response operation and caller-visible completion semantics. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| msg-model-queue-topic-partition-order | arch-sync-async-integration | message destination, delivery boundary and independently processed work. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `arch-requirements-quality-attributes`: **required response/completion behavior and relevant quality constraints.**; introduced only for `arch-sync-async-integration`, without source coverage or `PASSED` evidence.
-- `net-http-semantics`: **request/response operation and caller-visible completion semantics.**; introduced only for `arch-sync-async-integration`, without source coverage or `PASSED` evidence.
-- `msg-model-queue-topic-partition-order`: **message destination, delivery boundary and independently processed work.**; introduced only for `arch-sync-async-integration`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Required response; critical path; availability; operation state; queue/lag; recovery.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Sync simple/immediate vs runtime coupling; async decoupling vs state complexity.
+Async for scale only; long workflow blocks chain; immediate answer via event; sync cascade; async no status.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Inventory lookup → order/payment fulfillment.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| arch-requirements-quality-attributes | Frozen graph neighborhood with arch-sync-async-integration | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| net-http-semantics | Frozen graph neighborhood with arch-sync-async-integration | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
+- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-delivery-artifact-image-config
 
 ### Identity
 
-- **Working title:** delivery-artifact-image-config
+- **Unit ID:** lu-delivery-artifact-image-config
+- **Working title:** Produce reproducible versioned artifact and separate immutable build from runtime config/secret
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | delivery-artifact-image-config | Containers / Kubernetes / Cloud Delivery | L2 |
+| delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 |
+| delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 |
+| delivery-platform-evidence-debug | Containers / Kubernetes / Cloud Delivery | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Produce reproducible versioned artifact and separate immutable build from runtime config/secret.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Rebuild production differently; latest tag lost provenance; secret baked image; config drift; unknown rollback artifact.
+Build creates versioned image; runtime injects config; same digest promotes environments. → CI builds once; registry stores immutable artifact; CD promotes exact reference. → Platform moves traffic/version sets over time; strategy controls coexistence/exposure. → Platform state/events cover scheduling, startup, probes, resources/restarts; app logs alone omit not-running cause.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Build creates versioned image; runtime injects config; same digest promotes environments.
+Digest/tag; Git SHA; config source; SBOM/provenance; deployed identity.; SHA; pipeline run; digest; registry metadata; deployment record; approval.; Replica/version; deployment status; traffic; readiness; digest; rollback history.; Workload status; events; exit; metrics; logs; config refs; endpoints; revision.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
+Rebuild production differently; latest tag lost provenance; secret baked image; config drift; unknown rollback artifact.; Separate prod rebuild; tag moves digest; no source tie; manual bypass; rollback artifact absent.; Old/new incompatible; availability gap; irreversible schema/event; unrepresentative canary; readiness stall.; CrashLoop no exit reason; pending pod app-log only; OOMKill normal crash; mount ignored; selector mismatch.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Digest/tag; Git SHA; config source; SBOM/provenance; deployed identity.
-
-### Production boundary / trade-off
-
-Promotion metadata adds discipline but makes audit/rollback reliable.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-dotnet publish → container UAT → production digest.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `delivery-artifact-image-config`, `delivery-cicd-promotion-provenance`, `delivery-rollout-rollback-strategies`, `delivery-platform-evidence-debug` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `delivery-platform-transfer` remains separate pending its own mechanism/evidence boundary.
+- `rel-change-rollout-rollback-risk` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-delivery-autoscaling-signal-boundary
 
 ### Identity
 
-- **Working title:** delivery-autoscaling-signal-boundary
+- **Unit ID:** lu-delivery-autoscaling-signal-boundary
+- **Working title:** Choose platform scaling signal matching resource/work pressure and know when replicas cannot help
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | delivery-autoscaling-signal-boundary | Containers / Kubernetes / Cloud Delivery | L3 |
+| delivery-resources-cpu-memory | Containers / Kubernetes / Cloud Delivery | L3 |
+| delivery-platform-transfer | Containers / Kubernetes / Cloud Delivery | L4 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Choose platform scaling signal matching resource/work pressure and know when replicas cannot help.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-CPU for I/O bottleneck; consumers beyond DB; burst faster scale; hot partition; cold scale violates latency.
+Autoscaler observes signal then changes replicas after delay; scale helps parallel app work but can increase downstream pressure. → Scheduler uses requests; CPU may throttle and memory policy may kill/evict workload. → Artifact/config/resource/health/shutdown/network/telemetry are portable requirements; platform implementations differ.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Autoscaler observes signal then changes replicas after delay; scale helps parallel app work but can increase downstream pressure.
+Signal; replicas; CPU/queue/concurrency; downstream; events; p95/p99.; Requests/limits; throttle; RSS; OOM; restart; node/pod metrics.; Requirement matrix; platform config; lifecycle behavior; deployment/failure result.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| obs-latency-throughput-saturation | delivery-autoscaling-signal-boundary | throughput, queue/concurrency, latency and saturation identify a real capacity boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| delivery-resources-cpu-memory | delivery-autoscaling-signal-boundary | platform CPU/memory requests, limits and constrained workload behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+CPU for I/O bottleneck; consumers beyond DB; burst faster scale; hot partition; cold scale violates latency.; Throttle called lock; OOM only GC; no request; excessive reservation; limit ignores working/native/page cache.; YAML treated architecture; health shifts; filesystem assumption; CPU/memory change; debug evidence hidden.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `obs-latency-throughput-saturation`: **throughput, queue/concurrency, latency and saturation identify a real capacity boundary.**; introduced only for `delivery-autoscaling-signal-boundary`, without source coverage or `PASSED` evidence.
-- `delivery-resources-cpu-memory`: **platform CPU/memory requests, limits and constrained workload behavior.**; introduced only for `delivery-autoscaling-signal-boundary`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Signal; replicas; CPU/queue/concurrency; downstream; events; p95/p99.
-
-### Production boundary / trade-off
-
-Aggressive scaling raises headroom but cost/churn/downstream load.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-CPU service → queue consumer sharing DB pool.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `delivery-autoscaling-signal-boundary`, `delivery-resources-cpu-memory`, `delivery-platform-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-cicd-promotion-provenance
-
-### Identity
-
-- **Working title:** delivery-cicd-promotion-provenance
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Separate prod rebuild; tag moves digest; no source tie; manual bypass; rollback artifact absent.
-
-### State / data / mechanism trace
-
-CI builds once; registry stores immutable artifact; CD promotes exact reference.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| delivery-artifact-image-config | delivery-cicd-promotion-provenance | versioned artifact/image, digest and separation of build from runtime configuration. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `delivery-artifact-image-config`: **versioned artifact/image, digest and separation of build from runtime configuration.**; introduced only for `delivery-cicd-promotion-provenance`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-SHA; pipeline run; digest; registry metadata; deployment record; approval.
-
-### Production boundary / trade-off
-
-Discipline/storage cost buys reproducibility/audit/rollback.
-
-### Transfer variation
-
-Manual binary → CI image promotion.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
+- `rel-overload-load-shedding-degradation` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-delivery-cloud-responsibility-managed-services
 
 ### Identity
 
-- **Working title:** delivery-cloud-responsibility-managed-services
+- **Unit ID:** lu-delivery-cloud-responsibility-managed-services
+- **Working title:** State application-team responsibilities when platform component is managed
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | delivery-cloud-responsibility-managed-services | Containers / Kubernetes / Cloud Delivery | L2 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+State application-team responsibilities when platform component is managed.
 
-### Working canonical problem / case anchor
-
-Managed DB assumed infallible; restore unclear; provider SLA equals app SLO; IAM/network ignored; queue semantics assumed same.
-
-### State / data / mechanism trace
+### Shared mechanism / state trace
 
 Provider manages agreed hardware/control plane, but app owns usage, model, access, capacity, failure behavior/cost and often recovery verification.
 
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| — | — | — | — | No incoming REQUIRED relation. |
-
-### Local Prerequisite Slices
-
-None.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
+### Shared observable evidence
 
 Service contract; config; IAM; recovery; quota; telemetry; cost.
 
-### Production boundary / trade-off
+### Shared failure / debug story
 
-Managed reduces undifferentiated ops but costs/constraints/lock-in/control.
+Managed DB assumed infallible; restore unclear; provider SLA equals app SLO; IAM/network ignored; queue semantics assumed same.
+
+### Assessment-coherence argument
+
+The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
 
 ### Transfer variation
 
-Self-hosted DB/Redis/broker → cloud managed.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+|---|---|---|
+| sec-secrets-third-party-trust | Frozen graph neighborhood with delivery-cloud-responsibility-managed-services | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| rel-disaster-recovery-rpo-rto | Frozen graph neighborhood with delivery-cloud-responsibility-managed-services | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `sec-secrets-third-party-trust` remains separate pending its own mechanism/evidence boundary.
+- `rel-disaster-recovery-rpo-rto` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-delivery-container-process-lifecycle
 
 ### Identity
 
-- **Working title:** delivery-container-process-lifecycle
+- **Unit ID:** lu-delivery-container-process-lifecycle
+- **Working title:** Explain container as primary-process packaging/runtime boundary, not VM
 - **Learner-facing domain candidate:** Production Engineering
 
-### Primary capability records
+### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | delivery-container-process-lifecycle | Containers / Kubernetes / Cloud Delivery | L2 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Child lifecycle wrong; PID assumption; durable data ephemeral FS; restart equals recovery.
-
-### State / data / mechanism trace
-
-Runtime starts process with filesystem/network/resource boundaries; container lifetime follows primary process.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-process-thread-kernel | delivery-container-process-lifecycle | process lifetime, process identity and user/kernel execution boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `os-process-thread-kernel`: **process lifetime, process identity and user/kernel execution boundary.**; introduced only for `delivery-container-process-lifecycle`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Process tree; state/restart; mounts; exit code; runtime events.
-
-### Production boundary / trade-off
-
-Packaging improves reproducibility but not durable state/app recovery.
-
-### Transfer variation
-
-Bare process → .NET service container.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-graceful-shutdown-draining
-
-### Identity
-
-- **Working title:** delivery-graceful-shutdown-draining
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
+| delivery-probes-health | Containers / Kubernetes / Cloud Delivery | L3 |
 | delivery-graceful-shutdown-draining | Containers / Kubernetes / Cloud Delivery | L3 |
 
-### Why these capabilities belong together
+### Shared problem / need
 
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
+Explain container as primary-process packaging/runtime boundary, not VM.
 
-### Working canonical problem / case anchor
+### Shared mechanism / state trace
 
-Still routed after SIGTERM; ack after lost work; grace short; LB delay ignored; no durable handoff.
+Runtime starts process with filesystem/network/resource boundaries; container lifetime follows primary process. → Platform calls probe and converts result to routing/restart by configured type. → Termination → readiness removal → signal → grace window → drain/cancel/ack/release → exit.
 
-### State / data / mechanism trace
+### Shared observable evidence
 
-Termination → readiness removal → signal → grace window → drain/cancel/ack/release → exit.
+Process tree; state/restart; mounts; exit code; runtime events.; Probe config/result; K8s events; ready condition; restarts; routing.; Termination/readiness time; endpoints; active work; signal; grace; exit.
 
-### Incoming REQUIRED treatments
+### Shared failure / debug story
 
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| os-termination-graceful-shutdown | delivery-graceful-shutdown-draining | termination signal, finite shutdown lifetime and resource release before process exit. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| delivery-container-process-lifecycle | delivery-graceful-shutdown-draining | container/process start, running and termination lifecycle. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
+Child lifecycle wrong; PID assumption; durable data ephemeral FS; restart equals recovery.; Readiness wired liveness; outage restart loop; early warmup; expensive probe; terminating still routed.; Still routed after SIGTERM; ack after lost work; grace short; LB delay ignored; no durable handoff.
 
-### Local Prerequisite Slices
+### Assessment-coherence argument
 
-- `os-termination-graceful-shutdown`: **termination signal, finite shutdown lifetime and resource release before process exit.**; introduced only for `delivery-graceful-shutdown-draining`, without source coverage or `PASSED` evidence.
-- `delivery-container-process-lifecycle`: **container/process start, running and termination lifecycle.**; introduced only for `delivery-graceful-shutdown-draining`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Termination/readiness time; endpoints; active work; signal; grace; exit.
-
-### Production boundary / trade-off
-
-Longer drain reduces loss but slows rollout; beyond grace needs durable handoff.
+One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
 
 ### Transfer variation
 
-Process shutdown → K8s HTTP + consumer rollout.
+Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
 
-### Candidate gates / exit evidence
+### Merge decisions
 
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
+Merged because `delivery-container-process-lifecycle`, `delivery-probes-health`, `delivery-graceful-shutdown-draining` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
 
-### Research / version status
+### Explicit exclusions
 
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-platform-evidence-debug
-
-### Identity
-
-- **Working title:** delivery-platform-evidence-debug
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-platform-evidence-debug | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-CrashLoop no exit reason; pending pod app-log only; OOMKill normal crash; mount ignored; selector mismatch.
-
-### State / data / mechanism trace
-
-Platform state/events cover scheduling, startup, probes, resources/restarts; app logs alone omit not-running cause.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| delivery-container-process-lifecycle | delivery-platform-evidence-debug | container/process lifecycle, exit state and platform-controlled restart boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| delivery-resources-cpu-memory | delivery-platform-evidence-debug | requests/limits, CPU throttling, working memory and platform resource-termination behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| delivery-probes-health | delivery-platform-evidence-debug | probe configuration, readiness state, restart/routing action and probe failure reason. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `delivery-container-process-lifecycle`: **container/process lifecycle, exit state and platform-controlled restart boundary.**; introduced only for `delivery-platform-evidence-debug`, without source coverage or `PASSED` evidence.
-- `delivery-resources-cpu-memory`: **requests/limits, CPU throttling, working memory and platform resource-termination behavior.**; introduced only for `delivery-platform-evidence-debug`, without source coverage or `PASSED` evidence.
-- `delivery-probes-health`: **probe configuration, readiness state, restart/routing action and probe failure reason.**; introduced only for `delivery-platform-evidence-debug`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Workload status; events; exit; metrics; logs; config refs; endpoints; revision.
-
-### Production boundary / trade-off
-
-Platform evidence maps back to portable process/resource/network concepts.
-
-### Transfer variation
-
-Docker failure → Kubernetes → managed equivalent.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-platform-transfer
-
-### Identity
-
-- **Working title:** delivery-platform-transfer
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-platform-transfer | Containers / Kubernetes / Cloud Delivery | L4 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-YAML treated architecture; health shifts; filesystem assumption; CPU/memory change; debug evidence hidden.
-
-### State / data / mechanism trace
-
-Artifact/config/resource/health/shutdown/network/telemetry are portable requirements; platform implementations differ.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| delivery-artifact-image-config | delivery-platform-transfer | portable artifact identity and separation of build from runtime config. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| delivery-platform-evidence-debug | delivery-platform-transfer | diagnose lifecycle, resource, probe/config and routing behavior from platform evidence. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| delivery-graceful-shutdown-draining | delivery-platform-transfer | stop routing, signal termination, drain/cancel work and exit within a bounded lifetime. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `delivery-artifact-image-config`: **portable artifact identity and separation of build from runtime config.**; introduced only for `delivery-platform-transfer`, without source coverage or `PASSED` evidence.
-- `delivery-platform-evidence-debug`: **diagnose lifecycle, resource, probe/config and routing behavior from platform evidence.**; introduced only for `delivery-platform-transfer`, without source coverage or `PASSED` evidence.
-- `delivery-graceful-shutdown-draining`: **stop routing, signal termination, drain/cancel work and exit within a bounded lifetime.**; introduced only for `delivery-platform-transfer`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Requirement matrix; platform config; lifecycle behavior; deployment/failure result.
-
-### Production boundary / trade-off
-
-Native feature convenience trades migration/lock-in cost.
-
-### Transfer variation
-
-Compose/VM → K8s → managed container.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-probes-health
-
-### Identity
-
-- **Working title:** delivery-probes-health
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-probes-health | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Readiness wired liveness; outage restart loop; early warmup; expensive probe; terminating still routed.
-
-### State / data / mechanism trace
-
-Platform calls probe and converts result to routing/restart by configured type.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| rel-health-readiness-semantics | delivery-probes-health | difference between cannot make useful progress and should not receive traffic. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `rel-health-readiness-semantics`: **difference between cannot make useful progress and should not receive traffic.**; introduced only for `delivery-probes-health`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Probe config/result; K8s events; ready condition; restarts; routing.
-
-### Production boundary / trade-off
-
-Strict frequency reacts faster but false removal/load risk.
-
-### Transfer variation
-
-One health endpoint → startup/readiness/liveness.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-resources-cpu-memory
-
-### Identity
-
-- **Working title:** delivery-resources-cpu-memory
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-resources-cpu-memory | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Throttle called lock; OOM only GC; no request; excessive reservation; limit ignores working/native/page cache.
-
-### State / data / mechanism trace
-
-Scheduler uses requests; CPU may throttle and memory policy may kill/evict workload.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| delivery-container-process-lifecycle | delivery-resources-cpu-memory | container lifetime follows its workload process and runs under platform resource boundaries. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| os-resource-exhaustion | delivery-resources-cpu-memory | finite process memory/CPU resources and resource-exhaustion behavior. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `delivery-container-process-lifecycle`: **container lifetime follows its workload process and runs under platform resource boundaries.**; introduced only for `delivery-resources-cpu-memory`, without source coverage or `PASSED` evidence.
-- `os-resource-exhaustion`: **finite process memory/CPU resources and resource-exhaustion behavior.**; introduced only for `delivery-resources-cpu-memory`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Requests/limits; throttle; RSS; OOM; restart; node/pod metrics.
-
-### Production boundary / trade-off
-
-Higher reservation gives headroom vs lower density; tight limit contains but exposes burst.
-
-### Transfer variation
-
-Local process → CPU quota/memory limit container.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
-
-## lu-delivery-rollout-rollback-strategies
-
-### Identity
-
-- **Working title:** delivery-rollout-rollback-strategies
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capability records
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Why these capabilities belong together
-
-This capability retains a distinct mechanism/evidence boundary; adjacency alone is not a grouping reason.
-
-### Working canonical problem / case anchor
-
-Old/new incompatible; availability gap; irreversible schema/event; unrepresentative canary; readiness stall.
-
-### State / data / mechanism trace
-
-Platform moves traffic/version sets over time; strategy controls coexistence/exposure.
-
-### Incoming REQUIRED treatments
-
-| Source | Target | Exact Assumed Slice | Treatment | Reason |
-|---|---|---|---|---|
-| delivery-artifact-image-config | delivery-rollout-rollback-strategies | immutable deployable artifact identity and reproducible prior version. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-| rel-change-rollout-rollback-risk | delivery-rollout-rollback-strategies | progressive exposure, observation criteria and technical rollback boundary. | LOCAL_SLICE | Exact slice is introduced locally; source coverage/PASSED is not claimed. |
-
-### Local Prerequisite Slices
-
-- `delivery-artifact-image-config`: **immutable deployable artifact identity and reproducible prior version.**; introduced only for `delivery-rollout-rollback-strategies`, without source coverage or `PASSED` evidence.
-- `rel-change-rollout-rollback-risk`: **progressive exposure, observation criteria and technical rollback boundary.**; introduced only for `delivery-rollout-rollback-strategies`, without source coverage or `PASSED` evidence.
-
-### External Required Prerequisite Candidates
-
-None.
-
-### RECOMMENDED context surfaced
-
-None.
-
-### Internal learning order
-
-Problem → limitation → mechanism → observable evidence → transfer.
-
-### Observable evidence / debug story
-
-Replica/version; deployment status; traffic; readiness; digest; rollback history.
-
-### Production boundary / trade-off
-
-Staging lowers blast radius but needs capacity/operational complexity.
-
-### Transfer variation
-
-Stateless rolling → mixed schema/event rollout.
-
-### Candidate gates / exit evidence
-
-Prediction/trace, application/debug, explain-back and changed-condition transfer at the frozen target level.
-
-### Research / version status
-
-Research status: NOT YET PERFORMED FOR LEARNER-FACING AUTHORING.
+- `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
+- `delivery-resources-cpu-memory` remains separate pending its own mechanism/evidence boundary.
