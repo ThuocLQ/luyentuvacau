@@ -3,7 +3,7 @@
 > **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 163. Proposed Learning Units: 102. Singleton units: 67. Multi-capability units: 35. Single-owner units: 102. Multi-owner units: 0.
+Frozen capabilities: 163. Proposed Learning Units: 110. Singleton units: 76. Multi-capability units: 34. Single-owner units: 110. Multi-owner units: 0.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
@@ -35,10 +35,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
 | lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 |
 | lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 |
-| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions | Service & Network | Networking & HTTP | 2 |
-| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn | Service & Network | Networking & HTTP | 4 |
-| lu-net-proxy-lb-forwarded-boundary | Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers | Service & Network | Networking & HTTP | 1 |
-| lu-net-streaming-body-cancellation | Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect | Service & Network | Networking & HTTP | 1 |
 | lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 |
 | lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 |
 | lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 |
@@ -51,16 +47,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-msg-producer-acks-durability | Reason what producer acknowledgement proves and remaining failure possibilities | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-msg-schema-evolution-contract-ownership | Evolve event with old producers/consumers/history still present | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-msg-workflow-saga-compensation | Model multi-step workflow where completed steps may need business compensation, not rollback | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
-| lu-api-circuit-bulkhead-rate-limit | Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary | Service & Network | API Contracts & Resilience | 1 |
-| lu-api-contract-resource-semantics | Model operation as explicit contract over resource/state, not controller-to-URL mapping | Service & Network | API Contracts & Resilience | 4 |
-| lu-api-deadlines-timeout-cancellation | Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion | Service & Network | API Contracts & Resilience | 3 |
-| lu-sec-abuse-bruteforce-resource-business-flow | Detect/limit legitimate-looking request abuse by identity/resource/business state | Service & Network | Security | 3 |
-| lu-sec-audit-detection-evidence | Produce audit evidence of who did what to which object and which security decision occurred | Service & Network | Security | 1 |
-| lu-sec-auth-session-token | Distinguish authentication/authorization and reason session/token validation, lifetime, revocation | Service & Network | Security | 3 |
-| lu-sec-browser-boundaries-cors-csrf-xss | Distinguish CORS, CSRF and XSS to apply correct browser boundary control | Service & Network | Security | 1 |
-| lu-sec-injection-ssrf-input-output | Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context | Service & Network | Security | 1 |
-| lu-sec-race-business-logic-abuse | Reproduce concurrent valid requests bypassing invariant and protect atomic owner | Service & Network | Security | 1 |
-| lu-sec-secrets-third-party-trust | Control secret lifecycle and verify third-party data/action before trusting it | Service & Network | Security | 1 |
 | lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable | Production Engineering | Observability & Performance | 2 |
 | lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence | Production Engineering | Observability & Performance | 4 |
 | lu-obs-load-test-benchmark-validity | Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim | Production Engineering | Observability & Performance | 1 |
@@ -113,6 +99,28 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-cache-evidence-transfer | Diagnose cache latency, staleness and origin-load symptoms | Data & Consistency | Cache Engineering | 1 |
 | lu-cache-source-of-truth-invalidation | Keep cached copies fresh across layers | Data & Consistency | Cache Engineering | 3 |
 | lu-cache-patterns | Choose cache pattern and prevent miss overload | Data & Consistency | Cache Engineering | 2 |
+| lu-net-connection-reuse-pooling | Giải thích connection establishment, lifetime và reuse boundary dưới TCP để không suy từ HTTP code sang network cause. + Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions. | Service & Network | Networking & HTTP | 2 |
+| lu-net-request-path-dns | Giải thích hostname được resolve thành address trước khi connection và dùng evidence để tách DNS latency/failure. | Service & Network | Networking & HTTP | 1 |
+| lu-net-proxy-tls-forwarded-boundary | Kiểm tra identity, trust chain và handshake trước khi coi HTTPS request đã tới HTTP application. + Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers. | Service & Network | Networking & HTTP | 2 |
+| lu-net-http-streaming-cancellation | Dùng method, status, header và body như contract giữa client/server, không như danh sách mã cần thuộc. + Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect. | Service & Network | Networking & HTTP | 2 |
+| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn. | Service & Network | Networking & HTTP | 1 |
+| lu-api-circuit-bulkhead-rate-limit | Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary. | Service & Network | API Contracts & Resilience | 1 |
+| lu-api-contract-resource-semantics | Model operation as explicit contract over resource/state, not controller-to-URL mapping. | Service & Network | API Contracts & Resilience | 1 |
+| lu-api-validation-errors-pagination | Design validation, error and pagination contract so client can recover predictably. | Service & Network | API Contracts & Resilience | 1 |
+| lu-api-request-identity-idempotency | Define stable logical operation identity so same retry does not repeat business effect. | Service & Network | API Contracts & Resilience | 1 |
+| lu-api-versioning-compatibility | Change API while old/new clients coexist without silent break. | Service & Network | API Contracts & Resilience | 1 |
+| lu-api-deadline-retry-policy | Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion. + Retry only failure/effect classes safe to retry, with bounded backoff and jitter. | Service & Network | API Contracts & Resilience | 2 |
+| lu-api-unknown-outcome-reconciliation | Recover ambiguous mutation by stating known/unknown, using stable identity and querying/reconciling authoritative state. | Service & Network | API Contracts & Resilience | 1 |
+| lu-sec-trust-boundary-threat-model | Draw trust boundaries/assets/actors/untrusted input before controls. | Service & Network | Security | 1 |
+| lu-sec-abuse-bruteforce-resource-business-flow | Detect/limit legitimate-looking request abuse by identity/resource/business state. | Service & Network | Security | 1 |
+| lu-sec-unseen-attack-transfer | Given unfamiliar abuse, identify boundary/asset, attack paths/evidence, protect true owner and assess bypass. | Service & Network | Security | 1 |
+| lu-sec-auth-session-oauth | Distinguish authentication/authorization and reason session/token validation, lifetime, revocation. + Explain backend boundary OAuth authorization vs OIDC identity without flow memorization. | Service & Network | Security | 2 |
+| lu-sec-authorization-object-tenant | Prove subject may act on this object/tenant using server-trusted ownership/policy. | Service & Network | Security | 1 |
+| lu-sec-browser-boundaries-cors-csrf-xss | Distinguish CORS, CSRF and XSS to apply correct browser boundary control. | Service & Network | Security | 1 |
+| lu-sec-injection-ssrf-input-output | Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context. | Service & Network | Security | 1 |
+| lu-sec-race-business-logic-abuse | Reproduce concurrent valid requests bypassing invariant and protect atomic owner. | Service & Network | Security | 1 |
+| lu-sec-secrets-third-party-trust | Control secret lifecycle and verify third-party data/action before trusting it. | Service & Network | Security | 1 |
+| lu-sec-audit-detection-evidence | Produce audit evidence of who did what to which object and which security decision occurred. | Service & Network | Security | 1 |
 
 ## lu-index-query-shape
 
@@ -1305,60 +1313,187 @@ Publish an immutable snapshot instead of mutable fields and identify remaining o
 
 - `concurrency-interleavings-invariants` remains separate pending its own mechanism/evidence boundary.
 
+
+
+
+
 ## lu-net-connection-reuse-pooling
 
 ### Identity
 
 - **Unit ID:** lu-net-connection-reuse-pooling
-- **Working title:** Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions
+- **Working title:** Giải thích connection establishment, lifetime và reuse boundary dưới TCP để không suy từ HTTP code sang network cause. + Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| net-connection-reuse-pooling | Networking & HTTP | L3 |
 | net-tcp-connection-semantics | Networking & HTTP | L2 |
+| net-connection-reuse-pooling | Networking & HTTP | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions.
+Partner lowers idle timeout; traffic spike produces resets and pool queues. Decide TCP versus pool cause before changing retries.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Mỗi connection có handshake/socket/port cost; pool giữ connection usable theo lifetime/limit, nhưng network peer có thể đóng connection ngoài kiến thức client. → TCP connection được establish rồi giữ state đến close/reset; HTTP request có thể reuse connection nhưng peer/network có thể refuse/reset hoặc capacity cạn trước HTTP.
+TCP connection được establish rồi giữ state đến close/reset; HTTP request có thể reuse connection nhưng peer/network có thể refuse/reset hoặc capacity cạn trước HTTP. → Mỗi connection có handshake/socket/port cost; pool giữ connection usable theo lifetime/limit, nhưng network peer có thể đóng connection ngoài kiến thức client.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.; Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count.
+Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count.; Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.; Connection refused; reset; handshake timeout; connection exhaustion.
+Connection refused; reset; handshake timeout; connection exhaustion.; Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use connect/reset/socket state plus pool queue, port usage and idle age to classify the boundary; set a safe lifetime/limit and reject new-client-per-request. The evidence table below must attribute every Primary capability once.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Từ local same-host call sang remote availability zone with NAT/proxy.; Từ one outbound dependency sang nhiều replicas cùng mở connection tới một partner.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `net-connection-reuse-pooling`, `net-tcp-connection-semantics` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as one causal mechanism/evidence boundary.
 
-### Explicit exclusions
+## lu-net-request-path-dns
 
-- `os-files-handles-sockets-ipc` remains separate pending its own mechanism/evidence boundary.
-- `net-tls-trust-handshake` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-net-request-path-dns
+- **Working title:** Giải thích hostname được resolve thành address trước khi connection và dùng evidence để tách DNS latency/failure.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| net-request-path-dns | Networking & HTTP | L2 |
+
+### Canonical scenario
+
+Hostname fails after failover while direct IP works. Locate resolution/cache/address selection, not HTTP.
+
+### Integrated mechanism / state trace
+
+DNS maps hostname to record/address with cache/TTL; connection chỉ bắt đầu sau khi client có usable destination.
+
+### Integrated evidence surface
+
+Resolution result; resolver timing; TTL/cache state; address attempted; DNS error code.
+
+### Failure and debug loop
+
+NXDOMAIN/misconfigured record; slow resolver; stale cached address; IPv6/IPv4 mismatch.
+
+### Shared assessment task
+
+Use resolver timing, TTL, cached/returned addresses and error code to identify the failed DNS step; reject an HTTP retry as evidence-free.
+
+### Transfer variation
+
+Từ localhost/static host sang service discovery hoặc cloud DNS failover.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
+
+## lu-net-proxy-tls-forwarded-boundary
+
+### Identity
+
+- **Unit ID:** lu-net-proxy-tls-forwarded-boundary
+- **Working title:** Kiểm tra identity, trust chain và handshake trước khi coi HTTPS request đã tới HTTP application. + Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| net-tls-trust-handshake | Networking & HTTP | L2 |
+| net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 |
+
+### Canonical scenario
+
+Ingress causes redirect loop and rate-limits its own address. Verify TLS termination and trusted forwarded headers.
+
+### Integrated mechanism / state trace
+
+TLS handshake xác thực certificate/name/validity và thương lượng protected channel; HTTP starts only after this boundary succeeds. → App chỉ nên tin forwarded metadata khi request đến từ known proxy/LB đã strip/append đúng; client bên ngoài có thể tự gửi header giả.
+
+### Integrated evidence surface
+
+Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.; Proxy config; remote IP; raw forwarded headers; trusted-network list; app/proxy access logs.
+
+### Failure and debug loop
+
+Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.; Blind trust forwarded headers; spoofed client IP/scheme; redirect loop; auth/rate-limit dùng sai identity.
+
+### Shared assessment task
+
+Use certificate/handshake output, peer IP, raw headers, proxy config and logs to identify the trusted proxy set and safe scheme/client identity. The evidence table below must attribute every Primary capability once.
+
+### Transfer variation
+
+Từ direct service certificate sang TLS termination at proxy with upstream trust split.; Từ local reverse proxy sang cloud load balancer và multi-hop ingress.
+
+### Boundary decision
+
+KEEP as one causal mechanism/evidence boundary.
+
+## lu-net-http-streaming-cancellation
+
+### Identity
+
+- **Unit ID:** lu-net-http-streaming-cancellation
+- **Working title:** Dùng method, status, header và body như contract giữa client/server, không như danh sách mã cần thuộc. + Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| net-http-semantics | Networking & HTTP | L2 |
+| net-streaming-body-cancellation | Networking & HTTP | L3 |
+
+### Canonical scenario
+
+Client disconnects during large upload while API buffers body and continues export. Preserve contract and stop work.
+
+### Integrated mechanism / state trace
+
+Method nêu intent; status nêu kết quả ở boundary; headers điều khiển metadata/caching/auth/content negotiation; body mang representation có lifecycle riêng. → Request/response body là stream; consumer đọc dần và must observe cancellation, còn buffering materializes toàn bộ payload và kéo dài memory/lifetime.
+
+### Integrated evidence surface
+
+Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection.; Bytes in/out; cancellation/request-aborted trace; memory allocation; stream read/write duration; completion status.
+
+### Failure and debug loop
+
+GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng.; Buffer entire payload; continue expensive work after disconnect; partial upload treated complete; response stream disposed too early.
+
+### Shared assessment task
+
+Use request/status capture, bytes, abort trace, allocation and downstream trace to choose streaming/cancellation; distinguish partial input from success. The evidence table below must attribute every Primary capability once.
+
+### Transfer variation
+
+Từ internal API sang public endpoint có cache/proxy/client khác version.; Từ file upload local sang proxy streaming to a remote service with client disconnect.
+
+### Boundary decision
+
+KEEP as one causal mechanism/evidence boundary.
 
 ## lu-net-failure-localization-unknown-outcome
 
 ### Identity
 
 - **Unit ID:** lu-net-failure-localization-unknown-outcome
-- **Working title:** Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn
+- **Working title:** Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -1366,142 +1501,34 @@ Merged because `net-connection-reuse-pooling`, `net-tcp-connection-semantics` sh
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | net-failure-localization-unknown-outcome | Networking & HTTP | L4 |
-| net-request-path-dns | Networking & HTTP | L2 |
-| net-tls-trust-handshake | Networking & HTTP | L2 |
-| net-http-semantics | Networking & HTTP | L2 |
 
-### Shared problem / need
+### Canonical scenario
 
-Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn.
+Payment request times out after it may have crossed the network boundary. State what is known before retry.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Request path qua nhiều layer; timeout sau write không chứng minh server chưa tạo side effect, nên retry cần status query/idempotency contract chứ không chỉ exception type. → DNS maps hostname to record/address with cache/TTL; connection chỉ bắt đầu sau khi client có usable destination. → TLS handshake xác thực certificate/name/validity và thương lượng protected channel; HTTP starts only after this boundary succeeds. → Method nêu intent; status nêu kết quả ở boundary; headers điều khiển metadata/caching/auth/content negotiation; body mang representation có lifecycle riêng.
+Request path qua nhiều layer; timeout sau write không chứng minh server chưa tạo side effect, nên retry cần status query/idempotency contract chứ không chỉ exception type.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-DNS result/timing; socket/TLS error; HTTP status/header; client/server/proxy trace; operation ID and audit state.; Resolution result; resolver timing; TTL/cache state; address attempted; DNS error code.; Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.; Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection.
+DNS result/timing; socket/TLS error; HTTP status/header; client/server/proxy trace; operation ID and audit state.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Retry duplicate after unknown outcome; gán TLS lỗi thành HTTP 500; treat DNS failure as server rejection; mất correlation qua proxy.; NXDOMAIN/misconfigured record; slow resolver; stale cached address; IPv6/IPv4 mismatch.; Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.; GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng.
+Retry duplicate after unknown outcome; gán TLS lỗi thành HTTP 500; treat DNS failure as server rejection; mất correlation qua proxy.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use DNS/connect/TLS/HTTP timestamps and server/audit traces to localize the last proven boundary and choose query/reconciliation.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Từ local function failure sang remote service call qua proxy/LB và async callback.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `net-failure-localization-unknown-outcome`, `net-request-path-dns`, `net-tls-trust-handshake`, `net-http-semantics` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `net-tcp-connection-semantics` remains separate pending its own mechanism/evidence boundary.
-- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
-
-## lu-net-proxy-lb-forwarded-boundary
-
-### Identity
-
-- **Unit ID:** lu-net-proxy-lb-forwarded-boundary
-- **Working title:** Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 |
-
-### Shared problem / need
-
-Xác định trust boundary client → proxy/LB → application, đặc biệt với forwarded headers.
-
-### Shared mechanism / state trace
-
-App chỉ nên tin forwarded metadata khi request đến từ known proxy/LB đã strip/append đúng; client bên ngoài có thể tự gửi header giả.
-
-### Shared observable evidence
-
-Proxy config; remote IP; raw forwarded headers; trusted-network list; app/proxy access logs.
-
-### Shared failure / debug story
-
-Blind trust forwarded headers; spoofed client IP/scheme; redirect loop; auth/rate-limit dùng sai identity.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| net-http-semantics | Frozen graph neighborhood with net-proxy-lb-forwarded-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| net-tls-trust-handshake | Frozen graph neighborhood with net-proxy-lb-forwarded-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
-- `net-tls-trust-handshake` remains separate pending its own mechanism/evidence boundary.
-
-## lu-net-streaming-body-cancellation
-
-### Identity
-
-- **Unit ID:** lu-net-streaming-body-cancellation
-- **Working title:** Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect
-- **Learner-facing domain candidate:** Service & Network
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| net-streaming-body-cancellation | Networking & HTTP | L3 |
-
-### Shared problem / need
-
-Quản lý body lifetime và cancellation khi dữ liệu đang transfer để không buffer vô ích hoặc tiếp tục work sau disconnect.
-
-### Shared mechanism / state trace
-
-Request/response body là stream; consumer đọc dần và must observe cancellation, còn buffering materializes toàn bộ payload và kéo dài memory/lifetime.
-
-### Shared observable evidence
-
-Bytes in/out; cancellation/request-aborted trace; memory allocation; stream read/write duration; completion status.
-
-### Shared failure / debug story
-
-Buffer entire payload; continue expensive work after disconnect; partial upload treated complete; response stream disposed too early.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| net-http-semantics | Frozen graph neighborhood with net-streaming-body-cancellation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| concurrency-cancellation-lifetime | Frozen graph neighborhood with net-streaming-body-cancellation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
-- `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-db-backup-restore
 
@@ -3108,7 +3135,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 ### Identity
 
 - **Unit ID:** lu-api-circuit-bulkhead-rate-limit
-- **Working title:** Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary
+- **Working title:** Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3117,48 +3144,40 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 |---|---|---|
 | api-circuit-bulkhead-rate-limit | API Contracts & Resilience | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Chọn circuit, bulkhead hoặc rate limit theo dependency/resource/identity boundary.
+Slow partner and one tenant burst grow queues. Choose control by protected boundary, not all controls.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
 Circuit tạm tránh dependency failing; bulkhead caps concurrent blast radius; rate limit controls admission by quota/identity.
 
-### Shared observable evidence
+### Integrated evidence surface
 
 Circuit state/reason; queue/concurrency; admitted/rejected rate; tenant identity; dependency latency/errors; probe result.
 
-### Shared failure / debug story
+### Failure and debug loop
 
 Circuit opens on caller error; tenant exhausts shared concurrency; global limit punishes other tenant; unbounded bulkhead queue.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use dependency state, queue/concurrency, tenant admission and probe evidence to assign circuit, bulkhead or rate limit and define safe degradation.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+One dependency → multiple tenants/dependencies with isolated budgets.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| concurrency-bounded-backpressure | Frozen graph neighborhood with api-circuit-bulkhead-rate-limit | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partial-failure-uncertainty | Frozen graph neighborhood with api-circuit-bulkhead-rate-limit | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
-- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-api-contract-resource-semantics
 
 ### Identity
 
 - **Unit ID:** lu-api-contract-resource-semantics
-- **Working title:** Model operation as explicit contract over resource/state, not controller-to-URL mapping
+- **Working title:** Model operation as explicit contract over resource/state, not controller-to-URL mapping.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3166,49 +3185,167 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | api-contract-resource-semantics | API Contracts & Resilience | L2 |
-| api-validation-errors-pagination | API Contracts & Resilience | L2 |
-| api-versioning-compatibility | API Contracts & Resilience | L3 |
-| api-request-identity-idempotency | API Contracts & Resilience | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Model operation as explicit contract over resource/state, not controller-to-URL mapping.
+Client cannot tell whether an order was created, accepted later or rejected. Make a stable state contract.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Request expresses intent/input; server evaluates state/invariant; response conveys accepted/completed/rejected stable semantics. → Validation blocks unsafe transition; error contract separates classes; pagination defines traversal of changing collection. → Compatibility includes syntax and meaning; additive change/version/migration supports independent deploy. → Key/fingerprint/outcome record separates same-operation retry from a new similar request.
+Request expresses intent/input; server evaluates state/invariant; response conveys accepted/completed/rejected stable semantics.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Request/response examples; OpenAPI; persisted before/after; contract tests.; Contract tests; ProblemDetails payload; cursor/offset; query/order; boundary tests.; Contract/OpenAPI diff; consumer tests; version telemetry; old requests.; Idempotency key; fingerprint; operation record; business row; stored response; retry test.
+Request/response examples; OpenAPI; persisted before/after; contract tests.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Endpoint hides state transition; GET-like side effect; ambiguous update; caller cannot distinguish accepted/completed/rejected.; Invalid input mapped 500; exception leaks; offset skips/duplicates; unbounded page; field failure unclear.; Required field removed; meaning changes; enum breaks client; assume simultaneous upgrade; rollback incompatible.; Random retry key; same key different payload; crash after effect before record; dedup expiry too short; HTTP method assumed safe.
+Endpoint hides state transition; GET-like side effect; ambiguous update; caller cannot distinguish accepted/completed/rejected.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use request/response, before/after state and contract tests to define method/status/representation; reject controller-shaped URL semantics.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Internal CRUD endpoint → business operation consumed by independent clients.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `api-contract-resource-semantics`, `api-validation-errors-pagination`, `api-versioning-compatibility`, `api-request-identity-idempotency` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
-### Explicit exclusions
-
-- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
-- `sec-authorization-object-tenant` remains separate pending its own mechanism/evidence boundary.
-
-## lu-api-deadlines-timeout-cancellation
+## lu-api-validation-errors-pagination
 
 ### Identity
 
-- **Unit ID:** lu-api-deadlines-timeout-cancellation
-- **Working title:** Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion
+- **Unit ID:** lu-api-validation-errors-pagination
+- **Working title:** Design validation, error and pagination contract so client can recover predictably.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| api-validation-errors-pagination | API Contracts & Resilience | L2 |
+
+### Canonical scenario
+
+Invalid creates expose ad-hoc strings while list pages shift. Define recoverable validation and traversal.
+
+### Integrated mechanism / state trace
+
+Validation blocks unsafe transition; error contract separates classes; pagination defines traversal of changing collection.
+
+### Integrated evidence surface
+
+Contract tests; ProblemDetails payload; cursor/offset; query/order; boundary tests.
+
+### Failure and debug loop
+
+Invalid input mapped 500; exception leaks; offset skips/duplicates; unbounded page; field failure unclear.
+
+### Shared assessment task
+
+Use invalid payloads, ProblemDetails, ordering/query data and boundary tests to choose error fields and cursor/offset behavior.
+
+### Transfer variation
+
+Small list → large mutable independent-client dataset.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
+
+## lu-api-request-identity-idempotency
+
+### Identity
+
+- **Unit ID:** lu-api-request-identity-idempotency
+- **Working title:** Define stable logical operation identity so same retry does not repeat business effect.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| api-request-identity-idempotency | API Contracts & Resilience | L3 |
+
+### Canonical scenario
+
+Mobile retries create after response loss. Bind one key to one fingerprint and outcome.
+
+### Integrated mechanism / state trace
+
+Key/fingerprint/outcome record separates same-operation retry from a new similar request.
+
+### Integrated evidence surface
+
+Idempotency key; fingerprint; operation record; business row; stored response; retry test.
+
+### Failure and debug loop
+
+Random retry key; same key different payload; crash after effect before record; dedup expiry too short; HTTP method assumed safe.
+
+### Shared assessment task
+
+Use duplicate traces, stored key/fingerprint/outcome and concurrent claims to specify replay, conflict and pending behavior.
+
+### Transfer variation
+
+Create order retry → payment response lost.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
+
+## lu-api-versioning-compatibility
+
+### Identity
+
+- **Unit ID:** lu-api-versioning-compatibility
+- **Working title:** Change API while old/new clients coexist without silent break.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| api-versioning-compatibility | API Contracts & Resilience | L3 |
+
+### Canonical scenario
+
+Partner sends old payload after a field changes meaning. Choose compatibility, mapping or version/migration.
+
+### Integrated mechanism / state trace
+
+Compatibility includes syntax and meaning; additive change/version/migration supports independent deploy.
+
+### Integrated evidence surface
+
+Contract/OpenAPI diff; consumer tests; version telemetry; old requests.
+
+### Failure and debug loop
+
+Required field removed; meaning changes; enum breaks client; assume simultaneous upgrade; rollback incompatible.
+
+### Shared assessment task
+
+Use contract diff, consumer tests, old requests and telemetry to classify the change and set rollout/rollback conditions.
+
+### Transfer variation
+
+One frontend deploy → public/mobile/partner clients.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
+
+## lu-api-deadline-retry-policy
+
+### Identity
+
+- **Unit ID:** lu-api-deadline-retry-policy
+- **Working title:** Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion. + Retry only failure/effect classes safe to retry, with bounded backoff and jitter.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3217,47 +3354,125 @@ Merged because `api-contract-resource-semantics`, `api-validation-errors-paginat
 |---|---|---|
 | api-deadlines-timeout-cancellation | API Contracts & Resilience | L3 |
 | api-retry-backoff-jitter | API Contracts & Resilience | L3 |
-| api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 |
 
-### Shared problem / need
+### Canonical scenario
 
-Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion.
+800 ms budget crosses three services and a reset invites retry. Spend one budget and bound retries.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Remaining deadline is split across hops; cancellation signals no useful caller lifetime but does not prove remote side effect absent. → Retry creates another attempt; backoff spaces it; jitter prevents synchronized retry wave. → Transport failure and business completion are separate; API needs status/outcome mechanism.
+Remaining deadline is split across hops; cancellation signals no useful caller lifetime but does not prove remote side effect absent. → Retry creates another attempt; backoff spaces it; jitter prevents synchronized retry wave.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Request deadline; CancellationToken trace; span durations; downstream timeout; active work after disconnect; audit state.; Attempt count; error class; timing; downstream rate; operation ID; remaining deadline.; Operation ID; business/audit record; provider status; attempts; idempotency outcome; reconciliation result.
+Request deadline; CancellationToken trace; span durations; downstream timeout; active work after disconnect; audit state.; Attempt count; error class; timing; downstream rate; operation ID; remaining deadline.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Every hop full timeout; child outlives request; token not forwarded; timeout treated as no remote effect.; Retry non-idempotent mutation; nested retries multiply; immediate storm; retry auth/validation; budget exceeds deadline.; Timeout called failed though committed; blind duplicate retry; status uses other ID; cache trusted as authority; contradictory status.
+Every hop full timeout; child outlives request; token not forwarded; timeout treated as no remote effect.; Retry non-idempotent mutation; nested retries multiply; immediate storm; retry auth/validation; budget exceeds deadline.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use propagated deadline, spans, attempt timeline, error class and downstream rate to calculate remaining budget and set retry/backoff/jitter. The evidence table below must attribute every Primary capability once.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+One downstream call → three-service deadline chain.; One reset → thousands clients hitting degraded dependency.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `api-deadlines-timeout-cancellation`, `api-retry-backoff-jitter`, `api-unknown-outcome-reconciliation` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as one causal mechanism/evidence boundary.
 
-### Explicit exclusions
+## lu-api-unknown-outcome-reconciliation
 
-- `concurrency-cancellation-lifetime` remains separate pending its own mechanism/evidence boundary.
-- `dist-rpc-unknown-completion` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-api-unknown-outcome-reconciliation
+- **Working title:** Recover ambiguous mutation by stating known/unknown, using stable identity and querying/reconciling authoritative state.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 |
+
+### Canonical scenario
+
+Provider transfer times out after possible creation. Recover from authoritative state, not duplicate request.
+
+### Integrated mechanism / state trace
+
+Transport failure and business completion are separate; API needs status/outcome mechanism.
+
+### Integrated evidence surface
+
+Operation ID; business/audit record; provider status; attempts; idempotency outcome; reconciliation result.
+
+### Failure and debug loop
+
+Timeout called failed though committed; blind duplicate retry; status uses other ID; cache trusted as authority; contradictory status.
+
+### Shared assessment task
+
+Use operation ID, provider status, local audit and attempts to define reconciliation and terminal states.
+
+### Transfer variation
+
+Fast internal order write → slow external provider operation.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
+
+## lu-sec-trust-boundary-threat-model
+
+### Identity
+
+- **Unit ID:** lu-sec-trust-boundary-threat-model
+- **Working title:** Draw trust boundaries/assets/actors/untrusted input before controls.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| sec-trust-boundary-threat-model | Security | L2 |
+
+### Canonical scenario
+
+Webhook reaches worker able to mutate tenant data. Draw actors/assets/boundaries before controls.
+
+### Integrated mechanism / state trace
+
+Less-trusted data/identity crossing into trusted decision requires authz/validation/constraint proportional to risk.
+
+### Integrated evidence surface
+
+Data-flow diagram; identity/source; asset/operation; boundary notes; abuse cases.
+
+### Failure and debug loop
+
+Internal network assumed trusted; callback authoritative; tenant ID ownership proof; hidden admin endpoint missed.
+
+### Shared assessment task
+
+Use data-flow and payload to mark untrusted crossings and select the first server-side control for each path.
+
+### Transfer variation
+
+Public API → API + worker + webhook callback.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-sec-abuse-bruteforce-resource-business-flow
 
 ### Identity
 
 - **Unit ID:** lu-sec-abuse-bruteforce-resource-business-flow
-- **Working title:** Detect/limit legitimate-looking request abuse by identity/resource/business state
+- **Working title:** Detect/limit legitimate-looking request abuse by identity/resource/business state.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3265,98 +3480,83 @@ Merged because `api-deadlines-timeout-cancellation`, `api-retry-backoff-jitter`,
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-abuse-bruteforce-resource-business-flow | Security | L3 |
-| sec-trust-boundary-threat-model | Security | L2 |
-| sec-unseen-attack-transfer | Security | L4 |
 
-### Shared problem / need
+### Canonical scenario
 
-Detect/limit legitimate-looking request abuse by identity/resource/business state.
+Valid accounts repeatedly trigger expensive export. Limit abuse at the cost-owning dimension.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Valid endpoints/credentials can still be abused; budgets/signals need account/device/IP/resource/operation dimensions. → Less-trusted data/identity crossing into trusted decision requires authz/validation/constraint proportional to risk. → Authentication, authorization, input trust, resource abuse, race and audit compose through attacker capability and state transition.
+Valid endpoints/credentials can still be abused; budgets/signals need account/device/IP/resource/operation dimensions.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Attempt rate; account/device/IP/session; success ratio; resource cost; operation history; limit decision.; Data-flow diagram; identity/source; asset/operation; boundary notes; abuse cases.; Request/audit timeline; auth decision; state transition; resource usage; exploit/regression test.
+Attempt rate; account/device/IP/session; success ratio; resource cost; operation history; limit decision.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Credential stuffing; OTP abuse; expensive export; scalping; IP-only limit bypass.; Internal network assumed trusted; callback authoritative; tenant ID ownership proof; hidden admin endpoint missed.; Patch one payload; UI-only control; symptom block leaves path; fix breaks legitimate tenant flow.
+Credential stuffing; OTP abuse; expensive export; scalping; IP-only limit bypass.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use account/device/IP/resource history, cost and limit decisions to choose budget key and response; reject IP-only protection.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Login brute force → authenticated costly business operation.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `sec-abuse-bruteforce-resource-business-flow`, `sec-trust-boundary-threat-model`, `sec-unseen-attack-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
-### Explicit exclusions
-
-- `api-circuit-bulkhead-rate-limit` remains separate pending its own mechanism/evidence boundary.
-- `sec-auth-session-token` remains separate pending its own mechanism/evidence boundary.
-
-## lu-sec-audit-detection-evidence
+## lu-sec-unseen-attack-transfer
 
 ### Identity
 
-- **Unit ID:** lu-sec-audit-detection-evidence
-- **Working title:** Produce audit evidence of who did what to which object and which security decision occurred
+- **Unit ID:** lu-sec-unseen-attack-transfer
+- **Working title:** Given unfamiliar abuse, identify boundary/asset, attack paths/evidence, protect true owner and assess bypass.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
 
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| sec-audit-detection-evidence | Security | L3 |
+| sec-unseen-attack-transfer | Security | L4 |
 
-### Shared problem / need
+### Canonical scenario
 
-Produce audit evidence of who did what to which object and which security decision occurred.
+Unfamiliar incident combines valid session, object IDs and parallel requests. Derive path and durable fix.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Audit records subject/action/target/outcome/correlation at trust/business boundary; detection derives signal from it.
+Authentication, authorization, input trust, resource abuse, race and audit compose through attacker capability and state transition.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Subject/action/object/tenant; decision/reason; operation ID; timestamp/source; controlled destination.
+Request/audit timeline; auth decision; state transition; resource usage; exploit/regression test.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Success/deny indistinguishable; no tenant target; token logged; audit mutable; noise hides sensitive action.
+Patch one payload; UI-only control; symptom block leaves path; fix breaks legitimate tenant flow.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use timeline, authorization/state/resource evidence and regression test to identify violated owner and a bypass-resistant fix.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Known IDOR/race/SSRF → unlabeled production incident.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-audit-detection-evidence | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| obs-logs-structured-correlation | Frozen graph neighborhood with sec-audit-detection-evidence | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
-### Explicit exclusions
-
-- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
-- `obs-logs-structured-correlation` remains separate pending its own mechanism/evidence boundary.
-
-## lu-sec-auth-session-token
+## lu-sec-auth-session-oauth
 
 ### Identity
 
-- **Unit ID:** lu-sec-auth-session-token
-- **Working title:** Distinguish authentication/authorization and reason session/token validation, lifetime, revocation
+- **Unit ID:** lu-sec-auth-session-oauth
+- **Working title:** Distinguish authentication/authorization and reason session/token validation, lifetime, revocation. + Explain backend boundary OAuth authorization vs OIDC identity without flow memorization.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3364,48 +3564,84 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 | Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
 | sec-auth-session-token | Security | L3 |
-| sec-authorization-object-tenant | Security | L3 |
 | sec-oauth-oidc-awareness | Security | L2 |
 
-### Shared problem / need
+### Canonical scenario
 
-Distinguish authentication/authorization and reason session/token validation, lifetime, revocation.
+External IdP ID token is sent to resource API. Validate claims and distinguish identity from delegated access.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
-Credential/session/token establishes identity only after issuer/signature/audience/lifetime/state checks as applicable. → Authorization evaluates subject + action + resource tenant/owner + policy, not just login. → OAuth delegates access to resource; OIDC adds identity info; client/resource/auth server roles differ.
+Credential/session/token establishes identity only after issuer/signature/audience/lifetime/state checks as applicable. → OAuth delegates access to resource; OIDC adds identity info; client/resource/auth server roles differ.
 
-### Shared observable evidence
+### Integrated evidence surface
 
-Token/session metadata; issuer/audience/expiry; auth logs; revocation store; claims.; Subject; policy decision; authoritative owner/tenant; negative tests; audit event.; Token type; issuer; audience; scope; client/resource IDs; AS metadata.
+Token/session metadata; issuer/audience/expiry; auth logs; revocation store; claims.; Token type; issuer; audience; scope; client/resource IDs; AS metadata.
 
-### Shared failure / debug story
+### Failure and debug loop
 
-Expired accepted; wrong issuer/audience; fixation/reuse; logout assumed instant stateless revoke; token exposure.; BOLA/IDOR; tenant request value trusted; admin UI-only guard; filter after data exposed.; ID token used API token; wrong audience; code/token exposed; OAuth assumed arbitrary attribute proof.
+Expired accepted; wrong issuer/audience; fixation/reuse; logout assumed instant stateless revoke; token exposure.; ID token used API token; wrong audience; code/token exposed; OAuth assumed arbitrary attribute proof.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
+Use issuer/audience/scope, token type, AS metadata and auth logs to decide whether the API request is authenticated and authorized. The evidence table below must attribute every Primary capability once.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Server session → signed bearer token across services.; First-party SPA/API → external IdP or machine-to-machine API.
 
-### Merge decisions
+### Boundary decision
 
-Merged because `sec-auth-session-token`, `sec-authorization-object-tenant`, `sec-oauth-oidc-awareness` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
+KEEP as one causal mechanism/evidence boundary.
 
-### Explicit exclusions
+## lu-sec-authorization-object-tenant
 
-- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
-- `api-contract-resource-semantics` remains separate pending its own mechanism/evidence boundary.
+### Identity
+
+- **Unit ID:** lu-sec-authorization-object-tenant
+- **Working title:** Prove subject may act on this object/tenant using server-trusted ownership/policy.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| sec-authorization-object-tenant | Security | L3 |
+
+### Canonical scenario
+
+Support user changes another tenant order by ID. Enforce object/tenant policy at server boundary.
+
+### Integrated mechanism / state trace
+
+Authorization evaluates subject + action + resource tenant/owner + policy, not just login.
+
+### Integrated evidence surface
+
+Subject; policy decision; authoritative owner/tenant; negative tests; audit event.
+
+### Failure and debug loop
+
+BOLA/IDOR; tenant request value trusted; admin UI-only guard; filter after data exposed.
+
+### Shared assessment task
+
+Use subject, authoritative owner, policy result, negative test and audit event; reject client tenant or UI check.
+
+### Transfer variation
+
+User account → operator subset across tenant roles.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-sec-browser-boundaries-cors-csrf-xss
 
 ### Identity
 
 - **Unit ID:** lu-sec-browser-boundaries-cors-csrf-xss
-- **Working title:** Distinguish CORS, CSRF and XSS to apply correct browser boundary control
+- **Working title:** Distinguish CORS, CSRF and XSS to apply correct browser boundary control.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3414,48 +3650,40 @@ Merged because `sec-auth-session-token`, `sec-authorization-object-tenant`, `sec
 |---|---|---|
 | sec-browser-boundaries-cors-csrf-xss | Security | L2 |
 
-### Shared problem / need
+### Canonical scenario
 
-Distinguish CORS, CSRF and XSS to apply correct browser boundary control.
+Cookie app adds permissive CORS. Distinguish cross-origin reads, CSRF and XSS.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
 CORS controls browser cross-origin access; CSRF abuses ambient credentials; XSS executes attacker script in trusted origin.
 
-### Shared observable evidence
+### Integrated evidence surface
 
 Origin; CORS headers; cookie attributes; CSRF token; output context; browser test.
 
-### Shared failure / debug story
+### Failure and debug loop
 
 CORS assumed CSRF defense; wildcard credentials; cookie mutation no CSRF; unsafe content rendered HTML.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use origin, CORS headers, cookies, CSRF token and output context to choose each control; reject CORS as CSRF defense.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Cookie app → bearer-token SPA/API.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-browser-boundaries-cors-csrf-xss | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| net-http-semantics | Frozen graph neighborhood with sec-browser-boundaries-cors-csrf-xss | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
-- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-sec-injection-ssrf-input-output
 
 ### Identity
 
 - **Unit ID:** lu-sec-injection-ssrf-input-output
-- **Working title:** Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context
+- **Working title:** Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3464,48 +3692,40 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 |---|---|---|
 | sec-injection-ssrf-input-output | Security | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Trace untrusted data into query/network/output sink and stop it controlling syntax/destination/context.
+User supplies report filter and image URL. Stop input controlling query syntax, destination or output context.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
 Injection changes command syntax; SSRF lets attacker choose server destination; typed binding/allow-list separates data/control.
 
-### Shared observable evidence
+### Integrated evidence surface
 
 Constructed query; parameter binding; destination policy; DNS/IP resolution; test payload; egress logs.
 
-### Shared failure / debug story
+### Failure and debug loop
 
 Concatenated SQL; NoSQL operator injection; metadata/internal fetch; shell composition; wrong-context encoding.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use query construction, DNS/egress logs and hostile payloads to choose binding, allow-list and encoding.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+SQL parameterization → dynamic filter → server-side URL fetch.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-injection-ssrf-input-output | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| net-request-path-dns | Frozen graph neighborhood with sec-injection-ssrf-input-output | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
-- `net-request-path-dns` remains separate pending its own mechanism/evidence boundary.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-sec-race-business-logic-abuse
 
 ### Identity
 
 - **Unit ID:** lu-sec-race-business-logic-abuse
-- **Working title:** Reproduce concurrent valid requests bypassing invariant and protect atomic owner
+- **Working title:** Reproduce concurrent valid requests bypassing invariant and protect atomic owner.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3514,48 +3734,40 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 |---|---|---|
 | sec-race-business-logic-abuse | Security | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Reproduce concurrent valid requests bypassing invariant and protect atomic owner.
+Two coupon redeems pass pre-check together. Protect atomic state owner and prove no duplicate effect.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
 Attacker widens race window; pre-transition authorization/validation cannot protect non-atomic state change.
 
-### Shared observable evidence
+### Integrated evidence surface
 
 Parallel timeline; operation IDs; before/after state; DB constraint/conditional result; audit sequence.
 
-### Shared failure / debug story
+### Failure and debug loop
 
 Coupon redeemed twice; concurrent spend; duplicate reservation; limit check before insert.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use concurrent timeline, state, conditional result and audit sequence to select guard and regression test.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Accidental race → intentional exploit.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| concurrency-races-check-then-act | Frozen graph neighborhood with sec-race-business-logic-abuse | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| sec-unseen-attack-transfer | Frozen graph neighborhood with sec-race-business-logic-abuse | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `concurrency-races-check-then-act` remains separate pending its own mechanism/evidence boundary.
-- `sec-unseen-attack-transfer` remains separate pending its own mechanism/evidence boundary.
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-sec-secrets-third-party-trust
 
 ### Identity
 
 - **Unit ID:** lu-sec-secrets-third-party-trust
-- **Working title:** Control secret lifecycle and verify third-party data/action before trusting it
+- **Working title:** Control secret lifecycle and verify third-party data/action before trusting it.
 - **Learner-facing domain candidate:** Service & Network
 
 ### Primary capabilities
@@ -3564,41 +3776,75 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 |---|---|---|
 | sec-secrets-third-party-trust | Security | L3 |
 
-### Shared problem / need
+### Canonical scenario
 
-Control secret lifecycle and verify third-party data/action before trusting it.
+Signed webhook is replayed during key rotation. Verify authority while keeping legitimate deliveries.
 
-### Shared mechanism / state trace
+### Integrated mechanism / state trace
 
 Secrets grant authority; callbacks cross boundary and need identity/integrity/schema/business validation.
 
-### Shared observable evidence
+### Integrated evidence surface
 
 Secret rotation/scope/audit; signature/timestamp; provider request/response; replay record.
 
-### Shared failure / debug story
+### Failure and debug loop
 
 Secret repo/log; shared long-lived credential; unverified webhook/replay; upstream field trusted; rotation breaks fleet.
 
-### Assessment-coherence argument
+### Shared assessment task
 
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
+Use rotation/scope audit, signature/timestamp and delivery record to define verification and overlap.
 
 ### Transfer variation
 
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
+Static API key → workload identity/signed webhook.
 
-### Merge decisions
+### Boundary decision
 
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
+
+## lu-sec-audit-detection-evidence
+
+### Identity
+
+- **Unit ID:** lu-sec-audit-detection-evidence
+- **Working title:** Produce audit evidence of who did what to which object and which security decision occurred.
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
 |---|---|---|
-| sec-trust-boundary-threat-model | Frozen graph neighborhood with sec-secrets-third-party-trust | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| sec-unseen-attack-transfer | Frozen graph neighborhood with sec-secrets-third-party-trust | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
+| sec-audit-detection-evidence | Security | L3 |
 
-### Explicit exclusions
+### Canonical scenario
 
-- `sec-trust-boundary-threat-model` remains separate pending its own mechanism/evidence boundary.
-- `sec-unseen-attack-transfer` remains separate pending its own mechanism/evidence boundary.
+Support investigates privileged export without token logging. Create accountable protected audit evidence.
+
+### Integrated mechanism / state trace
+
+Audit records subject/action/target/outcome/correlation at trust/business boundary; detection derives signal from it.
+
+### Integrated evidence surface
+
+Subject/action/object/tenant; decision/reason; operation ID; timestamp/source; controlled destination.
+
+### Failure and debug loop
+
+Success/deny indistinguishable; no tenant target; token logged; audit mutable; noise hides sensitive action.
+
+### Shared assessment task
+
+Use audit schema, request context and detection query to select subject/action/object/tenant/outcome/reason/correlation fields.
+
+### Transfer variation
+
+Login audit → privileged export or tenant-admin change.
+
+### Boundary decision
+
+KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
 ## lu-obs-cardinality-sampling-cost
 

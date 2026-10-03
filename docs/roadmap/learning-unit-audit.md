@@ -8,28 +8,20 @@
 | Metric | Result |
 |---|---:|
 | Frozen capabilities | 163 |
-| Proposed Learning Units | 102 |
+| Proposed Learning Units | 110 |
 | Primary assessment homes | 163 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary assignments | 0 |
 | Unknown capability IDs | 0 |
-| Singleton units | 67 |
-| Multi-capability units | 35 |
-| Single-owner units | 102 |
+| Singleton units | 76 |
+| Multi-capability units | 34 |
+| Single-owner units | 110 |
 | Multi-owner units | 0 |
 
 ## B. Primary-Home Registry
 
 | Capability ID | Canonical owner | Frozen level | Primary Unit | Domain candidate |
 |---|---|---|---|---|
-| api-circuit-bulkhead-rate-limit | API Contracts & Resilience | L3 | lu-api-circuit-bulkhead-rate-limit | Service & Network |
-| api-contract-resource-semantics | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
-| api-deadlines-timeout-cancellation | API Contracts & Resilience | L3 | lu-api-deadlines-timeout-cancellation | Service & Network |
-| api-request-identity-idempotency | API Contracts & Resilience | L3 | lu-api-contract-resource-semantics | Service & Network |
-| api-retry-backoff-jitter | API Contracts & Resilience | L3 | lu-api-deadlines-timeout-cancellation | Service & Network |
-| api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 | lu-api-deadlines-timeout-cancellation | Service & Network |
-| api-validation-errors-pagination | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
-| api-versioning-compatibility | API Contracts & Resilience | L3 | lu-api-contract-resource-semantics | Service & Network |
 | arch-boundaries-ownership | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
 | arch-consistency-latency-availability | Architecture & System Design | L4 | lu-arch-consistency-latency-availability | Architecture & Engineering Reasoning |
 | arch-cost-complexity-changeability | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
@@ -81,14 +73,6 @@
 | msg-replay-backfill | Messaging & Event-Driven Consistency | L3 | lu-msg-consumer-groups-offsets-rebalance | Distributed Systems |
 | msg-schema-evolution-contract-ownership | Messaging & Event-Driven Consistency | L3 | lu-msg-schema-evolution-contract-ownership | Distributed Systems |
 | msg-workflow-saga-compensation | Messaging & Event-Driven Consistency | L3 | lu-msg-workflow-saga-compensation | Distributed Systems |
-| net-connection-reuse-pooling | Networking & HTTP | L3 | lu-net-connection-reuse-pooling | Service & Network |
-| net-failure-localization-unknown-outcome | Networking & HTTP | L4 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| net-http-semantics | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 | lu-net-proxy-lb-forwarded-boundary | Service & Network |
-| net-request-path-dns | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
-| net-streaming-body-cancellation | Networking & HTTP | L3 | lu-net-streaming-body-cancellation | Service & Network |
-| net-tcp-connection-semantics | Networking & HTTP | L2 | lu-net-connection-reuse-pooling | Service & Network |
-| net-tls-trust-handshake | Networking & HTTP | L2 | lu-net-failure-localization-unknown-outcome | Service & Network |
 | obs-cardinality-sampling-cost | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
 | obs-db-io-downstream-attribution | Observability & Performance | L3 | lu-obs-db-io-downstream-attribution | Production Engineering |
 | obs-diagnostic-method | Observability & Performance | L4 | lu-obs-db-io-downstream-attribution | Production Engineering |
@@ -130,17 +114,6 @@
 | runtime-memory-performance-debug | Runtime & Memory | L4 | lu-runtime-diagnostics | Runtime & Concurrency |
 | runtime-memory-roots-lifetime | Runtime & Memory | L2 | lu-runtime-allocation-gc | Runtime & Concurrency |
 | runtime-retention-pooling-large-objects | Runtime & Memory | L3 | lu-runtime-allocation-gc | Runtime & Concurrency |
-| sec-abuse-bruteforce-resource-business-flow | Security | L3 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
-| sec-audit-detection-evidence | Security | L3 | lu-sec-audit-detection-evidence | Service & Network |
-| sec-auth-session-token | Security | L3 | lu-sec-auth-session-token | Service & Network |
-| sec-authorization-object-tenant | Security | L3 | lu-sec-auth-session-token | Service & Network |
-| sec-browser-boundaries-cors-csrf-xss | Security | L2 | lu-sec-browser-boundaries-cors-csrf-xss | Service & Network |
-| sec-injection-ssrf-input-output | Security | L3 | lu-sec-injection-ssrf-input-output | Service & Network |
-| sec-oauth-oidc-awareness | Security | L2 | lu-sec-auth-session-token | Service & Network |
-| sec-race-business-logic-abuse | Security | L3 | lu-sec-race-business-logic-abuse | Service & Network |
-| sec-secrets-third-party-trust | Security | L3 | lu-sec-secrets-third-party-trust | Service & Network |
-| sec-trust-boundary-threat-model | Security | L2 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
-| sec-unseen-attack-transfer | Security | L4 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
 | test-ci-flakiness-repeatability | Testing & Engineering Quality | L3 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
 | test-failure-resilience | Testing & Engineering Quality | L3 | lu-test-failure-resilience | Architecture & Engineering Reasoning |
 | test-migration-compatibility | Testing & Engineering Quality | L3 | lu-test-migration-compatibility | Architecture & Engineering Reasoning |
@@ -185,6 +158,33 @@
 | cache-multilayer-coherence | Cache Engineering | L3 | lu-cache-source-of-truth-invalidation | Data & Consistency |
 | cache-patterns | Cache Engineering | L2 | lu-cache-patterns | Data & Consistency |
 | cache-stampede-penetration-avalanche-hot-key | Cache Engineering | L3 | lu-cache-patterns | Data & Consistency |
+| net-tcp-connection-semantics | Networking & HTTP | L2 | lu-net-connection-reuse-pooling | Service & Network |
+| net-connection-reuse-pooling | Networking & HTTP | L3 | lu-net-connection-reuse-pooling | Service & Network |
+| net-request-path-dns | Networking & HTTP | L2 | lu-net-request-path-dns | Service & Network |
+| net-tls-trust-handshake | Networking & HTTP | L2 | lu-net-proxy-tls-forwarded-boundary | Service & Network |
+| net-proxy-lb-forwarded-boundary | Networking & HTTP | L3 | lu-net-proxy-tls-forwarded-boundary | Service & Network |
+| net-http-semantics | Networking & HTTP | L2 | lu-net-http-streaming-cancellation | Service & Network |
+| net-streaming-body-cancellation | Networking & HTTP | L3 | lu-net-http-streaming-cancellation | Service & Network |
+| net-failure-localization-unknown-outcome | Networking & HTTP | L4 | lu-net-failure-localization-unknown-outcome | Service & Network |
+| api-circuit-bulkhead-rate-limit | API Contracts & Resilience | L3 | lu-api-circuit-bulkhead-rate-limit | Service & Network |
+| api-contract-resource-semantics | API Contracts & Resilience | L2 | lu-api-contract-resource-semantics | Service & Network |
+| api-validation-errors-pagination | API Contracts & Resilience | L2 | lu-api-validation-errors-pagination | Service & Network |
+| api-request-identity-idempotency | API Contracts & Resilience | L3 | lu-api-request-identity-idempotency | Service & Network |
+| api-versioning-compatibility | API Contracts & Resilience | L3 | lu-api-versioning-compatibility | Service & Network |
+| api-deadlines-timeout-cancellation | API Contracts & Resilience | L3 | lu-api-deadline-retry-policy | Service & Network |
+| api-retry-backoff-jitter | API Contracts & Resilience | L3 | lu-api-deadline-retry-policy | Service & Network |
+| api-unknown-outcome-reconciliation | API Contracts & Resilience | L4 | lu-api-unknown-outcome-reconciliation | Service & Network |
+| sec-trust-boundary-threat-model | Security | L2 | lu-sec-trust-boundary-threat-model | Service & Network |
+| sec-abuse-bruteforce-resource-business-flow | Security | L3 | lu-sec-abuse-bruteforce-resource-business-flow | Service & Network |
+| sec-unseen-attack-transfer | Security | L4 | lu-sec-unseen-attack-transfer | Service & Network |
+| sec-auth-session-token | Security | L3 | lu-sec-auth-session-oauth | Service & Network |
+| sec-oauth-oidc-awareness | Security | L2 | lu-sec-auth-session-oauth | Service & Network |
+| sec-authorization-object-tenant | Security | L3 | lu-sec-authorization-object-tenant | Service & Network |
+| sec-browser-boundaries-cors-csrf-xss | Security | L2 | lu-sec-browser-boundaries-cors-csrf-xss | Service & Network |
+| sec-injection-ssrf-input-output | Security | L3 | lu-sec-injection-ssrf-input-output | Service & Network |
+| sec-race-business-logic-abuse | Security | L3 | lu-sec-race-business-logic-abuse | Service & Network |
+| sec-secrets-third-party-trust | Security | L3 | lu-sec-secrets-third-party-trust | Service & Network |
+| sec-audit-detection-evidence | Security | L3 | lu-sec-audit-detection-evidence | Service & Network |
 
 ## C. Unit Composition Registry
 
@@ -214,10 +214,6 @@
 | lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | 1 | Concurrency & Async | Singleton |
 | lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | 1 | Concurrency & Async | Singleton |
 | lu-concurrency-memory-visibility | concurrency-memory-visibility | 1 | Concurrency & Async | Singleton |
-| lu-net-connection-reuse-pooling | net-connection-reuse-pooling; net-tcp-connection-semantics | 2 | Networking & HTTP | Multi |
-| lu-net-failure-localization-unknown-outcome | net-failure-localization-unknown-outcome; net-http-semantics; net-request-path-dns; net-tls-trust-handshake | 4 | Networking & HTTP | Multi |
-| lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | 1 | Networking & HTTP | Singleton |
-| lu-net-streaming-body-cancellation | net-streaming-body-cancellation | 1 | Networking & HTTP | Singleton |
 | lu-dist-consensus-coordination-purpose | dist-consensus-coordination-purpose; dist-guarantee-recovery-transfer; dist-partial-failure-uncertainty; dist-replication-leader-quorum | 4 | Distributed Systems | Multi |
 | lu-dist-consistency-linearizability | dist-consistency-linearizability | 1 | Distributed Systems | Singleton |
 | lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | 1 | Distributed Systems | Singleton |
@@ -230,16 +226,6 @@
 | lu-msg-producer-acks-durability | msg-producer-acks-durability | 1 | Messaging & Event-Driven Consistency | Singleton |
 | lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | 1 | Messaging & Event-Driven Consistency | Singleton |
 | lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | 1 | Messaging & Event-Driven Consistency | Singleton |
-| lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | 1 | API Contracts & Resilience | Singleton |
-| lu-api-contract-resource-semantics | api-contract-resource-semantics; api-request-identity-idempotency; api-validation-errors-pagination; api-versioning-compatibility | 4 | API Contracts & Resilience | Multi |
-| lu-api-deadlines-timeout-cancellation | api-deadlines-timeout-cancellation; api-retry-backoff-jitter; api-unknown-outcome-reconciliation | 3 | API Contracts & Resilience | Multi |
-| lu-sec-abuse-bruteforce-resource-business-flow | sec-abuse-bruteforce-resource-business-flow; sec-trust-boundary-threat-model; sec-unseen-attack-transfer | 3 | Security | Multi |
-| lu-sec-audit-detection-evidence | sec-audit-detection-evidence | 1 | Security | Singleton |
-| lu-sec-auth-session-token | sec-auth-session-token; sec-authorization-object-tenant; sec-oauth-oidc-awareness | 3 | Security | Multi |
-| lu-sec-browser-boundaries-cors-csrf-xss | sec-browser-boundaries-cors-csrf-xss | 1 | Security | Singleton |
-| lu-sec-injection-ssrf-input-output | sec-injection-ssrf-input-output | 1 | Security | Singleton |
-| lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | 1 | Security | Singleton |
-| lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | 1 | Security | Singleton |
 | lu-obs-cardinality-sampling-cost | obs-cardinality-sampling-cost; obs-instrumentation-context | 2 | Observability & Performance | Multi |
 | lu-obs-db-io-downstream-attribution | obs-db-io-downstream-attribution; obs-diagnostic-method; obs-latency-throughput-saturation; obs-tracing-distributed-evidence | 4 | Observability & Performance | Multi |
 | lu-obs-load-test-benchmark-validity | obs-load-test-benchmark-validity | 1 | Observability & Performance | Singleton |
@@ -292,6 +278,28 @@
 | lu-cache-evidence-transfer | cache-evidence-transfer | 1 | Cache Engineering | Singleton |
 | lu-cache-source-of-truth-invalidation | cache-need-source-of-truth; cache-invalidation-consistency; cache-multilayer-coherence | 3 | Cache Engineering | Multi |
 | lu-cache-patterns | cache-patterns; cache-stampede-penetration-avalanche-hot-key | 2 | Cache Engineering | Multi |
+| lu-net-connection-reuse-pooling | net-tcp-connection-semantics; net-connection-reuse-pooling | 2 | Networking & HTTP | Multi |
+| lu-net-request-path-dns | net-request-path-dns | 1 | Networking & HTTP | Singleton |
+| lu-net-proxy-tls-forwarded-boundary | net-tls-trust-handshake; net-proxy-lb-forwarded-boundary | 2 | Networking & HTTP | Multi |
+| lu-net-http-streaming-cancellation | net-http-semantics; net-streaming-body-cancellation | 2 | Networking & HTTP | Multi |
+| lu-net-failure-localization-unknown-outcome | net-failure-localization-unknown-outcome | 1 | Networking & HTTP | Singleton |
+| lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | 1 | API Contracts & Resilience | Singleton |
+| lu-api-contract-resource-semantics | api-contract-resource-semantics | 1 | API Contracts & Resilience | Singleton |
+| lu-api-validation-errors-pagination | api-validation-errors-pagination | 1 | API Contracts & Resilience | Singleton |
+| lu-api-request-identity-idempotency | api-request-identity-idempotency | 1 | API Contracts & Resilience | Singleton |
+| lu-api-versioning-compatibility | api-versioning-compatibility | 1 | API Contracts & Resilience | Singleton |
+| lu-api-deadline-retry-policy | api-deadlines-timeout-cancellation; api-retry-backoff-jitter | 2 | API Contracts & Resilience | Multi |
+| lu-api-unknown-outcome-reconciliation | api-unknown-outcome-reconciliation | 1 | API Contracts & Resilience | Singleton |
+| lu-sec-trust-boundary-threat-model | sec-trust-boundary-threat-model | 1 | Security | Singleton |
+| lu-sec-abuse-bruteforce-resource-business-flow | sec-abuse-bruteforce-resource-business-flow | 1 | Security | Singleton |
+| lu-sec-unseen-attack-transfer | sec-unseen-attack-transfer | 1 | Security | Singleton |
+| lu-sec-auth-session-oauth | sec-auth-session-token; sec-oauth-oidc-awareness | 2 | Security | Multi |
+| lu-sec-authorization-object-tenant | sec-authorization-object-tenant | 1 | Security | Singleton |
+| lu-sec-browser-boundaries-cors-csrf-xss | sec-browser-boundaries-cors-csrf-xss | 1 | Security | Singleton |
+| lu-sec-injection-ssrf-input-output | sec-injection-ssrf-input-output | 1 | Security | Singleton |
+| lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | 1 | Security | Singleton |
+| lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | 1 | Security | Singleton |
+| lu-sec-audit-detection-evidence | sec-audit-detection-evidence | 1 | Security | Singleton |
 
 ## D. Singleton Review Registry
 
@@ -315,8 +323,6 @@
 | lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | lu-race-atomicity; lu-db-locks-deadlocks-contention | Wait-cycle/forward-progress evidence differs from invariant interleaving and transaction locks. |
 | lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | lu-race-atomicity | Cross-replica authority needs replica identity, absent from local race proof. |
 | lu-concurrency-memory-visibility | concurrency-memory-visibility | lu-race-atomicity | Memory-publication ordering differs from an interleaving outcome. |
-| lu-net-proxy-lb-forwarded-boundary | net-proxy-lb-forwarded-boundary | net-http-semantics; net-tls-trust-handshake | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-net-streaming-body-cancellation | net-streaming-body-cancellation | net-http-semantics; concurrency-cancellation-lifetime | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-dist-consistency-linearizability | dist-consistency-linearizability | nosql-cassandra-lsm-compaction-consistency; cache-multilayer-coherence | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | db-partitioning-sharding-boundary; nosql-mongo-index-shard-transaction | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-dist-time-order-causality | dist-time-order-causality | dist-guarantee-recovery-transfer | Different mechanism/evidence boundary prevents one credible assessment policy. |
@@ -326,12 +332,6 @@
 | lu-msg-producer-acks-durability | msg-producer-acks-durability | msg-model-queue-topic-partition-order; dist-replication-leader-quorum | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | msg-replay-backfill; msg-model-queue-topic-partition-order | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | msg-model-queue-topic-partition-order; dist-partial-failure-uncertainty | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | concurrency-bounded-backpressure; dist-partial-failure-uncertainty | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-sec-audit-detection-evidence | sec-audit-detection-evidence | sec-trust-boundary-threat-model; obs-logs-structured-correlation | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-sec-browser-boundaries-cors-csrf-xss | sec-browser-boundaries-cors-csrf-xss | sec-trust-boundary-threat-model; net-http-semantics | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-sec-injection-ssrf-input-output | sec-injection-ssrf-input-output | sec-trust-boundary-threat-model; net-request-path-dns | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | concurrency-races-check-then-act; sec-unseen-attack-transfer | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | sec-trust-boundary-threat-model; sec-unseen-attack-transfer | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-obs-load-test-benchmark-validity | obs-load-test-benchmark-validity | obs-latency-throughput-saturation; runtime-jit-warmup | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-obs-profiling-runtime-evidence | obs-profiling-runtime-evidence | runtime-diagnostics; obs-diagnostic-method | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-rel-disaster-recovery-rpo-rto | rel-disaster-recovery-rpo-rto | db-backup-restore; dist-replication-leader-quorum | Different mechanism/evidence boundary prevents one credible assessment policy. |
@@ -364,6 +364,23 @@
 | lu-nosql-redis-persistence-replication-cluster-streams | nosql-redis-persistence-replication-cluster-streams | lu-nosql-redis-structures-memory; lu-msg-consumer-groups-offsets-rebalance | Topology/pending-work evidence differs from structures and broker assignment. |
 | lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | lu-cache-patterns; lu-nosql-redis-structures-memory | Eviction-to-origin containment differs from loader/write and Redis layout evidence. |
 | lu-cache-evidence-transfer | cache-evidence-transfer | lu-cache-capacity-eviction-fallback; lu-cache-source-of-truth-invalidation; lu-cache-patterns | L4 diagnosis spans capacity, freshness, layers and miss-overload. |
+| lu-net-request-path-dns | net-request-path-dns | lu-net-failure-localization-unknown-outcome; lu-net-proxy-tls-forwarded-boundary | Assessment: DNS failover trace; TTL/cache/address evidence. DNS proves resolution; the others require post-send ambiguity or transport-trust evidence. |
+| lu-net-failure-localization-unknown-outcome | net-failure-localization-unknown-outcome | lu-api-unknown-outcome-reconciliation | Assessment: timed-out mutation; layered timestamps and audit. Network localization is not authoritative business reconciliation. |
+| lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | lu-api-deadline-retry-policy; lu-sec-abuse-bruteforce-resource-business-flow | Assessment: slow partner plus tenant burst; queue/admission evidence. Isolation/admission differs from time budget or attacker budget selection. |
+| lu-api-contract-resource-semantics | api-contract-resource-semantics | lu-api-validation-errors-pagination; lu-api-request-identity-idempotency | Assessment: ambiguous order; state/status contract. Operation contract differs from recoverable list/error or duplicate identity evidence. |
+| lu-api-validation-errors-pagination | api-validation-errors-pagination | lu-api-contract-resource-semantics; lu-api-versioning-compatibility | Assessment: invalid payload plus shifting list; ProblemDetails/cursor. Wire recovery/traversal differs from operation state or client coexistence. |
+| lu-api-request-identity-idempotency | api-request-identity-idempotency | lu-api-unknown-outcome-reconciliation; lu-api-deadline-retry-policy | Assessment: lost response; key/fingerprint/outcome claim. Duplicate claim differs from external convergence or retry budget. |
+| lu-api-versioning-compatibility | api-versioning-compatibility | lu-api-contract-resource-semantics; lu-prog-api-refactoring-change-safety | Assessment: old client semantic change; diff/consumer telemetry. Independent-client compatibility differs from one state transition or internal refactor. |
+| lu-api-unknown-outcome-reconciliation | api-unknown-outcome-reconciliation | lu-net-failure-localization-unknown-outcome; lu-api-request-identity-idempotency | Assessment: provider timeout; operation ID/provider/local audit. Convergence after a mutation differs from transport location or request dedupe. |
+| lu-sec-trust-boundary-threat-model | sec-trust-boundary-threat-model | lu-sec-secrets-third-party-trust; lu-sec-authorization-object-tenant | Assessment: webhook data flow; actors/assets/crossings. Threat discovery differs from callback verification or object policy. |
+| lu-sec-abuse-bruteforce-resource-business-flow | sec-abuse-bruteforce-resource-business-flow | lu-api-circuit-bulkhead-rate-limit; lu-sec-unseen-attack-transfer | Assessment: expensive export; account/device/resource cost. Abuse budget differs from dependency isolation or synthesis transfer. |
+| lu-sec-unseen-attack-transfer | sec-unseen-attack-transfer | lu-sec-race-business-logic-abuse; lu-sec-authorization-object-tenant | Assessment: unlabelled session/object/race incident; path and bypass test. Transfer synthesizes; each candidate proves one mechanism. |
+| lu-sec-authorization-object-tenant | sec-authorization-object-tenant | lu-sec-auth-session-oauth; lu-sec-trust-boundary-threat-model | Assessment: cross-tenant update; authoritative ownership/policy. Authentication/threat mapping do not prove object authorization. |
+| lu-sec-browser-boundaries-cors-csrf-xss | sec-browser-boundaries-cors-csrf-xss | lu-net-http-streaming-cancellation; lu-sec-injection-ssrf-input-output | Assessment: cookie browser integration; origin/cookie/output evidence. Browser boundary differs from HTTP stream lifecycle and server sink control. |
+| lu-sec-injection-ssrf-input-output | sec-injection-ssrf-input-output | lu-net-request-path-dns; lu-sec-browser-boundaries-cors-csrf-xss | Assessment: filter plus fetch URL; binding/destination/egress. SSRF proves server-sink control beyond DNS or browser policy. |
+| lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | lu-concurrency-races-check-then-act; lu-sec-authorization-object-tenant | Assessment: parallel coupon; atomic result/audit. Security exploit/business effect differs from generic race or pre-transition policy. |
+| lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | lu-sec-audit-detection-evidence; lu-sec-trust-boundary-threat-model | Assessment: replayed webhook rotation; signature/timestamp/key audit. Verification/lifecycle differs from recording decisions or mapping paths. |
+| lu-sec-audit-detection-evidence | sec-audit-detection-evidence | lu-obs-logs-structured-correlation; lu-sec-secrets-third-party-trust | Assessment: privileged export; audit schema/detection query. Accountable audit differs from diagnostic logs or third-party verification. |
 
 ## E. Multi-Capability Grouping Review
 
@@ -375,15 +392,9 @@
 | lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ. | Counter trả lời xu hướng; trace cho timeline/causal activity; dump/profile cho object hoặc stack tại thời điểm; tool phải khớp câu hỏi. → Allocation, GC và retention tạo các dấu hiệu khác nhau; thay một biến rồi đo lại mới phân biệt causal effect. | Hypothesis viết trước; counter time series; trace span/stack; heap dump; profile hotspot.; Symptom timeline; allocation/GC counters; retaining path; controlled before/after experiment; post-change latency. | Collecting wrong evidence; dump sau khi symptom biến mất; kết luận leak từ heap size đơn lẻ.; Treating retention as GC tuning; pooling để che leak; mitigation giảm allocation nhưng tăng retained heap. | One bounded trace observes all Primary mechanisms. |
 | lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity. | File/socket/database operation hoàn tất qua kernel/external system; blocking giữ execution thread chờ, async cho phép thread làm work khác trong khi completion chưa tới. → Process giữ handle trỏ tới kernel resource; dispose/close giải phóng reference/quota, còn connection pool là owner layer khác với raw socket. | Blocked stack; wait time; worker/runtime queue; thread count; request queue growth.; Open handle count; socket states; per-process limits; connection-pool state; OS error code. | Blocking request path; sync I/O giữ worker; queue growth; timeout do worker starvation.; FD/handle leak; socket exhaustion; close quá sớm; IPC endpoint không được release. | One bounded trace observes all Primary mechanisms. |
 | lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource. | Async không tự tạo thread; concurrency là overlap lifetime; parallelism là nhiều work thực sự chạy đồng thời khi CPU/capacity cho phép. → CancellationToken báo owner rằng result không còn cần hoặc deadline đã hết; code phải observe signal, stop safely và không coi cancel là rollback của side effect đã commit. → Arrival rate lớn hơn service rate làm in-flight work tích tụ; bounded queue/semaphore buộc producer wait, reject hoặc shed thay vì giữ work vô hạn. | Timeline task/thread; CPU; active operations; request latency; queue depth.; Token propagation trace; active operation count; cancellation log; audit state; cleanup/timeout test.; In-flight count; queue depth; pool usage; throughput; p95/p99; rejection/wait time. | Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelism vô hạn cho downstream I/O.; Token không được forward; continue expensive work sau disconnect; cancel giữa side effect gây unknown outcome; dispose khi child còn dùng.; Unbounded in-flight tasks; queue/memory growth; pool exhaustion; p99 tăng dù throughput không tăng. | One bounded trace observes all Primary mechanisms. |
-| lu-net-connection-reuse-pooling | Giải thích vì sao client pool/reuse connection và nhận ra giới hạn socket/port hoặc stale connection assumptions. | Mỗi connection có handshake/socket/port cost; pool giữ connection usable theo lifetime/limit, nhưng network peer có thể đóng connection ngoài kiến thức client. → TCP connection được establish rồi giữ state đến close/reset; HTTP request có thể reuse connection nhưng peer/network có thể refuse/reset hoặc capacity cạn trước HTTP. | Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.; Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count. | Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.; Connection refused; reset; handshake timeout; connection exhaustion. | One bounded trace observes all Primary mechanisms. |
-| lu-net-failure-localization-unknown-outcome | Tách DNS, connection, TLS, HTTP response và timeout có thể đã tới server để chọn recovery an toàn. | Request path qua nhiều layer; timeout sau write không chứng minh server chưa tạo side effect, nên retry cần status query/idempotency contract chứ không chỉ exception type. → DNS maps hostname to record/address with cache/TTL; connection chỉ bắt đầu sau khi client có usable destination. → TLS handshake xác thực certificate/name/validity và thương lượng protected channel; HTTP starts only after this boundary succeeds. → Method nêu intent; status nêu kết quả ở boundary; headers điều khiển metadata/caching/auth/content negotiation; body mang representation có lifecycle riêng. | DNS result/timing; socket/TLS error; HTTP status/header; client/server/proxy trace; operation ID and audit state.; Resolution result; resolver timing; TTL/cache state; address attempted; DNS error code.; Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.; Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection. | Retry duplicate after unknown outcome; gán TLS lỗi thành HTTP 500; treat DNS failure as server rejection; mất correlation qua proxy.; NXDOMAIN/misconfigured record; slow resolver; stale cached address; IPv6/IPv4 mismatch.; Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.; GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng. | One bounded trace observes all Primary mechanisms. |
 | lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos. | Participants cần agree decision/order despite failure; safe progress cần đủ reachable members theo protocol rule. → Không có shared failure state; caller observes message/reply/timeout through network, not remote internal truth. → Replicas copy state; leader/quorum rule controls acceptance and when value is sufficiently replicated. → Partial failure, RPC uncertainty, consistency, replication, ownership and reconciliation compose; timeline phải gắn operation identity/state owner. | Leader/epoch/term; membership; quorum availability; committed decision/version; ownership record.; Per-node health/state; operation ID; request timings; dependency error rate; trace hop completion.; Leader/role; replica lag/position; ack count/state; operation version; failover timeline.; Timeline; per-system state; operation ID; ownership/version records; recovery result. | No quorum; stale epoch; two actors believe exclusive ownership; coordination service dependency.; One dependency unreachable; slow mistaken dead; retry amplification; local success inferred global success.; Stale replica read; leader fails during operation; insufficient ack assumed durable; stale node promoted.; Claim guarantee không có; recovery duplicates unknown effect; topology invalidates assumption. | One bounded trace observes all Primary mechanisms. |
 | lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn. | Reconciliation compares actual against authoritative state/invariant then applies repeatable correction until mismatch converges. → Execution and response delivery are independent events. | Source-vs-derived diff; audit/event history; job result; repair operation ID; mismatch count.; Operation/idempotency ID; server audit; client timing; status query; trace span. | Non-idempotent repair; endless loop; wrong truth source; missing record never emitted.; Side effect succeeded but client timeout; retry duplicates; server continues after client abandoned. | One bounded trace observes all Primary mechanisms. |
 | lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect. | Group assigns partitions; offset marks broker read position, not durable business effect. → Records route to queue/topic/partition; parallel consumers preserve order only where broker contract/key assignment does. → Reprocess records from selected offset/range; projection work differs from side effects that must be suppressed/idempotent. → Lag grows when arrival exceeds effective consumption or work is unevenly distributed/blocked. | Assignment; current/committed offset; generation/member; processing/audit record; rebalance event.; Topic/queue config; partition/key; offset/sequence; consumer assignment.; Replay range; offsets; IDs/schema version; inbox ledger; derived before/after.; Per-partition lag; arrival/consume rate; handler duration; retry rate; assignment; downstream pool/latency. | Offset commit before effect; effect succeeds then offset fails; rebalance interrupts work; stale ownership assumption.; Assume global partition order; wrong key; queue treated broadcast; partitions changed without order review.; Payment/email replayed; live/backfill race; old schema unreadable; wrong starting offset.; Hot partition; slow handler/downstream; retry storm; rebalance pause; consumers exceed shared capacity. | One bounded trace observes all Primary mechanisms. |
-| lu-api-contract-resource-semantics | Model operation as explicit contract over resource/state, not controller-to-URL mapping. | Request expresses intent/input; server evaluates state/invariant; response conveys accepted/completed/rejected stable semantics. → Validation blocks unsafe transition; error contract separates classes; pagination defines traversal of changing collection. → Compatibility includes syntax and meaning; additive change/version/migration supports independent deploy. → Key/fingerprint/outcome record separates same-operation retry from a new similar request. | Request/response examples; OpenAPI; persisted before/after; contract tests.; Contract tests; ProblemDetails payload; cursor/offset; query/order; boundary tests.; Contract/OpenAPI diff; consumer tests; version telemetry; old requests.; Idempotency key; fingerprint; operation record; business row; stored response; retry test. | Endpoint hides state transition; GET-like side effect; ambiguous update; caller cannot distinguish accepted/completed/rejected.; Invalid input mapped 500; exception leaks; offset skips/duplicates; unbounded page; field failure unclear.; Required field removed; meaning changes; enum breaks client; assume simultaneous upgrade; rollback incompatible.; Random retry key; same key different payload; crash after effect before record; dedup expiry too short; HTTP method assumed safe. | One bounded trace observes all Primary mechanisms. |
-| lu-api-deadlines-timeout-cancellation | Set/propagate one end-to-end time budget and distinguish caller deadline from remote completion. | Remaining deadline is split across hops; cancellation signals no useful caller lifetime but does not prove remote side effect absent. → Retry creates another attempt; backoff spaces it; jitter prevents synchronized retry wave. → Transport failure and business completion are separate; API needs status/outcome mechanism. | Request deadline; CancellationToken trace; span durations; downstream timeout; active work after disconnect; audit state.; Attempt count; error class; timing; downstream rate; operation ID; remaining deadline.; Operation ID; business/audit record; provider status; attempts; idempotency outcome; reconciliation result. | Every hop full timeout; child outlives request; token not forwarded; timeout treated as no remote effect.; Retry non-idempotent mutation; nested retries multiply; immediate storm; retry auth/validation; budget exceeds deadline.; Timeout called failed though committed; blind duplicate retry; status uses other ID; cache trusted as authority; contradictory status. | One bounded trace observes all Primary mechanisms. |
-| lu-sec-abuse-bruteforce-resource-business-flow | Detect/limit legitimate-looking request abuse by identity/resource/business state. | Valid endpoints/credentials can still be abused; budgets/signals need account/device/IP/resource/operation dimensions. → Less-trusted data/identity crossing into trusted decision requires authz/validation/constraint proportional to risk. → Authentication, authorization, input trust, resource abuse, race and audit compose through attacker capability and state transition. | Attempt rate; account/device/IP/session; success ratio; resource cost; operation history; limit decision.; Data-flow diagram; identity/source; asset/operation; boundary notes; abuse cases.; Request/audit timeline; auth decision; state transition; resource usage; exploit/regression test. | Credential stuffing; OTP abuse; expensive export; scalping; IP-only limit bypass.; Internal network assumed trusted; callback authoritative; tenant ID ownership proof; hidden admin endpoint missed.; Patch one payload; UI-only control; symptom block leaves path; fix breaks legitimate tenant flow. | One bounded trace observes all Primary mechanisms. |
-| lu-sec-auth-session-token | Distinguish authentication/authorization and reason session/token validation, lifetime, revocation. | Credential/session/token establishes identity only after issuer/signature/audience/lifetime/state checks as applicable. → Authorization evaluates subject + action + resource tenant/owner + policy, not just login. → OAuth delegates access to resource; OIDC adds identity info; client/resource/auth server roles differ. | Token/session metadata; issuer/audience/expiry; auth logs; revocation store; claims.; Subject; policy decision; authoritative owner/tenant; negative tests; audit event.; Token type; issuer; audience; scope; client/resource IDs; AS metadata. | Expired accepted; wrong issuer/audience; fixation/reuse; logout assumed instant stateless revoke; token exposure.; BOLA/IDOR; tenant request value trusted; admin UI-only guard; filter after data exposed.; ID token used API token; wrong audience; code/token exposed; OAuth assumed arbitrary attribute proof. | One bounded trace observes all Primary mechanisms. |
 | lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable. | Metric label combinations create time-series cardinality; sampling retains subset by policy. → Events/spans at meaningful transitions; propagated context links calls/tasks/messages. | Series count; ingest/storage; sample rate; retained slow/error traces; cost.; Parent/child tree; operation ID; semantic attributes; structured log; headers/message metadata. | User/order ID label; rare failure sampled away; head sampling loses slow trace; cost grows faster than traffic.; Span ends before async work; state transition missing; context lost in worker; token/payload logged. | One bounded trace observes all Primary mechanisms. |
 | lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence. | End-to-end latency composes work/wait across boundaries; correlation compares candidates. → Throughput is completed work, latency distribution measures wait/work, saturation approaches finite capacity, errors are failed work. → Spans represent timed operations with parent/causal relation; context links downstream when possible. → Evidence changes confidence between plausible causes; dashboards without hypothesis are not diagnosis. | Trace timing; query/plan; acquisition wait; socket/downstream timing; queue wait; profile.; p50/p95/p99; rates; success/error; CPU; queue; pool; concurrency.; Span timeline; parent/link; duration; status; dependency attrs; retry attempts.; Trace/profile; allocation/GC; queue/pool; DB wait/plan; network timing; before/after. | Slow endpoint blamed SQL; pool wait omitted; timeout called app processing; N+1 hidden aggregate.; Average hides p99; throughput stable while queue grows; low CPU masks pool bottleneck; reject improves latency but errors ignored.; Missing child span; retry opaque; message link absent; trace assumed business completion; wrong attribution.; Dashboard-first guess; correlation as cause; confirmation bias; many variables changed; metric improves but user symptom remains. | One bounded trace observes all Primary mechanisms. |
 | lu-obs-logs-structured-correlation | Produce structured queryable logs for significant events/context. | Stable fields make events queryable/correlatable instead of prose parsing. → Metrics aggregate behavior, logs discrete structured events, traces causal path; context connects views. | Event schema; correlation ID; query result; volume.; Trace/span; operation ID; metric dimensions/time; fields; request timeline. | String-only regex; inconsistent field types; secret/PII; no resource/operation; noisy duplicates.; Metric spike lacks context; logs uncorrelated; trace ID lost async; collect all signals no question. | One bounded trace observes all Primary mechanisms. |
@@ -404,6 +415,11 @@
 | lu-nosql-search-projection | Catalog projection | analyzer-refresh-shard-page | tokens/profile | wrong analyzer/deep offset | one task proves both. |
 | lu-cache-source-of-truth-invalidation | Source update with L1/L2 | version/invalidation/layer | version/age/instance | stale layer | one task proves all. |
 | lu-cache-patterns | Read/write and expiry | loader-to-miss mode | loader/expiry/key-QPS | stampede/hot key | one task proves both. |
+| lu-net-connection-reuse-pooling | partner idle timeout spike | TCP connect/reset then pool reuse/lifetime | socket state/connect timing; pool queue/ports/idle age | new client per request or stale pooled reset | classify both evidence surfaces in one trace. |
+| lu-net-proxy-tls-forwarded-boundary | ingress redirect/IP error | TLS termination then trusted forwarded identity | certificate/handshake; peer IP/raw headers/proxy config | spoofed header or wrong termination | identify both boundaries in one ingress trace. |
+| lu-net-http-streaming-cancellation | disconnect during large upload | HTTP contract then stream abort/lifetime | status capture; bytes/abort/allocation | buffering and continued work | define partial outcome and stop boundary. |
+| lu-api-deadline-retry-policy | 800 ms three-hop degraded call | remaining deadline then bounded retry | deadline/spans; attempts/error/timing/rate | nested full timeout/retry storm | calculate safe budget and attempt schedule. |
+| lu-sec-auth-session-oauth | ID token sent to API | claim validation then OAuth/OIDC role distinction | issuer/audience/expiry; token type/scope/AS metadata | wrong token accepted | decide correct token and access boundary. |
 
 ## F. Cross-Owner Review
 
@@ -414,9 +430,9 @@
 | os-blocking-io-waits → concurrency-async-parallelism | REJECTED | Blocking I/O evidence is external completion and kernel handle/wait; async evidence is task lifetime, cancellation and bounded admission. |
 | os-scheduling-starvation → concurrency-async-parallelism | REJECTED | Scheduler starvation needs runnable-queue/CPU forward-progress evidence; bounded concurrency needs application queue and downstream-pressure evidence. |
 | prog-resource-ownership → concurrency-cancellation-lifetime | REJECTED | Ownership follows final-consumer release; cancellation proves stop-signal observation and side-effect boundary. |
-| os-files-handles-sockets-ipc → net-tcp-connection-semantics | REJECTED | OS handle lifecycle evidence and TCP connection/handshake state belong to different system boundaries; one shared assessment would use handle ownership as context rather than prove both canonical mechanisms. |
-| concurrency-cancellation-lifetime → net-streaming-body-cancellation | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
-| prog-resource-ownership → net-streaming-body-cancellation | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
+| os-files-handles-sockets-ipc → net-tcp-connection-semantics | REJECTED | OS proves descriptor ownership/release; TCP proves SYN/connect/reset and peer state. One trace supplies context but cannot prove both mechanisms. |
+| concurrency-cancellation-lifetime → net-streaming-body-cancellation | REJECTED | Concurrency proves application cancellation lifetime; HTTP streaming additionally proves byte transfer, partial-body outcome and abort-driven stream disposal. |
+| prog-resource-ownership → net-streaming-body-cancellation | REJECTED | Final-consumer disposal is not HTTP abort evidence; streaming needs request-aborted, byte-count and response-stream lifecycle evidence. |
 | prog-invariants-domain-model → db-modeling-invariants | REJECTED | Domain transition reasoning is a prerequisite slice; database unit proves persisted constraint behavior with concurrent writers.|
 | os-virtual-memory-page-cache → db-buffer-io | REJECTED | OS page-cache evidence is faults/reclaim; database unit proves buffer/page statistics and query working-set behavior.|
 | concurrency-interleavings-invariants → db-transactions-isolation-anomalies | REJECTED | Application interleaving/atomicity differs from two-session version visibility and isolation anomalies.|
@@ -450,6 +466,30 @@
 | db-transactions-isolation-anomalies → msg-outbox-db-publish-gap | REJECTED | Local atomic commit is a prerequisite slice; outbox assessment proves the database-to-broker publication gap. |
 | dist-partial-failure-uncertainty → msg-outbox-db-publish-gap | REJECTED | Cross-owner assumed slice exists, but Stage 1 did not find one shared assessment boundary; revisit only if human review supplies a coherent case. |
 
+| prog-errors-results → api-validation-errors-pagination | REJECTED | Local result/error modeling differs from wire-level ProblemDetails field stability and cursor traversal under changing collections. |
+
+| prog-api-refactoring-change-safety → api-versioning-compatibility | REJECTED | Internal refactoring safety differs from independent-client compatibility proven by contract diff, old payloads and rollout telemetry. |
+
+| dist-rpc-unknown-completion → api-request-identity-idempotency | REJECTED | Distributed uncertainty is context; API idempotency proves same-key/fingerprint claim, replay and conflict behavior. |
+
+| dist-rpc-unknown-completion → api-deadlines-timeout-cancellation | REJECTED | Unknown completion is a consequence; this API unit proves remaining deadline propagation and bounded retry timing. |
+
+| dist-rpc-unknown-completion → api-unknown-outcome-reconciliation | REJECTED | RPC identifies ambiguity; reconciliation proves authoritative operation status and terminal convergence. |
+
+| dist-reconciliation-convergence → api-unknown-outcome-reconciliation | REJECTED | System-wide replica/workflow convergence differs from one operation ID reconciled against provider and local audit state. |
+
+| concurrency-cancellation-lifetime → api-deadlines-timeout-cancellation | REJECTED | Local cancellation lifetime differs from cross-hop budget propagation, remaining time and retry cutoff. |
+
+| concurrency-bounded-backpressure → api-circuit-bulkhead-rate-limit | REJECTED | Generic bounded admission differs from choosing circuit, bulkhead or tenant rate limit using dependency/identity evidence. |
+
+| concurrency-races-check-then-act → sec-race-business-logic-abuse | REJECTED | Generic interleaving differs from attacker-exploitable business effect and atomic owner proof. |
+
+| net-http-semantics → sec-browser-boundaries-cors-csrf-xss | REJECTED | Server HTTP contract differs from browser origin, ambient credential and script-execution evidence. |
+
+| net-request-path-dns → sec-injection-ssrf-input-output | REJECTED | DNS resolves intended destinations; SSRF proves untrusted input cannot control server-side destination and egress. |
+
+| obs-logs-structured-correlation → sec-audit-detection-evidence | REJECTED | Diagnostic correlation differs from protected accountable subject/action/object/tenant/outcome audit records. |
+
 ## G. Stage-2 Input Note
 
 REQUIRED and RECOMMENDED projection is **NOT FINALIZED** in Stage 1. The frozen relation graph remains untouched; Stage 2 will project all 194 REQUIRED and 124 RECOMMENDED relations after Primary boundaries are accepted.
@@ -462,7 +502,7 @@ None.
 
 - Runtime & Concurrency — REVIEWED
 - Data & Consistency — REVIEWED
-- Service & Network — PENDING
+- Service & Network — REVIEWED
 - Distributed Systems — PENDING
 - Production Engineering — PENDING
 - Architecture & Engineering Reasoning — PENDING
@@ -496,3 +536,7 @@ None.
 | lu-cache-capacity-eviction-fallback | SPLIT | lu-cache-capacity-eviction-fallback; lu-cache-evidence-transfer; `cache-need-source-of-truth` moves to lu-cache-source-of-truth-invalidation |
 | lu-cache-invalidation-consistency | MERGE | lu-cache-source-of-truth-invalidation |
 | lu-cache-patterns | KEEP | unchanged composition |
+
+## Service & Network batch closure
+
+**IN_REVIEW.** Registry materialization is complete but canonical singleton/multi evidence and cross-owner decision ledger still require the final semantic-hardening pass.
