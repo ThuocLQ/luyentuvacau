@@ -73,9 +73,22 @@ Every proposed Learning Unit classifies referenced capabilities as:
 |---|---|
 | **Primary / owned** | The unit teaches and assesses the canonical mechanism. |
 | **Supporting prerequisite** | Earlier demonstrated evidence may be assumed when the unit cannot teach or assess fairly without it. |
+| **Local prerequisite slice** | The unit introduces or recaps only the exact assumed slice needed by its target mechanism. It is not source-capability coverage or evidence. |
 | **Recap / applied** | A mechanism owned elsewhere is briefly recalled or applied to a new domain-specific problem. |
 
+A local prerequisite slice does not transfer canonical ownership, claim the source capability is covered, create `PASSED` evidence for it, or reproduce the full source-owner lesson. If the full source mechanism must be taught and assessed, it must become a deliberately justified Primary capability in a coherent multi-owner unit, or remain in its own unit as an external prerequisite candidate.
+
 A consumer domain may apply, transfer or add domain-specific failure evidence. It must not redefine the producer domain's canonical mechanism. Reuse is not duplicate teaching.
+
+## REQUIRED-edge completeness invariant
+
+For every capability classified as **Primary**, a proposal must inspect **all incoming REQUIRED** relations in the frozen dependency graph. Each relation receives exactly one explicit lesson-level treatment:
+
+1. **Internal Primary Order** — source and target are both Primary in the same unit; the relation becomes declared internal teaching and assessment order.
+2. **Local Prerequisite Slice** — only the exact source slice needed by the target is introduced or recapped locally, subject to the ownership limits above.
+3. **External Required Prerequisite Candidate** — earlier demonstrated source evidence is a candidate because local teaching would require substantial re-teaching or make teaching/assessment unfair.
+
+No incoming REQUIRED relation may disappear because a dry-run role table did not list it. Future decomposition validation must require a compact treatment table for every Primary capability. A REQUIRED treatment is a design decision, not an automatic progression lock; RECOMMENDED relations still never hard-lock.
 
 ## Four separate graphs
 
@@ -141,13 +154,20 @@ Domain membership does not define prerequisite order. Multiple roots, concurrent
 | Role | Frozen capability IDs | Treatment |
 |---|---|---|
 | Primary | `db-index-structures`, `db-composite-query-shape`, `db-execution-operators`, `db-optimizer-cardinality-stats` | One causal story: an index narrows candidates; query shape affects usable key path; the optimizer selects operators from estimates. |
-| Supporting prerequisite candidate | none required at first proposal | The unit can introduce logical index structure itself; page layout is not assumed. |
-| RECOMMENDED context | `db-physical-storage-pages`, `db-buffer-io` | Local recap when locality/I/O matters; not a lock. |
+| RECOMMENDED context | `db-physical-storage-pages` | Optional page-locality recap; its frozen relation to `db-index-structures` is RECOMMENDED, never a lock. |
+| Optional indirect context | `db-buffer-io` | May help a later performance discussion, but has no direct frozen relation to these Primary capabilities and is not presented as one. |
 | Split / later unit | `db-production-diagnosis-transfer` | It combines buffer/I/O, cardinality, locks and pool waits into a broader competing-hypothesis diagnosis story. |
+
+| Primary target | Incoming REQUIRED source | Frozen relation | Lesson-level treatment | Reason |
+|---|---|---|---|---|
+| `db-index-structures` | none | — | — | No incoming REQUIRED relation. |
+| `db-composite-query-shape` | `db-index-structures` | `db-index-structures → db-composite-query-shape` | Internal Primary Order | Both mechanisms are Primary in the same access-path trace. |
+| `db-execution-operators` | none | — | — | No incoming REQUIRED relation. |
+| `db-optimizer-cardinality-stats` | `db-execution-operators` | `db-execution-operators → db-optimizer-cardinality-stats` | Internal Primary Order | Estimated-versus-actual rows is assessed against the operator pipeline in the same case. |
 
 Internal order: expensive scan problem → ordered search structure → composite key path → scan/join/sort operator evidence → estimated versus actual rows → changed data distribution transfer.
 
-Actual relations preserved: `db-index-structures → db-composite-query-shape` is REQUIRED; `db-execution-operators → db-optimizer-cardinality-stats` is REQUIRED; `db-composite-query-shape → db-optimizer-cardinality-stats` and `db-index-structures → db-execution-operators` are RECOMMENDED. The first REQUIRED relation is internal order, not an external lesson prerequisite. The existing Index pilot is a useful sanity check because it already connects plan evidence and vocabulary, but it does not decide this grouping or future progression boundary.
+The frozen RECOMMENDED relations `db-composite-query-shape → db-optimizer-cardinality-stats`, `db-index-structures → db-execution-operators`, and `db-physical-storage-pages → db-index-structures` remain non-blocking context. The existing Index pilot is a useful sanity check because it already connects plan evidence and vocabulary, but it does not decide this grouping or future progression boundary.
 
 ## Dry-run B — concurrency/race region
 
@@ -156,11 +176,17 @@ Actual relations preserved: `db-index-structures → db-composite-query-shape` i
 | Role | Frozen capability IDs | Treatment |
 |---|---|---|
 | Primary | `concurrency-interleavings-invariants`, `concurrency-races-check-then-act`, `concurrency-synchronization-atomicity` | One trace: read/check/write interleaves, violates an invariant, then needs an atomicity/protection decision. |
-| Supporting prerequisite candidate | `prog-invariants-domain-model` | May become external only if a future unit has already collected demonstrated invariant reasoning and the race unit will not teach it locally. |
-| Recap / applied | `concurrency-local-vs-distributed` | Apply after a local protection solution to expose its process-local boundary. |
+| Local prerequisite slice | `prog-invariants-domain-model` | Introduce only the business-rule/invariant slice needed to read the race trace. This does not cover the source capability or create its progression evidence. |
+| Later possible unit | `concurrency-local-vs-distributed` | Its four-replica boundary needs distinct L4 transfer evidence, so it is not recap/applied inside this local-race unit. |
 | Split / later unit | `concurrency-memory-visibility`, `concurrency-deadlock-starvation` | Different mechanism/evidence/failure stories. |
 
-Internal order: business rule → two overlapping transitions → controlled `READ → CHECK → WRITE` race → protection/atomicity choice → evidence that the invariant holds → multi-instance transfer. `concurrency-interleavings-invariants → concurrency-races-check-then-act` and `→ concurrency-synchronization-atomicity` are REQUIRED internal order. `concurrency-races-check-then-act → concurrency-local-vs-distributed` is REQUIRED, yet can remain internal applied transfer rather than an external prerequisite. The Race pilot validates that this causal grouping is teachable; it does not mandate global sequence.
+| Primary target | Incoming REQUIRED source | Frozen relation | Lesson-level treatment | Reason |
+|---|---|---|---|---|
+| `concurrency-interleavings-invariants` | `prog-invariants-domain-model` | `prog-invariants-domain-model → concurrency-interleavings-invariants` | Local Prerequisite Slice | The case needs one stated invariant, not the full domain-model mechanism or source evidence. |
+| `concurrency-races-check-then-act` | `concurrency-interleavings-invariants` | `concurrency-interleavings-invariants → concurrency-races-check-then-act` | Internal Primary Order | The interleaving trace directly explains the check-then-act failure. |
+| `concurrency-synchronization-atomicity` | `concurrency-interleavings-invariants` | `concurrency-interleavings-invariants → concurrency-synchronization-atomicity` | Internal Primary Order | Atomic protection is evaluated against the same invariant and trace. |
+
+Internal order: business rule → two overlapping transitions → controlled `READ → CHECK → WRITE` race → protection/atomicity choice → evidence that the invariant holds. The later possible multi-instance unit has a genuine **External Required Prerequisite Candidate**: `concurrency-races-check-then-act → concurrency-local-vs-distributed`. Local protection must first be demonstrated before testing why one process-local lock does not protect four replicas. This is an example of a REQUIRED capability relation becoming an external lesson-prerequisite candidate because the later L4 transfer needs a separate mechanism boundary and evidence set. The Race pilot validates that the local causal grouping is teachable; it does not mandate global sequence.
 
 ## Dry-run C — messaging/outbox region
 
@@ -168,13 +194,21 @@ Internal order: business rule → two overlapping transitions → controlled `RE
 
 | Role | Frozen capability IDs | Treatment |
 |---|---|---|
-| Primary | `msg-outbox-db-publish-gap`, `msg-consumer-idempotency-inbox` | One DB-to-broker consistency story: durable intent, relay crash window, duplicate delivery and one local effect. |
-| Supporting prerequisite candidates | `db-transactions-isolation-anomalies`, `msg-model-queue-topic-partition-order` | Candidates only if a future unit chooses not to introduce a focused local transaction and broker-boundary mini-concept. |
-| Internal order | `dist-partial-failure-uncertainty` | The dual-write gap needs independent failure/uncertainty; it may be taught as a small internal concept when the declared boundary permits. |
+| Primary | `msg-outbox-db-publish-gap`, `msg-consumer-idempotency-inbox` | One end-to-end DB-to-broker trace: durable intent, relay crash window, duplicate delivery and one local effect. |
+| Supporting prerequisite candidate | `msg-delivery-retry-poison-dlq` | Retry/poison classification has its own policy and evidence boundary. Its demonstrated evidence is a candidate before assessing duplicate-consumer handling. |
+| Local prerequisite slices | `db-transactions-isolation-anomalies`, `msg-model-queue-topic-partition-order`, `dist-partial-failure-uncertainty` | Respectively: one local atomic-write boundary; the destination/key/ordering scope needed by the trace; and the fact that one path may fail after another effect. None claims source coverage or `PASSED` evidence. |
 | RECOMMENDED context | `msg-producer-acks-durability` | Useful for relay retry/ack ambiguity; never a lock. |
 | Split / later unit | `msg-external-side-effect-reconciliation`, `msg-replay-backfill` | External authority/recovery and historical replay have different evidence and correctness boundaries. |
 
-Frozen relations used: `msg-model-queue-topic-partition-order → msg-outbox-db-publish-gap`, `db-transactions-isolation-anomalies → msg-outbox-db-publish-gap`, and `dist-partial-failure-uncertainty → msg-outbox-db-publish-gap` are REQUIRED. `msg-producer-acks-durability → msg-outbox-db-publish-gap` is RECOMMENDED. `msg-delivery-retry-poison-dlq → msg-consumer-idempotency-inbox` and `db-transactions-isolation-anomalies → msg-consumer-idempotency-inbox` are REQUIRED. The Outbox pilot is a stress test for this choice, not authority for a final prerequisite boundary.
+| Primary target | Incoming REQUIRED source | Frozen relation | Lesson-level treatment | Reason |
+|---|---|---|---|---|
+| `msg-outbox-db-publish-gap` | `msg-model-queue-topic-partition-order` | `msg-model-queue-topic-partition-order → msg-outbox-db-publish-gap` | Local Prerequisite Slice | The trace needs its destination/key/ordering scope, not full broker-model coverage. |
+| `msg-outbox-db-publish-gap` | `db-transactions-isolation-anomalies` | `db-transactions-isolation-anomalies → msg-outbox-db-publish-gap` | Local Prerequisite Slice | Teach only the local atomic business-row/outbox-write boundary; no transaction-isolation source evidence is claimed. |
+| `msg-outbox-db-publish-gap` | `dist-partial-failure-uncertainty` | `dist-partial-failure-uncertainty → msg-outbox-db-publish-gap` | Local Prerequisite Slice | The trace needs only that a component/path may fail independently after another effect; the unit does not cover or pass the Distributed Systems capability. |
+| `msg-consumer-idempotency-inbox` | `msg-delivery-retry-poison-dlq` | `msg-delivery-retry-poison-dlq → msg-consumer-idempotency-inbox` | External Required Prerequisite Candidate | Full retry classification, bounded retry and DLQ ownership require separate policy evidence; reducing them to a recap would make duplicate handling assessment unfair. |
+| `msg-consumer-idempotency-inbox` | `db-transactions-isolation-anomalies` | `db-transactions-isolation-anomalies → msg-consumer-idempotency-inbox` | Local Prerequisite Slice | Teach only the local inbox-row/business-effect atomic-or-recoverable boundary; it does not claim the database source capability. |
+
+Outbox and consumer idempotency remain grouped in this design example: the same canonical trace follows one committed business change through relay uncertainty, duplicate delivery and one consumer-local effect. The retry/poison policy remains external because it has a separate state/policy/debug boundary; its prerequisite candidate does not dissolve the shared DB-to-broker consistency story. `msg-producer-acks-durability → msg-outbox-db-publish-gap` remains RECOMMENDED context, never a lock. The Outbox pilot is a stress test for this choice, not authority for a final prerequisite boundary.
 
 ## Adversarial checks
 
