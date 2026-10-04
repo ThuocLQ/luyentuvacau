@@ -539,4 +539,26 @@ None.
 
 ## Service & Network batch closure
 
-**IN_REVIEW.** Registry materialization is complete but canonical singleton/multi evidence and cross-owner decision ledger still require the final semantic-hardening pass.
+**REVIEWED.** Service & Network — REVIEWED. 14 / 14 original units accounted for: **7 KEEP, 5 SPLIT, 2 MERGE**. Final Service & Network Learning Units = **22**. Five multi-unit capability-proof tables are present; singleton review and cross-owner review evidence are complete; registry exactness passes. REQUIRED and RECOMMENDED projection is still **NOT FINALIZED**.
+
+
+## Service & Network Decision Ledger
+
+| Original unit | Primary disposition | Final canonical state |
+|---|---|---|
+| lu-net-connection-reuse-pooling | KEEP | lu-net-connection-reuse-pooling |
+| lu-net-failure-localization-unknown-outcome | SPLIT | lu-net-failure-localization-unknown-outcome; lu-net-request-path-dns; lu-net-proxy-tls-forwarded-boundary; lu-net-http-streaming-cancellation |
+| lu-net-proxy-lb-forwarded-boundary | MERGE | lu-net-proxy-tls-forwarded-boundary |
+| lu-net-streaming-body-cancellation | MERGE | lu-net-http-streaming-cancellation |
+| lu-api-circuit-bulkhead-rate-limit | KEEP | lu-api-circuit-bulkhead-rate-limit |
+| lu-api-contract-resource-semantics | SPLIT | lu-api-contract-resource-semantics; lu-api-validation-errors-pagination; lu-api-request-identity-idempotency; lu-api-versioning-compatibility |
+| lu-api-deadlines-timeout-cancellation | SPLIT | lu-api-deadline-retry-policy; lu-api-unknown-outcome-reconciliation |
+| lu-sec-abuse-bruteforce-resource-business-flow | SPLIT | lu-sec-abuse-bruteforce-resource-business-flow; lu-sec-trust-boundary-threat-model; lu-sec-unseen-attack-transfer |
+| lu-sec-audit-detection-evidence | KEEP | lu-sec-audit-detection-evidence |
+| lu-sec-auth-session-token | SPLIT | lu-sec-auth-session-oauth; lu-sec-authorization-object-tenant |
+| lu-sec-browser-boundaries-cors-csrf-xss | KEEP | lu-sec-browser-boundaries-cors-csrf-xss |
+| lu-sec-injection-ssrf-input-output | KEEP | lu-sec-injection-ssrf-input-output |
+| lu-sec-race-business-logic-abuse | KEEP | lu-sec-race-business-logic-abuse |
+| lu-sec-secrets-third-party-trust | KEEP | lu-sec-secrets-third-party-trust |
+
+**Derived disposition check: 14 / 14 — 7 KEEP, 5 SPLIT, 2 MERGE.**
