@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 const file = (root, path) => fs.readFileSync(`${root}/${path}`, 'utf8');
 const unique = values => [...new Set(values)];
 export const exactSet = (a, b) => a.length === new Set(a).size && b.length === new Set(b).size && a.length === b.length && a.every(value => b.includes(value));
+const exactOrder = (a, b) => a.length === b.length && a.every((value, index) => value === b[index]);
 const add = (errors, message) => errors.push(message);
 
 export function section(text, heading) {
@@ -23,7 +24,7 @@ function table(text, heading, columns, errors) {
   const start = lines.findIndex(line => line.startsWith('| '));
   if (start < 0) { add(errors, `missing table ${heading}`); return []; }
   const header = cells(lines[start]);
-  if (columns && !exactSet(header, columns)) add(errors, `malformed table header ${heading}`);
+  if (columns && !exactOrder(header, columns)) add(errors, `malformed table header ${heading}`);
   const separator = lines[start + 1] ?? '';
   if (!validSeparator(separator, header.length)) add(errors, `malformed table separator ${heading}`);
   const result = [];
@@ -78,11 +79,19 @@ const schemas = {
 };
 const placeholders = ['One bounded trace observes all Primary mechanisms.', 'strongest data boundary', 'One canonical scenario defined in map.', 'One bounded assessment is coherent.', 'Change workload, failure mode, topology or data distribution while preserving the mechanism above.', 'TODO', 'TBD', 'unchanged composition'];
 
+function subsection(body, heading) {
+  const match = new RegExp(`^### ${escape(heading)}\\s*$`, 'm').exec(body);
+  if (!match) return null;
+  const start = match.index + match[0].length; const next = /^### /m.exec(body.slice(start));
+  return body.slice(start, next ? start + next.index : body.length);
+}
+
 function proofCapabilities(body, errors, unit) {
+  const assessment = subsection(body, 'Shared assessment task') ?? '';
   const marker = '| Primary capability | What evidence in this same task proves it |';
-  const at = body.indexOf(marker);
+  const at = assessment.indexOf(marker);
   if (at < 0) { add(errors, `missing proof table ${unit}`); return []; }
-  const lines = body.slice(at).split(/\r?\n/); const output = [];
+  const lines = assessment.slice(at).split(/\r?\n/); const output = [];
   if (!validSeparator(lines[1] ?? '', 2)) add(errors, `malformed proof table separator ${unit}`);
   for (let i = 2; i < lines.length && lines[i].startsWith('|'); i += 1) {
     const row = cells(lines[i]);
@@ -93,7 +102,8 @@ function proofCapabilities(body, errors, unit) {
 }
 
 function reviewedBatches(audit) {
-  return [...audit.matchAll(/^- (.+?) — (PENDING|IN_REVIEW|REVIEWED)$/gm)].map(([, name, status]) => ({ name, status }));
+  const body = section(audit, 'Stage-1 semantic review batches') ?? '';
+  return [...body.matchAll(/^- (.+?) — (PENDING|IN_REVIEW|REVIEWED)$/gm)].map(([, name, status]) => ({ name, status }));
 }
 
 export function collectChangedFiles(root = '.') {
@@ -172,6 +182,7 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
     const derived = { KEEP: 0, SPLIT: 0, MERGE: 0 };
     for (const row of ledger) if (derived[row[1]] !== undefined) derived[row[1]] += 1;
     const finalUnits = unique(originals.flatMap(original => original.primaryCapabilities.map(capability => homeMap.get(capability)?.unit).filter(Boolean)));
+    for (const id of finalUnits) { const body = unitMap.get(id)?.body ?? ''; if (placeholders.some(value => body.includes(value))) add(errors, `generic placeholder ${id}`); }
     let proofsPassed = 0; const proofsExpected = finalUnits.filter(id => multiIds.includes(id) && info.evidenceSchema === 'canonical-v2').length;
     for (const id of finalUnits.filter(id => multiIds.includes(id))) {
       const body = unitMap.get(id)?.body ?? ''; const schema = schemas[info.evidenceSchema];
@@ -182,7 +193,6 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
         if (!exactSet(proof, homes.filter(home => home[3] === id).map(home => home[0]))) add(errors, `proof capability mismatch ${id}`);
         else proofsPassed += 1;
       }
-      if (placeholders.some(value => body.includes(value))) add(errors, `generic placeholder ${id}`);
     }
     summaries.push({ name, originals: originals.length, derived, proofsPassed, proofsExpected, schema: info.evidenceSchema });
   }

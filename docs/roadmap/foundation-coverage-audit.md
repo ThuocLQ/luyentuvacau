@@ -11,7 +11,7 @@
 - **MIT 6.5840** — fault tolerance, replication and consistency: <https://pdos.lcs.mit.edu/6.824/>
 - **Google SRE** — SLO/error-budget decisions and cascading failure control: <https://sre.google/sre-book/service-level-objectives/> and <https://sre.google/sre-book/addressing-cascading-failures/>
 - **OWASP ASVS/API Security** — verification controls and API threat boundaries: <https://owasp.org/www-project-application-security-verification-standard/> and <https://owasp.org/projects/api-security-project>
-- **gRPC / cloud Well-Architected** — contracts, platform responsibility and networking: <https://grpc.io/docs/> and <https://docs.aws.amazon.com/wellarchitected/latest/framework/>
+- **gRPC / cloud Well-Architected** — contracts, name resolution/load balancing/health and platform responsibility: <https://grpc.io/docs/guides/custom-name-resolution/>, <https://grpc.io/docs/guides/health-checking/> and <https://docs.aws.amazon.com/wellarchitected/latest/framework/>
 
 The source families set the expected mechanisms and evidence; they do not automatically imply a one-chapter-one-capability curriculum.
 
@@ -46,7 +46,7 @@ The source families set the expected mechanisms and evidence; they do not automa
 | TLS | COVERED | `net-tls-trust-handshake` | `lu-net-proxy-tls-forwarded-boundary` | L2: trust/handshake failure | OWASP, platform docs | Clear owner; retain. |
 | HTTP semantics | COVERED | `net-http-semantics` | `lu-net-http-streaming-cancellation` | L3: body/stream/cancel behavior | platform docs | Clear owner; retain. |
 | Proxy and forwarded boundary | COVERED | `net-proxy-lb-forwarded-boundary` | `lu-net-proxy-tls-forwarded-boundary` | L3: forwarded identity/trust trace | OWASP | Clear owner; retain. |
-| Discovery, L4/L7 load balancing, health selection | IMPLICIT | `net-proxy-lb-forwarded-boundary`, `rel-health-readiness-semantics` | `lu-net-proxy-tls-forwarded-boundary`, `lu-rel-health-readiness-semantics` | L3: endpoint removal/routing evidence | platform docs, Well-Architected | Split ownership is coherent; require explicit joint scenario, no mutation. |
+| Discovery, L4/L7 load balancing, health selection | TRUE GAP | — | — | L3: logical service → evolving endpoint set → discovery/resolution → LB/routing policy → backend selection → health/load change → redistribution. Cover DNS vs discovery; static/dynamic endpoints; client/proxy balancing; L4/L7; round-robin/least-request/load-aware intuition; connection/request balancing; long-lived connection, affinity, stale endpoint and scale behavior. Evidence: resolver result, backend set, picker decision, connection target, health and request distribution. | gRPC name-resolution/load-balancing/health docs, Google SRE, Well-Architected | **CORE capability-mutation candidate**. Existing owners cover adjacent DNS, proxy trust and readiness but not this complete routing mechanism. |
 | Connection reuse | COVERED | `net-connection-reuse-pooling` | `lu-net-connection-reuse-pooling` | L3: age/pool/port pressure | platform docs | Clear owner; retain. |
 
 ## Distributed systems and messaging
@@ -95,19 +95,20 @@ The source families set the expected mechanisms and evidence; they do not automa
 | Status | Count |
 |---|---:|
 | COVERED | 39 |
-| IMPLICIT | 6 |
-| TRUE GAP | 4 |
+| IMPLICIT | 5 |
+| TRUE GAP | 5 |
 
 ### TRUE GAP candidates
 
 1. Applied cryptography for credentials and tokens — **CORE capability-mutation candidate**.
 2. Data encryption and key lifecycle — **CORE capability-mutation candidate**.
-3. Background jobs/scheduling — **CORE capability-mutation candidate**.
-4. Stream processing — **SPECIALIZATION candidate**; not an automatic core addition.
+3. Service discovery/load balancing — **CORE capability-mutation candidate**.
+4. Background jobs/scheduling — **CORE capability-mutation candidate**.
+5. Stream processing — **SPECIALIZATION candidate**; not an automatic core addition.
 
 Counts are row-level audit counts derived from the classifications above. No capability is changed in this audit.
 
 ### Authoring requirements without capability mutation
 
-Future decomposition must teach deeply inside the current owners: SQL parse/bind/catalog; prepared-plan lifecycle; service discovery plus L4/L7 load balancing and health endpoint selection; configuration/feature rollout and rollback; IAM/VPC/NAT/service networking; and gRPC/Protobuf compatibility, deadlines, streaming and unknown completion. `IMPLICIT` is not optional or a brief mention.
+Future decomposition must teach deeply inside the current owners: SQL parse/bind/catalog; prepared-plan lifecycle; configuration/feature rollout and rollback; IAM/VPC/NAT/service networking; and gRPC/Protobuf compatibility, deadlines, streaming and unknown completion. `IMPLICIT` is not optional or a brief mention. Service discovery/load balancing is a TRUE GAP and must not be hidden in adjacent owners.
 
