@@ -1350,7 +1350,12 @@ A partner lowers idle timeout; the pool checks out an old connection, reset retr
 
 ### Shared assessment task
 
-Given connect/reset, socket state, pooled age/lifetime, active/queued count and port usage, decide TCP versus pool cause and set safe lifetime/limit.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| net-tcp-connection-semantics | Connect latency, reset/refused error and socket state establish peer lifecycle. |\n| net-connection-reuse-pooling | Age/lifetime, pool queue and port pressure establish reuse/limit behavior. |
+Given connect/reset, socket state, pooled age/lifetime, active/queued count and port usage, decide TCP versus pool cause and set safe lifetime/limit.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| net-tcp-connection-semantics | Connect latency, reset/refused error and socket state establish peer lifecycle. |
+| net-connection-reuse-pooling | Age/lifetime, pool queue and port pressure establish reuse/limit behavior. |
 
 ### Transfer variation
 
@@ -1435,7 +1440,12 @@ TLS ends at ingress but the app trusts every forwarded IP from the internet. A s
 
 ### Shared assessment task
 
-Given certificate/handshake, peer address, raw forwarded headers, proxy config and app identity, identify TLS termination, trusted hop and trusted metadata.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| net-tls-trust-handshake | Certificate identity/chain/expiry and handshake outcome establish trust/termination. |\n| net-proxy-lb-forwarded-boundary | Peer hop, transformed headers and trusted-proxy config establish forwarded identity. |
+Given certificate/handshake, peer address, raw forwarded headers, proxy config and app identity, identify TLS termination, trusted hop and trusted metadata.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| net-tls-trust-handshake | Certificate identity/chain/expiry and handshake outcome establish trust/termination. |
+| net-proxy-lb-forwarded-boundary | Peer hop, transformed headers and trusted-proxy config establish forwarded identity. |
 
 ### Transfer variation
 
@@ -1478,7 +1488,12 @@ A client disconnects mid-upload but the API buffered the body and a worker keeps
 
 ### Shared assessment task
 
-Given method/status/header, bytes, abort signal, downstream span and allocation/stream lifetime, define partial outcome, streaming/cancellation propagation and work stop.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| net-http-semantics | Method, status, headers and partial-body outcome in capture/contract test prove HTTP contract. |\n| net-streaming-body-cancellation | Byte counts, abort signal, downstream span and stream lifetime prove streaming/cancellation. |
+Given method/status/header, bytes, abort signal, downstream span and allocation/stream lifetime, define partial outcome, streaming/cancellation propagation and work stop.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| net-http-semantics | Method, status, headers and partial-body outcome in capture/contract test prove HTTP contract. |
+| net-streaming-body-cancellation | Byte counts, abort signal, downstream span and stream lifetime prove streaming/cancellation. |
 
 ### Transfer variation
 
@@ -3373,7 +3388,12 @@ Gateway has 800 ms, every hop uses 800 ms and the last service retries a reset t
 
 ### Shared assessment task
 
-Given a three-hop timeline with deadline, cancellation, error class, attempts, delay and downstream rate, calculate retry budget and allowed attempts.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| api-deadlines-timeout-cancellation | Original/remaining deadline, cancellation and spans prove cross-hop budget/lifetime. |\n| api-retry-backoff-jitter | Attempt class/timing, delay schedule and downstream rate prove bounded retry. |
+Given a three-hop timeline with deadline, cancellation, error class, attempts, delay and downstream rate, calculate retry budget and allowed attempts.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| api-deadlines-timeout-cancellation | Original/remaining deadline, cancellation and spans prove cross-hop budget/lifetime. |
+| api-retry-backoff-jitter | Attempt class/timing, delay schedule and downstream rate prove bounded retry. |
 
 ### Transfer variation
 
@@ -3584,7 +3604,12 @@ An API accepts an ID token because its signature is valid but ignores audience a
 
 ### Shared assessment task
 
-Given issuer, audience, expiry, token type, scope, client/resource IDs, AS metadata and auth logs, decide API authentication/access without inferring object/tenant authorization.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| sec-auth-session-token | Issuer, audience, expiry, signature/session state and auth logs prove identity/token validity/lifetime. |\n| sec-oauth-oidc-awareness | Token type, scope, client/resource IDs and AS metadata prove delegated access versus identity assertion. |
+Given issuer, audience, expiry, token type, scope, client/resource IDs, AS metadata and auth logs, decide API authentication/access without inferring object/tenant authorization.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| sec-auth-session-token | Issuer, audience, expiry, signature/session state and auth logs prove identity/token validity/lifetime. |
+| sec-oauth-oidc-awareness | Token type, scope, client/resource IDs and AS metadata prove delegated access versus identity assertion. |
 
 ### Transfer variation
 
