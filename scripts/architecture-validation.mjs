@@ -158,7 +158,9 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
   if (hasDuplicate(multi.map(row => row[0])) || !exactSet(multiIds, multi.map(row => row[0]))) add(errors, 'multi review mismatch');
 
   const rawBatches = manifest.batches ?? {}; const batches = Object.fromEntries(Object.entries(rawBatches).map(([name, value]) => [name, Array.isArray(value) ? { evidenceSchema: name === 'Runtime & Concurrency' ? 'legacy-v1' : 'canonical-v2', originalUnits: value } : value]));
-  const status = new Map(reviewedBatches(audit).map(entry => [entry.name, entry.status]));
+  const statusRows = reviewedBatches(audit);
+  if (hasDuplicate(statusRows.map(row => row.name)) || !exactSet(Object.keys(batches), statusRows.map(row => row.name))) add(errors, 'stage-1 batch registry mismatch');
+  const status = new Map(statusRows.map(entry => [entry.name, entry.status]));
   if (batch && (!batches[batch] || status.get(batch) !== 'REVIEWED')) add(errors, `batch not reviewed ${batch}`);
   const summaries = [];
   const selected = batch ? [batch] : [...status.entries()].filter(([, value]) => value === 'REVIEWED').map(([name]) => name);

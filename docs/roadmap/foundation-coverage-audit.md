@@ -94,7 +94,7 @@ The source families set the expected mechanisms and evidence; they do not automa
 
 | Status | Count |
 |---|---:|
-| COVERED | 39 |
+| COVERED | 40 |
 | IMPLICIT | 5 |
 | TRUE GAP | 5 |
 
