@@ -6,7 +6,7 @@
 
 ## Source families
 
-- **CMU DB 15-445/645** — storage, indexes, execution, optimization, transactions and recovery: <https://csd.cmu.edu/course/15445/s25>
+- **CMU DB 15-445/645** — storage, indexes, execution, optimization, transactions and recovery: <https://15445.courses.cs.cmu.edu/fall2026/>
 - **PostgreSQL documentation** — SQL execution, concurrency, WAL/recovery, backup and high availability: <https://www.postgresql.org/docs/current/>
 - **MIT 6.5840** — fault tolerance, replication and consistency: <https://pdos.lcs.mit.edu/6.824/>
 - **Google SRE** — SLO/error-budget decisions and cascading failure control: <https://sre.google/sre-book/service-level-objectives/> and <https://sre.google/sre-book/addressing-cascading-failures/>
@@ -26,7 +26,7 @@ The source families set the expected mechanisms and evidence; they do not automa
 | Parse, bind, names/types and catalog | IMPLICIT | `db-execution-operators` | `lu-execution-plan-estimates` | L2: explain query pipeline before plan; catalog lookup example | CMU, PostgreSQL | Owned by execution path; authoring requirement, no mutation. |
 | Optimizer/cardinality/cost | COVERED | `db-optimizer-cardinality-stats` | `lu-execution-plan-estimates` | L3: estimated vs actual rows/plan choice | CMU, PostgreSQL | Clear owner; retain. |
 | Executor/operators | COVERED | `db-execution-operators` | `lu-execution-plan-estimates` | L3: join/sort/scan operator trace | CMU, PostgreSQL | Clear owner; retain. |
-| Prepared statements and plan reuse | TRUE GAP | — | — | L2: parameter-sensitive plans, prepare/reuse evidence | PostgreSQL | No capability owns plan-cache lifecycle; candidate `db-prepared-plan-reuse`, needs mutation review. |
+| Prepared statements and plan reuse | IMPLICIT | `db-optimizer-cardinality-stats`, `db-execution-operators` | `lu-execution-plan-estimates` | L3: prepare/execute lifecycle, parameter sensitivity, generic/custom/reused plans, invalidation/replanning and `EXPLAIN EXECUTE`; transfer to Oracle binds and SQL Server parameter-sensitive plan cache | CMU Fall 2026, PostgreSQL | Must be taught deeply inside the existing execution/optimizer owners; no new DB capability. |
 | Transaction/isolation | COVERED | `db-transactions-isolation-anomalies` | `lu-db-transactions-mvcc-isolation` | L3: anomaly trace and isolation choice | CMU, PostgreSQL | Clear owner; retain. |
 | MVCC | COVERED | `db-mvcc-visibility` | `lu-db-transactions-mvcc-isolation` | L3: snapshot visibility evidence | CMU, PostgreSQL | Clear owner; retain. |
 | Locks/deadlocks | COVERED | `db-locks-deadlocks-contention` | `lu-db-locks-deadlocks-contention` | L3: wait graph and remedy | CMU, PostgreSQL | Clear owner; retain. |
@@ -74,9 +74,8 @@ The source families set the expected mechanisms and evidence; they do not automa
 | Trust boundaries/authn/authz/OAuth-OIDC | COVERED | `sec-trust-boundary-threat-model`, `sec-auth-session-token`, `sec-authorization-object-tenant`, `sec-oauth-oidc-awareness` | auth/security LUs | L3: object/tenant decision trace | OWASP ASVS/API | Clear owners; retain. |
 | Web/API and business-flow abuse | COVERED | `sec-browser-boundaries-cors-csrf-xss`, `sec-injection-ssrf-input-output`, `sec-abuse-bruteforce-resource-business-flow`, `sec-race-business-logic-abuse` | security LUs | L3: attack/mitigation/evidence | OWASP ASVS/API | Clear owners; retain. |
 | Secrets and audit | COVERED | `sec-secrets-third-party-trust`, `sec-audit-detection-evidence` | security LUs | L3: rotation/audit query | OWASP ASVS | Clear owners; retain. |
-| Cryptographic primitives and password hashing | TRUE GAP | — | — | L2: choose hash/MAC/signature; password work factor and verification | OWASP ASVS | Existing security non-goal excludes primitive implementation, but backend-safe use still lacks owner; candidate capability review. |
-| Encryption at rest/in transit and key lifecycle | TRUE GAP | — | — | L2: envelope boundary, rotation/revocation evidence | OWASP ASVS, Well-Architected | TLS/secrets do not own data-encryption/key lifecycle; candidate capability review. |
-| CSPRNG/token generation and sensitive-data handling | TRUE GAP | — | — | L2: entropy/token policy/redaction/classification evidence | OWASP ASVS | Auth token and audit touch consequences, not generation/protection mechanism; candidate capability review. |
+| Applied cryptography for credentials and tokens | TRUE GAP | — | — | L2: hash vs encryption vs MAC/signature; password salt/work factor and secure verification; CSPRNG and secure token generation | OWASP ASVS | **CORE capability-mutation candidate**. Safe use is needed, not cryptographic algorithm implementation. |
+| Data encryption and key lifecycle | TRUE GAP | — | — | L2: at-rest boundary, sensitive-data protection, envelope/KMS intuition, key scope/storage, rotation/revocation and exposure evidence | OWASP ASVS, Well-Architected | **CORE capability-mutation candidate**; TLS/secrets do not own data-key lifecycle. |
 
 ## Production, applied platforms and cloud
 
@@ -86,9 +85,9 @@ The source families set the expected mechanisms and evidence; they do not automa
 | SLI/SLO/error budgets, overload/cascades | COVERED | `rel-user-journey-sli-slo-budget`, `rel-overload-load-shedding-degradation`, `rel-cascading-failure-queue-capacity` | reliability LUs | L3: budget/queue/degradation trace | Google SRE | Clear owners; retain. |
 | Health/readiness, rollout/rollback, incident/DR | COVERED | `rel-health-readiness-semantics`, `rel-change-rollout-rollback-risk`, `rel-incident-response-postmortem`, `rel-disaster-recovery-rpo-rto` | reliability LUs | L3: operational decision evidence | Google SRE | Clear owners; retain. |
 | Configuration engineering and feature/runtime config rollback | IMPLICIT | `delivery-artifact-image-config`, `rel-change-rollout-rollback-risk` | delivery/reliability LUs | L3: mutable config/flag rollback with audit | Well-Architected | Owned across artifact and rollout; require an explicit linked scenario, no mutation. |
-| gRPC/Protobuf/serialization | TRUE GAP | — | — | L2: schema evolution, deadline, streaming and compatibility evidence | gRPC docs | Generic API/versioning does not own binary/RPC mechanism; candidate capability review. |
-| Background jobs/scheduling | TRUE GAP | — | — | L3: durable handoff, schedule misfire, concurrency and recovery evidence | platform docs, Google SRE | Queue/outbox cover messages, not scheduler ownership/misfire semantics; candidate capability review. |
-| Stream processing | TRUE GAP | — | — | L3: event-time/window/state/replay correctness | platform docs | Messaging replay does not own stream-time/state mechanism; candidate capability review. |
+| gRPC/Protobuf/serialization | IMPLICIT | `api-versioning-compatibility`, `api-deadlines-timeout-cancellation`, `net-streaming-body-cancellation`, `dist-rpc-unknown-completion` | API/network/distributed LUs | L3: Protobuf wire/schema and field-number evolution, unary/streaming RPC, deadline/cancellation, unknown completion/retry and service-config/LB where relevant | gRPC docs | Deep cross-cutting authoring obligation within existing mechanism owners; do not create technology-named `grpc-*` capability. |
+| Background jobs/scheduling | TRUE GAP | — | — | L3: schedule/trigger → durable ownership → acquisition/execution → crash/misfire → retry/recovery → concurrency/idempotency → evidence | .NET Hosted Services, Quartz.NET persistent store/misfire/clustering, Hangfire | **CORE capability-mutation candidate**. Queue/outbox do not own scheduler/misfire semantics. |
+| Stream processing | TRUE GAP | — | — | L3: event time, out-of-order events, windows, state stores, stateful aggregation/join, replay/recovery and processing guarantees | Apache Kafka Streams | **SPECIALIZATION candidate**, not an automatic core addition. Messaging replay does not own stream-time/state mechanics. |
 | Cloud IAM/VPC/NAT/service networking | IMPLICIT | `delivery-cloud-responsibility-managed-services`, `net-connection-reuse-pooling`, `net-proxy-lb-forwarded-boundary` | delivery/network LUs | L2: IAM least privilege and subnet/NAT path evidence | Well-Architected | Managed-service owner explicitly includes IAM/network; authoring requirement before mutation. |
 
 ## Closure
@@ -96,22 +95,19 @@ The source families set the expected mechanisms and evidence; they do not automa
 | Status | Count |
 |---|---:|
 | COVERED | 39 |
-| IMPLICIT | 4 |
-| TRUE GAP | 7 |
+| IMPLICIT | 6 |
+| TRUE GAP | 4 |
 
 ### TRUE GAP candidates
 
-1. Prepared statements / plan reuse — **capability mutation candidate**; it owns a specific execution-plan lifecycle not held elsewhere.
-2. Cryptographic primitives and password hashing — **capability mutation candidate**; backend-safe use needs its own mechanism and verification boundary.
-3. Encryption and key lifecycle — **capability mutation candidate**; neither TLS nor secrets owns data-key lifecycle.
-4. CSPRNG/token generation and sensitive-data protection — **capability mutation candidate**; distinct from auth policy and audit logging.
-5. gRPC/Protobuf/serialization — **capability mutation candidate**; RPC contract mechanics need a bounded owner.
-6. Background jobs/scheduling — **capability mutation candidate**; scheduling/misfire/durable-execution evidence is not equivalent to messaging.
-7. Stream processing — **capability mutation candidate**; event-time/window/state semantics do not fit generic replay.
+1. Applied cryptography for credentials and tokens — **CORE capability-mutation candidate**.
+2. Data encryption and key lifecycle — **CORE capability-mutation candidate**.
+3. Background jobs/scheduling — **CORE capability-mutation candidate**.
+4. Stream processing — **SPECIALIZATION candidate**; not an automatic core addition.
 
-Counts are row-level audit counts; the candidate list deliberately contains seven entries because the final table identifies seven true gaps. Before any mutation, Stage 1D must decide whether closely related security candidates form one capability or retain separate evidence boundaries.
+Counts are row-level audit counts derived from the classifications above. No capability is changed in this audit.
 
 ### Authoring requirements without capability mutation
 
-Future decomposition must explicitly teach query parse/bind/catalog flow; L4/L7 endpoint selection; configuration/feature rollout rollback; and IAM/VPC/NAT service path within their existing owners. These are `IMPLICIT`, not permission to leave the mechanism unexplained.
+Future decomposition must teach deeply inside the current owners: SQL parse/bind/catalog; prepared-plan lifecycle; service discovery plus L4/L7 load balancing and health endpoint selection; configuration/feature rollout and rollback; IAM/VPC/NAT/service networking; and gRPC/Protobuf compatibility, deadlines, streaming and unknown completion. `IMPLICIT` is not optional or a brief mention.
 

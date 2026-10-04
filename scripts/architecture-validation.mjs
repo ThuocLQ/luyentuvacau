@@ -24,6 +24,8 @@ function table(text, heading, columns, errors) {
   if (start < 0) { add(errors, `missing table ${heading}`); return []; }
   const header = cells(lines[start]);
   if (columns && !exactSet(header, columns)) add(errors, `malformed table header ${heading}`);
+  const separator = lines[start + 1] ?? '';
+  if (!validSeparator(separator, header.length)) add(errors, `malformed table separator ${heading}`);
   const result = [];
   for (let i = start + 2; i < lines.length && lines[i].startsWith('|'); i += 1) {
     const row = cells(lines[i]);
@@ -34,6 +36,7 @@ function table(text, heading, columns, errors) {
 }
 const cells = line => line.split('|').slice(1, -1).map(value => value.trim());
 const linePhysical = (line, count) => line.endsWith('|') && line.split('|').length === count + 2;
+const validSeparator = (line, count) => linePhysical(line, count) && cells(line).every(cell => /^:?-{3,}:?$/.test(cell));
 const splitIds = value => value.split(';').map(id => id.trim()).filter(Boolean);
 const hasDuplicate = values => values.length !== new Set(values).size;
 
@@ -73,13 +76,14 @@ const schemas = {
   'legacy-v1': ['Shared problem / need', 'Shared mechanism / state trace', 'Shared observable evidence', 'Shared failure / debug story', 'Assessment-coherence argument', 'Transfer variation'],
   'canonical-v2': ['Canonical scenario', 'Integrated mechanism / state trace', 'Integrated evidence surface', 'Failure and debug loop', 'Shared assessment task', 'Transfer variation', 'Boundary decision'],
 };
-const placeholders = ['One bounded trace observes all Primary mechanisms.', 'TODO', 'TBD', 'unchanged composition'];
+const placeholders = ['One bounded trace observes all Primary mechanisms.', 'strongest data boundary', 'One canonical scenario defined in map.', 'One bounded assessment is coherent.', 'Change workload, failure mode, topology or data distribution while preserving the mechanism above.', 'TODO', 'TBD', 'unchanged composition'];
 
 function proofCapabilities(body, errors, unit) {
   const marker = '| Primary capability | What evidence in this same task proves it |';
   const at = body.indexOf(marker);
   if (at < 0) { add(errors, `missing proof table ${unit}`); return []; }
   const lines = body.slice(at).split(/\r?\n/); const output = [];
+  if (!validSeparator(lines[1] ?? '', 2)) add(errors, `malformed proof table separator ${unit}`);
   for (let i = 2; i < lines.length && lines[i].startsWith('|'); i += 1) {
     const row = cells(lines[i]);
     if (!linePhysical(lines[i], 2) || row.length !== 2) add(errors, `malformed proof table ${unit}`);
@@ -109,7 +113,7 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
   const homes = table(audit, 'B. Primary-Home Registry', ['Capability ID', 'Canonical owner', 'Frozen level', 'Primary Unit', 'Domain candidate'], errors);
   const composition = table(audit, 'C. Unit Composition Registry', ['Unit ID', 'Primary capability IDs', 'Primary count', 'Owner set', 'Singleton / Multi'], errors);
   const single = table(audit, 'D. Singleton Review Registry', ['Unit ID', 'Capability', 'Strongest merge candidate(s)', 'Why merge rejected'], errors);
-  const multi = table(audit, 'E. Multi-Capability Grouping Review', null, errors);
+  const multi = table(audit, 'E. Multi-Capability Grouping Review', ['Unit ID', 'Shared problem / need', 'Shared mechanism / state trace', 'Shared observable evidence', 'Shared failure / debug story', 'Assessment-coherence argument'], errors);
   const registry = table(map, 'Unit Registry', ['Unit ID', 'Working title', 'Domain candidate', 'Primary owner set', 'Primary capability count'], errors);
   const frozenMap = frozenCapabilities(frozen, errors);
   const homeMap = new Map();
@@ -118,7 +122,7 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
     if (homeMap.has(id)) add(errors, `duplicate Primary capability ${id}`);
     homeMap.set(id, { owner, level, unit });
     const source = frozenMap.get(id);
-    if (!source) { add(errors, `unknown Primary ${id}`); add(errors, `missing frozen capability ${id}`); }
+    if (!source) add(errors, `unknown Primary ${id}`);
     else { if (source.owner !== owner) add(errors, `owner mismatch ${id}`); if (source.level !== level) add(errors, `L-level mismatch ${id}`); }
   }
   for (const id of frozenMap.keys()) if (!homeMap.has(id)) add(errors, `missing frozen capability ${id}`);
@@ -146,6 +150,7 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
   const rawBatches = manifest.batches ?? {}; const batches = Object.fromEntries(Object.entries(rawBatches).map(([name, value]) => [name, Array.isArray(value) ? { evidenceSchema: name === 'Runtime & Concurrency' ? 'legacy-v1' : 'canonical-v2', originalUnits: value } : value]));
   const status = new Map(reviewedBatches(audit).map(entry => [entry.name, entry.status]));
   if (batch && (!batches[batch] || status.get(batch) !== 'REVIEWED')) add(errors, `batch not reviewed ${batch}`);
+  const summaries = [];
   const selected = batch ? [batch] : [...status.entries()].filter(([, value]) => value === 'REVIEWED').map(([name]) => name);
   for (const name of selected) {
     const info = batches[name];
@@ -164,7 +169,10 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
       if (row[1] !== disposition) add(errors, `wrong disposition ${original.id}`);
       if (!exactSet(splitIds(row[2]), targets)) add(errors, `ledger target mismatch ${original.id}`);
     }
+    const derived = { KEEP: 0, SPLIT: 0, MERGE: 0 };
+    for (const row of ledger) if (derived[row[1]] !== undefined) derived[row[1]] += 1;
     const finalUnits = unique(originals.flatMap(original => original.primaryCapabilities.map(capability => homeMap.get(capability)?.unit).filter(Boolean)));
+    let proofsPassed = 0; const proofsExpected = finalUnits.filter(id => multiIds.includes(id) && info.evidenceSchema === 'canonical-v2').length;
     for (const id of finalUnits.filter(id => multiIds.includes(id))) {
       const body = unitMap.get(id)?.body ?? ''; const schema = schemas[info.evidenceSchema];
       if (!schema) add(errors, `unknown evidence schema ${name}`);
@@ -172,12 +180,14 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
       if (info.evidenceSchema === 'canonical-v2') {
         const proof = proofCapabilities(body, errors, id);
         if (!exactSet(proof, homes.filter(home => home[3] === id).map(home => home[0]))) add(errors, `proof capability mismatch ${id}`);
+        else proofsPassed += 1;
       }
       if (placeholders.some(value => body.includes(value))) add(errors, `generic placeholder ${id}`);
     }
+    summaries.push({ name, originals: originals.length, derived, proofsPassed, proofsExpected, schema: info.evidenceSchema });
   }
   if (changedFiles) errors.push(...validateDiffScope(changedFiles, allow, requireChanged, ignore));
-  return { errors: unique(errors), counts: { capabilities: homes.length, units: unitIds.length, singletons: singletonIds.length, multi: multiIds.length } };
+  return { errors: unique(errors), counts: { capabilities: homes.length, homes: homes.length, units: unitIds.length, singletons: singletonIds.length, multi: multiIds.length }, batches: { reviewed: [...status.values()].filter(value => value === 'REVIEWED').length, pendingOrInReview: [...status.values()].filter(value => value !== 'REVIEWED').length, selected: summaries }, diffScopePassed: Boolean(changedFiles) && !errors.some(error => error.includes('changed file')) };
 }
 
 export function validateArchitecture({ root = '.', batch, allow = [], requireChanged = [], ignore = [], changedFiles } = {}) {
