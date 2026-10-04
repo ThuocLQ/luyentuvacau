@@ -1342,19 +1342,19 @@ TCP connection được establish rồi giữ state đến close/reset; HTTP req
 
 ### Integrated evidence surface
 
-Socket state; connect timing; errno/socket exception; SYN/connection metrics; server accept count.; Pool counters/state; socket states; port usage; connection setup time; reset/retry trace.
+One trace joins connect/reset/socket state and latency with connection age, pool lifetime, active/queued state and port pressure so TCP lifecycle and reuse boundary are evidenced together.
 
 ### Failure and debug loop
 
-Connection refused; reset; handshake timeout; connection exhaustion.; Socket/ephemeral-port exhaustion; stale pooled connection; pool limit queueing; new client per request.
+A partner lowers idle timeout; the pool checks out an old connection, reset retries open more sockets and replicas behind NAT exhaust ports. Compare reset timing with age, queue and port pressure; do not create a new client per request.
 
 ### Shared assessment task
 
-Use connect/reset/socket state plus pool queue, port usage and idle age to classify the boundary; set a safe lifetime/limit and reject new-client-per-request. The evidence table below must attribute every Primary capability once.
+Given connect/reset, socket state, pooled age/lifetime, active/queued count and port usage, decide TCP versus pool cause and set safe lifetime/limit.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| net-tcp-connection-semantics | Connect latency, reset/refused error and socket state establish peer lifecycle. |\n| net-connection-reuse-pooling | Age/lifetime, pool queue and port pressure establish reuse/limit behavior. |
 
 ### Transfer variation
 
-Từ local same-host call sang remote availability zone with NAT/proxy.; Từ one outbound dependency sang nhiều replicas cùng mở connection tới một partner.
+Many app replicas behind NAT call a partner with an idle timeout shorter than the configured pool lifetime.
 
 ### Boundary decision
 
@@ -1427,19 +1427,19 @@ TLS handshake xác thực certificate/name/validity và thương lượng protec
 
 ### Integrated evidence surface
 
-Certificate chain/name/expiry; TLS error; handshake timing; client and proxy logs.; Proxy config; remote IP; raw forwarded headers; trusted-network list; app/proxy access logs.
+One ingress trace joins certificate/handshake at TLS termination with peer IP, raw forwarded headers, trusted-proxy config and the scheme/client identity observed by the app.
 
 ### Failure and debug loop
 
-Untrusted issuer; hostname mismatch; expired certificate; incompatible protocol/cipher.; Blind trust forwarded headers; spoofed client IP/scheme; redirect loop; auth/rate-limit dùng sai identity.
+TLS ends at ingress but the app trusts every forwarded IP from the internet. A spoofed IP/scheme bypasses rate limits or loops redirects. Compare peer IP, raw/transformed headers and trusted-hop list.
 
 ### Shared assessment task
 
-Use certificate/handshake output, peer IP, raw headers, proxy config and logs to identify the trusted proxy set and safe scheme/client identity. The evidence table below must attribute every Primary capability once.
+Given certificate/handshake, peer address, raw forwarded headers, proxy config and app identity, identify TLS termination, trusted hop and trusted metadata.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| net-tls-trust-handshake | Certificate identity/chain/expiry and handshake outcome establish trust/termination. |\n| net-proxy-lb-forwarded-boundary | Peer hop, transformed headers and trusted-proxy config establish forwarded identity. |
 
 ### Transfer variation
 
-Từ direct service certificate sang TLS termination at proxy with upstream trust split.; Từ local reverse proxy sang cloud load balancer và multi-hop ingress.
+TLS terminates upstream and forwarded metadata crosses another trusted proxy before the app.
 
 ### Boundary decision
 
@@ -1470,19 +1470,19 @@ Method nêu intent; status nêu kết quả ở boundary; headers điều khiể
 
 ### Integrated evidence surface
 
-Request/response capture; OpenAPI; contract tests; status distribution; cache header inspection.; Bytes in/out; cancellation/request-aborted trace; memory allocation; stream read/write duration; completion status.
+One upload lifecycle combines method/status/header/body contract, bytes transferred, request-aborted signal, downstream cancellation span and allocation/stream lifetime.
 
 ### Failure and debug loop
 
-GET có side effect; status success che validation failure; cache sai vì missing header; body contract thay đổi im lặng.; Buffer entire payload; continue expensive work after disconnect; partial upload treated complete; response stream disposed too early.
+A client disconnects mid-upload but the API buffered the body and a worker keeps exporting downstream. Compare byte count with abort time, response contract and allocation trace; partial upload is not success.
 
 ### Shared assessment task
 
-Use request/status capture, bytes, abort trace, allocation and downstream trace to choose streaming/cancellation; distinguish partial input from success. The evidence table below must attribute every Primary capability once.
+Given method/status/header, bytes, abort signal, downstream span and allocation/stream lifetime, define partial outcome, streaming/cancellation propagation and work stop.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| net-http-semantics | Method, status, headers and partial-body outcome in capture/contract test prove HTTP contract. |\n| net-streaming-body-cancellation | Byte counts, abort signal, downstream span and stream lifetime prove streaming/cancellation. |
 
 ### Transfer variation
 
-Từ internal API sang public endpoint có cache/proxy/client khác version.; Từ file upload local sang proxy streaming to a remote service with client disconnect.
+A proxy streams a large upload to another service and the caller disconnects mid-body.
 
 ### Boundary decision
 
@@ -3365,19 +3365,19 @@ Remaining deadline is split across hops; cancellation signals no useful caller l
 
 ### Integrated evidence surface
 
-Request deadline; CancellationToken trace; span durations; downstream timeout; active work after disconnect; audit state.; Attempt count; error class; timing; downstream rate; operation ID; remaining deadline.
+One request timeline contains original deadline, remaining budget per hop, cancellation, attempt/error timestamps, backoff/jitter delay and downstream request rate.
 
 ### Failure and debug loop
 
-Every hop full timeout; child outlives request; token not forwarded; timeout treated as no remote effect.; Retry non-idempotent mutation; nested retries multiply; immediate storm; retry auth/validation; budget exceeds deadline.
+Gateway has 800 ms, every hop uses 800 ms and the last service retries a reset three times. Child work survives cancellation and attempts overload downstream. Recompute remaining budget before each attempt.
 
 ### Shared assessment task
 
-Use propagated deadline, spans, attempt timeline, error class and downstream rate to calculate remaining budget and set retry/backoff/jitter. The evidence table below must attribute every Primary capability once.
+Given a three-hop timeline with deadline, cancellation, error class, attempts, delay and downstream rate, calculate retry budget and allowed attempts.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| api-deadlines-timeout-cancellation | Original/remaining deadline, cancellation and spans prove cross-hop budget/lifetime. |\n| api-retry-backoff-jitter | Attempt class/timing, delay schedule and downstream rate prove bounded retry. |
 
 ### Transfer variation
 
-One downstream call → three-service deadline chain.; One reset → thousands clients hitting degraded dependency.
+Three hops see transient failure; retry runs only while inside shrinking end-to-end deadline.
 
 ### Boundary decision
 
@@ -3576,19 +3576,19 @@ Credential/session/token establishes identity only after issuer/signature/audien
 
 ### Integrated evidence surface
 
-Token/session metadata; issuer/audience/expiry; auth logs; revocation store; claims.; Token type; issuer; audience; scope; client/resource IDs; AS metadata.
+One identity trace combines token/session validation with issuer, audience, expiry, type, scope, client/resource IDs and authorization-server metadata.
 
 ### Failure and debug loop
 
-Expired accepted; wrong issuer/audience; fixation/reuse; logout assumed instant stateless revoke; token exposure.; ID token used API token; wrong audience; code/token exposed; OAuth assumed arbitrary attribute proof.
+An API accepts an ID token because its signature is valid but ignores audience and scope. Caller identity exists but no resource access grant exists. Check token type, issuer/audience/expiry, scope and metadata.
 
 ### Shared assessment task
 
-Use issuer/audience/scope, token type, AS metadata and auth logs to decide whether the API request is authenticated and authorized. The evidence table below must attribute every Primary capability once.
+Given issuer, audience, expiry, token type, scope, client/resource IDs, AS metadata and auth logs, decide API authentication/access without inferring object/tenant authorization.\n\n| Primary capability | What evidence in this same task proves it |\n|---|---|\n| sec-auth-session-token | Issuer, audience, expiry, signature/session state and auth logs prove identity/token validity/lifetime. |\n| sec-oauth-oidc-awareness | Token type, scope, client/resource IDs and AS metadata prove delegated access versus identity assertion. |
 
 ### Transfer variation
 
-Server session → signed bearer token across services.; First-party SPA/API → external IdP or machine-to-machine API.
+An external IdP machine-to-machine client uses different issuer, audience, token type and scope.
 
 ### Boundary decision
 
