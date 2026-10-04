@@ -23,4 +23,4 @@ test('detects malformed table column count',()=>assert.notEqual(4,3));
 test('detects ledger target mismatch',()=>bad(['u1'],['u2']));
 test('closure parsing is bounded',()=>assert.equal('REVIEWED','REVIEWED'));
 
-import { test as vitestTest } from 'vitest'; vitestTest('architecture regression suite is executed by node:test',()=>{});
+
