@@ -511,6 +511,28 @@ None.
 
 **REVIEWED.** All 17 original in-scope units have an explicit disposition: 15 retained (including the four required singleton reviews) and 2 split. Canonical unit sections, Primary-home registry, composition registry, singleton review and cross-owner review hold the final state. REQUIRED and RECOMMENDED projection remains **NOT FINALIZED**.
 
+
+## Runtime & Concurrency Decision Ledger
+
+| Original unit | Primary disposition | Final canonical state |
+|---|---|---|
+| lu-race-atomicity | KEEP | lu-race-atomicity |
+| lu-prog-api-refactoring-change-safety | SPLIT | lu-prog-api-refactoring-change-safety; lu-prog-errors-results; lu-prog-invariants-domain-model; lu-prog-composition-dependencies |
+| lu-prog-collections-complexity | KEEP | lu-prog-collections-complexity |
+| lu-prog-resource-ownership | KEEP | lu-prog-resource-ownership |
+| lu-prog-types-generics | KEEP | lu-prog-types-generics |
+| lu-prog-values-identity | KEEP | lu-prog-values-identity |
+| lu-runtime-allocation-gc | KEEP | lu-runtime-allocation-gc |
+| lu-runtime-diagnostics | KEEP | lu-runtime-diagnostics |
+| lu-runtime-jit-warmup | KEEP | lu-runtime-jit-warmup |
+| lu-runtime-managed-execution | KEEP | lu-runtime-managed-execution |
+| lu-os-blocking-io-waits | KEEP | lu-os-blocking-io-waits |
+| lu-os-process-thread-kernel | SPLIT | lu-os-process-thread-kernel; lu-os-scheduling-starvation; lu-os-termination-graceful-shutdown; lu-os-virtual-memory-page-cache |
+| lu-os-resource-exhaustion | KEEP | lu-os-resource-exhaustion |
+| lu-concurrency-async-parallelism | KEEP | lu-concurrency-async-parallelism |
+| lu-concurrency-deadlock-starvation | KEEP | lu-concurrency-deadlock-starvation |
+| lu-concurrency-local-vs-distributed | KEEP | lu-concurrency-local-vs-distributed |
+| lu-concurrency-memory-visibility | KEEP | lu-concurrency-memory-visibility |
 ## Data & Consistency batch closure
 
 **REVIEWED.** The Decision Ledger below accounts for all 17 original units: **7 KEEP, 7 SPLIT, 3 MERGE**. Final state is 25 Data & Consistency units.

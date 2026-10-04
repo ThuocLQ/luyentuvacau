@@ -212,3 +212,6 @@ For current Learning-Unit work, derive unit membership from the Primary-Home Reg
 Row counts must match derived counts, each row must use final canonical membership, no singleton may remain in the Multi registry, and no multi unit may appear in the Singleton registry. A stale classification blocks REVIEWED.
 
 Canonical-registry Markdown tables must also be machine-checked for expected column count, one physical row per entity, no concatenated rows, and no literal newline escape artifacts such as backslash-n or PowerShell-style backtick-n inside table structure. Content validation does not replace this structural check.
+## Executable architecture gate
+
+A rule that can be mechanically verified must not rely only on agent self-attestation. Validator PASS is necessary, not sufficient, for REVIEWED; validator FAIL blocks REVIEWED and commit. Final reports cannot waive a failed gate.

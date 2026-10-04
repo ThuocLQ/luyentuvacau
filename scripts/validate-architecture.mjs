@@ -1,0 +1,2 @@
+import { validateArchitecture } from './architecture-validation.mjs';
+const a=process.argv.slice(2), value=k=>a[a.indexOf(k)+1], values=k=>a.flatMap((x,i)=>x===k?[a[i+1]]:[]);const r=validateArchitecture({batch:value('--batch'),allow:values('--allow'),requireChanged:values('--require-changed')});if(r.errors.length){console.error('Architecture validation FAILED\n'+r.errors.join('\n'));process.exit(1)}console.log('Architecture validation PASS\nCapabilities: '+r.counts.capabilities+'\nUnits: '+r.counts.units+'\nSingletons: '+r.counts.singletons+'\nMulti: '+r.counts.multi);

@@ -56,3 +56,4 @@ For lesson authoring/review, use:
 For research traceability, use:
 
 `docs/research/source-map-template.md`
+For architecture mutation tasks, run npm run validate:architecture; a failed gate blocks REVIEWED and commit. Use batch diff-scope flags before closure; prose does not waive a failed gate.

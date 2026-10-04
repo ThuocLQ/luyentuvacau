@@ -1,0 +1,620 @@
+{
+  "baselineRef": "412216c591404480a6539f220ea324f9ec53af56",
+  "batches": {
+    "Data & Consistency": [
+      {
+        "id": "lu-index-query-shape",
+        "primaryCapabilities": [
+          "db-index-structures",
+          "db-composite-query-shape"
+        ]
+      },
+      {
+        "id": "lu-execution-plan-estimates",
+        "primaryCapabilities": [
+          "db-execution-operators",
+          "db-optimizer-cardinality-stats"
+        ]
+      },
+      {
+        "id": "lu-db-backup-restore",
+        "primaryCapabilities": [
+          "db-backup-restore",
+          "db-wal-crash-recovery"
+        ]
+      },
+      {
+        "id": "lu-db-buffer-io",
+        "primaryCapabilities": [
+          "db-buffer-io",
+          "db-physical-storage-pages",
+          "db-production-diagnosis-transfer"
+        ]
+      },
+      {
+        "id": "lu-db-connection-pool-exhaustion",
+        "primaryCapabilities": [
+          "db-connection-pool-exhaustion"
+        ]
+      },
+      {
+        "id": "lu-db-locks-deadlocks-contention",
+        "primaryCapabilities": [
+          "db-locks-deadlocks-contention",
+          "db-transactions-isolation-anomalies",
+          "db-schema-evolution"
+        ]
+      },
+      {
+        "id": "lu-db-modeling-invariants",
+        "primaryCapabilities": [
+          "db-modeling-invariants",
+          "db-partitioning-sharding-boundary"
+        ]
+      },
+      {
+        "id": "lu-db-mvcc-visibility",
+        "primaryCapabilities": [
+          "db-mvcc-visibility"
+        ]
+      },
+      {
+        "id": "lu-db-replication-failover",
+        "primaryCapabilities": [
+          "db-replication-failover"
+        ]
+      },
+      {
+        "id": "lu-nosql-cassandra-lsm-compaction-consistency",
+        "primaryCapabilities": [
+          "nosql-cassandra-lsm-compaction-consistency",
+          "nosql-cassandra-partition-model",
+          "nosql-transfer-storage-choice"
+        ]
+      },
+      {
+        "id": "lu-nosql-model-selection",
+        "primaryCapabilities": [
+          "nosql-model-selection",
+          "nosql-mongo-aggregate-model",
+          "nosql-redis-structures-memory",
+          "nosql-search-inverted-index-analysis"
+        ]
+      },
+      {
+        "id": "lu-nosql-mongo-index-shard-transaction",
+        "primaryCapabilities": [
+          "nosql-mongo-index-shard-transaction"
+        ]
+      },
+      {
+        "id": "lu-nosql-redis-persistence-replication-cluster-streams",
+        "primaryCapabilities": [
+          "nosql-redis-persistence-replication-cluster-streams"
+        ]
+      },
+      {
+        "id": "lu-nosql-search-refresh-shards-pagination",
+        "primaryCapabilities": [
+          "nosql-search-refresh-shards-pagination"
+        ]
+      },
+      {
+        "id": "lu-cache-capacity-eviction-fallback",
+        "primaryCapabilities": [
+          "cache-capacity-eviction-fallback",
+          "cache-need-source-of-truth",
+          "cache-evidence-transfer"
+        ]
+      },
+      {
+        "id": "lu-cache-invalidation-consistency",
+        "primaryCapabilities": [
+          "cache-invalidation-consistency",
+          "cache-multilayer-coherence"
+        ]
+      },
+      {
+        "id": "lu-cache-patterns",
+        "primaryCapabilities": [
+          "cache-patterns",
+          "cache-stampede-penetration-avalanche-hot-key"
+        ]
+      }
+    ],
+    "Runtime & Concurrency": [
+      {
+        "id": "lu-race-atomicity",
+        "primaryCapabilities": [
+          "concurrency-interleavings-invariants",
+          "concurrency-races-check-then-act",
+          "concurrency-synchronization-atomicity"
+        ]
+      },
+      {
+        "id": "lu-prog-api-refactoring-change-safety",
+        "primaryCapabilities": [
+          "prog-api-refactoring-change-safety",
+          "prog-errors-results",
+          "prog-invariants-domain-model",
+          "prog-composition-dependencies"
+        ]
+      },
+      {
+        "id": "lu-prog-collections-complexity",
+        "primaryCapabilities": [
+          "prog-collections-complexity"
+        ]
+      },
+      {
+        "id": "lu-prog-resource-ownership",
+        "primaryCapabilities": [
+          "prog-resource-ownership"
+        ]
+      },
+      {
+        "id": "lu-prog-types-generics",
+        "primaryCapabilities": [
+          "prog-types-generics"
+        ]
+      },
+      {
+        "id": "lu-prog-values-identity",
+        "primaryCapabilities": [
+          "prog-values-identity"
+        ]
+      },
+      {
+        "id": "lu-runtime-allocation-gc",
+        "primaryCapabilities": [
+          "runtime-allocation-gc",
+          "runtime-memory-roots-lifetime",
+          "runtime-retention-pooling-large-objects"
+        ]
+      },
+      {
+        "id": "lu-runtime-diagnostics",
+        "primaryCapabilities": [
+          "runtime-diagnostics",
+          "runtime-memory-performance-debug"
+        ]
+      },
+      {
+        "id": "lu-runtime-jit-warmup",
+        "primaryCapabilities": [
+          "runtime-jit-warmup"
+        ]
+      },
+      {
+        "id": "lu-runtime-managed-execution",
+        "primaryCapabilities": [
+          "runtime-managed-execution"
+        ]
+      },
+      {
+        "id": "lu-os-blocking-io-waits",
+        "primaryCapabilities": [
+          "os-blocking-io-waits",
+          "os-files-handles-sockets-ipc"
+        ]
+      },
+      {
+        "id": "lu-os-process-thread-kernel",
+        "primaryCapabilities": [
+          "os-process-thread-kernel",
+          "os-scheduling-starvation",
+          "os-termination-graceful-shutdown",
+          "os-virtual-memory-page-cache"
+        ]
+      },
+      {
+        "id": "lu-os-resource-exhaustion",
+        "primaryCapabilities": [
+          "os-resource-exhaustion"
+        ]
+      },
+      {
+        "id": "lu-concurrency-async-parallelism",
+        "primaryCapabilities": [
+          "concurrency-async-parallelism",
+          "concurrency-cancellation-lifetime",
+          "concurrency-bounded-backpressure"
+        ]
+      },
+      {
+        "id": "lu-concurrency-deadlock-starvation",
+        "primaryCapabilities": [
+          "concurrency-deadlock-starvation"
+        ]
+      },
+      {
+        "id": "lu-concurrency-local-vs-distributed",
+        "primaryCapabilities": [
+          "concurrency-local-vs-distributed"
+        ]
+      },
+      {
+        "id": "lu-concurrency-memory-visibility",
+        "primaryCapabilities": [
+          "concurrency-memory-visibility"
+        ]
+      }
+    ],
+    "Distributed Systems": [
+      {
+        "id": "lu-outbox-duplicate-safe-effect",
+        "primaryCapabilities": [
+          "msg-outbox-db-publish-gap",
+          "msg-consumer-idempotency-inbox"
+        ]
+      },
+      {
+        "id": "lu-dist-consensus-coordination-purpose",
+        "primaryCapabilities": [
+          "dist-consensus-coordination-purpose",
+          "dist-partial-failure-uncertainty",
+          "dist-replication-leader-quorum",
+          "dist-guarantee-recovery-transfer"
+        ]
+      },
+      {
+        "id": "lu-dist-consistency-linearizability",
+        "primaryCapabilities": [
+          "dist-consistency-linearizability"
+        ]
+      },
+      {
+        "id": "lu-dist-partitioning-ownership-rebalancing",
+        "primaryCapabilities": [
+          "dist-partitioning-ownership-rebalancing"
+        ]
+      },
+      {
+        "id": "lu-dist-reconciliation-convergence",
+        "primaryCapabilities": [
+          "dist-reconciliation-convergence",
+          "dist-rpc-unknown-completion"
+        ]
+      },
+      {
+        "id": "lu-dist-time-order-causality",
+        "primaryCapabilities": [
+          "dist-time-order-causality"
+        ]
+      },
+      {
+        "id": "lu-dist-transactions-2pc-boundary",
+        "primaryCapabilities": [
+          "dist-transactions-2pc-boundary"
+        ]
+      },
+      {
+        "id": "lu-msg-consumer-groups-offsets-rebalance",
+        "primaryCapabilities": [
+          "msg-consumer-groups-offsets-rebalance",
+          "msg-model-queue-topic-partition-order",
+          "msg-replay-backfill",
+          "msg-lag-backpressure-evidence"
+        ]
+      },
+      {
+        "id": "lu-msg-delivery-retry-poison-dlq",
+        "primaryCapabilities": [
+          "msg-delivery-retry-poison-dlq"
+        ]
+      },
+      {
+        "id": "lu-msg-external-side-effect-reconciliation",
+        "primaryCapabilities": [
+          "msg-external-side-effect-reconciliation"
+        ]
+      },
+      {
+        "id": "lu-msg-producer-acks-durability",
+        "primaryCapabilities": [
+          "msg-producer-acks-durability"
+        ]
+      },
+      {
+        "id": "lu-msg-schema-evolution-contract-ownership",
+        "primaryCapabilities": [
+          "msg-schema-evolution-contract-ownership"
+        ]
+      },
+      {
+        "id": "lu-msg-workflow-saga-compensation",
+        "primaryCapabilities": [
+          "msg-workflow-saga-compensation"
+        ]
+      }
+    ],
+    "Service & Network": [
+      {
+        "id": "lu-net-connection-reuse-pooling",
+        "primaryCapabilities": [
+          "net-connection-reuse-pooling",
+          "net-tcp-connection-semantics"
+        ]
+      },
+      {
+        "id": "lu-net-failure-localization-unknown-outcome",
+        "primaryCapabilities": [
+          "net-failure-localization-unknown-outcome",
+          "net-request-path-dns",
+          "net-tls-trust-handshake",
+          "net-http-semantics"
+        ]
+      },
+      {
+        "id": "lu-net-proxy-lb-forwarded-boundary",
+        "primaryCapabilities": [
+          "net-proxy-lb-forwarded-boundary"
+        ]
+      },
+      {
+        "id": "lu-net-streaming-body-cancellation",
+        "primaryCapabilities": [
+          "net-streaming-body-cancellation"
+        ]
+      },
+      {
+        "id": "lu-api-circuit-bulkhead-rate-limit",
+        "primaryCapabilities": [
+          "api-circuit-bulkhead-rate-limit"
+        ]
+      },
+      {
+        "id": "lu-api-contract-resource-semantics",
+        "primaryCapabilities": [
+          "api-contract-resource-semantics",
+          "api-validation-errors-pagination",
+          "api-versioning-compatibility",
+          "api-request-identity-idempotency"
+        ]
+      },
+      {
+        "id": "lu-api-deadlines-timeout-cancellation",
+        "primaryCapabilities": [
+          "api-deadlines-timeout-cancellation",
+          "api-retry-backoff-jitter",
+          "api-unknown-outcome-reconciliation"
+        ]
+      },
+      {
+        "id": "lu-sec-abuse-bruteforce-resource-business-flow",
+        "primaryCapabilities": [
+          "sec-abuse-bruteforce-resource-business-flow",
+          "sec-trust-boundary-threat-model",
+          "sec-unseen-attack-transfer"
+        ]
+      },
+      {
+        "id": "lu-sec-audit-detection-evidence",
+        "primaryCapabilities": [
+          "sec-audit-detection-evidence"
+        ]
+      },
+      {
+        "id": "lu-sec-auth-session-token",
+        "primaryCapabilities": [
+          "sec-auth-session-token",
+          "sec-authorization-object-tenant",
+          "sec-oauth-oidc-awareness"
+        ]
+      },
+      {
+        "id": "lu-sec-browser-boundaries-cors-csrf-xss",
+        "primaryCapabilities": [
+          "sec-browser-boundaries-cors-csrf-xss"
+        ]
+      },
+      {
+        "id": "lu-sec-injection-ssrf-input-output",
+        "primaryCapabilities": [
+          "sec-injection-ssrf-input-output"
+        ]
+      },
+      {
+        "id": "lu-sec-race-business-logic-abuse",
+        "primaryCapabilities": [
+          "sec-race-business-logic-abuse"
+        ]
+      },
+      {
+        "id": "lu-sec-secrets-third-party-trust",
+        "primaryCapabilities": [
+          "sec-secrets-third-party-trust"
+        ]
+      }
+    ],
+    "Production Engineering": [
+      {
+        "id": "lu-obs-cardinality-sampling-cost",
+        "primaryCapabilities": [
+          "obs-cardinality-sampling-cost",
+          "obs-instrumentation-context"
+        ]
+      },
+      {
+        "id": "lu-obs-db-io-downstream-attribution",
+        "primaryCapabilities": [
+          "obs-db-io-downstream-attribution",
+          "obs-latency-throughput-saturation",
+          "obs-tracing-distributed-evidence",
+          "obs-diagnostic-method"
+        ]
+      },
+      {
+        "id": "lu-obs-load-test-benchmark-validity",
+        "primaryCapabilities": [
+          "obs-load-test-benchmark-validity"
+        ]
+      },
+      {
+        "id": "lu-obs-logs-structured-correlation",
+        "primaryCapabilities": [
+          "obs-logs-structured-correlation",
+          "obs-signals-correlation"
+        ]
+      },
+      {
+        "id": "lu-obs-profiling-runtime-evidence",
+        "primaryCapabilities": [
+          "obs-profiling-runtime-evidence"
+        ]
+      },
+      {
+        "id": "lu-rel-cascading-failure-queue-capacity",
+        "primaryCapabilities": [
+          "rel-cascading-failure-queue-capacity",
+          "rel-overload-load-shedding-degradation",
+          "rel-dependency-budgets"
+        ]
+      },
+      {
+        "id": "lu-rel-change-rollout-rollback-risk",
+        "primaryCapabilities": [
+          "rel-change-rollout-rollback-risk",
+          "rel-user-journey-sli-slo-budget"
+        ]
+      },
+      {
+        "id": "lu-rel-disaster-recovery-rpo-rto",
+        "primaryCapabilities": [
+          "rel-disaster-recovery-rpo-rto"
+        ]
+      },
+      {
+        "id": "lu-rel-failure-injection-verification",
+        "primaryCapabilities": [
+          "rel-failure-injection-verification"
+        ]
+      },
+      {
+        "id": "lu-rel-health-readiness-semantics",
+        "primaryCapabilities": [
+          "rel-health-readiness-semantics"
+        ]
+      },
+      {
+        "id": "lu-rel-incident-response-postmortem",
+        "primaryCapabilities": [
+          "rel-incident-response-postmortem"
+        ]
+      },
+      {
+        "id": "lu-delivery-artifact-image-config",
+        "primaryCapabilities": [
+          "delivery-artifact-image-config",
+          "delivery-cicd-promotion-provenance",
+          "delivery-rollout-rollback-strategies",
+          "delivery-platform-evidence-debug"
+        ]
+      },
+      {
+        "id": "lu-delivery-autoscaling-signal-boundary",
+        "primaryCapabilities": [
+          "delivery-autoscaling-signal-boundary",
+          "delivery-resources-cpu-memory",
+          "delivery-platform-transfer"
+        ]
+      },
+      {
+        "id": "lu-delivery-cloud-responsibility-managed-services",
+        "primaryCapabilities": [
+          "delivery-cloud-responsibility-managed-services"
+        ]
+      },
+      {
+        "id": "lu-delivery-container-process-lifecycle",
+        "primaryCapabilities": [
+          "delivery-container-process-lifecycle",
+          "delivery-probes-health",
+          "delivery-graceful-shutdown-draining"
+        ]
+      }
+    ],
+    "Architecture & Engineering Reasoning": [
+      {
+        "id": "lu-test-ci-flakiness-repeatability",
+        "primaryCapabilities": [
+          "test-ci-flakiness-repeatability",
+          "test-risk-strategy-boundaries",
+          "test-time-concurrency-determinism",
+          "test-real-dependency-fixtures"
+        ]
+      },
+      {
+        "id": "lu-test-failure-resilience",
+        "primaryCapabilities": [
+          "test-failure-resilience",
+          "test-risk-transfer"
+        ]
+      },
+      {
+        "id": "lu-test-migration-compatibility",
+        "primaryCapabilities": [
+          "test-migration-compatibility"
+        ]
+      },
+      {
+        "id": "lu-test-property-boundary-fuzz",
+        "primaryCapabilities": [
+          "test-property-boundary-fuzz"
+        ]
+      },
+      {
+        "id": "lu-test-review-static-analysis-change-safety",
+        "primaryCapabilities": [
+          "test-review-static-analysis-change-safety"
+        ]
+      },
+      {
+        "id": "lu-test-unit-integration-contract",
+        "primaryCapabilities": [
+          "test-unit-integration-contract"
+        ]
+      },
+      {
+        "id": "lu-arch-boundaries-ownership",
+        "primaryCapabilities": [
+          "arch-boundaries-ownership",
+          "arch-requirements-quality-attributes",
+          "arch-data-ownership-source-of-truth",
+          "arch-failure-recovery-security-observability"
+        ]
+      },
+      {
+        "id": "lu-arch-consistency-latency-availability",
+        "primaryCapabilities": [
+          "arch-consistency-latency-availability"
+        ]
+      },
+      {
+        "id": "lu-arch-cost-complexity-changeability",
+        "primaryCapabilities": [
+          "arch-cost-complexity-changeability",
+          "arch-decision-communication-transfer"
+        ]
+      },
+      {
+        "id": "lu-arch-evolution-migration-strangler",
+        "primaryCapabilities": [
+          "arch-evolution-migration-strangler"
+        ]
+      },
+      {
+        "id": "lu-arch-scale-capacity-partitioning",
+        "primaryCapabilities": [
+          "arch-scale-capacity-partitioning"
+        ]
+      },
+      {
+        "id": "lu-arch-sync-async-integration",
+        "primaryCapabilities": [
+          "arch-sync-async-integration"
+        ]
+      }
+    ]
+  }
+}

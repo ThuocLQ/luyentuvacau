@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('architecture validator module exports validation', async()=>{const m=await import('./architecture-validation.mjs');assert.equal(typeof m.validateArchitecture,'function')});
