@@ -2,6 +2,23 @@
 
 This repository contains a learner-first engineering learning system.
 
+## Session continuity bootstrap
+
+Before substantial QuanNet work, especially after a new chat/session or agent handoff:
+
+1. Read `docs/project/working-state.md`.
+2. Verify the actual Git branch/ref and HEAD before continuing. If they differ from the recorded working state, Git is the factual state; investigate the divergence before editing.
+3. Follow the canonical authorities referenced by the working-state file. Do not copy their full rules into the working-state file.
+4. Use `docs/project/decision-log.md` for durable project/architecture decisions and rationale. It records history; it does not override current canonical artifacts.
+5. Never infer unfinished work from chat history or model memory alone when repository state can resolve it.
+6. After a substantial roadmap/curriculum/learning-design task, update `docs/project/working-state.md` to reflect the real final state and exact next task.
+7. Add a decision-log entry only when a decision is durable enough that a future session could otherwise repeat or reverse the debate.
+8. Keep continuity files compact. They are navigation and handoff surfaces, not duplicate specifications.
+
+For conflicts, use this precedence:
+
+`actual Git state + canonical authority artifacts → durable decision log → working-state cursor → chat/model memory`.
+
 Before changing any Learning Lab, lesson narrative, learning visual, quiz tied to a lesson, or research/source-map file:
 
 1. Read `docs/engineering-learning-standard.md`.
@@ -49,6 +66,7 @@ For curriculum decomposition, Learning Unit grouping, Learning Unit prerequisite
 `docs/roadmap/lesson-decomposition-contract.md`
 
 `lesson-decomposition-contract.md` defines semantic correctness for Learning Unit decomposition. `architecture-execution-protocol.md` defines execution, propagation, consistency, validation, and completion semantics.
+
 For lesson authoring/review, use:
 
 `docs/authoring/golden-lesson-checklist.md`
@@ -56,4 +74,5 @@ For lesson authoring/review, use:
 For research traceability, use:
 
 `docs/research/source-map-template.md`
-For architecture mutation tasks, run npm run validate:architecture; a failed gate blocks REVIEWED and commit. Use batch diff-scope flags before closure; prose does not waive a failed gate.
+
+For architecture mutation tasks, run `npm run validate:architecture`; a failed gate blocks REVIEWED and commit. Use batch diff-scope flags before closure; prose does not waive a failed gate.
