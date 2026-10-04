@@ -1,0 +1,117 @@
+# Foundation Coverage Audit
+
+> **Status:** Pre-Stage 1D coverage audit.  
+> **Scope:** Frozen Phase 2 capability and Learning Unit state, reviewed against backend-interview foundations. This is an audit, not a capability change request.  
+> **Method:** `COVERED` means a named frozen capability already owns the mechanism and evidence boundary. `IMPLICIT` means the boundary is owned but a future unit must teach the named sub-concept explicitly. `TRUE GAP` means no current owner can teach the mechanism and its failure/evidence loop without distorting that owner.
+
+## Source families
+
+- **CMU DB 15-445/645** — storage, indexes, execution, optimization, transactions and recovery: <https://csd.cmu.edu/course/15445/s25>
+- **PostgreSQL documentation** — SQL execution, concurrency, WAL/recovery, backup and high availability: <https://www.postgresql.org/docs/current/>
+- **MIT 6.5840** — fault tolerance, replication and consistency: <https://pdos.lcs.mit.edu/6.824/>
+- **Google SRE** — SLO/error-budget decisions and cascading failure control: <https://sre.google/sre-book/service-level-objectives/> and <https://sre.google/sre-book/addressing-cascading-failures/>
+- **OWASP ASVS/API Security** — verification controls and API threat boundaries: <https://owasp.org/www-project-application-security-verification-standard/> and <https://owasp.org/projects/api-security-project>
+- **gRPC / cloud Well-Architected** — contracts, platform responsibility and networking: <https://grpc.io/docs/> and <https://docs.aws.amazon.com/wellarchitected/latest/framework/>
+
+The source families set the expected mechanisms and evidence; they do not automatically imply a one-chapter-one-capability curriculum.
+
+## Relational database internals
+
+| Concept | Status | Current capability owner(s) | Current Learning Unit(s) | Teach / depth / evidence | Source | Rationale and recommendation |
+|---|---|---|---|---|---|---|
+| Relational model and invariants | COVERED | `db-modeling-invariants` | `lu-db-modeling-invariants` | L3: constraints, write ownership, broken invariant trace | CMU, PostgreSQL | Clear owner; retain. |
+| Page/row physical organization | COVERED | `db-physical-storage-pages` | `lu-db-buffer-io` | L2: page/tuple layout, cold/warm evidence | CMU, PostgreSQL | Clear storage boundary; retain. |
+| Buffer pool and I/O | COVERED | `db-buffer-io` | `lu-db-buffer-io` | L3: cache/page read diagnosis | CMU, PostgreSQL | Clear owner; retain. |
+| Indexes and query shape | COVERED | `db-index-structures`, `db-composite-query-shape` | `lu-index-query-shape` | L3: access path/plan evidence | CMU, PostgreSQL | Clear owner; retain. |
+| Parse, bind, names/types and catalog | IMPLICIT | `db-execution-operators` | `lu-execution-plan-estimates` | L2: explain query pipeline before plan; catalog lookup example | CMU, PostgreSQL | Owned by execution path; authoring requirement, no mutation. |
+| Optimizer/cardinality/cost | COVERED | `db-optimizer-cardinality-stats` | `lu-execution-plan-estimates` | L3: estimated vs actual rows/plan choice | CMU, PostgreSQL | Clear owner; retain. |
+| Executor/operators | COVERED | `db-execution-operators` | `lu-execution-plan-estimates` | L3: join/sort/scan operator trace | CMU, PostgreSQL | Clear owner; retain. |
+| Prepared statements and plan reuse | TRUE GAP | — | — | L2: parameter-sensitive plans, prepare/reuse evidence | PostgreSQL | No capability owns plan-cache lifecycle; candidate `db-prepared-plan-reuse`, needs mutation review. |
+| Transaction/isolation | COVERED | `db-transactions-isolation-anomalies` | `lu-db-transactions-mvcc-isolation` | L3: anomaly trace and isolation choice | CMU, PostgreSQL | Clear owner; retain. |
+| MVCC | COVERED | `db-mvcc-visibility` | `lu-db-transactions-mvcc-isolation` | L3: snapshot visibility evidence | CMU, PostgreSQL | Clear owner; retain. |
+| Locks/deadlocks | COVERED | `db-locks-deadlocks-contention` | `lu-db-locks-deadlocks-contention` | L3: wait graph and remedy | CMU, PostgreSQL | Clear owner; retain. |
+| WAL, dirty pages, checkpoint, recovery | COVERED | `db-wal-crash-recovery` | `lu-db-wal-crash-recovery` | L3: crash/restart recovery trace | CMU, PostgreSQL | Clear owner; retain. |
+| Backup and PITR | COVERED | `db-backup-restore` | `lu-db-backup-restore` | L3: restore verification/RPO evidence | PostgreSQL | Clear owner; retain. |
+| Connection pool | COVERED | `db-connection-pool-exhaustion` | `lu-db-connection-pool-exhaustion` | L3: acquire wait/pool saturation | PostgreSQL | Clear owner; retain. |
+| Schema migration | COVERED | `db-schema-evolution` | `lu-db-schema-evolution` | L3: compatibility/rollback boundary | PostgreSQL | Clear owner; retain. |
+| Replication/failover | COVERED | `db-replication-failover` | `lu-db-replication-failover` | L3: lag/promotion/recovery evidence | PostgreSQL | Clear owner; retain. |
+| Partitioning/sharding | COVERED | `db-partitioning-sharding-boundary` | `lu-db-partitioning-sharding-boundary` | L3: ownership/rebalance trade-off | CMU | Clear owner; retain. |
+
+## Networking and service path
+
+| Concept | Status | Current capability owner(s) | Current Learning Unit(s) | Teach / depth / evidence | Source | Rationale and recommendation |
+|---|---|---|---|---|---|---|
+| DNS | COVERED | `net-request-path-dns` | `lu-net-request-path-dns` | L2: resolver/cache/failure timing | gRPC/platform docs | Clear owner; retain. |
+| TCP | COVERED | `net-tcp-connection-semantics` | `lu-net-connection-reuse-pooling` | L2: connect/reset/socket evidence | platform docs | Clear owner; retain. |
+| TLS | COVERED | `net-tls-trust-handshake` | `lu-net-proxy-tls-forwarded-boundary` | L2: trust/handshake failure | OWASP, platform docs | Clear owner; retain. |
+| HTTP semantics | COVERED | `net-http-semantics` | `lu-net-http-streaming-cancellation` | L3: body/stream/cancel behavior | platform docs | Clear owner; retain. |
+| Proxy and forwarded boundary | COVERED | `net-proxy-lb-forwarded-boundary` | `lu-net-proxy-tls-forwarded-boundary` | L3: forwarded identity/trust trace | OWASP | Clear owner; retain. |
+| Discovery, L4/L7 load balancing, health selection | IMPLICIT | `net-proxy-lb-forwarded-boundary`, `rel-health-readiness-semantics` | `lu-net-proxy-tls-forwarded-boundary`, `lu-rel-health-readiness-semantics` | L3: endpoint removal/routing evidence | platform docs, Well-Architected | Split ownership is coherent; require explicit joint scenario, no mutation. |
+| Connection reuse | COVERED | `net-connection-reuse-pooling` | `lu-net-connection-reuse-pooling` | L3: age/pool/port pressure | platform docs | Clear owner; retain. |
+
+## Distributed systems and messaging
+
+| Concept | Status | Current capability owner(s) | Current Learning Unit(s) | Teach / depth / evidence | Source | Rationale and recommendation |
+|---|---|---|---|---|---|---|
+| RPC and partial failure | COVERED | `dist-rpc-unknown-completion`, `dist-partial-failure-uncertainty` | `lu-dist-reconciliation-convergence`, `lu-dist-consensus-coordination-purpose` | L3: timeout/unknown-outcome trace | MIT 6.5840 | Clear owners; retain. |
+| Time/order/causality | COVERED | `dist-time-order-causality` | `lu-dist-time-order-causality` | L3: ordering scope/evidence | MIT 6.5840 | Clear owner; retain. |
+| Consistency | COVERED | `dist-consistency-linearizability` | `lu-dist-consistency-linearizability` | L3: stated guarantee/failure trace | MIT 6.5840 | Clear owner; retain. |
+| Replication/quorum and consensus | COVERED | `dist-replication-leader-quorum`, `dist-consensus-coordination-purpose` | `lu-dist-consensus-coordination-purpose` | L3: term/quorum/availability | MIT 6.5840 | Clear owner; retain. |
+| Partition/rebalancing | COVERED | `dist-partitioning-ownership-rebalancing` | `lu-dist-partitioning-ownership-rebalancing` | L3: ownership transfer/rebalance | MIT 6.5840 | Clear owner; retain. |
+| Reconciliation | COVERED | `dist-reconciliation-convergence` | `lu-dist-reconciliation-convergence` | L3: source/diff/repeatable repair | MIT 6.5840 | Clear owner; retain. |
+| Distributed transaction boundary | COVERED | `dist-transactions-2pc-boundary` | `lu-dist-transactions-2pc-boundary` | L3: commit/blocking/recovery | MIT 6.5840 | Clear owner; retain. |
+| Queue/topic/partition/order | COVERED | `msg-model-queue-topic-partition-order` | `lu-msg-consumer-groups-offsets-rebalance` | L3: routing/order scope | MIT 6.5840 | Clear owner; retain. |
+| Producer durability | COVERED | `msg-producer-acks-durability` | `lu-msg-producer-acks-durability` | L3: ack contract/failure trace | platform docs | Clear owner; retain. |
+| Consumer groups/offset/rebalance | COVERED | `msg-consumer-groups-offsets-rebalance` | `lu-msg-consumer-groups-offsets-rebalance` | L3: assignment/offset/effect | platform docs | Clear owner; retain. |
+| Duplicate-safe effects and retry/DLQ | COVERED | `msg-consumer-idempotency-inbox`, `msg-delivery-retry-poison-dlq` | `lu-outbox-duplicate-safe-effect`, `lu-msg-delivery-retry-poison-dlq` | L3: duplicate/retry/audit state | MIT 6.5840 | Clear owners; retain. |
+| Replay/backfill/schema evolution | COVERED | `msg-replay-backfill`, `msg-schema-evolution-contract-ownership` | `lu-msg-consumer-groups-offsets-rebalance`, `lu-msg-schema-evolution-contract-ownership` | L3: replay window/schema compatibility | platform docs | Clear owners; retain. |
+| Saga/compensation/external reconciliation | COVERED | `msg-workflow-saga-compensation`, `msg-external-side-effect-reconciliation` | matching LUs | L3: side effect/recovery evidence | MIT 6.5840 | Clear owners; retain. |
+
+## Security
+
+| Concept | Status | Current capability owner(s) | Current Learning Unit(s) | Teach / depth / evidence | Source | Rationale and recommendation |
+|---|---|---|---|---|---|---|
+| Trust boundaries/authn/authz/OAuth-OIDC | COVERED | `sec-trust-boundary-threat-model`, `sec-auth-session-token`, `sec-authorization-object-tenant`, `sec-oauth-oidc-awareness` | auth/security LUs | L3: object/tenant decision trace | OWASP ASVS/API | Clear owners; retain. |
+| Web/API and business-flow abuse | COVERED | `sec-browser-boundaries-cors-csrf-xss`, `sec-injection-ssrf-input-output`, `sec-abuse-bruteforce-resource-business-flow`, `sec-race-business-logic-abuse` | security LUs | L3: attack/mitigation/evidence | OWASP ASVS/API | Clear owners; retain. |
+| Secrets and audit | COVERED | `sec-secrets-third-party-trust`, `sec-audit-detection-evidence` | security LUs | L3: rotation/audit query | OWASP ASVS | Clear owners; retain. |
+| Cryptographic primitives and password hashing | TRUE GAP | — | — | L2: choose hash/MAC/signature; password work factor and verification | OWASP ASVS | Existing security non-goal excludes primitive implementation, but backend-safe use still lacks owner; candidate capability review. |
+| Encryption at rest/in transit and key lifecycle | TRUE GAP | — | — | L2: envelope boundary, rotation/revocation evidence | OWASP ASVS, Well-Architected | TLS/secrets do not own data-encryption/key lifecycle; candidate capability review. |
+| CSPRNG/token generation and sensitive-data handling | TRUE GAP | — | — | L2: entropy/token policy/redaction/classification evidence | OWASP ASVS | Auth token and audit touch consequences, not generation/protection mechanism; candidate capability review. |
+
+## Production, applied platforms and cloud
+
+| Concept | Status | Current capability owner(s) | Current Learning Unit(s) | Teach / depth / evidence | Source | Rationale and recommendation |
+|---|---|---|---|---|---|---|
+| Observability, instrumentation, latency/throughput/saturation, load/profile | COVERED | `obs-*` | observability LUs | L3: discriminating evidence/hypothesis | Google SRE | Clear owners; retain. |
+| SLI/SLO/error budgets, overload/cascades | COVERED | `rel-user-journey-sli-slo-budget`, `rel-overload-load-shedding-degradation`, `rel-cascading-failure-queue-capacity` | reliability LUs | L3: budget/queue/degradation trace | Google SRE | Clear owners; retain. |
+| Health/readiness, rollout/rollback, incident/DR | COVERED | `rel-health-readiness-semantics`, `rel-change-rollout-rollback-risk`, `rel-incident-response-postmortem`, `rel-disaster-recovery-rpo-rto` | reliability LUs | L3: operational decision evidence | Google SRE | Clear owners; retain. |
+| Configuration engineering and feature/runtime config rollback | IMPLICIT | `delivery-artifact-image-config`, `rel-change-rollout-rollback-risk` | delivery/reliability LUs | L3: mutable config/flag rollback with audit | Well-Architected | Owned across artifact and rollout; require an explicit linked scenario, no mutation. |
+| gRPC/Protobuf/serialization | TRUE GAP | — | — | L2: schema evolution, deadline, streaming and compatibility evidence | gRPC docs | Generic API/versioning does not own binary/RPC mechanism; candidate capability review. |
+| Background jobs/scheduling | TRUE GAP | — | — | L3: durable handoff, schedule misfire, concurrency and recovery evidence | platform docs, Google SRE | Queue/outbox cover messages, not scheduler ownership/misfire semantics; candidate capability review. |
+| Stream processing | TRUE GAP | — | — | L3: event-time/window/state/replay correctness | platform docs | Messaging replay does not own stream-time/state mechanism; candidate capability review. |
+| Cloud IAM/VPC/NAT/service networking | IMPLICIT | `delivery-cloud-responsibility-managed-services`, `net-connection-reuse-pooling`, `net-proxy-lb-forwarded-boundary` | delivery/network LUs | L2: IAM least privilege and subnet/NAT path evidence | Well-Architected | Managed-service owner explicitly includes IAM/network; authoring requirement before mutation. |
+
+## Closure
+
+| Status | Count |
+|---|---:|
+| COVERED | 39 |
+| IMPLICIT | 4 |
+| TRUE GAP | 7 |
+
+### TRUE GAP candidates
+
+1. Prepared statements / plan reuse — **capability mutation candidate**; it owns a specific execution-plan lifecycle not held elsewhere.
+2. Cryptographic primitives and password hashing — **capability mutation candidate**; backend-safe use needs its own mechanism and verification boundary.
+3. Encryption and key lifecycle — **capability mutation candidate**; neither TLS nor secrets owns data-key lifecycle.
+4. CSPRNG/token generation and sensitive-data protection — **capability mutation candidate**; distinct from auth policy and audit logging.
+5. gRPC/Protobuf/serialization — **capability mutation candidate**; RPC contract mechanics need a bounded owner.
+6. Background jobs/scheduling — **capability mutation candidate**; scheduling/misfire/durable-execution evidence is not equivalent to messaging.
+7. Stream processing — **capability mutation candidate**; event-time/window/state semantics do not fit generic replay.
+
+Counts are row-level audit counts; the candidate list deliberately contains seven entries because the final table identifies seven true gaps. Before any mutation, Stage 1D must decide whether closely related security candidates form one capability or retain separate evidence boundaries.
+
+### Authoring requirements without capability mutation
+
+Future decomposition must explicitly teach query parse/bind/catalog flow; L4/L7 endpoint selection; configuration/feature rollout rollback; and IAM/VPC/NAT service path within their existing owners. These are `IMPLICIT`, not permission to leave the mechanism unexplained.
+
