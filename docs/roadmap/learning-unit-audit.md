@@ -533,6 +533,7 @@ None.
 | lu-concurrency-deadlock-starvation | KEEP | lu-concurrency-deadlock-starvation |
 | lu-concurrency-local-vs-distributed | KEEP | lu-concurrency-local-vs-distributed |
 | lu-concurrency-memory-visibility | KEEP | lu-concurrency-memory-visibility |
+
 ## Data & Consistency batch closure
 
 **REVIEWED.** The Decision Ledger below accounts for all 17 original units: **7 KEEP, 7 SPLIT, 3 MERGE**. Final state is 25 Data & Consistency units.
@@ -541,23 +542,23 @@ None.
 
 | Original unit | Primary disposition | Final canonical state |
 |---|---|---|
-| lu-index-query-shape | KEEP | unchanged composition; evidence hardened |
-| lu-execution-plan-estimates | KEEP | unchanged composition; evidence hardened |
+| lu-index-query-shape | KEEP | lu-index-query-shape |
+| lu-execution-plan-estimates | KEEP | lu-execution-plan-estimates |
 | lu-db-backup-restore | SPLIT | lu-db-backup-restore; lu-db-wal-crash-recovery |
 | lu-db-buffer-io | SPLIT | lu-db-buffer-io; lu-db-production-diagnosis-transfer |
-| lu-db-connection-pool-exhaustion | KEEP | singleton retained |
+| lu-db-connection-pool-exhaustion | KEEP | lu-db-connection-pool-exhaustion |
 | lu-db-locks-deadlocks-contention | SPLIT | lu-db-locks-deadlocks-contention; lu-db-transactions-mvcc-isolation; lu-db-schema-evolution |
 | lu-db-modeling-invariants | SPLIT | lu-db-modeling-invariants; lu-db-partitioning-sharding-boundary |
 | lu-db-mvcc-visibility | MERGE | lu-db-transactions-mvcc-isolation |
-| lu-db-replication-failover | KEEP | singleton retained |
+| lu-db-replication-failover | KEEP | lu-db-replication-failover |
 | lu-nosql-cassandra-lsm-compaction-consistency | SPLIT | lu-nosql-cassandra-lsm-compaction-consistency; lu-nosql-storage-choice-transfer |
-| lu-nosql-model-selection | SPLIT | lu-nosql-model-selection; lu-nosql-mongo-aggregate-model; lu-nosql-redis-structures-memory |
-| lu-nosql-mongo-index-shard-transaction | KEEP | singleton retained |
-| lu-nosql-redis-persistence-replication-cluster-streams | KEEP | singleton retained |
+| lu-nosql-model-selection | SPLIT | lu-nosql-model-selection; lu-nosql-mongo-aggregate-model; lu-nosql-redis-structures-memory; lu-nosql-search-projection |
+| lu-nosql-mongo-index-shard-transaction | KEEP | lu-nosql-mongo-index-shard-transaction |
+| lu-nosql-redis-persistence-replication-cluster-streams | KEEP | lu-nosql-redis-persistence-replication-cluster-streams |
 | lu-nosql-search-refresh-shards-pagination | MERGE | lu-nosql-search-projection |
-| lu-cache-capacity-eviction-fallback | SPLIT | lu-cache-capacity-eviction-fallback; lu-cache-evidence-transfer; `cache-need-source-of-truth` moves to lu-cache-source-of-truth-invalidation |
+| lu-cache-capacity-eviction-fallback | SPLIT | lu-cache-capacity-eviction-fallback; lu-cache-source-of-truth-invalidation; lu-cache-evidence-transfer |
 | lu-cache-invalidation-consistency | MERGE | lu-cache-source-of-truth-invalidation |
-| lu-cache-patterns | KEEP | unchanged composition |
+| lu-cache-patterns | KEEP | lu-cache-patterns |
 
 ## Service & Network batch closure
 
@@ -573,7 +574,7 @@ None.
 | lu-net-proxy-lb-forwarded-boundary | MERGE | lu-net-proxy-tls-forwarded-boundary |
 | lu-net-streaming-body-cancellation | MERGE | lu-net-http-streaming-cancellation |
 | lu-api-circuit-bulkhead-rate-limit | KEEP | lu-api-circuit-bulkhead-rate-limit |
-| lu-api-contract-resource-semantics | SPLIT | lu-api-contract-resource-semantics; lu-api-validation-errors-pagination; lu-api-request-identity-idempotency; lu-api-versioning-compatibility |
+| lu-api-contract-resource-semantics | SPLIT | lu-api-contract-resource-semantics; lu-api-validation-errors-pagination; lu-api-versioning-compatibility; lu-api-request-identity-idempotency |
 | lu-api-deadlines-timeout-cancellation | SPLIT | lu-api-deadline-retry-policy; lu-api-unknown-outcome-reconciliation |
 | lu-sec-abuse-bruteforce-resource-business-flow | SPLIT | lu-sec-abuse-bruteforce-resource-business-flow; lu-sec-trust-boundary-threat-model; lu-sec-unseen-attack-transfer |
 | lu-sec-audit-detection-evidence | KEEP | lu-sec-audit-detection-evidence |
@@ -582,5 +583,3 @@ None.
 | lu-sec-injection-ssrf-input-output | KEEP | lu-sec-injection-ssrf-input-output |
 | lu-sec-race-business-logic-abuse | KEEP | lu-sec-race-business-logic-abuse |
 | lu-sec-secrets-third-party-trust | KEEP | lu-sec-secrets-third-party-trust |
-
-**Derived disposition check: 14 / 14 — 7 KEEP, 5 SPLIT, 2 MERGE.**

@@ -1,26 +1,42 @@
+import fs from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { exactSet, validateDiffScope } from './architecture-validation.mjs';
-const bad=(a,b)=>assert.equal(exactSet(a,b),false);
-test('detects missing derived unit',()=>bad(['u1','u2'],['u1']));
-test('detects stale classification after split',()=>bad(['single-u'],['multi-u']));
-test('detects reviewed closure contradiction',()=>assert.match('REVIEWED IN_REVIEW',/IN_REVIEW/));
-test('detects missing ledger',()=>assert.equal(false,Boolean('')));
-test('detects missing manifest unit',()=>bad(['a','b'],['a']));
-test('detects wrong disposition',()=>assert.notEqual('KEEP','SPLIT'));
-test('detects literal newline artifact',()=>assert.match('x\\n| row |',/\\n/));
-test('detects missing proof table',()=>assert.equal(false,'assessment'.includes('Primary capability')));
-test('detects proof set mismatch',()=>bad(['a','b'],['a','a']));
-test('detects diff scope violations',()=>assert.deepEqual(validateDiffScope(['a','x'],['a'],['a','b']),['unexpected changed file','required changed file absent b']));
-test('detects duplicate Primary',()=>bad(['a','a'],['a','a']));
-test('detects frozen capability mismatch',()=>bad(['a'],['b']));
-test('detects unknown Primary',()=>bad(['known'],['unknown']));
-test('detects owner mismatch',()=>assert.notEqual('owner-a','owner-b'));
-test('detects L-level mismatch',()=>assert.notEqual('L2','L3'));
-test('detects composition membership mismatch',()=>bad(['a','b'],['a','c']));
-test('detects duplicate Unit Registry row',()=>bad(['u','u'],['u','u']));
-test('detects malformed table column count',()=>assert.notEqual(4,3));
-test('detects ledger target mismatch',()=>bad(['u1'],['u2']));
-test('closure parsing is bounded',()=>assert.equal('REVIEWED','REVIEWED'));
+import { validateCanonical } from './architecture-validation.mjs';
 
+const read = path => fs.readFileSync(path, 'utf8');
+const base = () => ({
+  audit: read('docs/roadmap/learning-unit-audit.md'),
+  map: read('docs/roadmap/learning-unit-map.md'),
+  frozen: read('docs/roadmap/senior-backend-deep-track.md'),
+  manifest: JSON.parse(read('docs/roadmap/stage-1-review-manifest.json')),
+});
+const run = (change = state => state, options = {}) => validateCanonical((typeof change === 'function' ? change : state => state)(base()), options);
+const has = (change, fragment, options) => assert.ok(run(change, options).errors.some(error => error.includes(fragment)), `${fragment}: ${run(change, options).errors.join('; ')}`);
+const replace = (key, from, to) => state => ({ ...state, [key]: state[key].replace(from, to) });
+const line = (text, needle) => text.split(/\r?\n/).find(value => value.includes(needle));
 
+test('1 happy fixture calls the production validator', () => assert.deepEqual(run().errors, []));
+test('2 missing derived Unit Registry unit', () => has(state => ({ ...state, map: state.map.replace(line(state.map, '| lu-race-atomicity |'), '') }), 'unit registry mismatch'));
+test('3 stale singleton/multi classification', () => has(replace('audit', '| lu-prog-collections-complexity | prog-collections-complexity | 1 | Programming & Software Design Foundations | Singleton |', '| lu-prog-collections-complexity | prog-collections-complexity | 1 | Programming & Software Design Foundations | Multi |'), 'stale classification'));
+test('4 reviewed closure cannot say IN_REVIEW', () => has(replace('audit', '## Runtime & Concurrency Decision Ledger', '**IN_REVIEW.**\n\n## Runtime & Concurrency Decision Ledger'), 'closure status Runtime & Concurrency'));
+test('5 later IN_REVIEW batch does not poison Runtime closure', () => assert.equal(run({}, { batch: 'Runtime & Concurrency' }).errors.some(error => error.includes('closure status Runtime')), false));
+test('6 missing Decision Ledger', () => has(replace('audit', '## Runtime & Concurrency Decision Ledger', '## Runtime & Concurrency Missing Ledger'), 'missing section Runtime & Concurrency Decision Ledger'));
+test('7 missing manifest unit in ledger', () => has(state => { state.manifest.batches['Runtime & Concurrency'].originalUnits.pop(); return state; }, 'ledger scope Runtime & Concurrency'));
+test('8 wrong KEEP SPLIT MERGE disposition', () => has(replace('audit', '| lu-race-atomicity | KEEP |', '| lu-race-atomicity | SPLIT |'), 'wrong disposition lu-race-atomicity'));
+test('9 ledger target mismatch', () => has(replace('audit', '| lu-race-atomicity | KEEP | lu-race-atomicity |', '| lu-race-atomicity | KEEP | lu-runtime-diagnostics |'), 'ledger target mismatch lu-race-atomicity'));
+test('10 literal newline table serialization', () => has(replace('map', '| Capability ID | Canonical owner | Frozen target level |', '\\n| Capability ID | Canonical owner | Frozen target level |'), 'literal newline artifact'));
+test('11 missing canonical proof table', () => has(replace('map', '| Primary capability | What evidence in this same task proves it |', '| Missing proof |'), 'missing proof table'));
+test('12 proof capability mismatch duplicate extra', () => has(state => ({ ...state, map: state.map.replace('| net-tcp-connection-semantics | Connect latency, reset/refused error and socket state establish peer lifecycle. |', '| net-connection-reuse-pooling | duplicate |') }), 'proof capability mismatch'));
+test('13 duplicate Primary', () => has(state => ({ ...state, audit: state.audit.replace(line(state.audit, '| concurrency-interleavings-invariants |'), `${line(state.audit, '| concurrency-interleavings-invariants |')}\n${line(state.audit, '| concurrency-interleavings-invariants |')}`) }), 'duplicate Primary capability'));
+test('14 missing frozen capability', () => has(state => ({ ...state, frozen: state.frozen.replace(line(state.frozen, '| concurrency-interleavings-invariants |'), '') }), 'missing frozen capability'));
+test('15 unknown Primary', () => has(replace('audit', '| concurrency-interleavings-invariants |', '| unknown-capability |'), 'unknown Primary unknown-capability'));
+test('16 owner fidelity', () => has(replace('audit', '| Programming & Software Design Foundations |', '| Wrong owner |'), 'owner mismatch'));
+test('17 L-level fidelity', () => has(replace('audit', '| L3 | lu-race-atomicity |', '| L1 | lu-race-atomicity |'), 'L-level mismatch'));
+test('18 composition membership exactness', () => has(replace('audit', '| lu-race-atomicity | concurrency-interleavings-invariants; concurrency-races-check-then-act; concurrency-synchronization-atomicity |', '| lu-race-atomicity | concurrency-interleavings-invariants |'), 'composition membership mismatch lu-race-atomicity'));
+test('19 duplicate Unit Registry row', () => has(state => ({ ...state, map: state.map.replace(line(state.map, '| lu-race-atomicity |'), `${line(state.map, '| lu-race-atomicity |')}\n${line(state.map, '| lu-race-atomicity |')}`) }), 'duplicate Unit Registry row'));
+test('20 malformed physical table columns', () => has(replace('audit', '| lu-race-atomicity | concurrency-interleavings-invariants;', '| lu-race-atomicity concurrency-interleavings-invariants;'), 'malformed table column count'));
+test('21 generic placeholder rejected', () => has(replace('map', 'Partner lowers idle timeout; traffic spike produces resets and pool queues. Decide TCP versus pool cause before changing retries.', 'TODO'), 'generic placeholder lu-net-connection-reuse-pooling'));
+test('22 legacy-v1 Runtime evidence remains compatible', () => assert.equal(run({}, { batch: 'Runtime & Concurrency' }).errors.length, 0));
+test('23 batch mode rejects non-reviewed batch', () => has(state => state, 'batch not reviewed Distributed Systems', { batch: 'Distributed Systems' }));
+test('24 diff scope rejects unexpected and missing required files', () => has(state => state, 'unexpected changed file', { changedFiles: ['docs/a.md'], allow: ['docs/b.md'], requireChanged: ['docs/b.md'] }));
+test('25 explicit ignore supports pre-existing user-owned file', () => assert.deepEqual(run(state => state, { changedFiles: ['Anhanhemem.txt', 'scripts/architecture-validation.mjs'], allow: ['scripts/architecture-validation.mjs'], requireChanged: ['scripts/architecture-validation.mjs'], ignore: ['Anhanhemem.txt'] }).errors, []));

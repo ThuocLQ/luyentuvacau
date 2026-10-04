@@ -1,2 +1,6 @@
 import { validateArchitecture } from './architecture-validation.mjs';
-const a=process.argv.slice(2), value=k=>a[a.indexOf(k)+1], values=k=>a.flatMap((x,i)=>x===k?[a[i+1]]:[]);const r=validateArchitecture({batch:value('--batch'),allow:values('--allow'),requireChanged:values('--require-changed')});if(r.errors.length){console.error('Architecture validation FAILED\n'+r.errors.join('\n'));process.exit(1)}console.log('Architecture validation PASS\nCapabilities: '+r.counts.capabilities+'\nUnits: '+r.counts.units+'\nSingletons: '+r.counts.singletons+'\nMulti: '+r.counts.multi);
+const args = process.argv.slice(2);
+const values = flag => args.flatMap((value, index) => value === flag && args[index + 1] ? [args[index + 1]] : []);
+const result = validateArchitecture({ batch: values('--batch')[0], allow: values('--allow'), requireChanged: values('--require-changed'), ignore: values('--ignore') });
+if (result.errors.length) { console.error(result.errors.map(error => `Architecture validation: ${error}`).join('\n')); process.exitCode = 1; }
+else console.log(`Architecture validation passed: ${JSON.stringify(result.counts)}`);
