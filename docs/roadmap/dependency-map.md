@@ -342,6 +342,20 @@ All 17 core tracks are covered by 332 ordering relations over 167 frozen capabil
 | delivery-cloud-responsibility-managed-services | delivery-platform-transfer | RECOMMENDED | Managed-service responsibility reasoning strengthens transfer into higher-level cloud platforms, but a VM-to-Kubernetes transfer can be evaluated without it. | provider-managed implementation changes operational responsibility but does not remove application ownership of behavior. | — |
 | delivery-autoscaling-signal-boundary | delivery-platform-transfer | RECOMMENDED | Autoscaling behavior is an important platform delta, but not every platform move changes scaling model. | same workload pressure may map to different scaling signals and delay semantics on another platform. | — |
 | delivery-rollout-rollback-strategies | delivery-platform-transfer | RECOMMENDED | Deployment strategy differs across platforms and is useful transfer evidence, but platform portability can first be evaluated from runtime requirements. | platforms implement version coexistence, traffic movement and rollback differently. | — |
+| net-request-path-dns | net-service-discovery-load-balancing | REQUIRED | Discovery begins from a logical service name and resolver result. | logical name resolution versus endpoint discovery | Networking owns routing mechanism |
+| net-tcp-connection-semantics | net-service-discovery-load-balancing | REQUIRED | Balancing selects a backend connection target with TCP lifetime consequences. | connection target and lifetime | — |
+| rel-health-readiness-semantics | net-service-discovery-load-balancing | RECOMMENDED | Health eligibility helps explain endpoint removal but discovery can be introduced first. | traffic eligibility signal | Reliability owns probe semantics |
+| delivery-platform-evidence-debug | net-service-discovery-load-balancing | RECOMMENDED | Platform evidence helps inspect endpoint redistribution. | platform routing evidence | Delivery owns platform view |
+| sec-trust-boundary-threat-model | sec-cryptography-credentials-tokens | REQUIRED | Credential protection starts from asset and trust boundary. | credential/token asset and boundary | — |
+| sec-auth-session-token | sec-cryptography-credentials-tokens | RECOMMENDED | Existing token lifecycle contextualizes cryptographic choice. | token lifetime and verification context | Security owns both |
+| sec-cryptography-credentials-tokens | sec-data-encryption-key-lifecycle | REQUIRED | Key lifecycle builds on correct cryptographic purpose selection. | hash/encryption/MAC/signature distinction | — |
+| sec-secrets-third-party-trust | sec-data-encryption-key-lifecycle | REQUIRED | Key scope and rotation use secret lifecycle authority. | secret scope/rotation/audit | — |
+| delivery-cloud-responsibility-managed-services | sec-data-encryption-key-lifecycle | RECOMMENDED | Managed KMS responsibility informs implementation boundary. | managed-service responsibility | Delivery owns platform contract |
+| concurrency-cancellation-lifetime | msg-background-jobs-scheduling | REQUIRED | Job execution must end cooperatively within owned lifetime. | operation cancellation/lifetime | Concurrency owns local cancellation |
+| concurrency-bounded-backpressure | msg-background-jobs-scheduling | REQUIRED | Overdue work must respect finite execution capacity. | bounded in-flight work | Concurrency owns portable backpressure |
+| msg-delivery-retry-poison-dlq | msg-background-jobs-scheduling | RECOMMENDED | Retry classification informs job recovery but broker DLQ remains distinct. | bounded retry classification | Messaging owns both boundaries |
+| dist-consensus-coordination-purpose | msg-background-jobs-scheduling | RECOMMENDED | Clustered scheduler ownership may need coordination but is not required for one durable worker. | exclusive owner/lease coordination | Distributed owns portable coordination |
+| net-http-semantics | net-service-discovery-load-balancing | RECOMMENDED | Request-level balancing uses HTTP request boundary. | request versus connection routing | — |
 ## Step-2 dependency-question resolution
 
 - Numbering is TrackNumber.QuestionNumber following the frozen Step-2 Unresolved dependency questions bullet order.
@@ -1659,15 +1673,15 @@ promote-exact-artifact provenance.
 - C3 REQUIRED transitive redundancy through REQUIRED-only paths: 0
 - new target track: 15 only
 
-## Batch-D audit
+## Batch-D audit (historical pre-amendment evidence)
 
 - D rows: 66
 - D REQUIRED: 36
 - D RECOMMENDED: 30
-- cumulative rows: 318
-- cumulative REQUIRED: 194
-- cumulative RECOMMENDED: 124
-- frozen capabilities: 163
+- historical cumulative rows: 318
+- historical cumulative REQUIRED: 194
+- historical cumulative RECOMMENDED: 124
+- historical frozen capabilities: 163
 - unknown capability IDs: 0
 - duplicate From/To pairs: 0
 - REQUIRED cycle: none
@@ -1681,10 +1695,10 @@ promote-exact-artifact provenance.
 
 ## Final whole-graph audit
 
-- Frozen capability IDs: 163
-- Dependency rows: 318
-- REQUIRED: 194
-- RECOMMENDED: 124
+- Frozen capability IDs: 167
+- Dependency rows: 332
+- REQUIRED: 201
+- RECOMMENDED: 131
 - Unknown capability IDs: 0
 - Duplicate From/To pairs: 0
 - Mixed-relation duplicate pairs: 0
@@ -1707,7 +1721,7 @@ Isolated capabilities:
 
 Canonical registry fingerprint:
 
-SHA-256: 25f68256c94fbf077f01fb17564da2783355be0049c23c31f6f9e6eddd248340
+SHA-256: 22ff3ea4c04a4630f00f2253bd0e16d0fb1ad9736026faf95d7c86280e8b77bd
 
 Canonicalization: 332 data rows only → exact row text → LF between rows → final LF → UTF-8 → SHA-256.
 
@@ -1735,7 +1749,7 @@ Canonicalization: 332 data rows only → exact row text → LF between rows → 
 
 Phase 2 / Step 3 is frozen.
 
-The capability dependency graph is the canonical ordering model for the 163 frozen Senior Backend capabilities.
+The capability dependency graph is the canonical ordering model for the 167 frozen Senior Backend capabilities.
 
 It does not define lesson order or learner lock state.
 
@@ -1743,19 +1757,4 @@ Future lesson decomposition may map REQUIRED capability dependencies onto concre
 
 RECOMMENDED relations remain non-blocking.
 
-Any future graph change requires reopening Step 3 and updating the registry fingerprint
-| net-request-path-dns | net-service-discovery-load-balancing | REQUIRED | Discovery begins from a logical service name and resolver result. | logical name resolution versus endpoint discovery | Networking owns routing mechanism |
-| net-tcp-connection-semantics | net-service-discovery-load-balancing | REQUIRED | Balancing selects a backend connection target with TCP lifetime consequences. | connection target and lifetime | — |
-| rel-health-readiness-semantics | net-service-discovery-load-balancing | RECOMMENDED | Health eligibility helps explain endpoint removal but discovery can be introduced first. | traffic eligibility signal | Reliability owns probe semantics |
-| delivery-platform-evidence-debug | net-service-discovery-load-balancing | RECOMMENDED | Platform evidence helps inspect endpoint redistribution. | platform routing evidence | Delivery owns platform view |
-| sec-trust-boundary-threat-model | sec-cryptography-credentials-tokens | REQUIRED | Credential protection starts from asset and trust boundary. | credential/token asset and boundary | — |
-| sec-auth-session-token | sec-cryptography-credentials-tokens | RECOMMENDED | Existing token lifecycle contextualizes cryptographic choice. | token lifetime and verification context | Security owns both |
-| sec-cryptography-credentials-tokens | sec-data-encryption-key-lifecycle | REQUIRED | Key lifecycle builds on correct cryptographic purpose selection. | hash/encryption/MAC/signature distinction | — |
-| sec-secrets-third-party-trust | sec-data-encryption-key-lifecycle | REQUIRED | Key scope and rotation use secret lifecycle authority. | secret scope/rotation/audit | — |
-| delivery-cloud-responsibility-managed-services | sec-data-encryption-key-lifecycle | RECOMMENDED | Managed KMS responsibility informs implementation boundary. | managed-service responsibility | Delivery owns platform contract |
-| concurrency-cancellation-lifetime | msg-background-jobs-scheduling | REQUIRED | Job execution must end cooperatively within owned lifetime. | operation cancellation/lifetime | Concurrency owns local cancellation |
-| concurrency-bounded-backpressure | msg-background-jobs-scheduling | REQUIRED | Overdue work must respect finite execution capacity. | bounded in-flight work | Concurrency owns portable backpressure |
-| msg-delivery-retry-poison-dlq | msg-background-jobs-scheduling | RECOMMENDED | Retry classification informs job recovery but broker DLQ remains distinct. | bounded retry classification | Messaging owns both boundaries |
-| dist-consensus-coordination-purpose | msg-background-jobs-scheduling | RECOMMENDED | Clustered scheduler ownership may need coordination but is not required for one durable worker. | exclusive owner/lease coordination | Distributed owns portable coordination |
-| net-http-semantics | net-service-discovery-load-balancing | RECOMMENDED | Request-level balancing uses HTTP request boundary. | request versus connection routing | — |
-.
+Any future graph change requires reopening Step 3 and updating the registry fingerprint.

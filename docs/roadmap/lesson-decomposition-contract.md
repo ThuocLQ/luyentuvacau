@@ -95,7 +95,7 @@ No incoming REQUIRED relation may disappear because a dry-run role table did not
 
 ## Global full-decomposition invariants
 
-The future full Learning-Unit map must give every one of the 163 frozen Step-2 capabilities exactly one canonical **Primary assessment home**. A capability may appear elsewhere only through the defined taxonomy: Local Prerequisite Slice, External Required Prerequisite Candidate, Recap / Applied capability or RECOMMENDED context. This guarantees complete coverage without equating one capability with one lesson or duplicating canonical mechanism ownership. If a capability cannot obtain one coherent Primary assessment home without violating the grouping/split criteria, flag an architecture conflict; do not silently duplicate Primary coverage.
+The future full Learning-Unit map must give every one of the 167 frozen Step-2 capabilities exactly one canonical **Primary assessment home**. A capability may appear elsewhere only through the defined taxonomy: Local Prerequisite Slice, External Required Prerequisite Candidate, Recap / Applied capability or RECOMMENDED context. This guarantees complete coverage without equating one capability with one lesson or duplicating canonical mechanism ownership. If a capability cannot obtain one coherent Primary assessment home without violating the grouping/split criteria, flag an architecture conflict; do not silently duplicate Primary coverage.
 
 | Global structural acceptance check | Required result |
 |---|---:|
@@ -106,7 +106,7 @@ The future full Learning-Unit map must give every one of the 163 frozen Step-2 c
 | Unknown capability IDs | 0 |
 | Units without at least one Primary capability | 0 |
 
-The future full map must also classify all 194 frozen REQUIRED relations exactly once as Internal Primary Order, Local Prerequisite Slice or External Required Prerequisite Candidate: 194 classified and 0 unclassified. For every Primary capability, inspect all incoming frozen RECOMMENDED relations as well. Each of the 124 relations is either surfaced as RECOMMENDED context or intentionally not surfaced at Learning-Unit level with a concise rationale. Neither decision can create a learner lock.
+The future full map must also classify all 201 frozen REQUIRED relations exactly once as Internal Primary Order, Local Prerequisite Slice or External Required Prerequisite Candidate: 201 classified and 0 unclassified. For every Primary capability, inspect all incoming frozen RECOMMENDED relations as well. Each of the 131 relations is either surfaced as RECOMMENDED context or intentionally not surfaced at Learning-Unit level with a concise rationale. Neither decision can create a learner lock.
 
 Future full-map validation must additionally verify: the required Learning-Unit graph is acyclic; every Local Prerequisite Slice matches the frozen Assumed Slice; every capability owner remains its frozen Step-2 owner; track/document order is not treated as learning order; and multiple roots or parallel progression-eligible units remain possible.
 

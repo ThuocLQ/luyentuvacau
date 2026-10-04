@@ -5249,7 +5249,7 @@ Stale endpoint; unhealthy backend remains selected; uneven long-lived connection
 
 ### Shared assessment task
 
-Use the stated evidence to choose a safe production boundary and explain the trade-off.
+Given a logical service name, resolver result, changing endpoint set, health states, picker decisions, connection reuse and per-backend request distribution, diagnose whether stale discovery, unhealthy selection or long-lived connection skew caused the incident. Choose client-side or proxy routing and show the selected healthy-backend evidence that would confirm recovery.
 
 ### Transfer variation
 
@@ -5291,7 +5291,7 @@ Fast password hash; predictable reset token; reversible password storage; signat
 
 ### Shared assessment task
 
-Use the stated evidence to choose a safe production boundary and explain the trade-off.
+Given password-hash parameters, reset-token generation/storage, a signed-token verification path and expiry/audience audit, choose the correct primitive for each asset. Identify one unsafe storage or verification step and show the redacted evidence proving passwords are not recoverable and tokens cannot be accepted outside their intended context.
 
 ### Transfer variation
 
@@ -5333,7 +5333,7 @@ Secret/key in source; one shared long-lived key; rotation makes old data unreada
 
 ### Shared assessment task
 
-Use the stated evidence to choose a safe production boundary and explain the trade-off.
+Given data classification, KMS/key metadata, encryption metadata, rotation history and a recovery-drill record, design a key scope and rotation path. Diagnose an unreadable old record or exposed-key risk, then show the audit and recovery evidence that proves the chosen lifecycle protects the classified data.
 
 ### Transfer variation
 
@@ -5375,7 +5375,7 @@ Missed schedule after restart; two workers acquire same job; retry repeats side 
 
 ### Shared assessment task
 
-Use the stated evidence to choose a safe production boundary and explain the trade-off.
+Given durable job state, trigger/misfire record, lease owner/expiry, attempt timeline and idempotency key, diagnose duplicate or missed execution after restart. Choose the takeover, retry and reconciliation policy, then show the state transition and business-effect evidence that proves recovery did not repeat the side effect.
 
 ### Transfer variation
 

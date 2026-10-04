@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 
 const file = (root, path) => fs.readFileSync(`${root}/${path}`, 'utf8');
 const unique = values => [...new Set(values)];
@@ -106,6 +107,44 @@ function reviewedBatches(audit) {
   return [...body.matchAll(/^- (.+?) — (PENDING|IN_REVIEW|REVIEWED)$/gm)].map(([, name, status]) => ({ name, status }));
 }
 
+const dependencyColumns = ['From', 'To', 'Relation', 'Why prior context matters', 'Assumed slice', 'Ownership note'];
+const dependencyLine = line => /^\| [a-z]+-[^|]+ \| [a-z]+-[^|]+ \| (REQUIRED|RECOMMENDED) \|/.test(line);
+
+function declaredCount(body, label, errors) {
+  const match = new RegExp('^- ' + escape(label) + ': (\\d+)$', 'm').exec(body);
+  if (!match) { add(errors, 'missing declared dependency ' + label); return null; }
+  return Number(match[1]);
+}
+
+function validateDependencyRegistry(text, frozenMap, errors) {
+  if (!text) { add(errors, 'missing dependency map'); return; }
+  const rows = table(text, 'Dependency registry', dependencyColumns, errors);
+  const body = section(text, 'Dependency registry') ?? '';
+  const canonicalRaw = body.split(/\r?\n/).filter(dependencyLine);
+  const globalRaw = text.split(/\r?\n/).filter(dependencyLine);
+  if (globalRaw.length !== canonicalRaw.length) add(errors, 'dependency rows outside canonical registry');
+  if (rows.length !== canonicalRaw.length) add(errors, 'malformed canonical dependency registry');
+  const finalAudit = section(text, 'Final whole-graph audit') ?? '';
+  const declaredRows = declaredCount(finalAudit, 'Dependency rows', errors);
+  const declaredRequired = declaredCount(finalAudit, 'REQUIRED', errors);
+  const declaredRecommended = declaredCount(finalAudit, 'RECOMMENDED', errors);
+  const required = rows.filter(row => row[2] === 'REQUIRED').length;
+  const recommended = rows.filter(row => row[2] === 'RECOMMENDED').length;
+  if (declaredRows !== rows.length) add(errors, 'dependency declared row count mismatch');
+  if (declaredRequired !== required) add(errors, 'dependency declared REQUIRED count mismatch');
+  if (declaredRecommended !== recommended) add(errors, 'dependency declared RECOMMENDED count mismatch');
+  const pairs = new Set();
+  for (const row of rows) {
+    const pair = row[0] + ' -> ' + row[1];
+    if (pairs.has(pair)) add(errors, 'duplicate dependency pair ' + pair);
+    pairs.add(pair);
+    for (const id of row.slice(0, 2)) if (!frozenMap.has(id)) add(errors, 'unknown dependency capability ' + id);
+  }
+  const actual = createHash('sha256').update(canonicalRaw.join('\n') + '\n', 'utf8').digest('hex');
+  const fingerprint = /Canonical registry fingerprint:\s*SHA-256: ([a-f0-9]{64})/i.exec(text)?.[1];
+  if (!fingerprint || fingerprint !== actual) add(errors, 'dependency fingerprint mismatch');
+}
+
 export function collectChangedFiles(root = '.') {
   const run = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).split(/\r?\n/).filter(Boolean);
   return unique([...run(['diff', '--name-only']), ...run(['diff', '--cached', '--name-only']), ...run(['ls-files', '--others', '--exclude-standard'])]);
@@ -118,7 +157,7 @@ export function validateDiffScope(changed, allow = [], required = [], ignore = [
   ];
 }
 
-export function validateCanonical({ audit, map, frozen, manifest }, { batch, changedFiles, allow = [], requireChanged = [], ignore = [] } = {}) {
+export function validateCanonical({ audit, map, frozen, manifest, dependency = '' }, { batch, changedFiles, allow = [], requireChanged = [], ignore = [] } = {}) {
   const errors = [];
   const homes = table(audit, 'B. Primary-Home Registry', ['Capability ID', 'Canonical owner', 'Frozen level', 'Primary Unit', 'Domain candidate'], errors);
   const composition = table(audit, 'C. Unit Composition Registry', ['Unit ID', 'Primary capability IDs', 'Primary count', 'Owner set', 'Singleton / Multi'], errors);
@@ -126,6 +165,7 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
   const multi = table(audit, 'E. Multi-Capability Grouping Review', ['Unit ID', 'Shared problem / need', 'Shared mechanism / state trace', 'Shared observable evidence', 'Shared failure / debug story', 'Assessment-coherence argument'], errors);
   const registry = table(map, 'Unit Registry', ['Unit ID', 'Working title', 'Domain candidate', 'Primary owner set', 'Primary capability count'], errors);
   const frozenMap = frozenCapabilities(frozen, errors);
+  validateDependencyRegistry(dependency, frozenMap, errors);
   const homeMap = new Map();
   for (const row of homes) {
     const [id, owner, level, unit] = row;
@@ -213,6 +253,7 @@ export function validateArchitecture({ root = '.', batch, allow = [], requireCha
     map: file(root, 'docs/roadmap/learning-unit-map.md'),
     frozen: file(root, 'docs/roadmap/senior-backend-deep-track.md'),
     manifest: JSON.parse(file(root, 'docs/roadmap/stage-1-review-manifest.json')),
+    dependency: file(root, 'docs/roadmap/dependency-map.md'),
   }, { batch, allow, requireChanged, ignore, changedFiles: changedFiles ?? collectChangedFiles(root) });
 }
 

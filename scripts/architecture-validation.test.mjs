@@ -11,6 +11,7 @@ const base = () => ({
   map: read('docs/roadmap/learning-unit-map.md'),
   frozen: read('docs/roadmap/senior-backend-deep-track.md'),
   manifest: JSON.parse(read('docs/roadmap/stage-1-review-manifest.json')),
+  dependency: read('docs/roadmap/dependency-map.md'),
 });
 const run = (change = state => state, options = {}) => validateCanonical((typeof change === 'function' ? change : state => state)(base()), options);
 const has = (change, fragment, options) => assert.ok(run(change, options).errors.some(error => error.includes(fragment)), `${fragment}: ${run(change, options).errors.join('; ')}`);
@@ -60,3 +61,12 @@ test('36 declared amendment capability missing from Primary homes is rejected', 
 test('37 amended singleton placeholder is rejected in reviewed Service batch', () => has(replace('map', 'Reason from a logical service name to a selected healthy backend as endpoints and load change.', 'One canonical scenario defined in map.'), 'generic placeholder lu-net-service-discovery-load-balancing'));
 test('38 duplicate amendment declaration is rejected', () => has(state => { state.manifest.amendments[0].batches['Service & Network'].push('net-service-discovery-load-balancing'); return state; }, 'manifest capability coverage mismatch'));
 test('39 collectChangedFiles reads unstaged, staged and untracked paths from a real git repository', () => { const root=fs.mkdtempSync(`${os.tmpdir()}/quannet-git-`); const run=args=>execFileSync('git',args,{cwd:root,stdio:'ignore'}); run(['init']); run(['config','user.email','test@example.test']); run(['config','user.name','test']); fs.writeFileSync(`${root}/tracked.txt`,'a'); run(['add','tracked.txt']); run(['commit','-m','base']); fs.writeFileSync(`${root}/tracked.txt`,'b'); fs.writeFileSync(`${root}/staged.txt`,'s'); run(['add','staged.txt']); fs.writeFileSync(`${root}/untracked.txt`,'u'); const changed=collectChangedFiles(root); assert.ok(changed.includes('tracked.txt')&&changed.includes('staged.txt')&&changed.includes('untracked.txt')); fs.rmSync(root,{recursive:true,force:true}); });
+
+
+test('40 dependency row outside canonical registry is rejected', () => has(state => {
+  const row = '| net-request-path-dns | net-service-discovery-load-balancing | REQUIRED | Discovery begins from a logical service name and resolver result. | logical name resolution versus endpoint discovery | Networking owns routing mechanism |';
+  state.dependency = state.dependency.replace(row + '\n', '') + '\n' + row + '\n';
+  return state;
+}, 'dependency rows outside canonical registry'));
+test('41 stale declared dependency count is rejected', () => has(replace('dependency', '- Dependency rows: 332', '- Dependency rows: 331'), 'dependency declared row count mismatch'));
+test('42 incorrect dependency fingerprint is rejected', () => has(replace('dependency', 'SHA-256: 22ff3ea4c04a4630f00f2253bd0e16d0fb1ad9736026faf95d7c86280e8b77bd', 'SHA-256: 02ff3ea4c04a4630f00f2253bd0e16d0fb1ad9736026faf95d7c86280e8b77bd'), 'dependency fingerprint mismatch'));

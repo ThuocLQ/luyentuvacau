@@ -29,16 +29,16 @@ Architecture decisions are complete only when affected canonical artifacts agree
 ## D-005 — Foundation Coverage Audit disposition
 
 **Date:** 2026-10-04  
-**Status:** ACTIVE, PENDING MATERIALIZATION
+**Status:** ACTIVE, MATERIALIZED by `5f09fb85e87bfeadce0d7d82a78ffdc50ccc36f1`
 
-Core additions accepted for controlled amendment:
+The four accepted core gaps were materialized by the controlled amendment:
 
 1. Service discovery/load balancing.
 2. Applied cryptography for credentials/tokens.
 3. Data encryption and key lifecycle.
-4. Durable background jobs/scheduling, subject to canonical-owner coherence check.
+4. Durable background jobs/scheduling under Messaging & Event-Driven Consistency.
 
-Stream Processing is deferred as a specialization candidate.
+Stream Processing remains deferred as a specialization candidate.
 
 ## D-006 — Controlled amendments preserve historical scope
 
