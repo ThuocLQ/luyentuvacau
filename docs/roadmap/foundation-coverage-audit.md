@@ -112,3 +112,7 @@ Counts are row-level audit counts derived from the classifications above. No cap
 
 Future decomposition must teach deeply inside the current owners: SQL parse/bind/catalog; prepared-plan lifecycle; configuration/feature rollout and rollback; IAM/VPC/NAT/service networking; and gRPC/Protobuf compatibility, deadlines, streaming and unknown completion. `IMPLICIT` is not optional or a brief mention. Service discovery/load balancing is a TRUE GAP and must not be hidden in adjacent owners.
 
+
+## Controlled amendment resolution
+
+The following pre-amendment TRUE GAP evidence remains historical: `40 COVERED / 5 IMPLICIT / 5 TRUE GAP`. Controlled amendment `foundation-core-amendment-2026` materializes four CORE candidates: `net-service-discovery-load-balancing`, `sec-cryptography-credentials-tokens`, `sec-data-encryption-key-lifecycle`, and `msg-background-jobs-scheduling` (**ADD**). `Stream Processing` remains **DEFERRED** as a specialization; no core capability is added for it.

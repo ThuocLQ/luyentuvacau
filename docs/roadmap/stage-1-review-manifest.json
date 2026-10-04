@@ -634,5 +634,24 @@
         }
       ]
     }
-  }
+  },
+  "amendments": [
+    {
+      "id": "foundation-core-amendment-2026",
+      "reason": "Foundation Coverage Audit TRUE GAP materialization",
+      "batches": {
+        "Service & Network": [
+          "net-service-discovery-load-balancing",
+          "sec-cryptography-credentials-tokens",
+          "sec-data-encryption-key-lifecycle"
+        ],
+        "Distributed Systems": [
+          "msg-background-jobs-scheduling"
+        ]
+      },
+      "deferred": [
+        "Stream Processing"
+      ]
+    }
+  ]
 }

@@ -1,7 +1,9 @@
 import fs from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateCanonical } from './architecture-validation.mjs';
+import { validateCanonical, collectChangedFiles } from './architecture-validation.mjs';
+import os from 'node:os';
+import { execFileSync } from 'node:child_process';
 
 const read = path => fs.readFileSync(path, 'utf8');
 const base = () => ({
@@ -52,3 +54,9 @@ test('32 reordered canonical headers are rejected', () => has(replace('audit', '
 
 test('33 missing manifest batch status is rejected', () => has(state => ({ ...state, audit: state.audit.replace(/- Production Engineering — PENDING\r?\n/, '') }), 'stage-1 batch registry mismatch'));
 test('34 duplicate batch status is rejected', () => has(replace('audit', '- Production Engineering — PENDING', '- Production Engineering — PENDING\n- Production Engineering — PENDING'), 'stage-1 batch registry mismatch'));
+
+test('35 frozen amendment capability missing from manifest scope is rejected', () => has(state => { state.manifest.amendments = []; return state; }, 'manifest capability coverage mismatch'));
+test('36 declared amendment capability missing from Primary homes is rejected', () => has(state => ({ ...state, audit: state.audit.replace(line(state.audit, '| net-service-discovery-load-balancing |'), '') }), 'missing frozen capability net-service-discovery-load-balancing'));
+test('37 amended singleton placeholder is rejected in reviewed Service batch', () => has(replace('map', 'Reason from a logical service name to a selected healthy backend as endpoints and load change.', 'One canonical scenario defined in map.'), 'generic placeholder lu-net-service-discovery-load-balancing'));
+test('38 duplicate amendment declaration is rejected', () => has(state => { state.manifest.amendments[0].batches['Service & Network'].push('net-service-discovery-load-balancing'); return state; }, 'manifest capability coverage mismatch'));
+test('39 collectChangedFiles reads unstaged, staged and untracked paths from a real git repository', () => { const root=fs.mkdtempSync(`${os.tmpdir()}/quannet-git-`); const run=args=>execFileSync('git',args,{cwd:root,stdio:'ignore'}); run(['init']); run(['config','user.email','test@example.test']); run(['config','user.name','test']); fs.writeFileSync(`${root}/tracked.txt`,'a'); run(['add','tracked.txt']); run(['commit','-m','base']); fs.writeFileSync(`${root}/tracked.txt`,'b'); fs.writeFileSync(`${root}/staged.txt`,'s'); run(['add','staged.txt']); fs.writeFileSync(`${root}/untracked.txt`,'u'); const changed=collectChangedFiles(root); assert.ok(changed.includes('tracked.txt')&&changed.includes('staged.txt')&&changed.includes('untracked.txt')); fs.rmSync(root,{recursive:true,force:true}); });

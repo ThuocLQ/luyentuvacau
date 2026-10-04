@@ -7,15 +7,15 @@
 
 | Metric | Result |
 |---|---:|
-| Frozen capabilities | 163 |
-| Proposed Learning Units | 110 |
-| Primary assessment homes | 163 |
+| Frozen capabilities | 167 |
+| Proposed Learning Units | 114 |
+| Primary assessment homes | 167 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary assignments | 0 |
 | Unknown capability IDs | 0 |
-| Singleton units | 76 |
+| Singleton units | 80 |
 | Multi-capability units | 34 |
-| Single-owner units | 110 |
+| Single-owner units | 114 |
 | Multi-owner units | 0 |
 
 ## B. Primary-Home Registry
@@ -185,6 +185,10 @@
 | sec-race-business-logic-abuse | Security | L3 | lu-sec-race-business-logic-abuse | Service & Network |
 | sec-secrets-third-party-trust | Security | L3 | lu-sec-secrets-third-party-trust | Service & Network |
 | sec-audit-detection-evidence | Security | L3 | lu-sec-audit-detection-evidence | Service & Network |
+| net-service-discovery-load-balancing | Networking & HTTP | L3 | lu-net-service-discovery-load-balancing | Service & Network |
+| sec-cryptography-credentials-tokens | Security | L2 | lu-sec-cryptography-credentials-tokens | Service & Network |
+| sec-data-encryption-key-lifecycle | Security | L2 | lu-sec-data-encryption-key-lifecycle | Service & Network |
+| msg-background-jobs-scheduling | Messaging & Event-Driven Consistency | L3 | lu-msg-background-jobs-scheduling | Distributed Systems |
 
 ## C. Unit Composition Registry
 
@@ -300,6 +304,10 @@
 | lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | 1 | Security | Singleton |
 | lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | 1 | Security | Singleton |
 | lu-sec-audit-detection-evidence | sec-audit-detection-evidence | 1 | Security | Singleton |
+| lu-net-service-discovery-load-balancing | net-service-discovery-load-balancing | 1 | Networking & HTTP | Singleton |
+| lu-sec-cryptography-credentials-tokens | sec-cryptography-credentials-tokens | 1 | Security | Singleton |
+| lu-sec-data-encryption-key-lifecycle | sec-data-encryption-key-lifecycle | 1 | Security | Singleton |
+| lu-msg-background-jobs-scheduling | msg-background-jobs-scheduling | 1 | Messaging & Event-Driven Consistency | Singleton |
 
 ## D. Singleton Review Registry
 
@@ -381,6 +389,10 @@
 | lu-sec-race-business-logic-abuse | sec-race-business-logic-abuse | lu-concurrency-races-check-then-act; lu-sec-authorization-object-tenant | Assessment: parallel coupon; atomic result/audit. Security exploit/business effect differs from generic race or pre-transition policy. |
 | lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | lu-sec-audit-detection-evidence; lu-sec-trust-boundary-threat-model | Assessment: replayed webhook rotation; signature/timestamp/key audit. Verification/lifecycle differs from recording decisions or mapping paths. |
 | lu-sec-audit-detection-evidence | sec-audit-detection-evidence | lu-obs-logs-structured-correlation; lu-sec-secrets-third-party-trust | Assessment: privileged export; audit schema/detection query. Accountable audit differs from diagnostic logs or third-party verification. |
+| lu-net-service-discovery-load-balancing | net-service-discovery-load-balancing | — | Independent mechanism, failure and evidence boundary; merge would hide the approved gap. |
+| lu-sec-cryptography-credentials-tokens | sec-cryptography-credentials-tokens | — | Independent mechanism, failure and evidence boundary; merge would hide the approved gap. |
+| lu-sec-data-encryption-key-lifecycle | sec-data-encryption-key-lifecycle | — | Independent mechanism, failure and evidence boundary; merge would hide the approved gap. |
+| lu-msg-background-jobs-scheduling | msg-background-jobs-scheduling | — | Independent mechanism, failure and evidence boundary; merge would hide the approved gap. |
 
 ## E. Multi-Capability Grouping Review
 
@@ -492,7 +504,7 @@
 
 ## G. Stage-2 Input Note
 
-REQUIRED and RECOMMENDED projection is **NOT FINALIZED** in Stage 1. The frozen relation graph remains untouched; Stage 2 will project all 194 REQUIRED and 124 RECOMMENDED relations after Primary boundaries are accepted.
+REQUIRED and RECOMMENDED projection is **NOT FINALIZED** in Stage 1. The frozen relation graph remains untouched; Stage 2 will project all 201 REQUIRED and 131 RECOMMENDED relations after Primary boundaries are accepted.
 
 ## H. Architecture Conflicts
 
@@ -562,7 +574,7 @@ None.
 
 ## Service & Network batch closure
 
-**REVIEWED.** Service & Network — REVIEWED. 14 / 14 original units accounted for: **7 KEEP, 5 SPLIT, 2 MERGE**. Final Service & Network Learning Units = **22**. Five multi-unit capability-proof tables are present; singleton review and cross-owner review evidence are complete; registry exactness passes. REQUIRED and RECOMMENDED projection is still **NOT FINALIZED**.
+**REVIEWED.** Service & Network — REVIEWED. 14 / 14 historical original units accounted for; controlled amendment adds 3 independent singleton units (`lu-net-service-discovery-load-balancing`, `lu-sec-cryptography-credentials-tokens`, `lu-sec-data-encryption-key-lifecycle`) with explicit Primary, singleton and canonical evidence. **7 KEEP, 5 SPLIT, 2 MERGE**. Final Service & Network Learning Units = **22**. Five multi-unit capability-proof tables are present; singleton review and cross-owner review evidence are complete; registry exactness passes. REQUIRED and RECOMMENDED projection is still **NOT FINALIZED**.
 
 
 ## Service & Network Decision Ledger
@@ -583,3 +595,13 @@ None.
 | lu-sec-injection-ssrf-input-output | KEEP | lu-sec-injection-ssrf-input-output |
 | lu-sec-race-business-logic-abuse | KEEP | lu-sec-race-business-logic-abuse |
 | lu-sec-secrets-third-party-trust | KEEP | lu-sec-secrets-third-party-trust |
+
+## Service & Network controlled amendment ledger
+
+| Added capability | Final unit | Disposition | Evidence boundary |
+|---|---|---|---|
+| net-service-discovery-load-balancing | lu-net-service-discovery-load-balancing | ADD | evolving endpoint set, health-aware routing and distribution evidence |
+| sec-cryptography-credentials-tokens | lu-sec-cryptography-credentials-tokens | ADD | credential/token cryptographic purpose and verification evidence |
+| sec-data-encryption-key-lifecycle | lu-sec-data-encryption-key-lifecycle | ADD | data encryption/key lifecycle and rotation evidence |
+
+**REVIEWED.** Amendment scope is complete; historical ledger remains unchanged and final Service & Network unit count is 25.

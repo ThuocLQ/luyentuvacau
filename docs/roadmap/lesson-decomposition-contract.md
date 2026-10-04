@@ -15,7 +15,7 @@ frozen capability nodes + frozen capability dependency relations
 → learner-facing authoring
 ```
 
-It does not modify or reinterpret the frozen capability map or dependency graph. The inputs remain 163 capabilities in 17 core tracks and 318 ordering relations (194 REQUIRED, 124 RECOMMENDED). A Learning Unit is a pedagogical boundary; a capability is an engineering competence boundary. They are not interchangeable.
+It does not modify or reinterpret the frozen capability map or dependency graph. The inputs remain 167 capabilities in 17 core tracks and 332 ordering relations (201 REQUIRED, 131 RECOMMENDED). A Learning Unit is a pedagogical boundary; a capability is an engineering competence boundary. They are not interchangeable.
 
 The existing Index & Execution Plan, Race Condition & Concurrency, and Outbox & Idempotency pilots are validation fixtures only. Their file order, links and historical recommendations are not curriculum evidence.
 
@@ -99,8 +99,8 @@ The future full Learning-Unit map must give every one of the 163 frozen Step-2 c
 
 | Global structural acceptance check | Required result |
 |---|---:|
-| Frozen capability count | 163 |
-| Primary assessment homes | 163 |
+| Frozen capability count | 167 |
+| Primary assessment homes | 167 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary capability assignments | 0 |
 | Unknown capability IDs | 0 |

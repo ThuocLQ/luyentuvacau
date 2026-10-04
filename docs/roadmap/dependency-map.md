@@ -4,7 +4,7 @@
 
 ## Purpose and stop boundary
 
-This map records which prior capability mechanism a target may assume. All 17 core tracks are covered by 318 ordering relations over 163 frozen capability IDs: 194 REQUIRED and 124 RECOMMENDED. It is not a lesson order, learner progression gate, database schema, or frontend rule. Future lesson decomposition decides which capability dependencies become concrete lesson prerequisites only when that mapping is explicitly justified.
+This map records which prior capability mechanism a target may assume. All 17 core tracks are covered by 332 ordering relations over 167 frozen capability IDs: 201 REQUIRED and 131 RECOMMENDED. It is not a lesson order, learner progression gate, database schema, or frontend rule. Future lesson decomposition decides which capability dependencies become concrete lesson prerequisites only when that mapping is explicitly justified.
 
 ## Capability dependency != learner gating
 
@@ -18,7 +18,7 @@ A REQUIRED edge is only a candidate for a later lesson prerequisite; it does not
 
 ## Graph invariants
 
-All 17 core tracks are covered by 318 ordering relations over 163 frozen capability IDs: 194 REQUIRED and 124 RECOMMENDED. REQUIRED edges are acyclic, and REQUIRED + RECOMMENDED ordering edges are acyclic. Track number and registry row order are not learning order. Multiple REQUIRED roots and parallel learning branches are intentional. A REQUIRED edge is only a candidate for a future lesson prerequisite; this artifact does not set `LOCKED` or `AVAILABLE`, RECOMMENDED never creates a progression lock, RELATED/co-learning remains a non-edge, and learner content/reference access is not restricted by this graph.
+All 17 core tracks are covered by 332 ordering relations over 167 frozen capability IDs: 201 REQUIRED and 131 RECOMMENDED. REQUIRED edges are acyclic, and REQUIRED + RECOMMENDED ordering edges are acyclic. Track number and registry row order are not learning order. Multiple REQUIRED roots and parallel learning branches are intentional. A REQUIRED edge is only a candidate for a future lesson prerequisite; this artifact does not set `LOCKED` or `AVAILABLE`, RECOMMENDED never creates a progression lock, RELATED/co-learning remains a non-edge, and learner content/reference access is not restricted by this graph.
 
 ## Dependency registry
 
@@ -1707,9 +1707,9 @@ Isolated capabilities:
 
 Canonical registry fingerprint:
 
-SHA-256: db5ba3052c4cd1b91966df7469a1d566a93e255efdfcb47d6c70bb3543611703
+SHA-256: 25f68256c94fbf077f01fb17564da2783355be0049c23c31f6f9e6eddd248340
 
-Canonicalization: 318 data rows only → exact row text → LF between rows → final LF → UTF-8 → SHA-256.
+Canonicalization: 332 data rows only → exact row text → LF between rows → final LF → UTF-8 → SHA-256.
 
 ## Ownership closure
 
@@ -1743,4 +1743,19 @@ Future lesson decomposition may map REQUIRED capability dependencies onto concre
 
 RECOMMENDED relations remain non-blocking.
 
-Any future graph change requires reopening Step 3 and updating the registry fingerprint.
+Any future graph change requires reopening Step 3 and updating the registry fingerprint
+| net-request-path-dns | net-service-discovery-load-balancing | REQUIRED | Discovery begins from a logical service name and resolver result. | logical name resolution versus endpoint discovery | Networking owns routing mechanism |
+| net-tcp-connection-semantics | net-service-discovery-load-balancing | REQUIRED | Balancing selects a backend connection target with TCP lifetime consequences. | connection target and lifetime | — |
+| rel-health-readiness-semantics | net-service-discovery-load-balancing | RECOMMENDED | Health eligibility helps explain endpoint removal but discovery can be introduced first. | traffic eligibility signal | Reliability owns probe semantics |
+| delivery-platform-evidence-debug | net-service-discovery-load-balancing | RECOMMENDED | Platform evidence helps inspect endpoint redistribution. | platform routing evidence | Delivery owns platform view |
+| sec-trust-boundary-threat-model | sec-cryptography-credentials-tokens | REQUIRED | Credential protection starts from asset and trust boundary. | credential/token asset and boundary | — |
+| sec-auth-session-token | sec-cryptography-credentials-tokens | RECOMMENDED | Existing token lifecycle contextualizes cryptographic choice. | token lifetime and verification context | Security owns both |
+| sec-cryptography-credentials-tokens | sec-data-encryption-key-lifecycle | REQUIRED | Key lifecycle builds on correct cryptographic purpose selection. | hash/encryption/MAC/signature distinction | — |
+| sec-secrets-third-party-trust | sec-data-encryption-key-lifecycle | REQUIRED | Key scope and rotation use secret lifecycle authority. | secret scope/rotation/audit | — |
+| delivery-cloud-responsibility-managed-services | sec-data-encryption-key-lifecycle | RECOMMENDED | Managed KMS responsibility informs implementation boundary. | managed-service responsibility | Delivery owns platform contract |
+| concurrency-cancellation-lifetime | msg-background-jobs-scheduling | REQUIRED | Job execution must end cooperatively within owned lifetime. | operation cancellation/lifetime | Concurrency owns local cancellation |
+| concurrency-bounded-backpressure | msg-background-jobs-scheduling | REQUIRED | Overdue work must respect finite execution capacity. | bounded in-flight work | Concurrency owns portable backpressure |
+| msg-delivery-retry-poison-dlq | msg-background-jobs-scheduling | RECOMMENDED | Retry classification informs job recovery but broker DLQ remains distinct. | bounded retry classification | Messaging owns both boundaries |
+| dist-consensus-coordination-purpose | msg-background-jobs-scheduling | RECOMMENDED | Clustered scheduler ownership may need coordination but is not required for one durable worker. | exclusive owner/lease coordination | Distributed owns portable coordination |
+| net-http-semantics | net-service-discovery-load-balancing | RECOMMENDED | Request-level balancing uses HTTP request boundary. | request versus connection routing | — |
+.

@@ -3,7 +3,7 @@
 > **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 163. Proposed Learning Units: 110. Singleton units: 76. Multi-capability units: 34. Single-owner units: 110. Multi-owner units: 0.
+Frozen capabilities: 167. Proposed Learning Units: 114. Singleton units: 80. Multi-capability units: 34. Single-owner units: 114. Multi-owner units: 0.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
@@ -121,6 +121,10 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-sec-race-business-logic-abuse | Reproduce concurrent valid requests bypassing invariant and protect atomic owner. | Service & Network | Security | 1 |
 | lu-sec-secrets-third-party-trust | Control secret lifecycle and verify third-party data/action before trusting it. | Service & Network | Security | 1 |
 | lu-sec-audit-detection-evidence | Produce audit evidence of who did what to which object and which security decision occurred. | Service & Network | Security | 1 |
+| lu-net-service-discovery-load-balancing | Route a logical service to healthy backends as endpoints change | Service & Network | Networking & HTTP | 1 |
+| lu-sec-cryptography-credentials-tokens | Choose safe cryptographic protection for credentials and tokens | Service & Network | Security | 1 |
+| lu-sec-data-encryption-key-lifecycle | Protect sensitive data with an explicit key lifecycle | Service & Network | Security | 1 |
+| lu-msg-background-jobs-scheduling | Run scheduled durable work safely across retries and restarts | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 
 ## lu-index-query-shape
 
@@ -5213,3 +5217,170 @@ Merged because `delivery-container-process-lifecycle`, `delivery-probes-health`,
 This batch is **REVIEWED**. Canonical unit sections and audit registries hold the final evidence and membership; this record is not a second registry.
 
 Stage 1 remains DRAFT: every other domain batch is pending and REQUIRED/RECOMMENDED projection is not finalized.
+## lu-net-service-discovery-load-balancing
+
+### Identity
+
+- **Unit ID:** lu-net-service-discovery-load-balancing
+- **Working title:** Route a logical service to healthy backends as endpoints change
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| net-service-discovery-load-balancing | Networking & HTTP | L3 |
+
+### Canonical scenario
+
+Reason from a logical service name to a selected healthy backend as endpoints and load change.
+
+### Integrated mechanism / state trace
+
+A logical service resolves to an evolving endpoint set; a client or proxy picker applies routing policy and removes unhealthy endpoints. Connection reuse and long-lived streams make connection-level distribution different from request-level balancing.
+
+### Integrated evidence surface
+
+Resolver result; endpoint set; picker/routing decision; selected connection target; health state; per-backend request distribution.
+
+### Failure and debug loop
+
+Stale endpoint; unhealthy backend remains selected; uneven long-lived connections; DNS treated as full discovery; affinity overloads one backend.
+
+### Shared assessment task
+
+Use the stated evidence to choose a safe production boundary and explain the trade-off.
+
+### Transfer variation
+
+Static DNS list → dynamic service discovery behind proxy and client-side balancing.
+
+### Boundary decision
+
+Frequent updates improve freshness but add control-plane churn; affinity/reuse reduces setup cost but can skew load.
+
+## lu-sec-cryptography-credentials-tokens
+
+### Identity
+
+- **Unit ID:** lu-sec-cryptography-credentials-tokens
+- **Working title:** Choose safe cryptographic protection for credentials and tokens
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| sec-cryptography-credentials-tokens | Security | L2 |
+
+### Canonical scenario
+
+Choose hash, encryption, MAC or signature for a credential/token problem without implementing cryptographic algorithms.
+
+### Integrated mechanism / state trace
+
+Hashing verifies a secret without recovery; encryption protects recoverable data; MAC/signature proves integrity/authenticity. Passwords need salt and adaptive work factor; tokens need CSPRNG-generated unpredictable values and secure verification.
+
+### Integrated evidence surface
+
+Algorithm/purpose decision; password parameters; token entropy/source; verification result; expiry/revocation audit; redacted logs.
+
+### Failure and debug loop
+
+Fast password hash; predictable reset token; reversible password storage; signature confused with encryption; token logged or accepted without expiry/audience check.
+
+### Shared assessment task
+
+Use the stated evidence to choose a safe production boundary and explain the trade-off.
+
+### Transfer variation
+
+Local password login → signed service token or password-reset link.
+
+### Boundary decision
+
+Stronger work factor increases login cost; short token lifetime limits exposure but raises refresh/availability pressure.
+
+## lu-sec-data-encryption-key-lifecycle
+
+### Identity
+
+- **Unit ID:** lu-sec-data-encryption-key-lifecycle
+- **Working title:** Protect sensitive data with an explicit key lifecycle
+- **Learner-facing domain candidate:** Service & Network
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| sec-data-encryption-key-lifecycle | Security | L2 |
+
+### Canonical scenario
+
+Set a data-protection boundary and reason about key scope, rotation, revocation and exposure evidence.
+
+### Integrated mechanism / state trace
+
+Data encryption protects stored plaintext; envelope encryption separates data key from KMS-managed key. Key material has scope, storage, rotation and revocation lifecycle; TLS alone does not protect stored data.
+
+### Integrated evidence surface
+
+Data classification; key reference/scope; KMS audit; encryption metadata; rotation/recovery drill; redaction check.
+
+### Failure and debug loop
+
+Secret/key in source; one shared long-lived key; rotation makes old data unreadable; encrypted data with accessible key; sensitive payload logged.
+
+### Shared assessment task
+
+Use the stated evidence to choose a safe production boundary and explain the trade-off.
+
+### Transfer variation
+
+Database column encryption → object storage/export encrypted with KMS.
+
+### Boundary decision
+
+Per-record/envelope keys reduce blast radius but increase key-management and recovery complexity.
+
+## lu-msg-background-jobs-scheduling
+
+### Identity
+
+- **Unit ID:** lu-msg-background-jobs-scheduling
+- **Working title:** Run scheduled durable work safely across retries and restarts
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-background-jobs-scheduling | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Design durable scheduled/background work from trigger to recovery without treating it as fire-and-forget.
+
+### Integrated mechanism / state trace
+
+A trigger creates durable job identity/state; a worker acquires ownership/lease, executes, persists outcome and recovers after crash or misfire. Overlap policy, idempotency and retry protect business effect; this is not OS CPU scheduling or broker DLQ semantics.
+
+### Integrated evidence surface
+
+Job ID/state; trigger/misfire record; lease owner/expiry; attempt timeline; idempotency key; queue depth; execution audit.
+
+### Failure and debug loop
+
+Missed schedule after restart; two workers acquire same job; retry repeats side effect; stuck lease; unbounded overdue backlog; dashboard says success while work not durable.
+
+### Shared assessment task
+
+Use the stated evidence to choose a safe production boundary and explain the trade-off.
+
+### Transfer variation
+
+Single Worker timer → Quartz/Hangfire clustered persistent schedule.
+
+### Boundary decision
+
+Persistent store/leases improve recovery but add contention and reconciliation; no-overlap may delay work under backlog.

@@ -157,6 +157,10 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
   if (hasDuplicate(single.map(row => row[0])) || !exactSet(singletonIds, single.map(row => row[0]))) add(errors, 'singleton review mismatch');
   if (hasDuplicate(multi.map(row => row[0])) || !exactSet(multiIds, multi.map(row => row[0]))) add(errors, 'multi review mismatch');
 
+  const amendmentCaps = (manifest.amendments ?? []).flatMap(amendment => Object.values(amendment.batches ?? {}).flat());
+  const amendmentByBatch = new Map(); for (const amendment of manifest.amendments ?? []) for (const [name, ids] of Object.entries(amendment.batches ?? {})) amendmentByBatch.set(name, [...(amendmentByBatch.get(name) ?? []), ...ids]);
+  const originalCaps = Object.values(manifest.batches ?? {}).flatMap(value => (Array.isArray(value) ? value : value.originalUnits ?? []).flatMap(unit => unit.primaryCapabilities));
+  if (hasDuplicate([...originalCaps, ...amendmentCaps]) || !exactSet([...originalCaps, ...amendmentCaps], [...frozenMap.keys()])) add(errors, 'manifest capability coverage mismatch');
   const rawBatches = manifest.batches ?? {}; const batches = Object.fromEntries(Object.entries(rawBatches).map(([name, value]) => [name, Array.isArray(value) ? { evidenceSchema: name === 'Runtime & Concurrency' ? 'legacy-v1' : 'canonical-v2', originalUnits: value } : value]));
   const statusRows = reviewedBatches(audit);
   if (hasDuplicate(statusRows.map(row => row.name)) || !exactSet(Object.keys(batches), statusRows.map(row => row.name))) add(errors, 'stage-1 batch registry mismatch');
@@ -183,7 +187,8 @@ export function validateCanonical({ audit, map, frozen, manifest }, { batch, cha
     }
     const derived = { KEEP: 0, SPLIT: 0, MERGE: 0 };
     for (const row of ledger) if (derived[row[1]] !== undefined) derived[row[1]] += 1;
-    const finalUnits = unique(originals.flatMap(original => original.primaryCapabilities.map(capability => homeMap.get(capability)?.unit).filter(Boolean)));
+    const scopedCapabilities = [...originals.flatMap(original => original.primaryCapabilities), ...(amendmentByBatch.get(name) ?? [])];
+    const finalUnits = unique(scopedCapabilities.map(capability => homeMap.get(capability)?.unit).filter(Boolean));
     for (const id of finalUnits) { const body = unitMap.get(id)?.body ?? ''; if (placeholders.some(value => body.includes(value))) add(errors, `generic placeholder ${id}`); }
     let proofsPassed = 0; const proofsExpected = finalUnits.filter(id => multiIds.includes(id) && info.evidenceSchema === 'canonical-v2').length;
     for (const id of finalUnits.filter(id => multiIds.includes(id))) {
