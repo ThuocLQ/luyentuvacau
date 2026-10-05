@@ -12,7 +12,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count |
 |---|---|---|---|---:|
 | lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 |
-| lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 |
 | lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
 | lu-prog-errors-results | Phân loại lỗi dự đoán được và giữ lỗi bất ngờ có ngữ cảnh | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
 | lu-prog-invariants-domain-model | Giữ business invariant tại state transition và persistence boundary | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
@@ -35,18 +34,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
 | lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 |
 | lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 |
-| lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos | Distributed Systems | Distributed Systems | 4 |
-| lu-dist-consistency-linearizability | Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không | Distributed Systems | Distributed Systems | 1 |
-| lu-dist-partitioning-ownership-rebalancing | Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại | Distributed Systems | Distributed Systems | 1 |
-| lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn | Distributed Systems | Distributed Systems | 2 |
-| lu-dist-time-order-causality | Phân biệt wall-clock với causal/business order, không dùng clock như universal total order | Distributed Systems | Distributed Systems | 1 |
-| lu-dist-transactions-2pc-boundary | Explain 2PC atomicity intent across transactional participants and its coordination/failure cost | Distributed Systems | Distributed Systems | 1 |
-| lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect | Distributed Systems | Messaging & Event-Driven Consistency | 4 |
-| lu-msg-delivery-retry-poison-dlq | Distinguish transient failure from poison message và design bounded retry/quarantine | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
-| lu-msg-external-side-effect-reconciliation | Handle external side effect with unknown local result and derive safe reconciliation | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
-| lu-msg-producer-acks-durability | Reason what producer acknowledgement proves and remaining failure possibilities | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
-| lu-msg-schema-evolution-contract-ownership | Evolve event with old producers/consumers/history still present | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
-| lu-msg-workflow-saga-compensation | Model multi-step workflow where completed steps may need business compensation, not rollback | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable | Production Engineering | Observability & Performance | 2 |
 | lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence | Production Engineering | Observability & Performance | 4 |
 | lu-obs-load-test-benchmark-validity | Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim | Production Engineering | Observability & Performance | 1 |
@@ -124,7 +111,27 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-net-service-discovery-load-balancing | Route a logical service to healthy backends as endpoints change | Service & Network | Networking & HTTP | 1 |
 | lu-sec-cryptography-credentials-tokens | Choose safe cryptographic protection for credentials and tokens | Service & Network | Security | 1 |
 | lu-sec-data-encryption-key-lifecycle | Protect sensitive data with an explicit key lifecycle | Service & Network | Security | 1 |
-| lu-msg-background-jobs-scheduling | Run scheduled durable work safely across retries and restarts | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-outbox-duplicate-safe-effect | Persist producer intent and make consumer effect duplicate-safe | Distributed Systems | Messaging & Event-Driven Consistency | 2 |
+| lu-dist-partial-failure-uncertainty | Reason about partial failure without inventing remote truth | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-replication-leader-quorum | Judge replica acknowledgement and failover guarantees | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-consensus-coordination-purpose | Choose coordination for one shared decision | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-guarantee-recovery-transfer | Reason across distributed guarantees during recovery | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-consistency-linearizability | State the consistency guarantee a business operation needs | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-partitioning-ownership-rebalancing | Move ownership without losing in-flight work | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-rpc-unknown-completion | Handle remote call whose effect may already exist | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-reconciliation-convergence | Repair divergent state toward an authority | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-time-order-causality | Use causal or version order when clocks disagree | Distributed Systems | Distributed Systems | 1 |
+| lu-dist-transactions-2pc-boundary | Evaluate 2PC prepare/commit and blocking cost | Distributed Systems | Distributed Systems | 1 |
+| lu-msg-model-queue-topic-partition-order | Model queue topic partition and ordering scope | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-consumer-groups-offsets-rebalance | Process partitions through rebalance | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-replay-backfill | Replay history without corrupting live effects | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-lag-backpressure-evidence | Diagnose consumer lag as capacity signal | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-delivery-retry-poison-dlq | Classify retryable delivery and poison | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-external-side-effect-reconciliation | Recover external side effect after unknown local outcome | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-producer-acks-durability | State what producer acknowledgement proves | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-schema-evolution-contract-ownership | Evolve event contract with retained history | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-workflow-saga-compensation | Recover multi-step workflow with compensation | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-msg-background-jobs-scheduling | Run scheduled durable work across restarts | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 
 ## lu-index-query-shape
 
@@ -270,54 +277,6 @@ Merged because one inventory reservation trace exposes a violated invariant, the
 
 - `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
 - `concurrency-memory-visibility` remains separate pending its own mechanism/evidence boundary.
-
-## lu-outbox-duplicate-safe-effect
-
-### Identity
-
-- **Unit ID:** lu-outbox-duplicate-safe-effect
-- **Working title:** Persist producer intent and make consumer effect duplicate-safe
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-outbox-db-publish-gap | Messaging & Event-Driven Consistency | L3 |
-| msg-consumer-idempotency-inbox | Messaging & Event-Driven Consistency | L3 |
-
-### Shared problem / need
-
-Explain DB commit/broker publish gap and recover it without direct dual-write loss.
-
-### Shared mechanism / state trace
-
-Business state and broker are separate transactional systems; crash can happen between commit, relay publish and relay acknowledgement. → Stable message/operation ID is recorded with local effect atomically or recoverably so replay is recognized.
-
-### Shared observable evidence
-
-Business row; outbox status; relay attempt; broker metadata; consumer ledger.; Message ID; inbox row; business row; transaction record; duplicate/replay test.
-
-### Shared failure / debug story
-
-DB commit but no publish; broker accepts but relay timeout; retry duplicate; outbox stuck.; Crash between dedup check/write; business write succeeds inbox fails; unstable key; duplicate external effect.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `msg-outbox-db-publish-gap`, `msg-consumer-idempotency-inbox` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
-- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
 
 ## lu-prog-api-refactoring-change-safety
 
@@ -2553,602 +2512,6 @@ normal misses → synchronized TTL expiry/hot-key burst
 
 KEEP as a coherent multi-capability unit.
 
-## lu-dist-consensus-coordination-purpose
-
-### Identity
-
-- **Unit ID:** lu-dist-consensus-coordination-purpose
-- **Working title:** Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-consensus-coordination-purpose | Distributed Systems | L3 |
-| dist-partial-failure-uncertainty | Distributed Systems | L3 |
-| dist-replication-leader-quorum | Distributed Systems | L3 |
-| dist-guarantee-recovery-transfer | Distributed Systems | L4 |
-
-### Shared problem / need
-
-Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos.
-
-### Shared mechanism / state trace
-
-Participants cần agree decision/order despite failure; safe progress cần đủ reachable members theo protocol rule. → Không có shared failure state; caller observes message/reply/timeout through network, not remote internal truth. → Replicas copy state; leader/quorum rule controls acceptance and when value is sufficiently replicated. → Partial failure, RPC uncertainty, consistency, replication, ownership and reconciliation compose; timeline phải gắn operation identity/state owner.
-
-### Shared observable evidence
-
-Leader/epoch/term; membership; quorum availability; committed decision/version; ownership record.; Per-node health/state; operation ID; request timings; dependency error rate; trace hop completion.; Leader/role; replica lag/position; ack count/state; operation version; failover timeline.; Timeline; per-system state; operation ID; ownership/version records; recovery result.
-
-### Shared failure / debug story
-
-No quorum; stale epoch; two actors believe exclusive ownership; coordination service dependency.; One dependency unreachable; slow mistaken dead; retry amplification; local success inferred global success.; Stale replica read; leader fails during operation; insufficient ack assumed durable; stale node promoted.; Claim guarantee không có; recovery duplicates unknown effect; topology invalidates assumption.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `dist-consensus-coordination-purpose`, `dist-partial-failure-uncertainty`, `dist-replication-leader-quorum`, `dist-guarantee-recovery-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `concurrency-local-vs-distributed` remains separate pending its own mechanism/evidence boundary.
-- `net-failure-localization-unknown-outcome` remains separate pending its own mechanism/evidence boundary.
-
-## lu-dist-consistency-linearizability
-
-### Identity
-
-- **Unit ID:** lu-dist-consistency-linearizability
-- **Working title:** Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-consistency-linearizability | Distributed Systems | L3 |
-
-### Shared problem / need
-
-Nêu consistency guarantee cần cho business operation và reason history read/write có thỏa hay không.
-
-### Shared mechanism / state trace
-
-Consistency model giới hạn ordering/visibility history được phép giữa replicas/processes.
-
-### Shared observable evidence
-
-Timestamp/sequence-tagged history; versions; read-after-write result; replica/source record.
-
-### Shared failure / debug story
-
-Stale read violates expectation; writers observe incompatible state; assume global latest under eventual convergence.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| nosql-cassandra-lsm-compaction-consistency | Frozen graph neighborhood with dist-consistency-linearizability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| cache-multilayer-coherence | Frozen graph neighborhood with dist-consistency-linearizability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `nosql-cassandra-lsm-compaction-consistency` remains separate pending its own mechanism/evidence boundary.
-- `cache-multilayer-coherence` remains separate pending its own mechanism/evidence boundary.
-
-## lu-dist-partitioning-ownership-rebalancing
-
-### Identity
-
-- **Unit ID:** lu-dist-partitioning-ownership-rebalancing
-- **Working title:** Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-partitioning-ownership-rebalancing | Distributed Systems | L3 |
-
-### Shared problem / need
-
-Map key/work tới owner và reason safe rebalance khi in-flight work/state còn tồn tại.
-
-### Shared mechanism / state trace
-
-Assignment maps partition to owner; epoch/rebalance moves responsibility while router and workers converge.
-
-### Shared observable evidence
-
-Assignment; owner/epoch; traffic per partition; rebalance events; lag/in-flight count.
-
-### Shared failure / debug story
-
-Hot owner; stale router; zero/double ownership; duplicate in-flight work.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| db-partitioning-sharding-boundary | Frozen graph neighborhood with dist-partitioning-ownership-rebalancing | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| nosql-mongo-index-shard-transaction | Frozen graph neighborhood with dist-partitioning-ownership-rebalancing | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `db-partitioning-sharding-boundary` remains separate pending its own mechanism/evidence boundary.
-- `nosql-mongo-index-shard-transaction` remains separate pending its own mechanism/evidence boundary.
-
-## lu-dist-reconciliation-convergence
-
-### Identity
-
-- **Unit ID:** lu-dist-reconciliation-convergence
-- **Working title:** Detect divergent state và repair idempotently toward source/invariant đã chọn
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-reconciliation-convergence | Distributed Systems | L3 |
-| dist-rpc-unknown-completion | Distributed Systems | L3 |
-
-### Shared problem / need
-
-Detect divergent state và repair idempotently toward source/invariant đã chọn.
-
-### Shared mechanism / state trace
-
-Reconciliation compares actual against authoritative state/invariant then applies repeatable correction until mismatch converges. → Execution and response delivery are independent events.
-
-### Shared observable evidence
-
-Source-vs-derived diff; audit/event history; job result; repair operation ID; mismatch count.; Operation/idempotency ID; server audit; client timing; status query; trace span.
-
-### Shared failure / debug story
-
-Non-idempotent repair; endless loop; wrong truth source; missing record never emitted.; Side effect succeeded but client timeout; retry duplicates; server continues after client abandoned.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `dist-reconciliation-convergence`, `dist-rpc-unknown-completion` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
-- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
-
-## lu-dist-time-order-causality
-
-### Identity
-
-- **Unit ID:** lu-dist-time-order-causality
-- **Working title:** Phân biệt wall-clock với causal/business order, không dùng clock như universal total order
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-time-order-causality | Distributed Systems | L3 |
-
-### Shared problem / need
-
-Phân biệt wall-clock với causal/business order, không dùng clock như universal total order.
-
-### Shared mechanism / state trace
-
-Nodes have independent clocks/delay; version/causal relation can be meaningful when timestamps skew or delivery reorders.
-
-### Shared observable evidence
-
-Operation IDs; sequence/version; producer/receive timestamps; trace/audit causality.
-
-### Shared failure / debug story
-
-Last-write-wins on skewed clock; arrival time assumed event time; timeout logic assumes perfect clocks.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| dist-guarantee-recovery-transfer | Frozen graph neighborhood with dist-time-order-causality | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `dist-guarantee-recovery-transfer` remains separate pending its own mechanism/evidence boundary.
-
-## lu-dist-transactions-2pc-boundary
-
-### Identity
-
-- **Unit ID:** lu-dist-transactions-2pc-boundary
-- **Working title:** Explain 2PC atomicity intent across transactional participants and its coordination/failure cost
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| dist-transactions-2pc-boundary | Distributed Systems | L3 |
-
-### Shared problem / need
-
-Explain 2PC atomicity intent across transactional participants and its coordination/failure cost.
-
-### Shared mechanism / state trace
-
-Prepare makes participants commit-capable; coordinator later records commit/abort decision.
-
-### Shared observable evidence
-
-Coordinator/participant state; prepare/commit record; locks held; recovery log.
-
-### Shared failure / debug story
-
-Prepared participant with unavailable coordinator; long-held resources; prepare failure; assume 2PC covers external side effect.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| db-transactions-isolation-anomalies | Frozen graph neighborhood with dist-transactions-2pc-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partial-failure-uncertainty | Frozen graph neighborhood with dist-transactions-2pc-boundary | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `db-transactions-isolation-anomalies` remains separate pending its own mechanism/evidence boundary.
-- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
-
-## lu-msg-consumer-groups-offsets-rebalance
-
-### Identity
-
-- **Unit ID:** lu-msg-consumer-groups-offsets-rebalance
-- **Working title:** Reason separately partition assignment, offset position và business side effect
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-consumer-groups-offsets-rebalance | Messaging & Event-Driven Consistency | L3 |
-| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 |
-| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 |
-| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 |
-
-### Shared problem / need
-
-Reason separately partition assignment, offset position và business side effect.
-
-### Shared mechanism / state trace
-
-Group assigns partitions; offset marks broker read position, not durable business effect. → Records route to queue/topic/partition; parallel consumers preserve order only where broker contract/key assignment does. → Reprocess records from selected offset/range; projection work differs from side effects that must be suppressed/idempotent. → Lag grows when arrival exceeds effective consumption or work is unevenly distributed/blocked.
-
-### Shared observable evidence
-
-Assignment; current/committed offset; generation/member; processing/audit record; rebalance event.; Topic/queue config; partition/key; offset/sequence; consumer assignment.; Replay range; offsets; IDs/schema version; inbox ledger; derived before/after.; Per-partition lag; arrival/consume rate; handler duration; retry rate; assignment; downstream pool/latency.
-
-### Shared failure / debug story
-
-Offset commit before effect; effect succeeds then offset fails; rebalance interrupts work; stale ownership assumption.; Assume global partition order; wrong key; queue treated broadcast; partitions changed without order review.; Payment/email replayed; live/backfill race; old schema unreadable; wrong starting offset.; Hot partition; slow handler/downstream; retry storm; rebalance pause; consumers exceed shared capacity.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `msg-consumer-groups-offsets-rebalance`, `msg-model-queue-topic-partition-order`, `msg-replay-backfill`, `msg-lag-backpressure-evidence` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `dist-partitioning-ownership-rebalancing` remains separate pending its own mechanism/evidence boundary.
-- `nosql-redis-persistence-replication-cluster-streams` remains separate pending its own mechanism/evidence boundary.
-
-## lu-msg-delivery-retry-poison-dlq
-
-### Identity
-
-- **Unit ID:** lu-msg-delivery-retry-poison-dlq
-- **Working title:** Distinguish transient failure from poison message và design bounded retry/quarantine
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-delivery-retry-poison-dlq | Messaging & Event-Driven Consistency | L3 |
-
-### Shared problem / need
-
-Distinguish transient failure from poison message và design bounded retry/quarantine.
-
-### Shared mechanism / state trace
-
-Failed delivery retries; permanently invalid record repeats until classified/quarantined/skipped by explicit policy.
-
-### Shared observable evidence
-
-Attempt count; error class; message ID; retry timestamps; lag; DLQ reason.
-
-### Shared failure / debug story
-
-Infinite poison retry blocks partition; retry storm; DLQ graveyard; transient sent DLQ early.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-delivery-retry-poison-dlq | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partial-failure-uncertainty | Frozen graph neighborhood with msg-delivery-retry-poison-dlq | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
-- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
-
-## lu-msg-external-side-effect-reconciliation
-
-### Identity
-
-- **Unit ID:** lu-msg-external-side-effect-reconciliation
-- **Working title:** Handle external side effect with unknown local result and derive safe reconciliation
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-external-side-effect-reconciliation | Messaging & Event-Driven Consistency | L4 |
-
-### Shared problem / need
-
-Handle external side effect with unknown local result and derive safe reconciliation.
-
-### Shared mechanism / state trace
-
-Provider may commit while response lost; local DB/event cannot prove provider state.
-
-### Shared observable evidence
-
-External operation/idempotency ID; status query; local audit; callback history; reconciliation result.
-
-### Shared failure / debug story
-
-Charged but locally timeout-failed; retry double charge; callback lost; permanent divergence.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| dist-rpc-unknown-completion | Frozen graph neighborhood with msg-external-side-effect-reconciliation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-reconciliation-convergence | Frozen graph neighborhood with msg-external-side-effect-reconciliation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `dist-rpc-unknown-completion` remains separate pending its own mechanism/evidence boundary.
-- `dist-reconciliation-convergence` remains separate pending its own mechanism/evidence boundary.
-
-## lu-msg-producer-acks-durability
-
-### Identity
-
-- **Unit ID:** lu-msg-producer-acks-durability
-- **Working title:** Reason what producer acknowledgement proves and remaining failure possibilities
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-producer-acks-durability | Messaging & Event-Driven Consistency | L3 |
-
-### Shared problem / need
-
-Reason what producer acknowledgement proves and remaining failure possibilities.
-
-### Shared mechanism / state trace
-
-Broker acceptance/replication policy decides when ack returns; client timeout can overlap accepted record.
-
-### Shared observable evidence
-
-Producer result/error; message key/ID; broker offset; replica/leader state; retry attempt.
-
-### Shared failure / debug story
-
-Ack weaker than assumed; timeout after accept; retry duplicate; leader changes during send.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-producer-acks-durability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-replication-leader-quorum | Frozen graph neighborhood with msg-producer-acks-durability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
-- `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
-
-## lu-msg-schema-evolution-contract-ownership
-
-### Identity
-
-- **Unit ID:** lu-msg-schema-evolution-contract-ownership
-- **Working title:** Evolve event with old producers/consumers/history still present
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-schema-evolution-contract-ownership | Messaging & Event-Driven Consistency | L3 |
-
-### Shared problem / need
-
-Evolve event with old producers/consumers/history still present.
-
-### Shared mechanism / state trace
-
-Event contract has syntax and semantic meaning; compatibility includes deployed consumers and retained history replay.
-
-### Shared observable evidence
-
-Schema/event version; compatibility test; historical sample; consumer error; ownership doc.
-
-### Shared failure / debug story
-
-Required field removed; meaning changes silently; consumer cannot read history; producer assumes synchronized deploy.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| msg-replay-backfill | Frozen graph neighborhood with msg-schema-evolution-contract-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-schema-evolution-contract-ownership | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `msg-replay-backfill` remains separate pending its own mechanism/evidence boundary.
-- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
-
-## lu-msg-workflow-saga-compensation
-
-### Identity
-
-- **Unit ID:** lu-msg-workflow-saga-compensation
-- **Working title:** Model multi-step workflow where completed steps may need business compensation, not rollback
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-workflow-saga-compensation | Messaging & Event-Driven Consistency | L3 |
-
-### Shared problem / need
-
-Model multi-step workflow where completed steps may need business compensation, not rollback.
-
-### Shared mechanism / state trace
-
-Workflow persists progress; each step has outcome/possible compensation; compensation is new business operation.
-
-### Shared observable evidence
-
-Workflow state; step IDs; commands/events; compensation attempt; business records.
-
-### Shared failure / debug story
-
-Compensation fails; duplicate step/compensation; out-of-order transition; irreversible effect treated rollbackable.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| msg-model-queue-topic-partition-order | Frozen graph neighborhood with msg-workflow-saga-compensation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| dist-partial-failure-uncertainty | Frozen graph neighborhood with msg-workflow-saga-compensation | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `msg-model-queue-topic-partition-order` remains separate pending its own mechanism/evidence boundary.
-- `dist-partial-failure-uncertainty` remains separate pending its own mechanism/evidence boundary.
-
 ## lu-api-circuit-bulkhead-rate-limit
 
 ### Identity
@@ -5342,13 +4705,1154 @@ Database column encryption → object storage/export encrypted with KMS.
 ### Boundary decision
 
 Per-record/envelope keys reduce blast radius but increase key-management and recovery complexity.
+## lu-dist-partial-failure-uncertainty
+
+### Identity
+
+- **Unit ID:** lu-dist-partial-failure-uncertainty
+- **Working title:** Reason about partial failure without inventing remote truth
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-partial-failure-uncertainty | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Payment times out while inventory and notification show different health.
+
+### Integrated mechanism / state trace
+
+Each component can fail or become unreachable independently; timeout is not remote state.
+
+### Integrated evidence surface
+
+Per-hop timing, health, operation ID and server audit.
+
+### Failure and debug loop
+
+Timeout called failure, retry amplification, false global success.
+
+### Shared assessment task
+
+Classify known, unknown and unobservable state from spans and audit; choose the next safe observation.
+
+### Transfer variation
+
+One timeout to a network partition.
+
+### Boundary decision
+
+SPLIT: reusable uncertainty needs its own evidence before deeper guarantees.
+
+## lu-dist-replication-leader-quorum
+
+### Identity
+
+- **Unit ID:** lu-dist-replication-leader-quorum
+- **Working title:** Judge replica acknowledgement and failover guarantees
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-replication-leader-quorum | Distributed Systems | L3 |
+
+### Canonical scenario
+
+A write succeeds just before leader failover.
+
+### Integrated mechanism / state trace
+
+Leader, replica acknowledgements and promotion determine visibility and durability.
+
+### Integrated evidence surface
+
+Role, log position, ack set, lag, promotion and read result.
+
+### Failure and debug loop
+
+Leader receipt called durable; lagging replica promoted.
+
+### Shared assessment task
+
+Given ack policy and failover timeline, state the guarantee and reject unsafe promotion.
+
+### Transfer variation
+
+Three replicas to slow remote region.
+
+### Boundary decision
+
+SPLIT: replica state differs from authority and generic timeout evidence.
+
+## lu-dist-guarantee-recovery-transfer
+
+### Identity
+
+- **Unit ID:** lu-dist-guarantee-recovery-transfer
+- **Working title:** Reason across distributed guarantees during recovery
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-guarantee-recovery-transfer | Distributed Systems | L4 |
+
+### Canonical scenario
+
+Regional incident has lost reply, stale read and repair mismatch.
+
+### Integrated mechanism / state trace
+
+Synthesize uncertainty, replica, coordination, time and repair boundaries into one recovery plan.
+
+### Integrated evidence surface
+
+Incident timeline, term, version, source diff, repair audit and customer result.
+
+### Failure and debug loop
+
+Overclaiming exactly-once; repair from stale authority.
+
+### Shared assessment task
+
+State surviving guarantees and choose recovery owner from incident evidence.
+
+### Transfer variation
+
+Single region to multi-region failover.
+
+### Boundary decision
+
+SPLIT: L4 synthesis must not gate foundation evidence.
+
+## lu-dist-rpc-unknown-completion
+
+### Identity
+
+- **Unit ID:** lu-dist-rpc-unknown-completion
+- **Working title:** Handle remote call whose effect may already exist
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-rpc-unknown-completion | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Payment RPC times out after send before response.
+
+### Integrated mechanism / state trace
+
+Send, execution and response delivery are independent; timeout cannot infer remote truth.
+
+### Integrated evidence surface
+
+Client deadline, operation ID, server audit, provider status and trace.
+
+### Failure and debug loop
+
+Retry duplicate charge; cancel treated as rollback.
+
+### Shared assessment task
+
+Label unknown outcome, choose query versus retry, and name terminal evidence.
+
+### Transfer variation
+
+RPC to delayed callback.
+
+### Boundary decision
+
+SPLIT: response ambiguity differs from general reconciliation.
+
+## lu-msg-model-queue-topic-partition-order
+
+### Identity
+
+- **Unit ID:** lu-msg-model-queue-topic-partition-order
+- **Working title:** Model queue topic partition and ordering scope
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 |
+
+### Canonical scenario
+
+Choose messaging model for customer-keyed orders.
+
+### Integrated mechanism / state trace
+
+Destination controls fan-out; key and partition control ordering scope.
+
+### Integrated evidence surface
+
+Destination config, key, partition, offset, assignment and sequence.
+
+### Failure and debug loop
+
+Queue treated broadcast; wrong key breaks order.
+
+### Shared assessment task
+
+Select model and state ordering guarantee from configuration and records.
+
+### Transfer variation
+
+One partition to keyed group.
+
+### Boundary decision
+
+SPLIT: foundation model cannot wait for replay/lag.
+
+## lu-msg-replay-backfill
+
+### Identity
+
+- **Unit ID:** lu-msg-replay-backfill
+- **Working title:** Replay history without corrupting live effects
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Rebuild search projection while live traffic continues.
+
+### Integrated mechanism / state trace
+
+Range/checkpoint replay uses isolated or idempotent path with live watermark.
+
+### Integrated evidence surface
+
+Range, offsets, IDs, schema, checkpoint, watermark and counts.
+
+### Failure and debug loop
+
+Wrong start, live/backfill race, replayed side effect.
+
+### Shared assessment task
+
+Choose safe range and prove convergence without duplicate effect.
+
+### Transfer variation
+
+Full rebuild to selective customer backfill.
+
+### Boundary decision
+
+SPLIT: historic range differs from active assignment and lag.
+
+## lu-msg-lag-backpressure-evidence
+
+### Identity
+
+- **Unit ID:** lu-msg-lag-backpressure-evidence
+- **Working title:** Diagnose consumer lag as capacity signal
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Lag grows despite adding consumers.
+
+### Integrated mechanism / state trace
+
+Arrival/service rate, hot partition, handler and downstream determine lag.
+
+### Integrated evidence surface
+
+Per-partition lag, rates, duration, retries, assignment and downstream latency.
+
+### Failure and debug loop
+
+Hot partition, retry storm, saturated DB.
+
+### Shared assessment task
+
+Identify limiter and choose bounded mitigation from evidence.
+
+### Transfer variation
+
+Uniform load to one hot tenant.
+
+### Boundary decision
+
+SPLIT: capacity diagnosis differs from replay and group state.
+
+## Stage 1D closure
+
+Distributed Systems is REVIEWED. Canonical unit sections and audit registries hold final state; this is not a second registry. Production Engineering and Architecture & Engineering Reasoning remain PENDING.## lu-outbox-duplicate-safe-effect
+
+### Identity
+
+- **Unit ID:** lu-outbox-duplicate-safe-effect
+- **Working title:** Persist producer intent and make consumer effect duplicate-safe
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-outbox-db-publish-gap | Messaging & Event-Driven Consistency | L3 |
+| msg-consumer-idempotency-inbox | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Order commit survives a relay crash and the consumer receives the event twice.
+
+### Integrated mechanism / state trace
+
+Order and Outbox commit together; relay may publish before its acknowledgement; inbox and business effect commit together.
+
+### Integrated evidence surface
+
+Order/outbox rows, relay attempts, broker message ID, inbox row and ledger effect.
+
+### Failure and debug loop
+
+Commit without publish, ambiguous broker ack, repeated delivery.
+
+### Shared assessment task
+
+Given transaction, relay log, broker metadata and two deliveries, choose recovery and prove one published intent and one local business effect.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| msg-outbox-db-publish-gap | Business/Outbox rows and relay/broker timeline prove the producer gap. |
+| msg-consumer-idempotency-inbox | Message identity, inbox row and single ledger effect prove duplicate-safe consumption. |
+
+### Transfer variation
+
+Relay restart then duplicate reporting projection.
+
+### Boundary decision
+
+KEEP: one end-to-end incident proves producer gap and consumer duplicate safety, with separate durable evidence.
+
+## lu-dist-partial-failure-uncertainty
+
+### Identity
+
+- **Unit ID:** lu-dist-partial-failure-uncertainty
+- **Working title:** Reason about partial failure without inventing remote truth
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-partial-failure-uncertainty | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Payment times out while inventory and notification show different health.
+
+### Integrated mechanism / state trace
+
+Each component can fail or become unreachable independently; timeout is not remote state.
+
+### Integrated evidence surface
+
+Per-hop timing, health, operation ID and server audit.
+
+### Failure and debug loop
+
+Timeout called failure, retry amplification, false global success.
+
+### Shared assessment task
+
+Classify known, unknown and unobservable state from spans and audit; choose the next safe observation.
+
+### Transfer variation
+
+One timeout to a network partition.
+
+### Boundary decision
+
+SPLIT: reusable uncertainty needs its own evidence before deeper guarantees.
+
+## lu-dist-replication-leader-quorum
+
+### Identity
+
+- **Unit ID:** lu-dist-replication-leader-quorum
+- **Working title:** Judge replica acknowledgement and failover guarantees
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-replication-leader-quorum | Distributed Systems | L3 |
+
+### Canonical scenario
+
+A write succeeds just before leader failover.
+
+### Integrated mechanism / state trace
+
+Leader, replica acknowledgements and promotion determine visibility and durability.
+
+### Integrated evidence surface
+
+Role, log position, ack set, lag, promotion and read result.
+
+### Failure and debug loop
+
+Leader receipt called durable; lagging replica promoted.
+
+### Shared assessment task
+
+Given ack policy and failover timeline, state the guarantee and reject unsafe promotion.
+
+### Transfer variation
+
+Three replicas to slow remote region.
+
+### Boundary decision
+
+SPLIT: replica state differs from authority and generic timeout evidence.
+
+## lu-dist-consensus-coordination-purpose
+
+### Identity
+
+- **Unit ID:** lu-dist-consensus-coordination-purpose
+- **Working title:** Choose coordination for one shared decision
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-consensus-coordination-purpose | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Two schedulers compete for one lease during membership change.
+
+### Integrated mechanism / state trace
+
+Term, quorum and committed decision establish one authority or deliberately stop progress.
+
+### Integrated evidence surface
+
+Members, term, quorum, lease record and owner timeline.
+
+### Failure and debug loop
+
+Stale epoch creates two owners; writes during quorum loss.
+
+### Shared assessment task
+
+Use membership and lease history to decide safe progress and availability cost.
+
+### Transfer variation
+
+Static group to zone outage.
+
+### Boundary decision
+
+SPLIT: authority decision has distinct state/evidence.
+
+## lu-dist-guarantee-recovery-transfer
+
+### Identity
+
+- **Unit ID:** lu-dist-guarantee-recovery-transfer
+- **Working title:** Reason across distributed guarantees during recovery
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-guarantee-recovery-transfer | Distributed Systems | L4 |
+
+### Canonical scenario
+
+Regional incident has lost reply, stale read and repair mismatch.
+
+### Integrated mechanism / state trace
+
+Synthesize uncertainty, replica, coordination, time and repair boundaries into one recovery plan.
+
+### Integrated evidence surface
+
+Incident timeline, term, version, source diff, repair audit and customer result.
+
+### Failure and debug loop
+
+Overclaiming exactly-once; repair from stale authority.
+
+### Shared assessment task
+
+State surviving guarantees and choose recovery owner from incident evidence.
+
+### Transfer variation
+
+Single region to multi-region failover.
+
+### Boundary decision
+
+SPLIT: L4 synthesis must not gate foundation evidence.
+
+## lu-dist-consistency-linearizability
+
+### Identity
+
+- **Unit ID:** lu-dist-consistency-linearizability
+- **Working title:** State the consistency guarantee a business operation needs
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-consistency-linearizability | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Account limit is written then read through another replica.
+
+### Integrated mechanism / state trace
+
+Model constrains permitted read/write histories and visibility.
+
+### Integrated evidence surface
+
+Invocation/response history, versions, read source and replica state.
+
+### Failure and debug loop
+
+Stale read violates promise; eventual confused with latest.
+
+### Shared assessment task
+
+Judge if history meets required guarantee and choose stronger/weaker model.
+
+### Transfer variation
+
+Read-after-write to concurrent regional writes.
+
+### Boundary decision
+
+KEEP: history proof differs from cache/storage behavior.
+
+## lu-dist-partitioning-ownership-rebalancing
+
+### Identity
+
+- **Unit ID:** lu-dist-partitioning-ownership-rebalancing
+- **Working title:** Move ownership without losing in-flight work
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-partitioning-ownership-rebalancing | Distributed Systems | L3 |
+
+### Canonical scenario
+
+A hot tenant partition moves while requests arrive.
+
+### Integrated mechanism / state trace
+
+Assignment, epoch and handoff move responsibility while router converges.
+
+### Integrated evidence surface
+
+Partition map, owner epoch, route, in-flight count and handoff events.
+
+### Failure and debug loop
+
+Stale route, double owner, duplicate in-flight work.
+
+### Shared assessment task
+
+Find stale ownership and choose drain or fencing from handoff evidence.
+
+### Transfer variation
+
+Static ring to elastic workers.
+
+### Boundary decision
+
+KEEP: ownership handoff differs from offsets and DB sharding.
+
+## lu-dist-rpc-unknown-completion
+
+### Identity
+
+- **Unit ID:** lu-dist-rpc-unknown-completion
+- **Working title:** Handle remote call whose effect may already exist
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-rpc-unknown-completion | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Payment RPC times out after send before response.
+
+### Integrated mechanism / state trace
+
+Send, execution and response delivery are independent; timeout cannot infer remote truth.
+
+### Integrated evidence surface
+
+Client deadline, operation ID, server audit, provider status and trace.
+
+### Failure and debug loop
+
+Retry duplicate charge; cancel treated as rollback.
+
+### Shared assessment task
+
+Label unknown outcome, choose query versus retry, and name terminal evidence.
+
+### Transfer variation
+
+RPC to delayed callback.
+
+### Boundary decision
+
+SPLIT: response ambiguity differs from general reconciliation.
+
+## lu-dist-reconciliation-convergence
+
+### Identity
+
+- **Unit ID:** lu-dist-reconciliation-convergence
+- **Working title:** Repair divergent state toward an authority
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-reconciliation-convergence | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Projection missed events and diverges from orders.
+
+### Integrated mechanism / state trace
+
+Compare actual state with authority, apply repeatable repair and measure convergence.
+
+### Integrated evidence surface
+
+Source/derived diff, repair ID, mismatch count and before/after state.
+
+### Failure and debug loop
+
+Wrong truth source, non-idempotent repair, endless loop.
+
+### Shared assessment task
+
+Choose authority and idempotent correction; prove mismatch decreases.
+
+### Transfer variation
+
+Missed projection to bank callback reconciliation.
+
+### Boundary decision
+
+SPLIT: repair loop applies beyond RPC.
+
+## lu-dist-time-order-causality
+
+### Identity
+
+- **Unit ID:** lu-dist-time-order-causality
+- **Working title:** Use causal or version order when clocks disagree
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-time-order-causality | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Shipment cancellation has conflicting service timestamps.
+
+### Integrated mechanism / state trace
+
+Clock skew and delay require causal relation, version or sequence.
+
+### Integrated evidence surface
+
+Correlation ID, version, send/receive time and trace links.
+
+### Failure and debug loop
+
+Arrival time treated as event time; wrong reconstruction.
+
+### Shared assessment task
+
+Reconstruct supported order and reject false total order.
+
+### Transfer variation
+
+One queue to two-region events.
+
+### Boundary decision
+
+KEEP: causal evidence differs from broker ordering and synthesis.
+
+## lu-dist-transactions-2pc-boundary
+
+### Identity
+
+- **Unit ID:** lu-dist-transactions-2pc-boundary
+- **Working title:** Evaluate 2PC prepare/commit and blocking cost
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| dist-transactions-2pc-boundary | Distributed Systems | L3 |
+
+### Canonical scenario
+
+Two databases reserve inventory and record payment.
+
+### Integrated mechanism / state trace
+
+Participants prepare durable intent; coordinator records final decision.
+
+### Integrated evidence surface
+
+Coordinator log, participant state, locks, timeout and recovery.
+
+### Failure and debug loop
+
+Coordinator dies after prepare; external effect assumed rollback.
+
+### Shared assessment task
+
+Choose commit, abort or recovery wait from participant evidence.
+
+### Transfer variation
+
+Two DBs to irreversible provider.
+
+### Boundary decision
+
+KEEP: coordinator protocol differs from local isolation and Saga.
+
+## lu-msg-model-queue-topic-partition-order
+
+### Identity
+
+- **Unit ID:** lu-msg-model-queue-topic-partition-order
+- **Working title:** Model queue topic partition and ordering scope
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 |
+
+### Canonical scenario
+
+Choose messaging model for customer-keyed orders.
+
+### Integrated mechanism / state trace
+
+Destination controls fan-out; key and partition control ordering scope.
+
+### Integrated evidence surface
+
+Destination config, key, partition, offset, assignment and sequence.
+
+### Failure and debug loop
+
+Queue treated broadcast; wrong key breaks order.
+
+### Shared assessment task
+
+Select model and state ordering guarantee from configuration and records.
+
+### Transfer variation
+
+One partition to keyed group.
+
+### Boundary decision
+
+SPLIT: foundation model cannot wait for replay/lag.
+
+## lu-msg-consumer-groups-offsets-rebalance
+
+### Identity
+
+- **Unit ID:** lu-msg-consumer-groups-offsets-rebalance
+- **Working title:** Process partitions through rebalance
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-consumer-groups-offsets-rebalance | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Consumer dies and another takes its partitions.
+
+### Integrated mechanism / state trace
+
+Generation assigns partitions; committed offset tracks broker progress.
+
+### Integrated evidence surface
+
+Member/generation, assignment, offsets, rebalance and processing audit.
+
+### Failure and debug loop
+
+Effect succeeds then offset fails; stale member continues.
+
+### Shared assessment task
+
+Diagnose risk and choose commit/abort behavior from group evidence.
+
+### Transfer variation
+
+Stable group to rolling deploy.
+
+### Boundary decision
+
+SPLIT: group state differs from topology, replay and capacity.
+
+## lu-msg-replay-backfill
+
+### Identity
+
+- **Unit ID:** lu-msg-replay-backfill
+- **Working title:** Replay history without corrupting live effects
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Rebuild search projection while live traffic continues.
+
+### Integrated mechanism / state trace
+
+Range/checkpoint replay uses isolated or idempotent path with live watermark.
+
+### Integrated evidence surface
+
+Range, offsets, IDs, schema, checkpoint, watermark and counts.
+
+### Failure and debug loop
+
+Wrong start, live/backfill race, replayed side effect.
+
+### Shared assessment task
+
+Choose safe range and prove convergence without duplicate effect.
+
+### Transfer variation
+
+Full rebuild to selective customer backfill.
+
+### Boundary decision
+
+SPLIT: historic range differs from active assignment and lag.
+
+## lu-msg-lag-backpressure-evidence
+
+### Identity
+
+- **Unit ID:** lu-msg-lag-backpressure-evidence
+- **Working title:** Diagnose consumer lag as capacity signal
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Lag grows despite adding consumers.
+
+### Integrated mechanism / state trace
+
+Arrival/service rate, hot partition, handler and downstream determine lag.
+
+### Integrated evidence surface
+
+Per-partition lag, rates, duration, retries, assignment and downstream latency.
+
+### Failure and debug loop
+
+Hot partition, retry storm, saturated DB.
+
+### Shared assessment task
+
+Identify limiter and choose bounded mitigation from evidence.
+
+### Transfer variation
+
+Uniform load to one hot tenant.
+
+### Boundary decision
+
+SPLIT: capacity diagnosis differs from replay and group state.
+
+## lu-msg-delivery-retry-poison-dlq
+
+### Identity
+
+- **Unit ID:** lu-msg-delivery-retry-poison-dlq
+- **Working title:** Classify retryable delivery and poison
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-delivery-retry-poison-dlq | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Malformed invoice blocks a partition while provider outage clears.
+
+### Integrated mechanism / state trace
+
+Classify attempt; bounded retry protects capacity; poison quarantines with recovery path.
+
+### Integrated evidence surface
+
+Message ID, count, error class, schedule, lag, DLQ reason.
+
+### Failure and debug loop
+
+Infinite poison retry; transient sent early to DLQ.
+
+### Shared assessment task
+
+Classify samples and choose retry quarantine or replay.
+
+### Transfer variation
+
+Schema poison to transient 503.
+
+### Boundary decision
+
+KEEP: classification differs from routing and capacity.
+
+## lu-msg-external-side-effect-reconciliation
+
+### Identity
+
+- **Unit ID:** lu-msg-external-side-effect-reconciliation
+- **Working title:** Recover external side effect after unknown local outcome
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-external-side-effect-reconciliation | Messaging & Event-Driven Consistency | L4 |
+
+### Canonical scenario
+
+Shipping provider times out after create-label request.
+
+### Integrated mechanism / state trace
+
+Provider may complete independently; reference query/callback reconciles one outcome.
+
+### Integrated evidence surface
+
+Reference ID, provider state, callback, local audit and attempts.
+
+### Failure and debug loop
+
+Retry creates second label; duplicate callback.
+
+### Shared assessment task
+
+Choose retry wait or reconcile and prove one label.
+
+### Transfer variation
+
+Shipping label to bank transfer.
+
+### Boundary decision
+
+KEEP: external authority differs from generic repair.
+
+## lu-msg-producer-acks-durability
+
+### Identity
+
+- **Unit ID:** lu-msg-producer-acks-durability
+- **Working title:** State what producer acknowledgement proves
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-producer-acks-durability | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Broker leader fails after producer ack.
+
+### Integrated mechanism / state trace
+
+Ack semantics depend on record, replicas and failover state.
+
+### Integrated evidence surface
+
+Producer config, ack log, roles, positions, ISR and failover.
+
+### Failure and debug loop
+
+Ack treated as universal durability; ambiguous retry duplicates.
+
+### Shared assessment task
+
+State guarantee and choose verify/retry from broker evidence.
+
+### Transfer variation
+
+Single broker to quorum ack.
+
+### Boundary decision
+
+KEEP: producer contract differs from generic quorum.
+
+## lu-msg-schema-evolution-contract-ownership
+
+### Identity
+
+- **Unit ID:** lu-msg-schema-evolution-contract-ownership
+- **Working title:** Evolve event contract with retained history
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-schema-evolution-contract-ownership | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Producer adds field while old consumers remain.
+
+### Integrated mechanism / state trace
+
+Producer owns compatible evolution; retained history exposes old schemas.
+
+### Integrated evidence surface
+
+Schema versions, deployment matrix, payload samples and decode results.
+
+### Failure and debug loop
+
+Required field breaks old consumer; old history fails decode.
+
+### Shared assessment task
+
+Choose compatibility and prove both consumers handle contract.
+
+### Transfer variation
+
+Additive field to migration window.
+
+### Boundary decision
+
+KEEP: contract proof differs from replay range.
+
+## lu-msg-workflow-saga-compensation
+
+### Identity
+
+- **Unit ID:** lu-msg-workflow-saga-compensation
+- **Working title:** Recover multi-step workflow with compensation
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-workflow-saga-compensation | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Stock reserved and paid order fails shipment.
+
+### Integrated mechanism / state trace
+
+Independent steps persist; compensation is a new business action.
+
+### Integrated evidence surface
+
+Saga state, command IDs, outcomes, compensations and audit.
+
+### Failure and debug loop
+
+Compensation fails; duplicate/out-of-order command.
+
+### Shared assessment task
+
+Choose next action and prove invariant after recovery.
+
+### Transfer variation
+
+Local services to delayed provider callback.
+
+### Boundary decision
+
+KEEP: workflow state differs from 2PC and provider query.
 
 ## lu-msg-background-jobs-scheduling
 
 ### Identity
 
 - **Unit ID:** lu-msg-background-jobs-scheduling
-- **Working title:** Run scheduled durable work safely across retries and restarts
+- **Working title:** Run scheduled durable work across restarts
 - **Learner-facing domain candidate:** Distributed Systems
 
 ### Primary capabilities
@@ -5359,28 +5863,81 @@ Per-record/envelope keys reduce blast radius but increase key-management and rec
 
 ### Canonical scenario
 
-Design durable scheduled/background work from trigger to recovery without treating it as fire-and-forget.
+Nightly job restarts in a misfire window with two workers.
 
 ### Integrated mechanism / state trace
 
-A trigger creates durable job identity/state; a worker acquires ownership/lease, executes, persists outcome and recovers after crash or misfire. Overlap policy, idempotency and retry protect business effect; this is not OS CPU scheduling or broker DLQ semantics.
+Trigger creates durable job; lease selects worker; attempt/idempotency guards effect.
 
 ### Integrated evidence surface
 
-Job ID/state; trigger/misfire record; lease owner/expiry; attempt timeline; idempotency key; queue depth; execution audit.
+Job state, trigger, misfire, lease, attempts, key and audit.
 
 ### Failure and debug loop
 
-Missed schedule after restart; two workers acquire same job; retry repeats side effect; stuck lease; unbounded overdue backlog; dashboard says success while work not durable.
+Missed run, duplicate worker, stuck lease, repeated invoice.
 
 ### Shared assessment task
 
-Given durable job state, trigger/misfire record, lease owner/expiry, attempt timeline and idempotency key, diagnose duplicate or missed execution after restart. Choose the takeover, retry and reconciliation policy, then show the state transition and business-effect evidence that proves recovery did not repeat the side effect.
+Diagnose duplicate/missed job; choose takeover/retry and prove one effect.
 
 ### Transfer variation
 
-Single Worker timer → Quartz/Hangfire clustered persistent schedule.
+Timer to clustered persistent scheduler.
 
 ### Boundary decision
 
-Persistent store/leases improve recovery but add contention and reconciliation; no-overlap may delay work under backlog.
+KEEP amendment: scheduler trigger/lease differs from DLQ, coordination and local admission.
+
+
+
+## Stage 1D closure
+
+Distributed Systems is REVIEWED. Canonical unit sections and audit registries hold final state; this is not a second registry. Production Engineering and Architecture & Engineering Reasoning remain PENDING.
+## lu-outbox-duplicate-safe-effect
+
+### Identity
+
+- **Unit ID:** lu-outbox-duplicate-safe-effect
+- **Working title:** Persist producer intent and make consumer effect duplicate-safe
+- **Learner-facing domain candidate:** Distributed Systems
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| msg-outbox-db-publish-gap | Messaging & Event-Driven Consistency | L3 |
+| msg-consumer-idempotency-inbox | Messaging & Event-Driven Consistency | L3 |
+
+### Canonical scenario
+
+Order commit survives a relay crash and the consumer receives the event twice.
+
+### Integrated mechanism / state trace
+
+Order and Outbox commit together; relay may publish before its acknowledgement; inbox and business effect commit together.
+
+### Integrated evidence surface
+
+Order/outbox rows, relay attempts, broker message ID, inbox row and ledger effect.
+
+### Failure and debug loop
+
+Commit without publish, ambiguous broker acknowledgement and repeated delivery.
+
+### Shared assessment task
+
+Given the transaction, relay log, broker metadata and two deliveries, choose recovery and prove one published intent and one local business effect.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| msg-outbox-db-publish-gap | Business/Outbox rows and relay/broker timeline prove the producer gap. |
+| msg-consumer-idempotency-inbox | Message identity, inbox row and single ledger effect prove duplicate-safe consumption. |
+
+### Transfer variation
+
+Relay restart then duplicate reporting projection.
+
+### Boundary decision
+
+KEEP: one end-to-end incident proves producer gap and consumer duplicate safety with separate durable evidence.

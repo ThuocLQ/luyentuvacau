@@ -8,14 +8,14 @@
 | Metric | Result |
 |---|---:|
 | Frozen capabilities | 167 |
-| Proposed Learning Units | 114 |
+| Proposed Learning Units | 121 |
 | Primary assessment homes | 167 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary assignments | 0 |
 | Unknown capability IDs | 0 |
-| Singleton units | 80 |
-| Multi-capability units | 34 |
-| Single-owner units | 114 |
+| Singleton units | 90 |
+| Multi-capability units | 31 |
+| Single-owner units | 121 |
 | Multi-owner units | 0 |
 
 ## B. Primary-Home Registry
@@ -54,23 +54,23 @@
 | delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 | lu-delivery-artifact-image-config | Production Engineering |
 | dist-consensus-coordination-purpose | Distributed Systems | L3 | lu-dist-consensus-coordination-purpose | Distributed Systems |
 | dist-consistency-linearizability | Distributed Systems | L3 | lu-dist-consistency-linearizability | Distributed Systems |
-| dist-guarantee-recovery-transfer | Distributed Systems | L4 | lu-dist-consensus-coordination-purpose | Distributed Systems |
-| dist-partial-failure-uncertainty | Distributed Systems | L3 | lu-dist-consensus-coordination-purpose | Distributed Systems |
+| dist-guarantee-recovery-transfer | Distributed Systems | L4 | lu-dist-guarantee-recovery-transfer | Distributed Systems |
+| dist-partial-failure-uncertainty | Distributed Systems | L3 | lu-dist-partial-failure-uncertainty | Distributed Systems |
 | dist-partitioning-ownership-rebalancing | Distributed Systems | L3 | lu-dist-partitioning-ownership-rebalancing | Distributed Systems |
 | dist-reconciliation-convergence | Distributed Systems | L3 | lu-dist-reconciliation-convergence | Distributed Systems |
-| dist-replication-leader-quorum | Distributed Systems | L3 | lu-dist-consensus-coordination-purpose | Distributed Systems |
-| dist-rpc-unknown-completion | Distributed Systems | L3 | lu-dist-reconciliation-convergence | Distributed Systems |
+| dist-replication-leader-quorum | Distributed Systems | L3 | lu-dist-replication-leader-quorum | Distributed Systems |
+| dist-rpc-unknown-completion | Distributed Systems | L3 | lu-dist-rpc-unknown-completion | Distributed Systems |
 | dist-time-order-causality | Distributed Systems | L3 | lu-dist-time-order-causality | Distributed Systems |
 | dist-transactions-2pc-boundary | Distributed Systems | L3 | lu-dist-transactions-2pc-boundary | Distributed Systems |
 | msg-consumer-groups-offsets-rebalance | Messaging & Event-Driven Consistency | L3 | lu-msg-consumer-groups-offsets-rebalance | Distributed Systems |
 | msg-consumer-idempotency-inbox | Messaging & Event-Driven Consistency | L3 | lu-outbox-duplicate-safe-effect | Distributed Systems |
 | msg-delivery-retry-poison-dlq | Messaging & Event-Driven Consistency | L3 | lu-msg-delivery-retry-poison-dlq | Distributed Systems |
 | msg-external-side-effect-reconciliation | Messaging & Event-Driven Consistency | L4 | lu-msg-external-side-effect-reconciliation | Distributed Systems |
-| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 | lu-msg-consumer-groups-offsets-rebalance | Distributed Systems |
-| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 | lu-msg-consumer-groups-offsets-rebalance | Distributed Systems |
+| msg-lag-backpressure-evidence | Messaging & Event-Driven Consistency | L3 | lu-msg-lag-backpressure-evidence | Distributed Systems |
+| msg-model-queue-topic-partition-order | Messaging & Event-Driven Consistency | L2 | lu-msg-model-queue-topic-partition-order | Distributed Systems |
 | msg-outbox-db-publish-gap | Messaging & Event-Driven Consistency | L3 | lu-outbox-duplicate-safe-effect | Distributed Systems |
 | msg-producer-acks-durability | Messaging & Event-Driven Consistency | L3 | lu-msg-producer-acks-durability | Distributed Systems |
-| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 | lu-msg-consumer-groups-offsets-rebalance | Distributed Systems |
+| msg-replay-backfill | Messaging & Event-Driven Consistency | L3 | lu-msg-replay-backfill | Distributed Systems |
 | msg-schema-evolution-contract-ownership | Messaging & Event-Driven Consistency | L3 | lu-msg-schema-evolution-contract-ownership | Distributed Systems |
 | msg-workflow-saga-compensation | Messaging & Event-Driven Consistency | L3 | lu-msg-workflow-saga-compensation | Distributed Systems |
 | obs-cardinality-sampling-cost | Observability & Performance | L3 | lu-obs-cardinality-sampling-cost | Production Engineering |
@@ -195,7 +195,6 @@
 | Unit ID | Primary capability IDs | Primary count | Owner set | Singleton / Multi |
 |---|---|---:|---|---|
 | lu-race-atomicity | concurrency-interleavings-invariants; concurrency-races-check-then-act; concurrency-synchronization-atomicity | 3 | Concurrency & Async | Multi |
-| lu-outbox-duplicate-safe-effect | msg-consumer-idempotency-inbox; msg-outbox-db-publish-gap | 2 | Messaging & Event-Driven Consistency | Multi |
 | lu-prog-api-refactoring-change-safety | prog-api-refactoring-change-safety | 1 | Programming & Software Design Foundations | Singleton |
 | lu-prog-errors-results | prog-errors-results | 1 | Programming & Software Design Foundations | Singleton |
 | lu-prog-invariants-domain-model | prog-invariants-domain-model | 1 | Programming & Software Design Foundations | Singleton |
@@ -218,18 +217,6 @@
 | lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | 1 | Concurrency & Async | Singleton |
 | lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | 1 | Concurrency & Async | Singleton |
 | lu-concurrency-memory-visibility | concurrency-memory-visibility | 1 | Concurrency & Async | Singleton |
-| lu-dist-consensus-coordination-purpose | dist-consensus-coordination-purpose; dist-guarantee-recovery-transfer; dist-partial-failure-uncertainty; dist-replication-leader-quorum | 4 | Distributed Systems | Multi |
-| lu-dist-consistency-linearizability | dist-consistency-linearizability | 1 | Distributed Systems | Singleton |
-| lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | 1 | Distributed Systems | Singleton |
-| lu-dist-reconciliation-convergence | dist-reconciliation-convergence; dist-rpc-unknown-completion | 2 | Distributed Systems | Multi |
-| lu-dist-time-order-causality | dist-time-order-causality | 1 | Distributed Systems | Singleton |
-| lu-dist-transactions-2pc-boundary | dist-transactions-2pc-boundary | 1 | Distributed Systems | Singleton |
-| lu-msg-consumer-groups-offsets-rebalance | msg-consumer-groups-offsets-rebalance; msg-lag-backpressure-evidence; msg-model-queue-topic-partition-order; msg-replay-backfill | 4 | Messaging & Event-Driven Consistency | Multi |
-| lu-msg-delivery-retry-poison-dlq | msg-delivery-retry-poison-dlq | 1 | Messaging & Event-Driven Consistency | Singleton |
-| lu-msg-external-side-effect-reconciliation | msg-external-side-effect-reconciliation | 1 | Messaging & Event-Driven Consistency | Singleton |
-| lu-msg-producer-acks-durability | msg-producer-acks-durability | 1 | Messaging & Event-Driven Consistency | Singleton |
-| lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | 1 | Messaging & Event-Driven Consistency | Singleton |
-| lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | 1 | Messaging & Event-Driven Consistency | Singleton |
 | lu-obs-cardinality-sampling-cost | obs-cardinality-sampling-cost; obs-instrumentation-context | 2 | Observability & Performance | Multi |
 | lu-obs-db-io-downstream-attribution | obs-db-io-downstream-attribution; obs-diagnostic-method; obs-latency-throughput-saturation; obs-tracing-distributed-evidence | 4 | Observability & Performance | Multi |
 | lu-obs-load-test-benchmark-validity | obs-load-test-benchmark-validity | 1 | Observability & Performance | Singleton |
@@ -307,6 +294,26 @@
 | lu-net-service-discovery-load-balancing | net-service-discovery-load-balancing | 1 | Networking & HTTP | Singleton |
 | lu-sec-cryptography-credentials-tokens | sec-cryptography-credentials-tokens | 1 | Security | Singleton |
 | lu-sec-data-encryption-key-lifecycle | sec-data-encryption-key-lifecycle | 1 | Security | Singleton |
+| lu-outbox-duplicate-safe-effect | msg-consumer-idempotency-inbox; msg-outbox-db-publish-gap | 2 | Messaging & Event-Driven Consistency | Multi |
+| lu-dist-partial-failure-uncertainty | dist-partial-failure-uncertainty | 1 | Distributed Systems | Singleton |
+| lu-dist-replication-leader-quorum | dist-replication-leader-quorum | 1 | Distributed Systems | Singleton |
+| lu-dist-consensus-coordination-purpose | dist-consensus-coordination-purpose | 1 | Distributed Systems | Singleton |
+| lu-dist-guarantee-recovery-transfer | dist-guarantee-recovery-transfer | 1 | Distributed Systems | Singleton |
+| lu-dist-consistency-linearizability | dist-consistency-linearizability | 1 | Distributed Systems | Singleton |
+| lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | 1 | Distributed Systems | Singleton |
+| lu-dist-rpc-unknown-completion | dist-rpc-unknown-completion | 1 | Distributed Systems | Singleton |
+| lu-dist-reconciliation-convergence | dist-reconciliation-convergence | 1 | Distributed Systems | Singleton |
+| lu-dist-time-order-causality | dist-time-order-causality | 1 | Distributed Systems | Singleton |
+| lu-dist-transactions-2pc-boundary | dist-transactions-2pc-boundary | 1 | Distributed Systems | Singleton |
+| lu-msg-model-queue-topic-partition-order | msg-model-queue-topic-partition-order | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-consumer-groups-offsets-rebalance | msg-consumer-groups-offsets-rebalance | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-replay-backfill | msg-replay-backfill | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-lag-backpressure-evidence | msg-lag-backpressure-evidence | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-delivery-retry-poison-dlq | msg-delivery-retry-poison-dlq | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-external-side-effect-reconciliation | msg-external-side-effect-reconciliation | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-producer-acks-durability | msg-producer-acks-durability | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | 1 | Messaging & Event-Driven Consistency | Singleton |
+| lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | 1 | Messaging & Event-Driven Consistency | Singleton |
 | lu-msg-background-jobs-scheduling | msg-background-jobs-scheduling | 1 | Messaging & Event-Driven Consistency | Singleton |
 
 ## D. Singleton Review Registry
@@ -331,15 +338,6 @@
 | lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | lu-race-atomicity; lu-db-locks-deadlocks-contention | Wait-cycle/forward-progress evidence differs from invariant interleaving and transaction locks. |
 | lu-concurrency-local-vs-distributed | concurrency-local-vs-distributed | lu-race-atomicity | Cross-replica authority needs replica identity, absent from local race proof. |
 | lu-concurrency-memory-visibility | concurrency-memory-visibility | lu-race-atomicity | Memory-publication ordering differs from an interleaving outcome. |
-| lu-dist-consistency-linearizability | dist-consistency-linearizability | nosql-cassandra-lsm-compaction-consistency; cache-multilayer-coherence | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | db-partitioning-sharding-boundary; nosql-mongo-index-shard-transaction | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-dist-time-order-causality | dist-time-order-causality | dist-guarantee-recovery-transfer | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-dist-transactions-2pc-boundary | dist-transactions-2pc-boundary | db-transactions-isolation-anomalies; dist-partial-failure-uncertainty | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-msg-delivery-retry-poison-dlq | msg-delivery-retry-poison-dlq | msg-model-queue-topic-partition-order; dist-partial-failure-uncertainty | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-msg-external-side-effect-reconciliation | msg-external-side-effect-reconciliation | dist-rpc-unknown-completion; dist-reconciliation-convergence | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-msg-producer-acks-durability | msg-producer-acks-durability | msg-model-queue-topic-partition-order; dist-replication-leader-quorum | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | msg-replay-backfill; msg-model-queue-topic-partition-order | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | msg-model-queue-topic-partition-order; dist-partial-failure-uncertainty | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-obs-load-test-benchmark-validity | obs-load-test-benchmark-validity | obs-latency-throughput-saturation; runtime-jit-warmup | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-obs-profiling-runtime-evidence | obs-profiling-runtime-evidence | runtime-diagnostics; obs-diagnostic-method | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-rel-disaster-recovery-rpo-rto | rel-disaster-recovery-rpo-rto | db-backup-restore; dist-replication-leader-quorum | Different mechanism/evidence boundary prevents one credible assessment policy. |
@@ -392,21 +390,36 @@
 | lu-net-service-discovery-load-balancing | net-service-discovery-load-balancing | lu-net-request-path-dns; lu-net-proxy-tls-forwarded-boundary; lu-rel-health-readiness-semantics | DNS proves one resolver answer, proxy boundary proves trusted forwarding, and readiness proves traffic eligibility. This unit alone traces evolving endpoint membership through picker selection into connection/request distribution; stale endpoint, unhealthy selection and long-lived skew need that combined evidence and a routing-boundary assessment. |
 | lu-sec-cryptography-credentials-tokens | sec-cryptography-credentials-tokens | lu-sec-auth-session-oauth; lu-sec-secrets-third-party-trust | Session/OAuth evidence proves protocol and claim handling; secret/webhook evidence proves scope, rotation and third-party verification. This unit assesses primitive selection, password/reset-token storage and unsafe verification from algorithm/entropy/expiry evidence, a distinct state and failure loop. |
 | lu-sec-data-encryption-key-lifecycle | sec-data-encryption-key-lifecycle | lu-sec-secrets-third-party-trust; lu-delivery-cloud-responsibility-managed-services | Secret trust and cloud responsibility do not prove data classification, envelope-key hierarchy, rotation or recovery. This unit requires KMS metadata, encryption metadata and rotation/recovery evidence to debug unreadable old data or an exposed key, so its lifecycle assessment remains independent. |
-| lu-msg-background-jobs-scheduling | msg-background-jobs-scheduling | lu-msg-delivery-retry-poison-dlq; lu-concurrency-async-parallelism; lu-dist-consensus-coordination-purpose | Broker retry/DLQ, in-process admission and generic coordination each cover one neighboring concern. This unit owns durable trigger-to-state-to-lease execution, misfire and restart recovery; job/lease/attempt/idempotency evidence supports a distinct duplicate-or-missed-execution diagnosis and recovery-policy assessment. |
+| lu-dist-partial-failure-uncertainty | dist-partial-failure-uncertainty | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: reusable uncertainty needs its own evidence before deeper guarantees. |
+| lu-dist-replication-leader-quorum | dist-replication-leader-quorum | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: replica state differs from authority and generic timeout evidence. |
+| lu-dist-consensus-coordination-purpose | dist-consensus-coordination-purpose | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: authority decision has distinct state/evidence. |
+| lu-dist-guarantee-recovery-transfer | dist-guarantee-recovery-transfer | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: L4 synthesis must not gate foundation evidence. |
+| lu-dist-consistency-linearizability | dist-consistency-linearizability | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: history proof differs from cache/storage behavior. |
+| lu-dist-partitioning-ownership-rebalancing | dist-partitioning-ownership-rebalancing | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: ownership handoff differs from offsets and DB sharding. |
+| lu-dist-rpc-unknown-completion | dist-rpc-unknown-completion | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: response ambiguity differs from general reconciliation. |
+| lu-dist-reconciliation-convergence | dist-reconciliation-convergence | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: repair loop applies beyond RPC. |
+| lu-dist-time-order-causality | dist-time-order-causality | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: causal evidence differs from broker ordering and synthesis. |
+| lu-dist-transactions-2pc-boundary | dist-transactions-2pc-boundary | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: coordinator protocol differs from local isolation and Saga. |
+| lu-msg-model-queue-topic-partition-order | msg-model-queue-topic-partition-order | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: foundation model cannot wait for replay/lag. |
+| lu-msg-consumer-groups-offsets-rebalance | msg-consumer-groups-offsets-rebalance | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: group state differs from topology, replay and capacity. |
+| lu-msg-replay-backfill | msg-replay-backfill | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: historic range differs from active assignment and lag. |
+| lu-msg-lag-backpressure-evidence | msg-lag-backpressure-evidence | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: SPLIT: capacity diagnosis differs from replay and group state. |
+| lu-msg-delivery-retry-poison-dlq | msg-delivery-retry-poison-dlq | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: classification differs from routing and capacity. |
+| lu-msg-external-side-effect-reconciliation | msg-external-side-effect-reconciliation | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: external authority differs from generic repair. |
+| lu-msg-producer-acks-durability | msg-producer-acks-durability | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: producer contract differs from generic quorum. |
+| lu-msg-schema-evolution-contract-ownership | msg-schema-evolution-contract-ownership | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: contract proof differs from replay range. |
+| lu-msg-workflow-saga-compensation | msg-workflow-saga-compensation | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP: workflow state differs from 2PC and provider query. |
+| lu-msg-background-jobs-scheduling | msg-background-jobs-scheduling | nearest related unit | Distinct state, evidence, failure/debug loop and assessment: KEEP amendment: scheduler trigger/lease differs from DLQ, coordination and local admission. |
 
 ## E. Multi-Capability Grouping Review
 
 | Unit ID | Shared problem / need | Shared mechanism / state trace | Shared observable evidence | Shared failure / debug story | Assessment-coherence argument |
 |---|---|---|---|---|---|
 | lu-race-atomicity | Viết state transition và các interleaving có thể xảy ra để chứng minh invariant có thể bị phá ở đâu. | Khi hai operation overlap, read/validate/write có thể xen kẽ; invariant chỉ giữ nếu transition được atomically protected ở đúng owner. → Check tách khỏi act tạo cửa sổ để state đổi; correctness nằm ở compare-and-swap/conditional write/unique constraint chứ không chỉ validation trước đó. → Lock, Interlocked hoặc transactional conditional update serializes/atomically applies state transition theo scope của primitive. | Step trace; concurrent test barrier; before/after state; affected-row count; audit sequence.; Interleaving trace; concurrent integration test; conditional affected rows; unique violation; version conflict.; Critical-section trace; contention time; affected rows; invariant test dưới parallel load. | Oversell inventory; duplicate reservation; lost update; negative balance.; Duplicate creation; lost update; TOCTOU authorization; negative stock.; Read-modify-write lost update; lock sai scope; double release; atomic increment dùng cho invariant nhiều field. | One bounded trace observes all Primary mechanisms. |
-| lu-outbox-duplicate-safe-effect | Explain DB commit/broker publish gap and recover it without direct dual-write loss. | Business state and broker are separate transactional systems; crash can happen between commit, relay publish and relay acknowledgement. → Stable message/operation ID is recorded with local effect atomically or recoverably so replay is recognized. | Business row; outbox status; relay attempt; broker metadata; consumer ledger.; Message ID; inbox row; business row; transaction record; duplicate/replay test. | DB commit but no publish; broker accepts but relay timeout; retry duplicate; outbox stuck.; Crash between dedup check/write; business write succeeds inbox fails; unstable key; duplicate external effect. | One bounded trace observes all Primary mechanisms. |
 | lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu. | Allocation tạo object trên managed heap; khi vùng nhớ cần thu hồi, GC tìm object còn reachable rồi dọn phần còn lại, nên tốc độ cấp phát quyết định tần suất và chi phí collection. → Object sống khi có đường reference từ GC root như stack, static, handle hoặc long-lived collection; scope source code không đồng nghĩa object hết reachable. → Retention là object còn reachable; pool chủ động giữ object để reuse; buffer lớn có allocation/lifetime cost riêng, và pool có thể biến allocation pressure thành retained heap. | Allocation rate; GC count/time; heap size; generation size; request latency lúc collection.; Heap graph; retaining path; root type; object count/size theo thời gian.; Heap dump; generation/size distribution; pool counters; allocation trace của large buffer. | High allocation rate; frequent GC; pause dài; CPU overhead do GC.; Unexpected retention; event handler giữ subscriber; cache/list vô hạn; closure giữ graph lớn.; Pool retains too much; large buffers repeatedly allocated; long-lived owner giữ object graph; wrong-size buffer reuse. | One bounded trace observes all Primary mechanisms. |
 | lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ. | Counter trả lời xu hướng; trace cho timeline/causal activity; dump/profile cho object hoặc stack tại thời điểm; tool phải khớp câu hỏi. → Allocation, GC và retention tạo các dấu hiệu khác nhau; thay một biến rồi đo lại mới phân biệt causal effect. | Hypothesis viết trước; counter time series; trace span/stack; heap dump; profile hotspot.; Symptom timeline; allocation/GC counters; retaining path; controlled before/after experiment; post-change latency. | Collecting wrong evidence; dump sau khi symptom biến mất; kết luận leak từ heap size đơn lẻ.; Treating retention as GC tuning; pooling để che leak; mitigation giảm allocation nhưng tăng retained heap. | One bounded trace observes all Primary mechanisms. |
 | lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity. | File/socket/database operation hoàn tất qua kernel/external system; blocking giữ execution thread chờ, async cho phép thread làm work khác trong khi completion chưa tới. → Process giữ handle trỏ tới kernel resource; dispose/close giải phóng reference/quota, còn connection pool là owner layer khác với raw socket. | Blocked stack; wait time; worker/runtime queue; thread count; request queue growth.; Open handle count; socket states; per-process limits; connection-pool state; OS error code. | Blocking request path; sync I/O giữ worker; queue growth; timeout do worker starvation.; FD/handle leak; socket exhaustion; close quá sớm; IPC endpoint không được release. | One bounded trace observes all Primary mechanisms. |
 | lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource. | Async không tự tạo thread; concurrency là overlap lifetime; parallelism là nhiều work thực sự chạy đồng thời khi CPU/capacity cho phép. → CancellationToken báo owner rằng result không còn cần hoặc deadline đã hết; code phải observe signal, stop safely và không coi cancel là rollback của side effect đã commit. → Arrival rate lớn hơn service rate làm in-flight work tích tụ; bounded queue/semaphore buộc producer wait, reject hoặc shed thay vì giữ work vô hạn. | Timeline task/thread; CPU; active operations; request latency; queue depth.; Token propagation trace; active operation count; cancellation log; audit state; cleanup/timeout test.; In-flight count; queue depth; pool usage; throughput; p95/p99; rejection/wait time. | Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelism vô hạn cho downstream I/O.; Token không được forward; continue expensive work sau disconnect; cancel giữa side effect gây unknown outcome; dispose khi child còn dùng.; Unbounded in-flight tasks; queue/memory growth; pool exhaustion; p99 tăng dù throughput không tăng. | One bounded trace observes all Primary mechanisms. |
-| lu-dist-consensus-coordination-purpose | Giải thích vì sao một quyết định chung như leader/owner/config cần coordination dù không implement Raft/Paxos. | Participants cần agree decision/order despite failure; safe progress cần đủ reachable members theo protocol rule. → Không có shared failure state; caller observes message/reply/timeout through network, not remote internal truth. → Replicas copy state; leader/quorum rule controls acceptance and when value is sufficiently replicated. → Partial failure, RPC uncertainty, consistency, replication, ownership and reconciliation compose; timeline phải gắn operation identity/state owner. | Leader/epoch/term; membership; quorum availability; committed decision/version; ownership record.; Per-node health/state; operation ID; request timings; dependency error rate; trace hop completion.; Leader/role; replica lag/position; ack count/state; operation version; failover timeline.; Timeline; per-system state; operation ID; ownership/version records; recovery result. | No quorum; stale epoch; two actors believe exclusive ownership; coordination service dependency.; One dependency unreachable; slow mistaken dead; retry amplification; local success inferred global success.; Stale replica read; leader fails during operation; insufficient ack assumed durable; stale node promoted.; Claim guarantee không có; recovery duplicates unknown effect; topology invalidates assumption. | One bounded trace observes all Primary mechanisms. |
-| lu-dist-reconciliation-convergence | Detect divergent state và repair idempotently toward source/invariant đã chọn. | Reconciliation compares actual against authoritative state/invariant then applies repeatable correction until mismatch converges. → Execution and response delivery are independent events. | Source-vs-derived diff; audit/event history; job result; repair operation ID; mismatch count.; Operation/idempotency ID; server audit; client timing; status query; trace span. | Non-idempotent repair; endless loop; wrong truth source; missing record never emitted.; Side effect succeeded but client timeout; retry duplicates; server continues after client abandoned. | One bounded trace observes all Primary mechanisms. |
-| lu-msg-consumer-groups-offsets-rebalance | Reason separately partition assignment, offset position và business side effect. | Group assigns partitions; offset marks broker read position, not durable business effect. → Records route to queue/topic/partition; parallel consumers preserve order only where broker contract/key assignment does. → Reprocess records from selected offset/range; projection work differs from side effects that must be suppressed/idempotent. → Lag grows when arrival exceeds effective consumption or work is unevenly distributed/blocked. | Assignment; current/committed offset; generation/member; processing/audit record; rebalance event.; Topic/queue config; partition/key; offset/sequence; consumer assignment.; Replay range; offsets; IDs/schema version; inbox ledger; derived before/after.; Per-partition lag; arrival/consume rate; handler duration; retry rate; assignment; downstream pool/latency. | Offset commit before effect; effect succeeds then offset fails; rebalance interrupts work; stale ownership assumption.; Assume global partition order; wrong key; queue treated broadcast; partitions changed without order review.; Payment/email replayed; live/backfill race; old schema unreadable; wrong starting offset.; Hot partition; slow handler/downstream; retry storm; rebalance pause; consumers exceed shared capacity. | One bounded trace observes all Primary mechanisms. |
 | lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable. | Metric label combinations create time-series cardinality; sampling retains subset by policy. → Events/spans at meaningful transitions; propagated context links calls/tasks/messages. | Series count; ingest/storage; sample rate; retained slow/error traces; cost.; Parent/child tree; operation ID; semantic attributes; structured log; headers/message metadata. | User/order ID label; rare failure sampled away; head sampling loses slow trace; cost grows faster than traffic.; Span ends before async work; state transition missing; context lost in worker; token/payload logged. | One bounded trace observes all Primary mechanisms. |
 | lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence. | End-to-end latency composes work/wait across boundaries; correlation compares candidates. → Throughput is completed work, latency distribution measures wait/work, saturation approaches finite capacity, errors are failed work. → Spans represent timed operations with parent/causal relation; context links downstream when possible. → Evidence changes confidence between plausible causes; dashboards without hypothesis are not diagnosis. | Trace timing; query/plan; acquisition wait; socket/downstream timing; queue wait; profile.; p50/p95/p99; rates; success/error; CPU; queue; pool; concurrency.; Span timeline; parent/link; duration; status; dependency attrs; retry attempts.; Trace/profile; allocation/GC; queue/pool; DB wait/plan; network timing; before/after. | Slow endpoint blamed SQL; pool wait omitted; timeout called app processing; N+1 hidden aggregate.; Average hides p99; throughput stable while queue grows; low CPU masks pool bottleneck; reject improves latency but errors ignored.; Missing child span; retry opaque; message link absent; trace assumed business completion; wrong attribution.; Dashboard-first guess; correlation as cause; confirmation bias; many variables changed; metric improves but user symptom remains. | One bounded trace observes all Primary mechanisms. |
 | lu-obs-logs-structured-correlation | Produce structured queryable logs for significant events/context. | Stable fields make events queryable/correlatable instead of prose parsing. → Metrics aggregate behavior, logs discrete structured events, traces causal path; context connects views. | Event schema; correlation ID; query result; volume.; Trace/span; operation ID; metric dimensions/time; fields; request timeline. | String-only regex; inconsistent field types; secret/PII; no resource/operation; noisy duplicates.; Metric spike lacks context; logs uncorrelated; trace ID lost async; collect all signals no question. | One bounded trace observes all Primary mechanisms. |
@@ -432,6 +445,7 @@
 | lu-net-http-streaming-cancellation | disconnect during large upload | HTTP contract then stream abort/lifetime | status capture; bytes/abort/allocation | buffering and continued work | define partial outcome and stop boundary. |
 | lu-api-deadline-retry-policy | 800 ms three-hop degraded call | remaining deadline then bounded retry | deadline/spans; attempts/error/timing/rate | nested full timeout/retry storm | calculate safe budget and attempt schedule. |
 | lu-sec-auth-session-oauth | ID token sent to API | claim validation then OAuth/OIDC role distinction | issuer/audience/expiry; token type/scope/AS metadata | wrong token accepted | decide correct token and access boundary. |
+| lu-outbox-duplicate-safe-effect | committed business change | Outbox publish then inbox effect | order/outbox/relay/broker/inbox/ledger IDs | relay crash plus duplicate delivery | One incident proves both durable boundaries. |
 
 ## F. Cross-Owner Review
 
@@ -515,7 +529,7 @@ None.
 - Runtime & Concurrency — REVIEWED
 - Data & Consistency — REVIEWED
 - Service & Network — REVIEWED
-- Distributed Systems — PENDING
+- Distributed Systems — REVIEWED
 - Production Engineering — PENDING
 - Architecture & Engineering Reasoning — PENDING
 
@@ -605,3 +619,31 @@ None.
 | sec-data-encryption-key-lifecycle | lu-sec-data-encryption-key-lifecycle | ADD | data encryption/key lifecycle and rotation evidence |
 
 **REVIEWED.** Amendment scope is complete; historical ledger remains unchanged and final Service & Network unit count is 25.
+
+## Distributed Systems batch closure
+
+**REVIEWED.** 13 historical originals: **10 KEEP, 3 SPLIT, 0 MERGE**; **20 historical final units**. +1 controlled amendment (`lu-msg-background-jobs-scheduling`) gives **21 current Distributed Systems units**. Multi proof tables: **1 / 1**. Singleton review: **20 / 20**. Dependency projection remains **NOT FINALIZED**.
+
+## Distributed Systems Decision Ledger
+
+| Original unit | Primary disposition | Final canonical state |
+|---|---|---|
+| lu-outbox-duplicate-safe-effect | KEEP | lu-outbox-duplicate-safe-effect |
+| lu-dist-consensus-coordination-purpose | SPLIT | lu-dist-partial-failure-uncertainty; lu-dist-replication-leader-quorum; lu-dist-consensus-coordination-purpose; lu-dist-guarantee-recovery-transfer |
+| lu-dist-consistency-linearizability | KEEP | lu-dist-consistency-linearizability |
+| lu-dist-partitioning-ownership-rebalancing | KEEP | lu-dist-partitioning-ownership-rebalancing |
+| lu-dist-reconciliation-convergence | SPLIT | lu-dist-rpc-unknown-completion; lu-dist-reconciliation-convergence |
+| lu-dist-time-order-causality | KEEP | lu-dist-time-order-causality |
+| lu-dist-transactions-2pc-boundary | KEEP | lu-dist-transactions-2pc-boundary |
+| lu-msg-consumer-groups-offsets-rebalance | SPLIT | lu-msg-model-queue-topic-partition-order; lu-msg-consumer-groups-offsets-rebalance; lu-msg-replay-backfill; lu-msg-lag-backpressure-evidence |
+| lu-msg-delivery-retry-poison-dlq | KEEP | lu-msg-delivery-retry-poison-dlq |
+| lu-msg-external-side-effect-reconciliation | KEEP | lu-msg-external-side-effect-reconciliation |
+| lu-msg-producer-acks-durability | KEEP | lu-msg-producer-acks-durability |
+| lu-msg-schema-evolution-contract-ownership | KEEP | lu-msg-schema-evolution-contract-ownership |
+| lu-msg-workflow-saga-compensation | KEEP | lu-msg-workflow-saga-compensation |
+
+## Distributed Systems controlled amendment ledger
+
+| Added capability | Final unit | Disposition | Evidence boundary |
+|---|---|---|---|
+| msg-background-jobs-scheduling | lu-msg-background-jobs-scheduling | KEEP | trigger, misfire, lease, attempt and idempotent recovery |
