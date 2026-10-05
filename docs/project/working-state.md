@@ -2,11 +2,13 @@
 
 > **Purpose:** Small, current handoff surface for humans and agents. This file points to canonical authorities and records the workflow cursor. It must not duplicate full policy or architecture specifications.
 >
-> **Last updated:** 2026-10-04
+> **Last updated:** 2026-10-05
 >
 > **Expected branch:** `codex/senior-backend-evidence-map`
 >
 > **Final Stage 1D seal commit:** `b0523472726c5e5230a512ac855e9dbcdd9f0cec`
+>
+> **Stage 1E canonical architecture commit:** `7d345586b4e0054ee8488dc746393f0d5b98e8d4`
 
 ## Bootstrap
 
@@ -32,28 +34,25 @@
 
 ## Current phase
 
-**Pre-Stage 1E — Stage 1D sealed**
+**Pre-Stage 1F — Stage 1E sealed**
 
-The Foundation Coverage Audit amendment is **MATERIALIZED** by `5f09fb85e87bfeadce0d7d82a78ffdc50ccc36f1`.
-
-- Core additions: service discovery/load balancing; applied cryptography for credentials/tokens; data encryption/key lifecycle; durable background jobs/scheduling.
-- Stream Processing remains a deferred specialization.
-- Stage 1D is **SEALED** by `b0523472726c5e5230a512ac855e9dbcdd9f0cec`.
+Production Engineering is **REVIEWED / SEALED** by `7d345586b4e0054ee8488dc746393f0d5b98e8d4`. Architecture & Engineering Reasoning is the only remaining Stage-1 semantic-review batch and has **not started**.
 
 ## Important current facts
 
 - Frozen capabilities: **167**.
 - Dependency graph: **332** relations = **201 REQUIRED + 131 RECOMMENDED**.
-- Learning Units: **121** = **90 singleton + 31 multi**, with **167 Primary homes**.
+- Learning Units: **132** = **105 singleton + 27 multi**, with **167 Primary homes**.
 - Service & Network: **25 current final units** and REVIEWED.
 - Distributed Systems: **21 current final units** and REVIEWED by `29e1b0a05e8ed1f08270c04395a42a20886a97ec`.
-- Production Engineering and Architecture & Engineering Reasoning remain **PENDING**.
+- Production Engineering: **30 Primaries → 26 final units = 22 singleton + 4 multi**, including **2 multi-owner** units; **REVIEWED / SEALED**.
+- Architecture & Engineering Reasoning: **PENDING**.
 - `stage-1-review-manifest.json` baseline remains `412216c591404480a6539f220ea324f9ec53af56`; original scope plus declared amendment scope must equal the current frozen capability set.
 - The repaired dependency registry keeps all 14 amendment relations inside its canonical section.
 
 ## Exact next task
 
-Stage 1E — Production Engineering semantic review.
+Stage 1F — Architecture & Engineering Reasoning semantic review.
 
 ## Stop conditions
 

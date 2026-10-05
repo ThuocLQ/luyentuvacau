@@ -63,3 +63,11 @@ A REVIEWED batch receiving an amendment must explicitly reopen/revalidate amende
 Use `AGENTS.md` for bootstrap rules, canonical docs for source-of-truth semantics, this log for durable rationale, and `docs/project/working-state.md` for the current workflow cursor.
 
 Actual Git state and canonical artifacts outrank this log; this log outranks the working cursor; chat/model memory is convenience only.
+
+## D-008 — Stage 1E Production Engineering seal
+
+**Date:** 2026-10-05
+
+**Status:** SEALED by `7d345586b4e0054ee8488dc746393f0d5b98e8d4`
+
+Stage 1E closed after canonical materialization of 15 historical units: **6 KEEP / 8 SPLIT / 1 MERGE**. Its 30 Primaries now have 26 final Production units (**22 singleton / 4 multi**, including **2 multi-owner**): `lu-rel-health-probes` and `lu-release-rollout-rollback`. Dependency projection remains **NOT FINALIZED**. Architecture & Engineering Reasoning remains **PENDING**. Do not reopen this semantic/canonical review without concrete evidence.
