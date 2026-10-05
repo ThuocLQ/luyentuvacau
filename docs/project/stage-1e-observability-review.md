@@ -26,6 +26,10 @@ NON-CANONICAL WORKING REVIEW ARTIFACT. Final authority remains learning-unit-aud
 | lu-obs-signals-correlation | obs-signals-correlation |
 | lu-obs-profiling-runtime-evidence | obs-profiling-runtime-evidence |
 
+## Cross-historical lineage
+
+`lu-obs-instrumentation-tracing` is a cross-historical coalescing/merge of outputs produced by two SPLIT decisions: `obs-instrumentation-context` from `lu-obs-cardinality-sampling-cost` and `obs-tracing-distributed-evidence` from `lu-obs-db-io-downstream-attribution`. Both historical units remain SPLIT because both old groupings cease to exist. Preserve this lineage during final Stage 1E materialization.
+
 ## Proposed multi-capability unit
 
 ### lu-obs-instrumentation-tracing
@@ -47,7 +51,7 @@ NON-CANONICAL WORKING REVIEW ARTIFACT. Final authority remains learning-unit-aud
 | lu-obs-load-test-benchmark-validity | lu-obs-latency-throughput-saturation | Measurements supply inputs, while validity assesses whether workload, warm-up, data and generator make a claim credible. |
 | lu-obs-logs-structured-correlation | lu-obs-signals-correlation | Logs prove stable event schema/queryability; signals/correlation proves selection across metric, log and trace evidence. |
 | lu-obs-signals-correlation | lu-obs-logs-structured-correlation | Signal selection requires choosing the minimum evidence set for a question; logging is only one implementation. |
-| lu-obs-profiling-runtime-evidence | runtime-diagnostics | Runtime diagnostics owns collection mechanisms; this unit assesses interpreting CPU, allocation, stack and wait evidence for a production hypothesis. |
+| lu-obs-profiling-runtime-evidence | lu-runtime-diagnostics | Runtime diagnostics owns collection mechanisms; this unit assesses interpreting CPU, allocation, stack and wait evidence for a production hypothesis. |
 
 ## Cross-owner considerations
 
