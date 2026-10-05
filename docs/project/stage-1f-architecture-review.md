@@ -12,12 +12,12 @@ This Stage 1F-B review covers exactly the 6 historical Architecture & System Des
 |---|---|---|---|---|
 | lu-arch-boundaries-ownership | SPLIT | lu-arch-requirements-quality-attributes; lu-arch-boundaries-data-ownership; lu-arch-failure-recovery-security-observability | arch-requirements-quality-attributes; arch-boundaries-ownership + arch-data-ownership-source-of-truth; arch-failure-recovery-security-observability | Requirement framing, L3 authority/source-of-truth design and L4 production synthesis have independent state, evidence and progression boundaries. Boundary ownership and source-of-truth do share one authoritative-write/derived-copy assessment. |
 | lu-arch-consistency-latency-availability | KEEP | lu-arch-consistency-latency-availability | arch-consistency-latency-availability | This is one architecture-level guarantee choice: invariant/failure assumption to visibility, stale window, coordination cost and reconciliation path. |
-| lu-arch-cost-complexity-changeability | MERGE | lu-arch-cost-complexity-changeability | arch-cost-complexity-changeability + arch-decision-communication-transfer | The modular-monolith versus microservices decision has one option comparison, lifecycle-cost model, ADR evidence and revisit trigger; one bounded assessment credibly proves both L4 Primaries. |
+| lu-arch-cost-complexity-changeability | KEEP | lu-arch-cost-complexity-changeability | arch-cost-complexity-changeability + arch-decision-communication-transfer | The modular-monolith versus microservices decision has one option comparison, lifecycle-cost model, ADR evidence and revisit trigger; one bounded assessment credibly proves both L4 Primaries. |
 | lu-arch-evolution-migration-strangler | KEEP | lu-arch-evolution-migration-strangler | arch-evolution-migration-strangler | Old/new routing, coexistence, comparison, rollback and retirement form one migration-state mechanism. |
 | lu-arch-scale-capacity-partitioning | KEEP | lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | Measured demand, bottleneck evidence, capacity estimate and replica/partition boundary form one scale decision, not a generic partitioning lesson. |
 | lu-arch-sync-async-integration | KEEP | lu-arch-sync-async-integration | arch-sync-async-integration | Required completion semantics, lifetime coupling, operation state and recovery model form one integration-style decision. |
 
-Proposed result: 8 final units: 6 singleton and 2 multi. Historical totals: 4 KEEP, 1 SPLIT, 1 MERGE.
+Proposed result: 8 final units: 6 singleton and 2 multi. Historical totals: 5 KEEP, 1 SPLIT, 0 MERGE.
 
 ## 2. Proposed final allocation
 
@@ -108,7 +108,7 @@ RECOMMENDED Architecture relations remain recap, applied context or transfer mat
 No proposed final unit combines Primaries from different historical Architecture units. The only accepted multi-units are internal to their historical source:
 
 - lu-arch-boundaries-data-ownership combines the boundary-ownership and source-of-truth outputs of the SPLIT lu-arch-boundaries-ownership mega-unit.
-- lu-arch-cost-complexity-changeability retains the two capabilities from its existing historical unit after the MERGE pressure test accepts their shared assessment.
+- lu-arch-cost-complexity-changeability has no cross-historical merge; it simply retains its historical two-Primary grouping after merge-pressure testing accepts the shared assessment.
 
 ## 7. Cross-owner boundaries
 
@@ -120,7 +120,7 @@ No cross-owner merge is accepted. Architecture consumes and synthesizes Distribu
 |---|---|---:|---|
 | lu-arch-boundaries-ownership | SPLIT | 3 | Create requirement foundation, authority/source-of-truth multi-unit and L4 production-synthesis singleton; remove the four-capability mega-unit. |
 | lu-arch-consistency-latency-availability | KEEP | 1 | Preserve its singleton. |
-| lu-arch-cost-complexity-changeability | MERGE | 1 accepted multi | Preserve both Primaries together with canonical-v2 proof evidence. |
+| lu-arch-cost-complexity-changeability | KEEP | 1 accepted multi | Retain both historical Primaries together with canonical-v2 proof evidence. |
 | lu-arch-evolution-migration-strangler | KEEP | 1 | Preserve its singleton. |
 | lu-arch-scale-capacity-partitioning | KEEP | 1 | Preserve its singleton. |
 | lu-arch-sync-async-integration | KEEP | 1 | Preserve its singleton. |
