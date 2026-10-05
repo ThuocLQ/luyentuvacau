@@ -15,18 +15,29 @@ This Stage 1F-A review covers exactly the 6 historical Testing & Engineering Qua
 | lu-test-migration-compatibility | KEEP | lu-test-migration-compatibility | test-migration-compatibility | Mixed old/new version state, transitional fixture matrix and rollback compatibility form one distinct mechanism and assessment. |
 | lu-test-property-boundary-fuzz | KEEP | lu-test-property-boundary-fuzz | test-property-boundary-fuzz | Property, generated input, shrinking and reproducible failing case are one broad-input falsification mechanism. |
 | lu-test-review-static-analysis-change-safety | KEEP | lu-test-review-static-analysis-change-safety | test-review-static-analysis-change-safety | Diff intent, static findings, review rationale and targeted dynamic evidence are one complementary change-safety workflow. |
-| lu-test-unit-integration-contract | KEEP | lu-test-unit-integration-contract | test-unit-integration-contract | Choosing a unit, integration or contract boundary and stating its blind spot is a focused L3 decision mechanism. |
+| lu-test-unit-integration-contract | MERGE | lu-test-risk-strategy-boundaries | test-unit-integration-contract | Its original singleton is absorbed into the accepted cross-historical risk-driven boundary-selection unit. |
 
-Proposed result: 10 final units, all singleton. Historical totals: 4 KEEP, 2 SPLIT, 0 MERGE.
+Proposed result: 9 final units: 8 singleton and 1 multi. Historical totals: 3 KEEP, 2 SPLIT, 1 MERGE.
 
 ## Required merge-pressure decisions
 
 ### Risk strategy and unit/integration/contract
 
-**Decision: REJECT MERGE.**
+**Decision: MERGE.**
 
-A database-backed business-rule change can require the learner to identify the risky transaction/constraint mechanism, choose an integration boundary, and state that unit/contract tests cannot prove PostgreSQL behavior. That is a useful prerequisite trace, but it does not make one unit coherent. Risk strategy is L2 and must also choose boundaries for migration, fault, review and CI cases without teaching the entire test-type taxonomy. Unit/integration/contract owns the later L3 comparison of what each boundary can and cannot prove. One combined assessment would over-gate reusable risk reasoning behind one test-family decision.
+**Shared problem:** Given a code/system change, determine which real production mechanism is at risk and choose the smallest test boundary that can actually falsify that risk.
 
+**Shared mechanism / state trace:** Risky assumption → identify the real mechanism → locate the behavior boundary → choose unit / integration / contract scope → state what the selected boundary can and cannot prove. Test-boundary vocabulary and evidence are the concrete model for risk-driven boundary selection.
+
+**Canonical bounded assessment:** Given one database-backed business-rule change, state the risky assumption/invariant; identify PostgreSQL transaction/constraint semantics as part of the real mechanism; reject a mocked/unit-only boundary; choose integration; explain why a contract test answers a different question; and state the blind spots of the chosen boundary.
+
+**Evidence:** The same task contains the risk statement, invariant, chosen boundary, rejected alternatives, real-mechanism evidence and blind-spot explanation.
+
+**Shared failure/debug loop:** A mock can remove the risky mechanism, an E2E test can reproduce behavior while hiding localization, and a wrong test type can give confidence for a property it cannot prove. Repair begins by returning to the mechanism at risk and changing the boundary.
+
+**Transfer:** Pure deterministic domain rule → PostgreSQL transaction/constraint → independently deployed HTTP/provider contract.
+
+**Prerequisite/progression note:** L2 risk reasoning is the first part of the same causal unit. The L3 assessment proves it while extending into concrete boundary comparison; differing frozen levels do not require a separate prerequisite unit.
 ### Unit/integration/contract and real dependency fixtures
 
 **Decision: REJECT MERGE.**
@@ -55,7 +66,6 @@ Fixture lifecycle/isolation can create a CI flake, but that is a causal input ra
 
 | Final singleton unit | Strongest real merge candidate(s) | Mechanism/state distinction | Evidence distinction | Failure/debug distinction | Why one bounded assessment should not prove both |
 |---|---|---|---|---|---|
-| lu-test-risk-strategy-boundaries | lu-test-unit-integration-contract; lu-test-failure-resilience; lu-test-migration-compatibility | L2 risk statement maps a changed mechanism to the narrowest trustworthy boundary; candidate units execute one later boundary-specific strategy. | Risk statement, invariant and escaped-defect history differ from type comparison, injected-fault or version-matrix evidence. | Mock removes the mechanism or E2E obscures the cause; candidates fail through wrong layer, recovery or mixed-version behavior. | It must remain reusable before several L3 mechanisms rather than be assessed only through one later test type. |
 | lu-test-ci-flakiness-repeatability | lu-test-time-concurrency-determinism; lu-test-real-dependency-fixtures | Flakiness tracks verdict stability across ordering, state, ports, environment and network; candidates control one interleaving or operate one fixture lifecycle. | Repeat history, seed, order, worker/env and artefact differ from gate events or dependency version/migration/cleanup. | Shared static state, port collision and external network are not solved by a clock gate; a fixture may be sound yet unrelated tests still flake. | A flake investigation must classify broad causes; a deterministic-race or fixture assessment cannot prove that diagnostic scope. |
 | lu-test-time-concurrency-determinism | lu-test-ci-flakiness-repeatability; lu-race-atomicity | Controlled clock/gate/interleaving intentionally reaches a known unsafe schedule; flakiness is diagnosis, and race unit owns production interleaving/invariant semantics. | Gate events, controlled clock, task completion and captured interleaving differ from repeat history or business invariant evidence. | Thread.Sleep and occasional passes are test-control failures, not every CI instability or product-race decision. | One case can use both, but it cannot prove broad flake classification and test-control design without overclaiming. |
 | lu-test-real-dependency-fixtures | lu-test-unit-integration-contract; lu-test-migration-compatibility | Fixture owns disposable real engine/protocol lifecycle; boundary selection owns test-family choice and migration owns old/new coexistence matrix. | Version, migration, seed, health, persisted/message result and cleanup differ from blind-spot rationale or old/new compatibility results. | In-memory semantic drift, shared DB leak and wrong migration differ from choosing a wrong boundary or rollout incompatibility. | A PostgreSQL case can connect them, but fixture fidelity/lifecycle requires its own transferable proof. |
@@ -64,25 +74,36 @@ Fixture lifecycle/isolation can create a CI flake, but that is a causal input ra
 | lu-test-migration-compatibility | lu-api-versioning-compatibility; lu-db-schema-evolution; lu-test-real-dependency-fixtures | Testing owns a transitional old/new state matrix; API/schema own change semantics and fixtures own dependency lifecycle. | Old/new binary/data/event/request, schema version, migration and rollback evidence differ from contract design or fixture health. | Early destructive change and rollback incompatibility differ from defining an API policy or starting a disposable dependency. | A credible assessment must prove coexistence across transition states, not merely the source mechanism or fixture setup. |
 | lu-test-property-boundary-fuzz | prog-invariants-domain-model; lu-test-risk-strategy-boundaries | This unit broadens one stated invariant through generators, boundaries and shrinking; candidates define the invariant or prioritize risk. | Property, seed/input, shrunk case and reproducible counterexample differ from domain transition or risk statement evidence. | Weak property, lost seed and rare generated sequence differ from invalid domain state or wrong boundary choice. | The assessment must expose unknown input/state combinations; defining or prioritizing the rule alone cannot prove it. |
 | lu-test-review-static-analysis-change-safety | prog-api-refactoring-change-safety; lu-test-risk-strategy-boundaries | Complementary review/static/dynamic evidence evaluates one implementation change; candidates own contract evolution or initial risk selection. | Diff, review rationale, analyzer output, targeted regression and before/after evidence differ from API coexistence or risk matrix. | Style-only review, unexplained suppression and AI diff accepted green differ from contract rollout or boundary selection. | The assessment must combine static and dynamic evidence after a concrete change; neither candidate proves the full evidence workflow. |
-| lu-test-unit-integration-contract | lu-test-risk-strategy-boundaries; lu-test-real-dependency-fixtures | Boundary comparison distinguishes deterministic local logic, real-collaborator integration and external compatibility contract; candidates choose risk or operate fixture lifecycle. | Real dependency state, contract, DB rows, double boundary and omitted-semantics evidence differ from risk statement or version/cleanup evidence. | Mocked SQL, HTTP 200 with wrong DB state and provider semantic change differ from an abstract risk choice or leaky fixture. | It must prove what each test type cannot establish, which fixture setup or risk analysis alone cannot demonstrate. |
 
 ## Cross-historical lineage
 
-No proposed final unit combines Primaries from different historical units. All final units remain within the source historical unit after the two approved SPLIT decisions.
+lu-test-risk-strategy-boundaries combines test-risk-strategy-boundaries from historical lu-test-ci-flakiness-repeatability and test-unit-integration-contract from historical lu-test-unit-integration-contract. The first historical unit remains SPLIT because its original four-capability grouping disappears. The second historical unit becomes MERGE because its original singleton is absorbed into the new multi-unit.
 
 ## Multi-capability assessment review
 
-No multi-capability unit is proposed. The tested candidate pairs fail assessment coherence: each pair either over-gates an L2/L3 foundation, combines distinct control/fidelity states, or treats a prerequisite relation as a grouping rule.
+### lu-test-risk-strategy-boundaries
 
+- **Shared problem:** Determine the production mechanism at risk and choose the smallest boundary that can falsify it.
+- **Shared mechanism/state trace:** risky assumption → real mechanism → behavior boundary → unit/integration/contract choice → explicit blind spot.
+- **Shared evidence:** risk statement, invariant, selected boundary, rejected alternatives, real-mechanism evidence and blind-spot explanation.
+- **Shared failure/debug loop:** a mock removes the mechanism, an E2E test hides localization, or a test type claims a property it cannot prove.
+- **Bounded assessment:** the database-backed business-rule change described above.
+
+| Primary capability | Evidence in the same bounded assessment |
+|---|---|
+| test-risk-strategy-boundaries | risk statement, real mechanism, selected boundary and rejected alternatives prove risk-driven boundary selection |
+| test-unit-integration-contract | unit/integration/contract comparison and explicit blind spots prove test-boundary semantics |
+
+Real dependency fixtures remain a singleton. Boundary selection decides where trustworthy evidence must come from; fixture design owns version, migration, seed/state, health/readiness, isolation, cleanup and persisted/message-result lifecycle. A learner can select integration correctly and still construct a bad fixture, so Local Prerequisite Slice / progression is better than a three-capability grouping.
 ## Decision ledger for later materialization
 
 | Historical unit | Final disposition | Final unit count | Materialization note |
 |---|---|---:|---|
-| lu-test-ci-flakiness-repeatability | SPLIT | 4 | Replace the four-capability group with four singleton units. |
+| lu-test-ci-flakiness-repeatability | SPLIT | 4 outputs, including one cross-historical multi | Its risk-strategy output coalesces with unit/integration/contract; the other three outputs stay singleton. |
 | lu-test-failure-resilience | SPLIT | 2 | Separate L3 controlled failure verification from L4 risk transfer. |
 | lu-test-migration-compatibility | KEEP | 1 | Preserve its singleton. |
 | lu-test-property-boundary-fuzz | KEEP | 1 | Preserve its singleton. |
 | lu-test-review-static-analysis-change-safety | KEEP | 1 | Preserve its singleton. |
-| lu-test-unit-integration-contract | KEEP | 1 | Preserve its singleton. |
+| lu-test-unit-integration-contract | MERGE | 1 absorbed target | Absorb into lu-test-risk-strategy-boundaries. |
 
 No canonical registry, map, audit, dependency row or review status was changed by this analysis-only artifact.
