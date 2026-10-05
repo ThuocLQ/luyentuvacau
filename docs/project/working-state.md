@@ -6,7 +6,7 @@
 >
 > **Expected branch:** `codex/senior-backend-evidence-map`
 >
-> **Last Stage 1D materialization commit:** `29e1b0a05e8ed1f08270c04395a42a20886a97ec`
+> **Final Stage 1D seal commit:** `b0523472726c5e5230a512ac855e9dbcdd9f0cec`
 
 ## Bootstrap
 
@@ -38,7 +38,7 @@ The Foundation Coverage Audit amendment is **MATERIALIZED** by `5f09fb85e87bfead
 
 - Core additions: service discovery/load balancing; applied cryptography for credentials/tokens; data encryption/key lifecycle; durable background jobs/scheduling.
 - Stream Processing remains a deferred specialization.
-- Stage 1D is under external review/seal repair.
+- Stage 1D is **SEALED** by `b0523472726c5e5230a512ac855e9dbcdd9f0cec`.
 
 ## Important current facts
 
@@ -53,8 +53,8 @@ The Foundation Coverage Audit amendment is **MATERIALIZED** by `5f09fb85e87bfead
 
 ## Exact next task
 
-External review/seal of Stage 1D. Do not start Stage 1E until that review passes.
+Stage 1E+�u���T Production Engineering semantic review.
 
 ## Stop conditions
 
-Do not start Stage 1E until external review/seal of Stage 1D passes; do not start Stage 1D again, reset historical baselines, rewrite audit history, broaden curriculum scope, or modify learner-facing content without a separately authorized task.
+Do not reopen sealed Stage 1D, reset historical baselines, rewrite audit history, broaden curriculum scope, or modify learner-facing content without a separately authorized task.
