@@ -32,7 +32,7 @@
 
 ## Current phase
 
-**Pre-Stage 1E \u2014 Stage 1D sealed**
+**Pre-Stage 1E — Stage 1D sealed**
 
 The Foundation Coverage Audit amendment is **MATERIALIZED** by `5f09fb85e87bfeadce0d7d82a78ffdc50ccc36f1`.
 
@@ -51,7 +51,9 @@ The Foundation Coverage Audit amendment is **MATERIALIZED** by `5f09fb85e87bfead
 - `stage-1-review-manifest.json` baseline remains `412216c591404480a6539f220ea324f9ec53af56`; original scope plus declared amendment scope must equal the current frozen capability set.
 - The repaired dependency registry keeps all 14 amendment relations inside its canonical section.
 
-## Exact next task\n\nStage 1E \u2014 Production Engineering semantic review.
+## Exact next task
+
+Stage 1E — Production Engineering semantic review.
 
 ## Stop conditions
 
