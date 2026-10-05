@@ -57,7 +57,9 @@ function frozenCapabilities(text, errors) {
 function unitSections(map, registry, errors) {
   const result = new Map();
   for (const row of registry) {
-    const id = row[0]; const body = section(map, id);
+    const id = row[0]; const occurrences = [...map.matchAll(new RegExp('^## ' + escape(id) + '\\s*$', 'gm'))].length;
+    if (occurrences > 1) add(errors, `duplicate unit section ${id}`);
+    const body = section(map, id);
     if (body == null) { add(errors, `missing unit section ${id}`); continue; }
     if (/\\n\s*\||`n\s*\|/.test(body)) add(errors, `literal newline artifact ${id}`);
     const match = /\| Capability ID \| Canonical owner \| Frozen target level \|\r?\n\|[-| ]+\|\r?\n((?:\|.*\|\r?\n?)+)/.exec(body);

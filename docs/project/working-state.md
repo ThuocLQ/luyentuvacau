@@ -6,7 +6,7 @@
 >
 > **Expected branch:** `codex/senior-backend-evidence-map`
 >
-> **Last materialization commit:** `5f09fb85e87bfeadce0d7d82a78ffdc50ccc36f1`
+> **Last Stage 1D materialization commit:** `29e1b0a05e8ed1f08270c04395a42a20886a97ec`
 
 ## Bootstrap
 
@@ -38,14 +38,15 @@ The Foundation Coverage Audit amendment is **MATERIALIZED** by `5f09fb85e87bfead
 
 - Core additions: service discovery/load balancing; applied cryptography for credentials/tokens; data encryption/key lifecycle; durable background jobs/scheduling.
 - Stream Processing remains a deferred specialization.
-- Stage 1D has **NOT** started.
+- Stage 1D is under external review/seal repair.
 
 ## Important current facts
 
 - Frozen capabilities: **167**.
 - Dependency graph: **332** relations = **201 REQUIRED + 131 RECOMMENDED**.
 - Learning Units: **121** = **90 singleton + 31 multi**, with **167 Primary homes**.
-- Service & Network: **25 current final units** and REVIEWED.\n- Distributed Systems: **21 current final units** and REVIEWED by `29e1b0a05e8ed1f08270c04395a42a20886a97ec`.
+- Service & Network: **25 current final units** and REVIEWED.
+- Distributed Systems: **21 current final units** and REVIEWED by `29e1b0a05e8ed1f08270c04395a42a20886a97ec`.
 - Production Engineering and Architecture & Engineering Reasoning remain **PENDING**.
 - `stage-1-review-manifest.json` baseline remains `412216c591404480a6539f220ea324f9ec53af56`; original scope plus declared amendment scope must equal the current frozen capability set.
 - The repaired dependency registry keeps all 14 amendment relations inside its canonical section.
@@ -56,4 +57,4 @@ External review/seal of Stage 1D. Do not start Stage 1E until that review passes
 
 ## Stop conditions
 
-Do not start Stage 1D, reset historical baselines, rewrite audit history, broaden curriculum scope, or modify learner-facing content without a separately authorized task.
+Do not start Stage 1E until external review/seal of Stage 1D passes; do not start Stage 1D again, reset historical baselines, rewrite audit history, broaden curriculum scope, or modify learner-facing content without a separately authorized task.

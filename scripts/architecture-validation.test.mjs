@@ -70,3 +70,9 @@ test('40 dependency row outside canonical registry is rejected', () => has(state
 }, 'dependency rows outside canonical registry'));
 test('41 stale declared dependency count is rejected', () => has(replace('dependency', '- Dependency rows: 332', '- Dependency rows: 331'), 'dependency declared row count mismatch'));
 test('42 incorrect dependency fingerprint is rejected', () => has(replace('dependency', 'SHA-256: 22ff3ea4c04a4630f00f2253bd0e16d0fb1ad9736026faf95d7c86280e8b77bd', 'SHA-256: 02ff3ea4c04a4630f00f2253bd0e16d0fb1ad9736026faf95d7c86280e8b77bd'), 'dependency fingerprint mismatch'));
+
+test('43 duplicate registered unit section is rejected', () => has(state => {
+  const heading = '## lu-dist-partial-failure-uncertainty';
+  const body = state.map.split(heading)[1].split('\n## ')[0];
+  return { ...state, map: state.map + '\n' + heading + body };
+}, 'duplicate unit section lu-dist-partial-failure-uncertainty'));

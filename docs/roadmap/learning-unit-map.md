@@ -3,7 +3,7 @@
 > **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 167. Proposed Learning Units: 114. Singleton units: 80. Multi-capability units: 34. Single-owner units: 114. Multi-owner units: 0.
+Frozen capabilities: 167. Proposed Learning Units: 121. Singleton units: 90. Multi-capability units: 31. Single-owner units: 121. Multi-owner units: 0.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
@@ -4705,7 +4705,6 @@ Database column encryption → object storage/export encrypted with KMS.
 ### Boundary decision
 
 Per-record/envelope keys reduce blast radius but increase key-management and recovery complexity.
-## lu-dist-partial-failure-uncertainty
 
 ### Identity
 
@@ -4747,7 +4746,6 @@ One timeout to a network partition.
 
 SPLIT: reusable uncertainty needs its own evidence before deeper guarantees.
 
-## lu-dist-replication-leader-quorum
 
 ### Identity
 
@@ -4789,7 +4787,6 @@ Three replicas to slow remote region.
 
 SPLIT: replica state differs from authority and generic timeout evidence.
 
-## lu-dist-guarantee-recovery-transfer
 
 ### Identity
 
@@ -4831,7 +4828,6 @@ Single region to multi-region failover.
 
 SPLIT: L4 synthesis must not gate foundation evidence.
 
-## lu-dist-rpc-unknown-completion
 
 ### Identity
 
@@ -4873,7 +4869,6 @@ RPC to delayed callback.
 
 SPLIT: response ambiguity differs from general reconciliation.
 
-## lu-msg-model-queue-topic-partition-order
 
 ### Identity
 
@@ -4915,7 +4910,6 @@ One partition to keyed group.
 
 SPLIT: foundation model cannot wait for replay/lag.
 
-## lu-msg-replay-backfill
 
 ### Identity
 
@@ -4957,7 +4951,6 @@ Full rebuild to selective customer backfill.
 
 SPLIT: historic range differs from active assignment and lag.
 
-## lu-msg-lag-backpressure-evidence
 
 ### Identity
 
@@ -4999,55 +4992,7 @@ Uniform load to one hot tenant.
 
 SPLIT: capacity diagnosis differs from replay and group state.
 
-## Stage 1D closure
 
-Distributed Systems is REVIEWED. Canonical unit sections and audit registries hold final state; this is not a second registry. Production Engineering and Architecture & Engineering Reasoning remain PENDING.## lu-outbox-duplicate-safe-effect
-
-### Identity
-
-- **Unit ID:** lu-outbox-duplicate-safe-effect
-- **Working title:** Persist producer intent and make consumer effect duplicate-safe
-- **Learner-facing domain candidate:** Distributed Systems
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| msg-outbox-db-publish-gap | Messaging & Event-Driven Consistency | L3 |
-| msg-consumer-idempotency-inbox | Messaging & Event-Driven Consistency | L3 |
-
-### Canonical scenario
-
-Order commit survives a relay crash and the consumer receives the event twice.
-
-### Integrated mechanism / state trace
-
-Order and Outbox commit together; relay may publish before its acknowledgement; inbox and business effect commit together.
-
-### Integrated evidence surface
-
-Order/outbox rows, relay attempts, broker message ID, inbox row and ledger effect.
-
-### Failure and debug loop
-
-Commit without publish, ambiguous broker ack, repeated delivery.
-
-### Shared assessment task
-
-Given transaction, relay log, broker metadata and two deliveries, choose recovery and prove one published intent and one local business effect.
-
-| Primary capability | What evidence in this same task proves it |
-|---|---|
-| msg-outbox-db-publish-gap | Business/Outbox rows and relay/broker timeline prove the producer gap. |
-| msg-consumer-idempotency-inbox | Message identity, inbox row and single ledger effect prove duplicate-safe consumption. |
-
-### Transfer variation
-
-Relay restart then duplicate reporting projection.
-
-### Boundary decision
-
-KEEP: one end-to-end incident proves producer gap and consumer duplicate safety, with separate durable evidence.
 
 ## lu-dist-partial-failure-uncertainty
 
@@ -5891,9 +5836,6 @@ KEEP amendment: scheduler trigger/lease differs from DLQ, coordination and local
 
 
 
-## Stage 1D closure
-
-Distributed Systems is REVIEWED. Canonical unit sections and audit registries hold final state; this is not a second registry. Production Engineering and Architecture & Engineering Reasoning remain PENDING.
 ## lu-outbox-duplicate-safe-effect
 
 ### Identity
@@ -5941,3 +5883,6 @@ Relay restart then duplicate reporting projection.
 ### Boundary decision
 
 KEEP: one end-to-end incident proves producer gap and consumer duplicate safety with separate durable evidence.
+## Stage 1D closure
+
+Distributed Systems is REVIEWED. Canonical unit sections and audit registries hold final state; this is not a second registry. Production Engineering and Architecture & Engineering Reasoning remain PENDING.
