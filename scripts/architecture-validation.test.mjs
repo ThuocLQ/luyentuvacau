@@ -76,3 +76,9 @@ test('43 duplicate registered unit section is rejected', () => has(state => {
   const body = state.map.split(heading)[1].split('\n## ')[0];
   return { ...state, map: state.map + '\n' + heading + body };
 }, 'duplicate unit section lu-dist-partial-failure-uncertainty'));
+
+
+test('44 orphan unit body without a second H2 is rejected', () => has(state => {
+  const heading = '## lu-dist-partial-failure-uncertainty';
+  return { ...state, map: state.map.replace(heading, heading + '\n\n### Identity\n\n- **Unit ID:** orphan\n') };
+}, 'multiple Identity sections lu-dist-partial-failure-uncertainty'));

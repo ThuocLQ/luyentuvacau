@@ -61,6 +61,9 @@ function unitSections(map, registry, errors) {
     if (occurrences > 1) add(errors, `duplicate unit section ${id}`);
     const body = section(map, id);
     if (body == null) { add(errors, `missing unit section ${id}`); continue; }
+    const identities = (body.match(/^### Identity\s*$/gm) ?? []).length;
+    if (identities === 0) add(errors, `missing Identity section ${id}`);
+    if (identities > 1) add(errors, `multiple Identity sections ${id}`);
     if (/\\n\s*\||`n\s*\|/.test(body)) add(errors, `literal newline artifact ${id}`);
     const match = /\| Capability ID \| Canonical owner \| Frozen target level \|\r?\n\|[-| ]+\|\r?\n((?:\|.*\|\r?\n?)+)/.exec(body);
     if (!match) { add(errors, `missing primary table ${id}`); continue; }
