@@ -3,14 +3,14 @@
 > **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 167. Proposed Learning Units: 121. Singleton units: 90. Multi-capability units: 31. Single-owner units: 121. Multi-owner units: 0.
+Frozen capabilities: 167. Proposed Learning Units: 132. Singleton units: 105. Multi-capability units: 27. Single-owner units: 130. Multi-owner units: 2.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
 ## Unit Registry
 
 | Unit ID | Working title | Domain candidate | Primary owner set | Primary capability count |
-|---|---|---|---|---:|
+|---|---|---|---|---|
 | lu-race-atomicity | Protect an invariant across unsafe interleaving | Runtime & Concurrency | Concurrency & Async | 3 |
 | lu-prog-api-refactoring-change-safety | Đưa một API qua thay đổi yêu cầu mà vẫn chỉ ra được contract cũ/mới, caller bị ảnh hưởng và giới hạn refactor | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
 | lu-prog-errors-results | Phân loại lỗi dự đoán được và giữ lỗi bất ngờ có ngữ cảnh | Runtime & Concurrency | Programming & Software Design Foundations | 1 |
@@ -34,17 +34,32 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-concurrency-deadlock-starvation | Chẩn đoán deadlock khác starvation bằng dependency wait và bằng chứng forward progress | Runtime & Concurrency | Concurrency & Async | 1 |
 | lu-concurrency-local-vs-distributed | Đánh giá boundary của in-process synchronization và thiết kế lại invariant owner khi service chạy bốn replicas | Runtime & Concurrency | Concurrency & Async | 1 |
 | lu-concurrency-memory-visibility | Giải thích vì sao thread khác có thể không quan sát state theo thứ tự ngây thơ và dùng primitive tạo visibility/ordering cần thiết | Runtime & Concurrency | Concurrency & Async | 1 |
-| lu-obs-cardinality-sampling-cost | Control dimensions/sampling so telemetry remains useful and affordable | Production Engineering | Observability & Performance | 2 |
-| lu-obs-db-io-downstream-attribution | Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence | Production Engineering | Observability & Performance | 4 |
-| lu-obs-load-test-benchmark-validity | Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim | Production Engineering | Observability & Performance | 1 |
-| lu-obs-logs-structured-correlation | Produce structured queryable logs for significant events/context | Production Engineering | Observability & Performance | 2 |
-| lu-obs-profiling-runtime-evidence | Use CPU/allocation/stack/runtime evidence to locate actual time/memory work | Production Engineering | Observability & Performance | 1 |
-| lu-rel-cascading-failure-queue-capacity | Trace one slow dependency into queues/retries/resource exhaustion upstream | Production Engineering | Reliability / SRE | 3 |
-| lu-rel-change-rollout-rollback-risk | Release incrementally with evidence and rollback/roll-forward boundary defined first | Production Engineering | Reliability / SRE | 2 |
-| lu-rel-disaster-recovery-rpo-rto | Translate business recovery requirement to RPO/RTO and verify mechanism meets it | Production Engineering | Reliability / SRE | 1 |
-| lu-rel-failure-injection-verification | Design safe bounded fault test for stated reliability assumption and interpret result | Production Engineering | Reliability / SRE | 1 |
-| lu-rel-health-readiness-semantics | Define liveness/readiness semantics so routing/restarts help recovery instead of cascade | Production Engineering | Reliability / SRE | 1 |
-| lu-rel-incident-response-postmortem | During/after incident separate mitigation, diagnosis, evidence preservation and system learning | Production Engineering | Reliability / SRE | 1 |
+| lu-obs-cardinality-sampling-cost | Control telemetry cardinality and sampling cost | Production Engineering | Observability & Performance | 1 |
+| lu-obs-instrumentation-tracing | Reconstruct one operation across API, worker and downstream service | Production Engineering | Observability & Performance | 2 |
+| lu-obs-latency-throughput-saturation | Read latency, throughput and saturation as one workload signal | Production Engineering | Observability & Performance | 1 |
+| lu-obs-db-io-downstream-attribution | Locate the timing boundary responsible for a slow request | Production Engineering | Observability & Performance | 1 |
+| lu-obs-diagnostic-method | Turn competing production hypotheses into discriminating evidence | Production Engineering | Observability & Performance | 1 |
+| lu-obs-load-test-benchmark-validity | Decide whether a performance claim is supported by a valid experiment | Production Engineering | Observability & Performance | 1 |
+| lu-obs-logs-structured-correlation | Make significant events queryable through structured correlated logs | Production Engineering | Observability & Performance | 1 |
+| lu-obs-signals-correlation | Choose the smallest signal set that answers an operational question | Production Engineering | Observability & Performance | 1 |
+| lu-obs-profiling-runtime-evidence | Interpret runtime profiling evidence before optimizing | Production Engineering | Observability & Performance | 1 |
+| lu-rel-cascading-failure-queue-capacity | Trace pressure propagation from one slow dependency across services | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-overload-load-shedding-degradation | Protect critical work through explicit admission and degradation policy | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-dependency-budgets | Allocate one user journey deadline across dependencies and retries | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-user-journey-sli-slo-budget | Define an SLI/SLO around a real user journey | Production Engineering | Reliability / SRE | 1 |
+| lu-release-rollout-rollback | Release a risky version progressively and recover safely | Production Engineering | Reliability / SRE; Containers / Kubernetes / Cloud Delivery | 2 |
+| lu-rel-disaster-recovery-rpo-rto | Prove a recovery plan meets RPO and RTO | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-failure-injection-verification | Run a bounded fault experiment with recovery proof | Production Engineering | Reliability / SRE | 1 |
+| lu-rel-health-probes | Keep unsafe traffic out without restarting useful work | Production Engineering | Reliability / SRE; Containers / Kubernetes / Cloud Delivery | 2 |
+| lu-rel-incident-response-postmortem | Mitigate an incident while preserving evidence and learning | Production Engineering | Reliability / SRE | 1 |
+| lu-delivery-artifact-provenance | Prove the exact artifact and configuration promoted to production | Production Engineering | Containers / Kubernetes / Cloud Delivery | 2 |
+| lu-delivery-platform-evidence-debug | Localize a workload failure from platform evidence | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-autoscaling-signal-boundary | Choose an autoscaling signal that matches real work pressure | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-resources-cpu-memory | Set CPU and memory requests/limits from workload evidence | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-platform-transfer | Transfer a workload requirement across platform implementations | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-cloud-responsibility-managed-services | Verify application-team responsibility around managed services | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-container-process-lifecycle | Reason about the primary process lifecycle inside a container | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
+| lu-delivery-graceful-shutdown-draining | Drain traffic and finish bounded work before termination | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
 | lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test | Architecture & Engineering Reasoning | Testing & Engineering Quality | 4 |
 | lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure | Architecture & Engineering Reasoning | Testing & Engineering Quality | 2 |
 | lu-test-migration-compatibility | Prove old/new app and schema/data/event contract coexist during transitional rollout | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
@@ -57,10 +72,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-arch-evolution-migration-strangler | Move old to target incrementally while paths coexist safely | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
 | lu-arch-scale-capacity-partitioning | Estimate bottleneck and choose scale/partition boundary from measurable demand | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
 | lu-arch-sync-async-integration | Choose sync/async from coupling, completion semantics, latency and recovery | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
-| lu-delivery-artifact-image-config | Produce reproducible versioned artifact and separate immutable build from runtime config/secret | Production Engineering | Containers / Kubernetes / Cloud Delivery | 4 |
-| lu-delivery-autoscaling-signal-boundary | Choose platform scaling signal matching resource/work pressure and know when replicas cannot help | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 |
-| lu-delivery-cloud-responsibility-managed-services | State application-team responsibilities when platform component is managed | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
-| lu-delivery-container-process-lifecycle | Explain container as primary-process packaging/runtime boundary, not VM | Production Engineering | Containers / Kubernetes / Cloud Delivery | 3 |
 | lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
 | lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
 | lu-db-backup-restore | Verify backup and point-in-time restore | Data & Consistency | Relational Database Engineering | 1 |
@@ -132,7 +143,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-msg-schema-evolution-contract-ownership | Evolve event contract with retained history | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-msg-workflow-saga-compensation | Recover multi-step workflow with compensation | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-msg-background-jobs-scheduling | Run scheduled durable work across restarts | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
-
 ## lu-index-query-shape
 
 ### Identity
@@ -3238,9 +3248,7 @@ Login audit → privileged export or tenant-admin change.
 
 KEEP as a distinct mechanism/evidence boundary after merge pressure review.
 
-## lu-obs-cardinality-sampling-cost
 
-### Identity
 
 - **Unit ID:** lu-obs-cardinality-sampling-cost
 - **Working title:** Control dimensions/sampling so telemetry remains useful and affordable
@@ -3286,9 +3294,7 @@ Merged because `obs-cardinality-sampling-cost`, `obs-instrumentation-context` sh
 - `obs-signals-correlation` remains separate pending its own mechanism/evidence boundary.
 - `obs-tracing-distributed-evidence` remains separate pending its own mechanism/evidence boundary.
 
-## lu-obs-db-io-downstream-attribution
 
-### Identity
 
 - **Unit ID:** lu-obs-db-io-downstream-attribution
 - **Working title:** Attribute latency to CPU, DB, network, downstream or queue wait using discriminating evidence
@@ -3336,9 +3342,7 @@ Merged because `obs-db-io-downstream-attribution`, `obs-latency-throughput-satur
 - `db-execution-operators` remains separate pending its own mechanism/evidence boundary.
 - `db-connection-pool-exhaustion` remains separate pending its own mechanism/evidence boundary.
 
-## lu-obs-load-test-benchmark-validity
 
-### Identity
 
 - **Unit ID:** lu-obs-load-test-benchmark-validity
 - **Working title:** Design/reject benchmark from workload, warm-up, distribution and bottleneck similarity to claim
@@ -3386,9 +3390,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
 - `runtime-jit-warmup` remains separate pending its own mechanism/evidence boundary.
 
-## lu-obs-logs-structured-correlation
 
-### Identity
 
 - **Unit ID:** lu-obs-logs-structured-correlation
 - **Working title:** Produce structured queryable logs for significant events/context
@@ -3434,9 +3436,7 @@ Merged because `obs-logs-structured-correlation`, `obs-signals-correlation` shar
 - `sec-audit-detection-evidence` remains separate pending its own mechanism/evidence boundary.
 - `obs-diagnostic-method` remains separate pending its own mechanism/evidence boundary.
 
-## lu-obs-profiling-runtime-evidence
 
-### Identity
 
 - **Unit ID:** lu-obs-profiling-runtime-evidence
 - **Working title:** Use CPU/allocation/stack/runtime evidence to locate actual time/memory work
@@ -3484,9 +3484,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `runtime-diagnostics` remains separate pending its own mechanism/evidence boundary.
 - `obs-diagnostic-method` remains separate pending its own mechanism/evidence boundary.
 
-## lu-rel-cascading-failure-queue-capacity
 
-### Identity
 
 - **Unit ID:** lu-rel-cascading-failure-queue-capacity
 - **Working title:** Trace one slow dependency into queues/retries/resource exhaustion upstream
@@ -3533,9 +3531,7 @@ Merged because `rel-cascading-failure-queue-capacity`, `rel-overload-load-sheddi
 - `api-retry-backoff-jitter` remains separate pending its own mechanism/evidence boundary.
 - `concurrency-bounded-backpressure` remains separate pending its own mechanism/evidence boundary.
 
-## lu-rel-change-rollout-rollback-risk
 
-### Identity
 
 - **Unit ID:** lu-rel-change-rollout-rollback-risk
 - **Working title:** Release incrementally with evidence and rollback/roll-forward boundary defined first
@@ -3581,9 +3577,7 @@ Merged because `rel-change-rollout-rollback-risk`, `rel-user-journey-sli-slo-bud
 - `api-versioning-compatibility` remains separate pending its own mechanism/evidence boundary.
 - `db-schema-evolution` remains separate pending its own mechanism/evidence boundary.
 
-## lu-rel-disaster-recovery-rpo-rto
 
-### Identity
 
 - **Unit ID:** lu-rel-disaster-recovery-rpo-rto
 - **Working title:** Translate business recovery requirement to RPO/RTO and verify mechanism meets it
@@ -3631,9 +3625,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `db-backup-restore` remains separate pending its own mechanism/evidence boundary.
 - `dist-replication-leader-quorum` remains separate pending its own mechanism/evidence boundary.
 
-## lu-rel-failure-injection-verification
 
-### Identity
 
 - **Unit ID:** lu-rel-failure-injection-verification
 - **Working title:** Design safe bounded fault test for stated reliability assumption and interpret result
@@ -3681,9 +3673,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `test-failure-resilience` remains separate pending its own mechanism/evidence boundary.
 - `rel-user-journey-sli-slo-budget` remains separate pending its own mechanism/evidence boundary.
 
-## lu-rel-health-readiness-semantics
 
-### Identity
 
 - **Unit ID:** lu-rel-health-readiness-semantics
 - **Working title:** Define liveness/readiness semantics so routing/restarts help recovery instead of cascade
@@ -3731,9 +3721,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `obs-signals-correlation` remains separate pending its own mechanism/evidence boundary.
 - `delivery-probes-health` remains separate pending its own mechanism/evidence boundary.
 
-## lu-rel-incident-response-postmortem
 
-### Identity
 
 - **Unit ID:** lu-rel-incident-response-postmortem
 - **Working title:** During/after incident separate mitigation, diagnosis, evidence preservation and system learning
@@ -4377,9 +4365,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
 - `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
 
-## lu-delivery-artifact-image-config
 
-### Identity
 
 - **Unit ID:** lu-delivery-artifact-image-config
 - **Working title:** Produce reproducible versioned artifact and separate immutable build from runtime config/secret
@@ -4427,9 +4413,7 @@ Merged because `delivery-artifact-image-config`, `delivery-cicd-promotion-proven
 - `delivery-platform-transfer` remains separate pending its own mechanism/evidence boundary.
 - `rel-change-rollout-rollback-risk` remains separate pending its own mechanism/evidence boundary.
 
-## lu-delivery-autoscaling-signal-boundary
 
-### Identity
 
 - **Unit ID:** lu-delivery-autoscaling-signal-boundary
 - **Working title:** Choose platform scaling signal matching resource/work pressure and know when replicas cannot help
@@ -4476,9 +4460,7 @@ Merged because `delivery-autoscaling-signal-boundary`, `delivery-resources-cpu-m
 - `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
 - `rel-overload-load-shedding-degradation` remains separate pending its own mechanism/evidence boundary.
 
-## lu-delivery-cloud-responsibility-managed-services
 
-### Identity
 
 - **Unit ID:** lu-delivery-cloud-responsibility-managed-services
 - **Working title:** State application-team responsibilities when platform component is managed
@@ -4526,9 +4508,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `sec-secrets-third-party-trust` remains separate pending its own mechanism/evidence boundary.
 - `rel-disaster-recovery-rpo-rto` remains separate pending its own mechanism/evidence boundary.
 
-## lu-delivery-container-process-lifecycle
 
-### Identity
 
 - **Unit ID:** lu-delivery-container-process-lifecycle
 - **Working title:** Explain container as primary-process packaging/runtime boundary, not VM
@@ -5595,6 +5575,1122 @@ Relay restart then duplicate reporting projection.
 ### Boundary decision
 
 KEEP: one end-to-end incident proves producer gap and consumer duplicate safety with separate durable evidence.
-## Stage 1D closure
+## lu-obs-cardinality-sampling-cost
 
-Distributed Systems is REVIEWED. Canonical unit sections and audit registries hold final state; this is not a second registry. Production Engineering and Architecture & Engineering Reasoning remain PENDING.
+### Identity
+
+- **Unit ID:** lu-obs-cardinality-sampling-cost
+- **Working title:** Control telemetry cardinality and sampling cost
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-cardinality-sampling-cost | Observability & Performance | L3 |
+
+### Canonical scenario
+
+A checkout metric adds customer ID as a label and ingest cost rises faster than traffic.
+
+### Integrated mechanism / state trace
+
+Choose bounded dimensions and sampling rules; retain an error/slow trace representative enough to investigate.
+
+### Integrated evidence surface
+
+Series count, label values, ingest cost, sample rate and retained error traces.
+
+### Failure and debug loop
+
+A per-user label creates unbounded series or sampling removes the rare failing request.
+
+### Shared assessment task
+
+Given traffic, label and cost data, remove unsafe dimensions and set a sampling policy that preserves the failing class.
+
+### Transfer variation
+
+A new tenant dimension has high churn.
+
+### Boundary decision
+
+Cardinality controls retention cost and fidelity; instrumentation/tracing proves causal boundaries.
+
+## lu-obs-instrumentation-tracing
+
+### Identity
+
+- **Unit ID:** lu-obs-instrumentation-tracing
+- **Working title:** Reconstruct one operation across API, worker and downstream service
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-instrumentation-context | Observability & Performance | L3 |
+| obs-tracing-distributed-evidence | Observability & Performance | L3 |
+
+### Canonical scenario
+
+An order API enqueues payment work, but the payment wait disappears after the worker boundary.
+
+### Integrated mechanism / state trace
+
+Create semantic spans and propagate operation context through HTTP and message metadata so the causal trace stays connected.
+
+### Integrated evidence surface
+
+Trace tree, parent/link relation, operation ID, headers/message metadata, dependency duration and retry attributes.
+
+### Failure and debug loop
+
+Worker context is lost, a span ends too early or downstream timing is detached from the initiating request.
+
+### Shared assessment task
+
+Given API, worker and payment traces plus instrumentation snippets, repair the missing propagation and show the complete causal path.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| obs-instrumentation-context | Instrumentation snippets plus propagated headers/message metadata establish the semantic boundary and operation identity. |
+| obs-tracing-distributed-evidence | Trace tree, parent/link relation and downstream timing establish the reconstructed causal path. |
+
+### Transfer variation
+
+Replace the worker with a scheduled relay.
+
+### Boundary decision
+
+Context propagation establishes the trace boundary; trace evidence verifies the reconstructed path.
+
+## lu-obs-latency-throughput-saturation
+
+### Identity
+
+- **Unit ID:** lu-obs-latency-throughput-saturation
+- **Working title:** Read latency, throughput and saturation as one workload signal
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-latency-throughput-saturation | Observability & Performance | L2 |
+
+### Canonical scenario
+
+A service keeps its average latency stable while the queue and p99 grow during a traffic step.
+
+### Integrated mechanism / state trace
+
+Compare completed work, latency distribution, queueing and finite-capacity saturation before declaring the bottleneck.
+
+### Integrated evidence surface
+
+Request rate, p50/p95/p99, queue depth, concurrency, CPU and error rate.
+
+### Failure and debug loop
+
+An average hides tail latency or low CPU hides a saturated pool.
+
+### Shared assessment task
+
+Given a load chart, identify the saturation signal and explain why throughput alone is not success.
+
+### Transfer variation
+
+The same request rate moves from a queue-bound to CPU-bound path.
+
+### Boundary decision
+
+Workload symptoms differ from causal attribution of time to one dependency boundary.
+
+## lu-obs-db-io-downstream-attribution
+
+### Identity
+
+- **Unit ID:** lu-obs-db-io-downstream-attribution
+- **Working title:** Locate the timing boundary responsible for a slow request
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-db-io-downstream-attribution | Observability & Performance | L3 |
+
+### Canonical scenario
+
+Checkout p99 rises and the team blames SQL before comparing pool wait, query time and payment time.
+
+### Integrated mechanism / state trace
+
+Correlate end-to-end timing with DB, socket, queue and downstream intervals to identify the responsible boundary.
+
+### Integrated evidence surface
+
+Trace timing, query plan/duration, pool acquisition wait, socket timing, dependency duration and queue wait.
+
+### Failure and debug loop
+
+A pool wait is called database execution or a downstream timeout is called application CPU.
+
+### Shared assessment task
+
+Given trace, query and pool evidence, name the timing owner and the next discriminating check.
+
+### Transfer variation
+
+A fan-out request adds one slow remote dependency.
+
+### Boundary decision
+
+Attribution proves one causal timing boundary; L4 diagnosis tests competing hypotheses beyond that boundary.
+
+## lu-obs-diagnostic-method
+
+### Identity
+
+- **Unit ID:** lu-obs-diagnostic-method
+- **Working title:** Turn competing production hypotheses into discriminating evidence
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-diagnostic-method | Observability & Performance | L4 |
+
+### Canonical scenario
+
+A latency incident has plausible CPU, database, queue and downstream causes but only one change window.
+
+### Integrated mechanism / state trace
+
+State hypotheses, choose evidence that separates them, run a safe experiment and calibrate confidence.
+
+### Integrated evidence surface
+
+Hypothesis log, trace/profile/metric evidence, experiment result, before/after comparison and confidence statement.
+
+### Failure and debug loop
+
+Dashboard-first guessing, changing several variables or treating correlation as cause.
+
+### Shared assessment task
+
+Given competing incident hypotheses, choose the smallest experiment and defend the conclusion from the evidence.
+
+### Transfer variation
+
+The first experiment contradicts the leading hypothesis.
+
+### Boundary decision
+
+Diagnostic synthesis uses many evidence types; profiling is one evidence source.
+
+## lu-obs-load-test-benchmark-validity
+
+### Identity
+
+- **Unit ID:** lu-obs-load-test-benchmark-validity
+- **Working title:** Decide whether a performance claim is supported by a valid experiment
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-load-test-benchmark-validity | Observability & Performance | L3 |
+
+### Canonical scenario
+
+A benchmark reports high throughput from cold code and a tiny uniform dataset.
+
+### Integrated mechanism / state trace
+
+Match workload, warm-up, data distribution, generator capacity and bottleneck conditions to the claim.
+
+### Integrated evidence surface
+
+Workload model, arrival/concurrency, data distribution, warm-up, generator metrics and latency distribution.
+
+### Failure and debug loop
+
+A generator bottleneck or unrealistic data turns a measurement into a misleading claim.
+
+### Shared assessment task
+
+Given a benchmark plan and results, accept or reject the claim and name the missing validity evidence.
+
+### Transfer variation
+
+The production workload has bursty arrivals and skewed keys.
+
+### Boundary decision
+
+Benchmark validity governs experiment conditions; workload metrics are only inputs.
+
+## lu-obs-logs-structured-correlation
+
+### Identity
+
+- **Unit ID:** lu-obs-logs-structured-correlation
+- **Working title:** Make significant events queryable through structured correlated logs
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-logs-structured-correlation | Observability & Performance | L2 |
+
+### Canonical scenario
+
+Support needs to find one failed refund but the log contains only prose and inconsistent identifiers.
+
+### Integrated mechanism / state trace
+
+Emit stable event fields and correlation IDs at meaningful state transitions.
+
+### Integrated evidence surface
+
+Event schema, correlation ID, field types, query result, redaction decision and event volume.
+
+### Failure and debug loop
+
+String parsing, missing correlation, inconsistent field types or secret leakage prevent a reliable query.
+
+### Shared assessment task
+
+Given an incident question and log samples, design a stable event schema and retrieve the affected operation.
+
+### Transfer variation
+
+The event crosses a tenant boundary with redaction requirements.
+
+### Boundary decision
+
+Structured logging is one signal implementation; cross-signal selection is separate.
+
+## lu-obs-signals-correlation
+
+### Identity
+
+- **Unit ID:** lu-obs-signals-correlation
+- **Working title:** Choose the smallest signal set that answers an operational question
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-signals-correlation | Observability & Performance | L2 |
+
+### Canonical scenario
+
+A user journey is slow; metrics show a spike, logs show retries and traces show one dependency wait.
+
+### Integrated mechanism / state trace
+
+Select and correlate metrics, logs and traces around a question rather than collecting every signal.
+
+### Integrated evidence surface
+
+Metric dimensions/time, structured event fields, trace IDs and a joined request timeline.
+
+### Failure and debug loop
+
+A metric spike lacks context, logs cannot join or a trace is treated as business completion.
+
+### Shared assessment task
+
+Given an incident question and three signal sources, choose the minimum evidence set and justify the correlation.
+
+### Transfer variation
+
+One source is delayed or sampled.
+
+### Boundary decision
+
+Signal selection spans evidence types; log schema alone does not prove it.
+
+## lu-obs-profiling-runtime-evidence
+
+### Identity
+
+- **Unit ID:** lu-obs-profiling-runtime-evidence
+- **Working title:** Interpret runtime profiling evidence before optimizing
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| obs-profiling-runtime-evidence | Observability & Performance | L3 |
+
+### Canonical scenario
+
+An export endpoint is slow and memory grows, but the suspected CPU hotspot is actually I/O wait.
+
+### Integrated mechanism / state trace
+
+Capture representative CPU, allocation, stack and wait evidence, then test the production hypothesis.
+
+### Integrated evidence surface
+
+CPU samples, allocations, GC data, stacks, ThreadPool queue and wait traces.
+
+### Failure and debug loop
+
+Optimizing without a profile or reading a non-representative capture as production truth.
+
+### Shared assessment task
+
+Given a capture and latency symptom, identify the dominant work or wait and propose a measured next change.
+
+### Transfer variation
+
+The same code runs under a different allocation rate.
+
+### Boundary decision
+
+Runtime diagnostics collects evidence; this unit interprets it for a production hypothesis.
+
+## lu-rel-cascading-failure-queue-capacity
+
+### Identity
+
+- **Unit ID:** lu-rel-cascading-failure-queue-capacity
+- **Working title:** Trace pressure propagation from one slow dependency across services
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-cascading-failure-queue-capacity | Reliability / SRE | L3 |
+
+### Canonical scenario
+
+A slow payment dependency increases in-flight work, queues and retries until upstream workers are exhausted.
+
+### Integrated mechanism / state trace
+
+Follow retained work and retry amplification across dependency/service boundaries under finite capacity.
+
+### Integrated evidence surface
+
+Dependency latency, queue age, in-flight work, retry rate, pool utilization and cross-service error timeline.
+
+### Failure and debug loop
+
+Long waits retain workers and retries multiply pressure upstream.
+
+### Shared assessment task
+
+Given a dependency slowdown timeline, identify the propagation path and the earliest containment point.
+
+### Transfer variation
+
+The dependency intermittently recovers while the queue remains old.
+
+### Boundary decision
+
+Cascades diagnose cross-service pressure; admission control and journey budgets use different state.
+
+## lu-rel-overload-load-shedding-degradation
+
+### Identity
+
+- **Unit ID:** lu-rel-overload-load-shedding-degradation
+- **Working title:** Protect critical work through explicit admission and degradation policy
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-overload-load-shedding-degradation | Reliability / SRE | L3 |
+
+### Canonical scenario
+
+Traffic exceeds sustainable capacity and the service must preserve checkout while shedding recommendations.
+
+### Integrated mechanism / state trace
+
+Choose accepted, deferred, rejected or degraded work at a finite-capacity boundary.
+
+### Integrated evidence surface
+
+Arrival/service rate, queue/in-flight counts, rejection reason, critical latency and user impact.
+
+### Failure and debug loop
+
+Accepting all work until OOM or shedding only after expensive work has consumed capacity.
+
+### Shared assessment task
+
+Given demand and priority classes, set an admission/degradation policy and prove critical work stays protected.
+
+### Transfer variation
+
+A batch job competes with interactive traffic.
+
+### Boundary decision
+
+Admission state differs from cascade propagation and SLI/SLO outcome policy.
+
+## lu-rel-dependency-budgets
+
+### Identity
+
+- **Unit ID:** lu-rel-dependency-budgets
+- **Working title:** Allocate one user journey deadline across dependencies and retries
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-dependency-budgets | Reliability / SRE | L3 |
+
+### Canonical scenario
+
+Checkout has an 800 ms promise, but nested retries let a downstream call outlive the caller.
+
+### Integrated mechanism / state trace
+
+Allocate remaining deadline, timeout and retry allowance per hop from the end-to-end budget.
+
+### Integrated evidence surface
+
+Remaining deadline, per-hop timeout, retry consumption, dependency latency and critical-path trace.
+
+### Failure and debug loop
+
+Nested retries exhaust the caller budget or an optional dependency blocks the critical path.
+
+### Shared assessment task
+
+Given a journey deadline and dependency timings, assign per-hop limits and reject an unsafe retry plan.
+
+### Transfer variation
+
+One optional dependency becomes best-effort.
+
+### Boundary decision
+
+Journey budget allocation differs from API retry mechanics and cascade diagnosis.
+
+## lu-rel-user-journey-sli-slo-budget
+
+### Identity
+
+- **Unit ID:** lu-rel-user-journey-sli-slo-budget
+- **Working title:** Define an SLI/SLO around a real user journey
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-user-journey-sli-slo-budget | Reliability / SRE | L3 |
+
+### Canonical scenario
+
+A service reports uptime while customers cannot complete refunds.
+
+### Integrated mechanism / state trace
+
+Define good/total events, window and error budget around the user-visible outcome.
+
+### Integrated evidence surface
+
+Denominator, success/latency events, time window, burn rate and excluded outcomes.
+
+### Failure and debug loop
+
+A wrong denominator or availability-only metric hides the failed journey.
+
+### Shared assessment task
+
+Given business events, define the SLI/SLO and calculate whether the budget supports a change.
+
+### Transfer variation
+
+A rare but high-value journey has different criticality.
+
+### Boundary decision
+
+SLI/SLO measurement is reusable foundation, not a rollout or incident command workflow.
+
+## lu-release-rollout-rollback
+
+### Identity
+
+- **Unit ID:** lu-release-rollout-rollback
+- **Working title:** Release a risky version progressively and recover safely
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-change-rollout-rollback-risk | Reliability / SRE | L3 |
+| delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+A new checkout version is exposed to 5 percent traffic and breaks a path hidden by aggregate health.
+
+### Integrated mechanism / state trace
+
+Combine progressive traffic/version mechanics with version-specific journey evidence and compatibility-aware rollback or roll-forward.
+
+### Integrated evidence surface
+
+Version/traffic split, deployment state, journey SLI, schema/config compatibility facts and recovery record.
+
+### Failure and debug loop
+
+A broad release expands blast radius or rollback conflicts with already-written state.
+
+### Shared assessment task
+
+Given canary evidence and compatibility state, choose rollout, rollback or roll-forward and prove the safe recovery.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| rel-change-rollout-rollback-risk | Version-specific journey evidence and compatibility boundary establish the risk decision. |
+| delivery-rollout-rollback-strategies | Deployment/traffic state and recovery record establish rollout mechanics. |
+
+### Transfer variation
+
+A flag changes behavior without undoing a persisted side effect.
+
+### Boundary decision
+
+Risk policy and rollout mechanics form one release state machine and one recovery assessment.
+
+## lu-rel-disaster-recovery-rpo-rto
+
+### Identity
+
+- **Unit ID:** lu-rel-disaster-recovery-rpo-rto
+- **Working title:** Prove a recovery plan meets RPO and RTO
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-disaster-recovery-rpo-rto | Reliability / SRE | L3 |
+
+### Canonical scenario
+
+A regional failure requires restoring order history within two hours with at most five minutes of loss.
+
+### Integrated mechanism / state trace
+
+Translate business loss/time objectives into backup, restore, dependency and verification steps.
+
+### Integrated evidence surface
+
+Restore drill timing, recovered data delta, dependency checklist, integrity checks and declared objectives.
+
+### Failure and debug loop
+
+A backup exists but restore time or recovered point misses the business objective.
+
+### Shared assessment task
+
+Given RPO/RTO and drill evidence, decide whether the plan is acceptable and identify the failing step.
+
+### Transfer variation
+
+One dependency is managed by a cloud provider.
+
+### Boundary decision
+
+Business recovery objectives differ from backup, replication and provider-control mechanisms.
+
+## lu-rel-failure-injection-verification
+
+### Identity
+
+- **Unit ID:** lu-rel-failure-injection-verification
+- **Working title:** Run a bounded fault experiment with recovery proof
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-failure-injection-verification | Reliability / SRE | L4 |
+
+### Canonical scenario
+
+A team wants to verify retry behavior by injecting payment latency in production.
+
+### Integrated mechanism / state trace
+
+State a hypothesis, constrain blast radius, set stop conditions, inject one fault and verify recovery.
+
+### Integrated evidence surface
+
+Experiment plan, injected fault, SLI, stop condition, rollback/recovery evidence and audit timeline.
+
+### Failure and debug loop
+
+Uncontrolled chaos expands impact or recovery is assumed instead of measured.
+
+### Shared assessment task
+
+Given a reliability assumption, design the smallest safe fault test and define the evidence that passes it.
+
+### Transfer variation
+
+The fault is a dropped callback instead of latency.
+
+### Boundary decision
+
+Production-safe experiment design differs from general resilience testing and diagnosis.
+
+## lu-rel-health-probes
+
+### Identity
+
+- **Unit ID:** lu-rel-health-probes
+- **Working title:** Keep unsafe traffic out without restarting useful work
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-health-readiness-semantics | Reliability / SRE | L3 |
+| delivery-probes-health | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+A dependency outage makes requests unsafe, but the process can still drain work and should not restart.
+
+### Integrated mechanism / state trace
+
+Define useful-progress and traffic-eligibility semantics, then configure probes so routing and restart actions follow that meaning.
+
+### Integrated evidence surface
+
+Dependency state, probe configuration/result, ready endpoints, restart count and traffic outcome.
+
+### Failure and debug loop
+
+Readiness wired as liveness creates a restart storm or routes traffic to an unsafe instance.
+
+### Shared assessment task
+
+Given the outage, choose health semantics and probe configuration, then prove traffic drains without destructive restarts.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| rel-health-readiness-semantics | Dependency state and useful-progress/traffic-eligibility decision establish health meaning. |
+| delivery-probes-health | Probe configuration/result, ready endpoints, restart count and traffic outcome establish platform behavior. |
+
+### Transfer variation
+
+A worker has no inbound traffic but must report lease health.
+
+### Boundary decision
+
+Health meaning and probe behavior share one routing/restart state and outage assessment.
+
+## lu-rel-incident-response-postmortem
+
+### Identity
+
+- **Unit ID:** lu-rel-incident-response-postmortem
+- **Working title:** Mitigate an incident while preserving evidence and learning
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| rel-incident-response-postmortem | Reliability / SRE | L3 |
+
+### Canonical scenario
+
+A payment outage is ongoing and a quick configuration change could erase the evidence needed to understand it.
+
+### Integrated mechanism / state trace
+
+Separate impact command, safe mitigation, evidence preservation and verified follow-up.
+
+### Integrated evidence surface
+
+Incident timeline, snapshots, mitigation actions, owner decisions, customer impact and follow-up verification.
+
+### Failure and debug loop
+
+Risky mitigation destroys evidence or blame replaces a system-learning action.
+
+### Shared assessment task
+
+Given an active incident timeline, choose the next mitigation and write the evidence-preserving follow-up.
+
+### Transfer variation
+
+The incident spans a third-party dependency.
+
+### Boundary decision
+
+Incident command workflow differs from diagnosis and SLI measurement.
+
+## lu-delivery-artifact-provenance
+
+### Identity
+
+- **Unit ID:** lu-delivery-artifact-provenance
+- **Working title:** Prove the exact artifact and configuration promoted to production
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-artifact-image-config | Containers / Kubernetes / Cloud Delivery | L2 |
+| delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+A production pod runs an image tag that cannot be tied confidently to a source commit or approved deployment.
+
+### Integrated mechanism / state trace
+
+Trace source commit to immutable image digest, config reference, approval and deployed identity.
+
+### Integrated evidence surface
+
+Git SHA, image digest, SBOM, config reference, approval record and deployment record.
+
+### Failure and debug loop
+
+Mutable tags or production rebuilds lose rollback identity and provenance.
+
+### Shared assessment task
+
+Given a deployment chain, accept or reject the artifact/config provenance before release.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| delivery-artifact-image-config | Digest, config reference and SBOM establish immutable artifact/config identity. |
+| delivery-cicd-promotion-provenance | Build, approval and deployment records establish promotion provenance. |
+
+### Transfer variation
+
+A rollback selects an older immutable digest.
+
+### Boundary decision
+
+Artifact identity and promotion provenance are one trace from build to deployed state.
+
+## lu-delivery-platform-evidence-debug
+
+### Identity
+
+- **Unit ID:** lu-delivery-platform-evidence-debug
+- **Working title:** Localize a workload failure from platform evidence
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-platform-evidence-debug | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+A pod is Pending, then CrashLoops after a deployment, and the team must distinguish configuration, resource and probe causes.
+
+### Integrated mechanism / state trace
+
+Correlate workload state with scheduler events, exit reasons, resource status, mount/config and probe observations.
+
+### Integrated evidence surface
+
+Events, pod phase, exit reason, resource status, probe result, mount/config state and deployment revision.
+
+### Failure and debug loop
+
+Changing replicas before locating the failure makes a CrashLoop or OOM harder to diagnose.
+
+### Shared assessment task
+
+Given platform evidence, name the failure location and the next discriminating check.
+
+### Transfer variation
+
+The same workload fails only on one node class.
+
+### Boundary decision
+
+Diagnosis chooses among mechanism-specific inputs; lifecycle/resources/health need narrower controls.
+
+## lu-delivery-autoscaling-signal-boundary
+
+### Identity
+
+- **Unit ID:** lu-delivery-autoscaling-signal-boundary
+- **Working title:** Choose an autoscaling signal that matches real work pressure
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-autoscaling-signal-boundary | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+Replica count grows on CPU while a queue-backed worker falls further behind.
+
+### Integrated mechanism / state trace
+
+Relate signal, controller delay, replica response and downstream pressure before scaling.
+
+### Integrated evidence surface
+
+Scaling signal, target, replica history, queue/latency, controller events and downstream saturation.
+
+### Failure and debug loop
+
+More replicas cannot help a serialized downstream or a delayed signal reacts after overload.
+
+### Shared assessment task
+
+Given a workload trace, choose a scale signal and state the boundary where replicas stop helping.
+
+### Transfer variation
+
+The workload moves from request-driven to queue-driven.
+
+### Boundary decision
+
+Scaling is a control loop; resource limits and shedding are different controls.
+
+## lu-delivery-resources-cpu-memory
+
+### Identity
+
+- **Unit ID:** lu-delivery-resources-cpu-memory
+- **Working title:** Set CPU and memory requests/limits from workload evidence
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-resources-cpu-memory | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+A service is CPU-throttled under load and another is OOMKilled despite low average memory.
+
+### Integrated mechanism / state trace
+
+Map requests, limits, throttling and memory termination to observed runtime demand.
+
+### Integrated evidence surface
+
+Requests/limits, RSS, CPU throttling, OOM termination, GC/allocation and node placement.
+
+### Failure and debug loop
+
+Averaged metrics hide a short memory peak or too-low CPU limit creates latency.
+
+### Shared assessment task
+
+Given workload evidence, set resource boundaries and explain the expected throttle/OOM behavior.
+
+### Transfer variation
+
+A new batch changes memory burst shape.
+
+### Boundary decision
+
+Resource controls differ from replica-control-loop behavior.
+
+## lu-delivery-platform-transfer
+
+### Identity
+
+- **Unit ID:** lu-delivery-platform-transfer
+- **Working title:** Transfer a workload requirement across platform implementations
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-platform-transfer | Containers / Kubernetes / Cloud Delivery | L4 |
+
+### Canonical scenario
+
+The same service moves from one orchestration platform to another with equivalent delivery constraints.
+
+### Integrated mechanism / state trace
+
+Map artifact, resource, health, scaling and shutdown requirements to platform-specific primitives and evidence.
+
+### Integrated evidence surface
+
+Requirement mapping, platform configuration, observed behavior and trade-off record.
+
+### Failure and debug loop
+
+A familiar platform feature is chosen without proving the required behavior.
+
+### Shared assessment task
+
+Given requirements and two platforms, choose equivalent controls and defend the transfer evidence.
+
+### Transfer variation
+
+A platform lacks a direct probe or autoscaling primitive.
+
+### Boundary decision
+
+L4 transfer synthesizes foundations rather than replacing a mechanism assessment.
+
+## lu-delivery-cloud-responsibility-managed-services
+
+### Identity
+
+- **Unit ID:** lu-delivery-cloud-responsibility-managed-services
+- **Working title:** Verify application-team responsibility around managed services
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-cloud-responsibility-managed-services | Containers / Kubernetes / Cloud Delivery | L2 |
+
+### Canonical scenario
+
+A managed database incident reveals unclear ownership for IAM, quotas, backups and recovery verification.
+
+### Integrated mechanism / state trace
+
+Separate provider contract from application-team configuration, access, quota and recovery responsibilities.
+
+### Integrated evidence surface
+
+Service contract, IAM policy, quota settings, recovery verification and operational runbook.
+
+### Failure and debug loop
+
+Assuming managed means no application responsibility leaves access or recovery unverified.
+
+### Shared assessment task
+
+Given a managed-service incident, assign each responsibility and name the evidence that proves it is covered.
+
+### Transfer variation
+
+The provider changes a service tier or retention default.
+
+### Boundary decision
+
+Provider/application responsibility differs from DR, security and cross-platform transfer.
+
+## lu-delivery-container-process-lifecycle
+
+### Identity
+
+- **Unit ID:** lu-delivery-container-process-lifecycle
+- **Working title:** Reason about the primary process lifecycle inside a container
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-container-process-lifecycle | Containers / Kubernetes / Cloud Delivery | L2 |
+
+### Canonical scenario
+
+A container starts, its primary process exits and the platform repeatedly restarts it.
+
+### Integrated mechanism / state trace
+
+Treat the container as primary-process packaging/runtime boundary with explicit start, exit and restart state.
+
+### Integrated evidence surface
+
+Container state, process exit code, restart count, image command and startup logs.
+
+### Failure and debug loop
+
+A VM mental model hides a short-lived main process or restart policy behavior.
+
+### Shared assessment task
+
+Given startup and exit evidence, explain the lifecycle state and the next process-level fix.
+
+### Transfer variation
+
+The workload changes from a web process to a one-shot job.
+
+### Boundary decision
+
+Basic start/exit/restart state differs from traffic draining orchestration.
+
+## lu-delivery-graceful-shutdown-draining
+
+### Identity
+
+- **Unit ID:** lu-delivery-graceful-shutdown-draining
+- **Working title:** Drain traffic and finish bounded work before termination
+- **Learner-facing domain candidate:** Production Engineering
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| delivery-graceful-shutdown-draining | Containers / Kubernetes / Cloud Delivery | L3 |
+
+### Canonical scenario
+
+A deployment terminates workers while requests and queued jobs are still active.
+
+### Integrated mechanism / state trace
+
+Remove traffic, receive termination, stop intake, finish or hand off active work, then exit within grace.
+
+### Integrated evidence surface
+
+Readiness state, termination signal, in-flight work, durable handoff, grace deadline and exit result.
+
+### Failure and debug loop
+
+Process exits before work is durable or receives traffic after shutdown begins.
+
+### Shared assessment task
+
+Given a termination timeline, design the drain sequence and prove no active work is silently lost.
+
+### Transfer variation
+
+A worker must hand off a leased job before its deadline.
+
+### Boundary decision
+
+Drain orchestration has traffic and durable-work state beyond basic container lifecycle.
+
+## Stage 1E closure
+
+Production Engineering is REVIEWED. The 15 approved historical decisions are materialized in the canonical registries and exactly 26 canonical unit bodies. The batch has 30 scoped Primaries, 22 singleton units, 4 multi-capability units and 2 multi-owner units. Dependency projection remains NOT FINALIZED. Architecture & Engineering Reasoning remains PENDING.
