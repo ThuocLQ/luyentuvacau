@@ -71,3 +71,10 @@ Actual Git state and canonical artifacts outrank this log; this log outranks the
 **Status:** SEALED by `7d345586b4e0054ee8488dc746393f0d5b98e8d4`
 
 Stage 1E closed after canonical materialization of 15 historical units: **6 KEEP / 8 SPLIT / 1 MERGE**. Its 30 Primaries now have 26 final Production units (**22 singleton / 4 multi**, including **2 multi-owner**): `lu-rel-health-probes` and `lu-release-rollout-rollback`. Dependency projection remains **NOT FINALIZED**. Architecture & Engineering Reasoning remains **PENDING**. Do not reopen this semantic/canonical review without concrete evidence.
+
+## D-009 — Stage 1 Learning-Unit semantic decomposition sealed
+
+**Date:** 2026-10-06
+**Status:** SEALED by `df4d0ed58b87a3632086c0e0ddfb6adbc3a52c55`
+
+Stage 1F canonical materialization is `2d410ddc325b47a0f17fed1890713c103c8181b4`. The sealed decomposition has **167 Primary homes** and **137 final Learning Units** (**111 singleton / 26 multi**, **135 single-owner / 2 multi-owner**); all Stage-1 semantic-review batches are REVIEWED. Dependency/progression projection remains **NOT FINALIZED**. Do not reopen semantic decomposition without concrete evidence.

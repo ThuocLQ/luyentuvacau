@@ -2,13 +2,15 @@
 
 > **Purpose:** Small, current handoff surface for humans and agents. This file points to canonical authorities and records the workflow cursor. It must not duplicate full policy or architecture specifications.
 >
-> **Last updated:** 2026-10-05
+> **Last updated:** 2026-10-06
 >
 > **Expected branch:** `codex/senior-backend-evidence-map`
 >
 > **Final Stage 1D seal commit:** `b0523472726c5e5230a512ac855e9dbcdd9f0cec`
 >
-> **Stage 1E canonical architecture commit:** `7d345586b4e0054ee8488dc746393f0d5b98e8d4`
+> **Stage 1F canonical materialization commit:** `2d410ddc325b47a0f17fed1890713c103c8181b4`
+>
+> **Stage 1F validation seal:** `df4d0ed58b87a3632086c0e0ddfb6adbc3a52c55`
 
 ## Bootstrap
 
@@ -34,25 +36,32 @@
 
 ## Current phase
 
-**Pre-Stage 1F — Stage 1E sealed**
+**Stage 1 Learning-Unit semantic decomposition: SEALED**
 
-Production Engineering is **REVIEWED / SEALED** by `7d345586b4e0054ee8488dc746393f0d5b98e8d4`. Architecture & Engineering Reasoning is the only remaining Stage-1 semantic-review batch and has **not started**.
+All Stage-1 semantic-review batches are **REVIEWED**. Stage 1F Architecture & Engineering Reasoning is sealed; dependency/progression projection has **not started**.
 
 ## Important current facts
 
 - Frozen capabilities: **167**.
 - Dependency graph: **332** relations = **201 REQUIRED + 131 RECOMMENDED**.
-- Learning Units: **132** = **105 singleton + 27 multi**, with **167 Primary homes**.
+- Primary homes: **167**.
+- Learning Units: **137** = **111 singleton + 26 multi**.
+- Single-owner units: **135**.
+- Multi-owner units: **2**.
 - Service & Network: **25 current final units** and REVIEWED.
 - Distributed Systems: **21 current final units** and REVIEWED by `29e1b0a05e8ed1f08270c04395a42a20886a97ec`.
 - Production Engineering: **30 Primaries → 26 final units = 22 singleton + 4 multi**, including **2 multi-owner** units; **REVIEWED / SEALED**.
-- Architecture & Engineering Reasoning: **PENDING**.
+- Stage 1F: **12 historical units; 8 KEEP / 3 SPLIT / 1 MERGE; 20 Primaries; 17 final units = 14 singleton + 3 multi; 0 new multi-owner**.
+- Stage 1 Learning-Unit semantic decomposition: **SEALED**.
+- Dependency / Learning-Unit progression projection: **NOT FINALIZED**.
 - `stage-1-review-manifest.json` baseline remains `412216c591404480a6539f220ea324f9ec53af56`; original scope plus declared amendment scope must equal the current frozen capability set.
 - The repaired dependency registry keeps all 14 amendment relations inside its canonical section.
 
 ## Exact next task
 
-Stage 1F — Architecture & Engineering Reasoning semantic review.
+Finalize the Learning-Unit dependency/progression projection across the sealed 137-unit map, classifying frozen REQUIRED and RECOMMENDED relations without reopening Learning-Unit semantic decomposition.
+
+Do not call this learner-facing lesson authoring yet.
 
 ## Stop conditions
 
