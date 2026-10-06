@@ -1,6 +1,6 @@
 # QuanNet Learning-Unit Audit — Stage 1
 
-> **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
+> **Status:** REVIEWED — Stage 1 Learning-Unit semantic decomposition complete.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
 ## A. Global Summary
@@ -8,28 +8,28 @@
 | Metric | Result |
 |---|---:|
 | Frozen capabilities | 167 |
-| Proposed Learning Units | 132 |
+| Proposed Learning Units | 137 |
 | Primary assessment homes | 167 |
 | Missing Primary capabilities | 0 |
 | Duplicate Primary assignments | 0 |
 | Unknown capability IDs | 0 |
-| Singleton units | 105 |
-| Multi-capability units | 27 |
-| Single-owner units | 130 |
+| Singleton units | 111 |
+| Multi-capability units | 26 |
+| Single-owner units | 135 |
 | Multi-owner units | 2 |
 
 ## B. Primary-Home Registry
 
 | Capability ID | Canonical owner | Frozen level | Primary Unit | Domain candidate |
 |---|---|---|---|---|
-| arch-boundaries-ownership | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-boundaries-ownership | Architecture & System Design | L3 | lu-arch-boundaries-data-ownership | Architecture & Engineering Reasoning |
 | arch-consistency-latency-availability | Architecture & System Design | L4 | lu-arch-consistency-latency-availability | Architecture & Engineering Reasoning |
 | arch-cost-complexity-changeability | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
-| arch-data-ownership-source-of-truth | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-data-ownership-source-of-truth | Architecture & System Design | L3 | lu-arch-boundaries-data-ownership | Architecture & Engineering Reasoning |
 | arch-decision-communication-transfer | Architecture & System Design | L4 | lu-arch-cost-complexity-changeability | Architecture & Engineering Reasoning |
 | arch-evolution-migration-strangler | Architecture & System Design | L3 | lu-arch-evolution-migration-strangler | Architecture & Engineering Reasoning |
-| arch-failure-recovery-security-observability | Architecture & System Design | L4 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
-| arch-requirements-quality-attributes | Architecture & System Design | L3 | lu-arch-boundaries-ownership | Architecture & Engineering Reasoning |
+| arch-failure-recovery-security-observability | Architecture & System Design | L4 | lu-arch-failure-recovery-security-observability | Architecture & Engineering Reasoning |
+| arch-requirements-quality-attributes | Architecture & System Design | L3 | lu-arch-requirements-quality-attributes | Architecture & Engineering Reasoning |
 | arch-scale-capacity-partitioning | Architecture & System Design | L3 | lu-arch-scale-capacity-partitioning | Architecture & Engineering Reasoning |
 | arch-sync-async-integration | Architecture & System Design | L3 | lu-arch-sync-async-integration | Architecture & Engineering Reasoning |
 | concurrency-async-parallelism | Concurrency & Async | L2 | lu-concurrency-async-parallelism | Runtime & Concurrency |
@@ -118,12 +118,12 @@
 | test-failure-resilience | Testing & Engineering Quality | L3 | lu-test-failure-resilience | Architecture & Engineering Reasoning |
 | test-migration-compatibility | Testing & Engineering Quality | L3 | lu-test-migration-compatibility | Architecture & Engineering Reasoning |
 | test-property-boundary-fuzz | Testing & Engineering Quality | L3 | lu-test-property-boundary-fuzz | Architecture & Engineering Reasoning |
-| test-real-dependency-fixtures | Testing & Engineering Quality | L3 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
+| test-real-dependency-fixtures | Testing & Engineering Quality | L3 | lu-test-real-dependency-fixtures | Architecture & Engineering Reasoning |
 | test-review-static-analysis-change-safety | Testing & Engineering Quality | L3 | lu-test-review-static-analysis-change-safety | Architecture & Engineering Reasoning |
-| test-risk-strategy-boundaries | Testing & Engineering Quality | L2 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
-| test-risk-transfer | Testing & Engineering Quality | L4 | lu-test-failure-resilience | Architecture & Engineering Reasoning |
-| test-time-concurrency-determinism | Testing & Engineering Quality | L3 | lu-test-ci-flakiness-repeatability | Architecture & Engineering Reasoning |
-| test-unit-integration-contract | Testing & Engineering Quality | L3 | lu-test-unit-integration-contract | Architecture & Engineering Reasoning |
+| test-risk-strategy-boundaries | Testing & Engineering Quality | L2 | lu-test-risk-strategy-boundaries | Architecture & Engineering Reasoning |
+| test-risk-transfer | Testing & Engineering Quality | L4 | lu-test-risk-transfer | Architecture & Engineering Reasoning |
+| test-time-concurrency-determinism | Testing & Engineering Quality | L3 | lu-test-time-concurrency-determinism | Architecture & Engineering Reasoning |
+| test-unit-integration-contract | Testing & Engineering Quality | L3 | lu-test-risk-strategy-boundaries | Architecture & Engineering Reasoning |
 | db-index-structures | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
 | db-composite-query-shape | Relational Database Engineering | L3 | lu-index-query-shape | Data & Consistency |
 | db-execution-operators | Relational Database Engineering | L3 | lu-execution-plan-estimates | Data & Consistency |
@@ -191,7 +191,6 @@
 | msg-background-jobs-scheduling | Messaging & Event-Driven Consistency | L3 | lu-msg-background-jobs-scheduling | Distributed Systems |
 
 ## C. Unit Composition Registry
-
 | Unit ID | Primary capability IDs | Primary count | Owner set | Singleton / Multi |
 |---|---|---|---|---|
 | lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | 1 | API Contracts & Resilience | Singleton |
@@ -201,12 +200,6 @@
 | lu-api-unknown-outcome-reconciliation | api-unknown-outcome-reconciliation | 1 | API Contracts & Resilience | Singleton |
 | lu-api-validation-errors-pagination | api-validation-errors-pagination | 1 | API Contracts & Resilience | Singleton |
 | lu-api-versioning-compatibility | api-versioning-compatibility | 1 | API Contracts & Resilience | Singleton |
-| lu-arch-boundaries-ownership | arch-boundaries-ownership; arch-data-ownership-source-of-truth; arch-failure-recovery-security-observability; arch-requirements-quality-attributes | 4 | Architecture & System Design | Multi |
-| lu-arch-consistency-latency-availability | arch-consistency-latency-availability | 1 | Architecture & System Design | Singleton |
-| lu-arch-cost-complexity-changeability | arch-cost-complexity-changeability; arch-decision-communication-transfer | 2 | Architecture & System Design | Multi |
-| lu-arch-evolution-migration-strangler | arch-evolution-migration-strangler | 1 | Architecture & System Design | Singleton |
-| lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | 1 | Architecture & System Design | Singleton |
-| lu-arch-sync-async-integration | arch-sync-async-integration | 1 | Architecture & System Design | Singleton |
 | lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | 1 | Cache Engineering | Singleton |
 | lu-cache-evidence-transfer | cache-evidence-transfer | 1 | Cache Engineering | Singleton |
 | lu-cache-patterns | cache-patterns; cache-stampede-penetration-avalanche-hot-key | 2 | Cache Engineering | Multi |
@@ -320,14 +313,24 @@
 | lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | 1 | Security | Singleton |
 | lu-sec-trust-boundary-threat-model | sec-trust-boundary-threat-model | 1 | Security | Singleton |
 | lu-sec-unseen-attack-transfer | sec-unseen-attack-transfer | 1 | Security | Singleton |
-| lu-test-ci-flakiness-repeatability | test-ci-flakiness-repeatability; test-real-dependency-fixtures; test-risk-strategy-boundaries; test-time-concurrency-determinism | 4 | Testing & Engineering Quality | Multi |
-| lu-test-failure-resilience | test-failure-resilience; test-risk-transfer | 2 | Testing & Engineering Quality | Multi |
+| lu-test-risk-strategy-boundaries | test-risk-strategy-boundaries; test-unit-integration-contract | 2 | Testing & Engineering Quality | Multi |
+| lu-test-ci-flakiness-repeatability | test-ci-flakiness-repeatability | 1 | Testing & Engineering Quality | Singleton |
+| lu-test-time-concurrency-determinism | test-time-concurrency-determinism | 1 | Testing & Engineering Quality | Singleton |
+| lu-test-real-dependency-fixtures | test-real-dependency-fixtures | 1 | Testing & Engineering Quality | Singleton |
+| lu-test-failure-resilience | test-failure-resilience | 1 | Testing & Engineering Quality | Singleton |
+| lu-test-risk-transfer | test-risk-transfer | 1 | Testing & Engineering Quality | Singleton |
 | lu-test-migration-compatibility | test-migration-compatibility | 1 | Testing & Engineering Quality | Singleton |
 | lu-test-property-boundary-fuzz | test-property-boundary-fuzz | 1 | Testing & Engineering Quality | Singleton |
 | lu-test-review-static-analysis-change-safety | test-review-static-analysis-change-safety | 1 | Testing & Engineering Quality | Singleton |
-| lu-test-unit-integration-contract | test-unit-integration-contract | 1 | Testing & Engineering Quality | Singleton |
+| lu-arch-requirements-quality-attributes | arch-requirements-quality-attributes | 1 | Architecture & System Design | Singleton |
+| lu-arch-boundaries-data-ownership | arch-boundaries-ownership; arch-data-ownership-source-of-truth | 2 | Architecture & System Design | Multi |
+| lu-arch-failure-recovery-security-observability | arch-failure-recovery-security-observability | 1 | Architecture & System Design | Singleton |
+| lu-arch-consistency-latency-availability | arch-consistency-latency-availability | 1 | Architecture & System Design | Singleton |
+| lu-arch-cost-complexity-changeability | arch-cost-complexity-changeability; arch-decision-communication-transfer | 2 | Architecture & System Design | Multi |
+| lu-arch-evolution-migration-strangler | arch-evolution-migration-strangler | 1 | Architecture & System Design | Singleton |
+| lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | 1 | Architecture & System Design | Singleton |
+| lu-arch-sync-async-integration | arch-sync-async-integration | 1 | Architecture & System Design | Singleton |
 ## D. Singleton Review Registry
-
 | Unit ID | Capability | Strongest merge candidate(s) | Why merge rejected |
 |---|---|---|---|
 | lu-api-circuit-bulkhead-rate-limit | api-circuit-bulkhead-rate-limit | lu-api-deadline-retry-policy; lu-sec-abuse-bruteforce-resource-business-flow | Assessment: slow partner plus tenant burst; queue/admission evidence. Isolation/admission differs from time budget or attacker budget selection. |
@@ -336,10 +339,6 @@
 | lu-api-unknown-outcome-reconciliation | api-unknown-outcome-reconciliation | lu-net-failure-localization-unknown-outcome; lu-api-request-identity-idempotency | Assessment: provider timeout; operation ID/provider/local audit. Convergence after a mutation differs from transport location or request dedupe. |
 | lu-api-validation-errors-pagination | api-validation-errors-pagination | lu-api-contract-resource-semantics; lu-api-versioning-compatibility | Assessment: invalid payload plus shifting list; ProblemDetails/cursor. Wire recovery/traversal differs from operation state or client coexistence. |
 | lu-api-versioning-compatibility | api-versioning-compatibility | lu-api-contract-resource-semantics; lu-prog-api-refactoring-change-safety | Assessment: old client semantic change; diff/consumer telemetry. Independent-client compatibility differs from one state transition or internal refactor. |
-| lu-arch-consistency-latency-availability | arch-consistency-latency-availability | arch-requirements-quality-attributes; prog-invariants-domain-model | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-arch-evolution-migration-strangler | arch-evolution-migration-strangler | arch-boundaries-ownership; prog-api-refactoring-change-safety | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | arch-requirements-quality-attributes; obs-latency-throughput-saturation | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-arch-sync-async-integration | arch-sync-async-integration | arch-requirements-quality-attributes; net-http-semantics | Different mechanism/evidence boundary prevents one credible assessment policy. |
 | lu-cache-capacity-eviction-fallback | cache-capacity-eviction-fallback | lu-cache-patterns; lu-nosql-redis-structures-memory | Eviction-to-origin containment differs from loader/write and Redis layout evidence. |
 | lu-cache-evidence-transfer | cache-evidence-transfer | lu-cache-capacity-eviction-fallback; lu-cache-source-of-truth-invalidation; lu-cache-patterns | L4 diagnosis spans capacity, freshness, layers and miss-overload. |
 | lu-concurrency-deadlock-starvation | concurrency-deadlock-starvation | lu-race-atomicity; lu-db-locks-deadlocks-contention | Wait-cycle/forward-progress evidence differs from invariant interleaving and transaction locks. |
@@ -431,17 +430,24 @@
 | lu-sec-secrets-third-party-trust | sec-secrets-third-party-trust | lu-sec-audit-detection-evidence; lu-sec-trust-boundary-threat-model | Assessment: replayed webhook rotation; signature/timestamp/key audit. Verification/lifecycle differs from recording decisions or mapping paths. |
 | lu-sec-trust-boundary-threat-model | sec-trust-boundary-threat-model | lu-sec-secrets-third-party-trust; lu-sec-authorization-object-tenant | Assessment: webhook data flow; actors/assets/crossings. Threat discovery differs from callback verification or object policy. |
 | lu-sec-unseen-attack-transfer | sec-unseen-attack-transfer | lu-sec-race-business-logic-abuse; lu-sec-authorization-object-tenant | Assessment: unlabelled session/object/race incident; path and bypass test. Transfer synthesizes; each candidate proves one mechanism. |
-| lu-test-migration-compatibility | test-migration-compatibility | test-risk-strategy-boundaries; api-versioning-compatibility | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-test-property-boundary-fuzz | test-property-boundary-fuzz | prog-invariants-domain-model; test-risk-strategy-boundaries | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-test-review-static-analysis-change-safety | test-review-static-analysis-change-safety | test-risk-strategy-boundaries; prog-api-refactoring-change-safety | Different mechanism/evidence boundary prevents one credible assessment policy. |
-| lu-test-unit-integration-contract | test-unit-integration-contract | test-risk-strategy-boundaries; test-real-dependency-fixtures | Different mechanism/evidence boundary prevents one credible assessment policy. |
+| lu-test-ci-flakiness-repeatability | test-ci-flakiness-repeatability | lu-test-time-concurrency-determinism; lu-test-real-dependency-fixtures | Repeat history, seed, order, worker and environment diagnose broad verdict instability; controlled interleaving or fixture lifecycle cannot prove the same classification and repair boundary. |
+| lu-test-time-concurrency-determinism | test-time-concurrency-determinism | lu-test-ci-flakiness-repeatability; lu-race-atomicity | Controlled clock, gate, ownership and captured interleaving differ from CI diagnosis and production race evidence; one assessment cannot prove all three. |
+| lu-test-real-dependency-fixtures | test-real-dependency-fixtures | lu-test-risk-strategy-boundaries; lu-test-migration-compatibility | Version, migration, seed, health, isolation, cleanup and persisted result belong to fixture lifecycle; boundary selection or coexistence cannot establish fixture fidelity. |
+| lu-test-failure-resilience | test-failure-resilience | lu-rel-failure-injection-verification; lu-test-risk-transfer | Injected fault, attempts, durable state and recovery differ from SRE experiment controls or L4 transfer risk; a known-failure case cannot prove either. |
+| lu-test-risk-transfer | test-risk-transfer | lu-test-failure-resilience; lu-test-risk-strategy-boundaries | A changed architecture requires a new risk matrix, boundary and falsifying fixture; a known recovery trace or initial boundary choice cannot prove adaptation. |
+| lu-test-migration-compatibility | test-migration-compatibility | lu-api-versioning-compatibility; lu-db-schema-evolution; lu-test-real-dependency-fixtures | Transitional old/new state and rollback evidence differ from API/schema semantics and fixture setup; one case cannot prove coexistence. |
+| lu-test-property-boundary-fuzz | test-property-boundary-fuzz | prog-invariants-domain-model; lu-test-risk-strategy-boundaries | Generated boundary input, seed, shrinking and reproducible counterexample differ from invariant definition and risk selection; they need their own falsification loop. |
+| lu-test-review-static-analysis-change-safety | test-review-static-analysis-change-safety | prog-api-refactoring-change-safety; lu-test-risk-strategy-boundaries | Diff intent, analyzer output, review rationale and targeted regression differ from API coexistence and initial risk choice; one assessment cannot prove complementary evidence. |
+| lu-arch-requirements-quality-attributes | arch-requirements-quality-attributes | lu-arch-boundaries-data-ownership; lu-arch-sync-async-integration; lu-arch-scale-capacity-partitioning; lu-arch-cost-complexity-changeability | Requirement scenarios, estimates, constraints and assumptions are reusable foundation evidence; candidate mechanisms have distinct state, evidence and failures. |
+| lu-arch-failure-recovery-security-observability | arch-failure-recovery-security-observability | lu-arch-boundaries-data-ownership; lu-arch-consistency-latency-availability; lu-arch-sync-async-integration | L4 failure, recovery-owner, trust and telemetry synthesis differs from normal-state authority, guarantee and integration coupling; combining over-gates L3 evidence. |
+| lu-arch-consistency-latency-availability | arch-consistency-latency-availability | lu-arch-requirements-quality-attributes; lu-arch-boundaries-data-ownership; lu-arch-failure-recovery-security-observability | Visibility/order choice, stale window, coordination, latency and reconciliation differ from requirement framing, authority mapping and production synthesis. |
+| lu-arch-evolution-migration-strangler | arch-evolution-migration-strangler | lu-arch-boundaries-data-ownership; lu-arch-cost-complexity-changeability | Seam, coexistence, comparison, rollback and retirement differ from steady-state authority and ADR economics; one assessment cannot prove migration safety. |
+| lu-arch-scale-capacity-partitioning | arch-scale-capacity-partitioning | lu-arch-requirements-quality-attributes; obs-latency-throughput-saturation; dist-partitioning-ownership-rebalancing | Bottleneck/capacity and scale choice use measured demand; requirements, measurement and rebalance mechanics are distinct evidence loops. |
+| lu-arch-sync-async-integration | arch-sync-async-integration | lu-arch-requirements-quality-attributes; lu-arch-failure-recovery-security-observability; lu-arch-cost-complexity-changeability | Completion, coupling, operation state and recovery differ from quality framing, L4 synthesis and lifecycle-cost ADR reasoning. |
 ## E. Multi-Capability Grouping Review
-
 | Unit ID | Shared problem / need | Shared mechanism / state trace | Shared observable evidence | Shared failure / debug story | Assessment-coherence argument |
 |---|---|---|---|---|---|
 | lu-api-deadline-retry-policy | 800 ms three-hop degraded call | remaining deadline then bounded retry | deadline/spans; attempts/error/timing/rate | nested full timeout/retry storm | calculate safe budget and attempt schedule. |
-| lu-arch-boundaries-ownership | Choose module/service boundary by invariant, change ownership and operational owner. | Boundary grants one owner authority over state/rules; crossing it needs explicit contract. → Decisions only matter against correctness, latency, availability, throughput, durability, security, operability, changeability and cost needs. → One owner accepts transition; derived systems copy/calculate with different freshness. → Critical transition needs failure behavior, recovery owner, trust path and diagnostic evidence. | State owner; write paths; invariant; API/event dependencies; coupling; deployment owner.; Requirement list; quality scenario; traffic/data estimates; constraints; assumption register.; Write paths; source version; update flow; derived copy; rebuild/reconcile.; Failure table; recovery owner; data flow; telemetry path; RPO/RTO/SLO; operation ID. | Service per table; shared DB mutation; split invariant; chatty arbitrary decomposition; no owner.; Technology-first; scale no number; conflict implicit; optional feature drives core; imagined hyperscale.; Two authorities; cache/search mutated as source; reporting write leaks; unrebuildable projection; migration ambiguity.; No timeout/recovery owner; unmodeled trust path; async uncorrelated; dependency collapse; no recovery plan. | One bounded trace observes all Primary mechanisms. |
-| lu-arch-cost-complexity-changeability | Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change. | Component/boundary creates deploy, failure, data movement, skills, cloud and migration cost. → Explicit assumptions let future engineer know why/when decision changes. | Component count; ownership/incident burden; cost; latency/capacity; change frequency.; ADR; capacity evidence; option comparison; risk; revisit condition; outcome. | Microservices no change need; résumé Kafka/Redis/K8s; irrelevant optimization; lock-in ignored.; Diagram no rationale; universal best practice; rejected choices hidden; stale decision persists. | One bounded trace observes all Primary mechanisms. |
 | lu-cache-patterns | Read/write and expiry | loader-to-miss mode | loader/expiry/key-QPS | stampede/hot key | one task proves both. |
 | lu-cache-source-of-truth-invalidation | Source update with L1/L2 | version/invalidation/layer | version/age/instance | stale layer | one task proves all. |
 | lu-concurrency-async-parallelism | Phân biệt async chờ completion, concurrency quản lý nhiều work và parallel execution dùng nhiều execution resource. | Async không tự tạo thread; concurrency là overlap lifetime; parallelism là nhiều work thực sự chạy đồng thời khi CPU/capacity cho phép. → CancellationToken báo owner rằng result không còn cần hoặc deadline đã hết; code phải observe signal, stop safely và không coi cancel là rollback của side effect đã commit. → Arrival rate lớn hơn service rate làm in-flight work tích tụ; bounded queue/semaphore buộc producer wait, reject hoặc shed thay vì giữ work vô hạn. | Timeline task/thread; CPU; active operations; request latency; queue depth.; Token propagation trace; active operation count; cancellation log; audit state; cleanup/timeout test.; In-flight count; queue depth; pool usage; throughput; p95/p99; rejection/wait time. | Wrap sync I/O trong Task.Run; nghĩ await tăng CPU throughput; tạo parallelism vô hạn cho downstream I/O.; Token không được forward; continue expensive work sau disconnect; cancel giữa side effect gây unknown outcome; dispose khi child còn dùng.; Unbounded in-flight tasks; queue/memory growth; pool exhaustion; p99 tăng dù throughput không tăng. | One bounded trace observes all Primary mechanisms. |
@@ -457,6 +463,8 @@
 | lu-nosql-search-projection | Catalog projection | analyzer-refresh-shard-page | tokens/profile | wrong analyzer/deep offset | one task proves both. |
 | lu-obs-instrumentation-tracing | An order API enqueues payment work, but the payment wait disappears after the worker boundary. | Create semantic spans and propagate operation context through HTTP and message metadata so the causal trace stays connected. | Trace tree, parent/link relation, operation ID, headers/message metadata, dependency duration and retry attributes. | Worker context is lost, a span ends too early or downstream timing is detached from the initiating request. | Context propagation establishes the trace boundary; trace evidence verifies the reconstructed path. |
 | lu-os-blocking-io-waits | Giải thích thread chờ vì completion ở bên ngoài và nhận ra sync I/O đang chiếm worker capacity. | File/socket/database operation hoàn tất qua kernel/external system; blocking giữ execution thread chờ, async cho phép thread làm work khác trong khi completion chưa tới. → Process giữ handle trỏ tới kernel resource; dispose/close giải phóng reference/quota, còn connection pool là owner layer khác với raw socket. | Blocked stack; wait time; worker/runtime queue; thread count; request queue growth.; Open handle count; socket states; per-process limits; connection-pool state; OS error code. | Blocking request path; sync I/O giữ worker; queue growth; timeout do worker starvation.; FD/handle leak; socket exhaustion; close quá sớm; IPC endpoint không được release. | One bounded trace observes all Primary mechanisms. |
+| lu-arch-boundaries-data-ownership | A write crosses service boundaries and nobody can prove which component owns the authoritative state. | Map boundary, owner, source-of-truth and transfer contract for one business flow. | Ownership matrix, write/read path, invariant location, event/API contract and reconciliation evidence. | Two writers diverge or a downstream copy is treated as authoritative; debug by tracing the write owner and stale read. | One bounded flow proves both boundary placement and data ownership without requiring unrelated architecture trade-offs. |
+| lu-arch-cost-complexity-changeability | A design decision must balance operating cost, complexity and future change while communicating the trade-off. | Compare options through explicit assumptions, constraint weights, reversibility and change surface. | ADR decision matrix, cost/latency/complexity estimates, rejected alternatives and stakeholder rationale. | Hidden coupling or optimistic estimates make a change expensive; debug by revisiting assumptions and the affected change surface. | One bounded ADR task proves both trade-off reasoning and decision communication for the same architecture choice. |
 | lu-outbox-duplicate-safe-effect | committed business change | Outbox publish then inbox effect | order/outbox/relay/broker/inbox/ledger IDs | relay crash plus duplicate delivery | One incident proves both durable boundaries. |
 | lu-race-atomicity | Viết state transition và các interleaving có thể xảy ra để chứng minh invariant có thể bị phá ở đâu. | Khi hai operation overlap, read/validate/write có thể xen kẽ; invariant chỉ giữ nếu transition được atomically protected ở đúng owner. → Check tách khỏi act tạo cửa sổ để state đổi; correctness nằm ở compare-and-swap/conditional write/unique constraint chứ không chỉ validation trước đó. → Lock, Interlocked hoặc transactional conditional update serializes/atomically applies state transition theo scope của primitive. | Step trace; concurrent test barrier; before/after state; affected-row count; audit sequence.; Interleaving trace; concurrent integration test; conditional affected rows; unique violation; version conflict.; Critical-section trace; contention time; affected rows; invariant test dưới parallel load. | Oversell inventory; duplicate reservation; lost update; negative balance.; Duplicate creation; lost update; TOCTOU authorization; negative stock.; Read-modify-write lost update; lock sai scope; double release; atomic increment dùng cho invariant nhiều field. | One bounded trace observes all Primary mechanisms. |
 | lu-rel-health-probes | A dependency outage makes requests unsafe, but the process can still drain work and should not restart. | Define useful-progress and traffic-eligibility semantics, then configure probes so routing and restart actions follow that meaning. | Dependency state, probe configuration/result, ready endpoints, restart count and traffic outcome. | Readiness wired as liveness creates a restart storm or routes traffic to an unsafe instance. | Health meaning and probe behavior share one routing/restart state and outage assessment. |
@@ -464,8 +472,7 @@
 | lu-runtime-allocation-gc | Giải thích allocation rate dẫn tới GC work và chọn mitigation sau khi có số liệu. | Allocation tạo object trên managed heap; khi vùng nhớ cần thu hồi, GC tìm object còn reachable rồi dọn phần còn lại, nên tốc độ cấp phát quyết định tần suất và chi phí collection. → Object sống khi có đường reference từ GC root như stack, static, handle hoặc long-lived collection; scope source code không đồng nghĩa object hết reachable. → Retention là object còn reachable; pool chủ động giữ object để reuse; buffer lớn có allocation/lifetime cost riêng, và pool có thể biến allocation pressure thành retained heap. | Allocation rate; GC count/time; heap size; generation size; request latency lúc collection.; Heap graph; retaining path; root type; object count/size theo thời gian.; Heap dump; generation/size distribution; pool counters; allocation trace của large buffer. | High allocation rate; frequent GC; pause dài; CPU overhead do GC.; Unexpected retention; event handler giữ subscriber; cache/list vô hạn; closure giữ graph lớn.; Pool retains too much; large buffers repeatedly allocated; long-lived owner giữ object graph; wrong-size buffer reuse. | One bounded trace observes all Primary mechanisms. |
 | lu-runtime-diagnostics | Chọn counter, trace hoặc dump/profile theo một hypothesis về runtime thay vì thu thập mọi thứ. | Counter trả lời xu hướng; trace cho timeline/causal activity; dump/profile cho object hoặc stack tại thời điểm; tool phải khớp câu hỏi. → Allocation, GC và retention tạo các dấu hiệu khác nhau; thay một biến rồi đo lại mới phân biệt causal effect. | Hypothesis viết trước; counter time series; trace span/stack; heap dump; profile hotspot.; Symptom timeline; allocation/GC counters; retaining path; controlled before/after experiment; post-change latency. | Collecting wrong evidence; dump sau khi symptom biến mất; kết luận leak từ heap size đơn lẻ.; Treating retention as GC tuning; pooling để che leak; mitigation giảm allocation nhưng tăng retained heap. | One bounded trace observes all Primary mechanisms. |
 | lu-sec-auth-session-oauth | ID token sent to API | claim validation then OAuth/OIDC role distinction | issuer/audience/expiry; token type/scope/AS metadata | wrong token accepted | decide correct token and access boundary. |
-| lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test. | Trustworthy test gives same verdict for same state; hidden clock/order/network/shared state breaks repeatability. → Test value falsifies risky assumption at narrowest boundary that retains actual mechanism. → Clock, barrier, scheduling point and test-data ownership intentionally reach desired state. → Fixture provides controlled real instance/state, observing constraint/transaction/serialization/broker behavior. | Repeat history; seed; test order; worker/env; resource owner; timing; failure artifact.; Risk statement; boundary; reproduced failure; invariant assertion; escaped defect history.; Gate events; controlled clock; task completion; captured interleaving; repeated stability.; Version; migration; seed; health; persisted/message result; cleanup/isolation. | Order dependency; shared DB/static; port collision; external network; timing race; retry hides flake.; Mock removes mechanism; E2E for pure logic; coverage misses path; implementation-shaped test.; Thread.Sleep; occasional race pass; assertion before work done; wall-clock expiry flake; shared mutable tests.; In-memory differs PostgreSQL; mock broker misses redelivery; shared DB leak; version mismatch; wrong migration. | One bounded trace observes all Primary mechanisms. |
-| lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure. | Inject known boundary failure then assert observable result and post-recovery state. → Strategy derives from risk/mechanism, not copied feature test structure. | Injected fault; attempts; persisted/audit state; operation ID; result; recovery state.; Risk matrix; boundary; failing/passing fixture; real state; rejected alternative rationale. | Timeout only exception checked; retry duplicates; partial DB write; wrong fallback authority; stub always success.; Copy old shape after boundary moved; mock removes new failure; E2E no localization; green proves untested assumption. | One bounded trace observes all Primary mechanisms. |
+| lu-test-risk-strategy-boundaries | Database business-rule change must retain the real mechanism while selecting the smallest trustworthy test boundary. | Risky assumption → real mechanism → behavior boundary → unit/integration/contract choice → blind spot. | Risk statement; PostgreSQL transaction/constraint evidence; selected boundary; rejected alternatives; blind spots. | Mock removes the mechanism, E2E hides localization or wrong test type claims an untested property; return to risk and boundary. | One task separately proves risk/mechanism/boundary/rejections and boundary comparison/blind spots. |
 ## F. Cross-Owner Review
 
 | Candidate neighborhood | Decision | Reason |
@@ -553,7 +560,7 @@ None.
 - Service & Network — REVIEWED
 - Distributed Systems — REVIEWED
 - Production Engineering — REVIEWED
-- Architecture & Engineering Reasoning — PENDING
+- Architecture & Engineering Reasoning — REVIEWED
 
 ## Runtime & Concurrency batch closure
 
@@ -694,3 +701,24 @@ None.
 | lu-delivery-autoscaling-signal-boundary | SPLIT | lu-delivery-resources-cpu-memory; lu-delivery-autoscaling-signal-boundary; lu-delivery-platform-transfer |
 | lu-delivery-cloud-responsibility-managed-services | KEEP | lu-delivery-cloud-responsibility-managed-services |
 | lu-delivery-container-process-lifecycle | SPLIT | lu-delivery-container-process-lifecycle; lu-rel-health-probes; lu-delivery-graceful-shutdown-draining |
+
+## Architecture & Engineering Reasoning batch closure
+
+**REVIEWED.** 12 historical units: **8 KEEP, 3 SPLIT, 1 MERGE**; **20 scoped Primaries** now form **17 final units**: **14 singleton, 3 multi, 0 new multi-owner**. Canonical-v2 proof completeness: **3 / 3**. Singleton completeness: **14 / 14**. Dependency projection remains **NOT FINALIZED**.
+
+## Architecture & Engineering Reasoning Decision Ledger
+
+| Original unit | Primary disposition | Final canonical state |
+|---|---|---|
+| lu-test-ci-flakiness-repeatability | SPLIT | lu-test-ci-flakiness-repeatability; lu-test-risk-strategy-boundaries; lu-test-time-concurrency-determinism; lu-test-real-dependency-fixtures |
+| lu-test-failure-resilience | SPLIT | lu-test-failure-resilience; lu-test-risk-transfer |
+| lu-test-migration-compatibility | KEEP | lu-test-migration-compatibility |
+| lu-test-property-boundary-fuzz | KEEP | lu-test-property-boundary-fuzz |
+| lu-test-review-static-analysis-change-safety | KEEP | lu-test-review-static-analysis-change-safety |
+| lu-test-unit-integration-contract | MERGE | lu-test-risk-strategy-boundaries |
+| lu-arch-boundaries-ownership | SPLIT | lu-arch-boundaries-data-ownership; lu-arch-requirements-quality-attributes; lu-arch-failure-recovery-security-observability |
+| lu-arch-consistency-latency-availability | KEEP | lu-arch-consistency-latency-availability |
+| lu-arch-cost-complexity-changeability | KEEP | lu-arch-cost-complexity-changeability |
+| lu-arch-evolution-migration-strangler | KEEP | lu-arch-evolution-migration-strangler |
+| lu-arch-scale-capacity-partitioning | KEEP | lu-arch-scale-capacity-partitioning |
+| lu-arch-sync-async-integration | KEEP | lu-arch-sync-async-integration |

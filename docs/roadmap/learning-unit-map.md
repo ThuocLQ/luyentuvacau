@@ -60,18 +60,6 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-delivery-cloud-responsibility-managed-services | Verify application-team responsibility around managed services | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
 | lu-delivery-container-process-lifecycle | Reason about the primary process lifecycle inside a container | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
 | lu-delivery-graceful-shutdown-draining | Drain traffic and finish bounded work before termination | Production Engineering | Containers / Kubernetes / Cloud Delivery | 1 |
-| lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test | Architecture & Engineering Reasoning | Testing & Engineering Quality | 4 |
-| lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure | Architecture & Engineering Reasoning | Testing & Engineering Quality | 2 |
-| lu-test-migration-compatibility | Prove old/new app and schema/data/event contract coexist during transitional rollout | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
-| lu-test-property-boundary-fuzz | Falsify invariant over generated/boundary input, not hand-picked happy examples | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
-| lu-test-review-static-analysis-change-safety | Use review/compiler/analyzer/targeted tests as complementary change evidence | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
-| lu-test-unit-integration-contract | Choose unit/integration/contract by behavior boundary and state what each cannot prove | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
-| lu-arch-boundaries-ownership | Choose module/service boundary by invariant, change ownership and operational owner | Architecture & Engineering Reasoning | Architecture & System Design | 4 |
-| lu-arch-consistency-latency-availability | Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
-| lu-arch-cost-complexity-changeability | Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change | Architecture & Engineering Reasoning | Architecture & System Design | 2 |
-| lu-arch-evolution-migration-strangler | Move old to target incrementally while paths coexist safely | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
-| lu-arch-scale-capacity-partitioning | Estimate bottleneck and choose scale/partition boundary from measurable demand | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
-| lu-arch-sync-async-integration | Choose sync/async from coupling, completion semantics, latency and recovery | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
 | lu-index-query-shape | Choose a usable index key path | Data & Consistency | Relational Database Engineering | 2 |
 | lu-execution-plan-estimates | Read execution pipeline and judge estimates | Data & Consistency | Relational Database Engineering | 2 |
 | lu-db-backup-restore | Verify backup and point-in-time restore | Data & Consistency | Relational Database Engineering | 1 |
@@ -143,6 +131,23 @@ File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not
 | lu-msg-schema-evolution-contract-ownership | Evolve event contract with retained history | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-msg-workflow-saga-compensation | Recover multi-step workflow with compensation | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
 | lu-msg-background-jobs-scheduling | Run scheduled durable work across restarts | Distributed Systems | Messaging & Event-Driven Consistency | 1 |
+| lu-test-risk-strategy-boundaries | Choose the smallest trustworthy test boundary for a real mechanism at risk | Architecture & Engineering Reasoning | Testing & Engineering Quality | 2 |
+| lu-test-ci-flakiness-repeatability | Diagnose CI failure as product defect, environment dependency or nondeterministic test | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-time-concurrency-determinism | Reproduce interleaving and deadline behavior with controlled time and gates | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-real-dependency-fixtures | Use a disposable real dependency where engine or protocol semantics are at risk | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-failure-resilience | Verify outcome, durable state, retry/recovery and invariant under controlled failure | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-risk-transfer | Adapt risk, boundary and falsifying fixture after architecture changes | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-migration-compatibility | Prove old/new app and schema/data/event contract coexist during rollout | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-property-boundary-fuzz | Falsify an invariant across generated and boundary input | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-test-review-static-analysis-change-safety | Combine review, compiler, analyzer and targeted tests as change evidence | Architecture & Engineering Reasoning | Testing & Engineering Quality | 1 |
+| lu-arch-requirements-quality-attributes | Turn a vague request into measurable quality scenarios and constraints | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-boundaries-data-ownership | Choose authority boundary and classify derived copies | Architecture & Engineering Reasoning | Architecture & System Design | 2 |
+| lu-arch-failure-recovery-security-observability | Evaluate a design under failure, recovery, trust and evidence constraints | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-consistency-latency-availability | Choose strong guarantee or stale view from invariant and failure assumptions | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-cost-complexity-changeability | Reject lifecycle cost that exceeds the property bought and record why | Architecture & Engineering Reasoning | Architecture & System Design | 2 |
+| lu-arch-evolution-migration-strangler | Move an old path to a target while coexistence remains safe | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-scale-capacity-partitioning | Estimate bottleneck and choose a scale or partition boundary from demand | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
+| lu-arch-sync-async-integration | Choose sync or async from coupling, completion and recovery | Architecture & Engineering Reasoning | Architecture & System Design | 1 |
 ## lu-index-query-shape
 
 ### Identity
@@ -3769,792 +3774,6 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 - `obs-diagnostic-method` remains separate pending its own mechanism/evidence boundary.
 - `rel-user-journey-sli-slo-budget` remains separate pending its own mechanism/evidence boundary.
 
-## lu-test-ci-flakiness-repeatability
-
-### Identity
-
-- **Unit ID:** lu-test-ci-flakiness-repeatability
-- **Working title:** Diagnose CI failure as product defect, environment dependency or nondeterministic test
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-ci-flakiness-repeatability | Testing & Engineering Quality | L3 |
-| test-risk-strategy-boundaries | Testing & Engineering Quality | L2 |
-| test-time-concurrency-determinism | Testing & Engineering Quality | L3 |
-| test-real-dependency-fixtures | Testing & Engineering Quality | L3 |
-
-### Shared problem / need
-
-Diagnose CI failure as product defect, environment dependency or nondeterministic test.
-
-### Shared mechanism / state trace
-
-Trustworthy test gives same verdict for same state; hidden clock/order/network/shared state breaks repeatability. → Test value falsifies risky assumption at narrowest boundary that retains actual mechanism. → Clock, barrier, scheduling point and test-data ownership intentionally reach desired state. → Fixture provides controlled real instance/state, observing constraint/transaction/serialization/broker behavior.
-
-### Shared observable evidence
-
-Repeat history; seed; test order; worker/env; resource owner; timing; failure artifact.; Risk statement; boundary; reproduced failure; invariant assertion; escaped defect history.; Gate events; controlled clock; task completion; captured interleaving; repeated stability.; Version; migration; seed; health; persisted/message result; cleanup/isolation.
-
-### Shared failure / debug story
-
-Order dependency; shared DB/static; port collision; external network; timing race; retry hides flake.; Mock removes mechanism; E2E for pure logic; coverage misses path; implementation-shaped test.; Thread.Sleep; occasional race pass; assertion before work done; wall-clock expiry flake; shared mutable tests.; In-memory differs PostgreSQL; mock broker misses redelivery; shared DB leak; version mismatch; wrong migration.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `test-ci-flakiness-repeatability`, `test-risk-strategy-boundaries`, `test-time-concurrency-determinism`, `test-real-dependency-fixtures` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
-- `test-unit-integration-contract` remains separate pending its own mechanism/evidence boundary.
-
-## lu-test-failure-resilience
-
-### Identity
-
-- **Unit ID:** lu-test-failure-resilience
-- **Working title:** Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-failure-resilience | Testing & Engineering Quality | L3 |
-| test-risk-transfer | Testing & Engineering Quality | L4 |
-
-### Shared problem / need
-
-Verify outcome, durable state, retry/recovery and invariant under controlled dependency/resource failure.
-
-### Shared mechanism / state trace
-
-Inject known boundary failure then assert observable result and post-recovery state. → Strategy derives from risk/mechanism, not copied feature test structure.
-
-### Shared observable evidence
-
-Injected fault; attempts; persisted/audit state; operation ID; result; recovery state.; Risk matrix; boundary; failing/passing fixture; real state; rejected alternative rationale.
-
-### Shared failure / debug story
-
-Timeout only exception checked; retry duplicates; partial DB write; wrong fallback authority; stub always success.; Copy old shape after boundary moved; mock removes new failure; E2E no localization; green proves untested assumption.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `test-failure-resilience`, `test-risk-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `rel-failure-injection-verification` remains separate pending its own mechanism/evidence boundary.
-- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
-
-## lu-test-migration-compatibility
-
-### Identity
-
-- **Unit ID:** lu-test-migration-compatibility
-- **Working title:** Prove old/new app and schema/data/event contract coexist during transitional rollout
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-migration-compatibility | Testing & Engineering Quality | L3 |
-
-### Shared problem / need
-
-Prove old/new app and schema/data/event contract coexist during transitional rollout.
-
-### Shared mechanism / state trace
-
-Test production transitional states, not only final migration state.
-
-### Shared observable evidence
-
-Old/new fixture; schema version; old data/event/request; migration; rollback test.
-
-### Shared failure / debug story
-
-New reads column before migration; old cannot read new state; destructive early change; rollback incompatible; old fixture fails.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| test-risk-strategy-boundaries | Frozen graph neighborhood with test-migration-compatibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| api-versioning-compatibility | Frozen graph neighborhood with test-migration-compatibility | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
-- `api-versioning-compatibility` remains separate pending its own mechanism/evidence boundary.
-
-## lu-test-property-boundary-fuzz
-
-### Identity
-
-- **Unit ID:** lu-test-property-boundary-fuzz
-- **Working title:** Falsify invariant over generated/boundary input, not hand-picked happy examples
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-property-boundary-fuzz | Testing & Engineering Quality | L3 |
-
-### Shared problem / need
-
-Falsify invariant over generated/boundary input, not hand-picked happy examples.
-
-### Shared mechanism / state trace
-
-Property states behavior over many input; boundary targets transitions; fuzz explores omitted combinations.
-
-### Shared observable evidence
-
-Property; seed/input; shrunk example; boundary values; reproducible case.
-
-### Shared failure / debug story
-
-Size boundary; malformed parser combination; rare sequence violates invariant; weak property; seed lost.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| prog-invariants-domain-model | Frozen graph neighborhood with test-property-boundary-fuzz | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| test-risk-strategy-boundaries | Frozen graph neighborhood with test-property-boundary-fuzz | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
-- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
-
-## lu-test-review-static-analysis-change-safety
-
-### Identity
-
-- **Unit ID:** lu-test-review-static-analysis-change-safety
-- **Working title:** Use review/compiler/analyzer/targeted tests as complementary change evidence
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-review-static-analysis-change-safety | Testing & Engineering Quality | L3 |
-
-### Shared problem / need
-
-Use review/compiler/analyzer/targeted tests as complementary change evidence.
-
-### Shared mechanism / state trace
-
-Static finds non-executed classes; review assesses intent/boundary; tests exercise dynamic behavior.
-
-### Shared observable evidence
-
-Diff; review rationale; analyzer; invariant/contract; regression test; before/after.
-
-### Shared failure / debug story
-
-Style-only review; unexplained suppression; AI diff accepted green; test old requirement; risky diff no regression.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| test-risk-strategy-boundaries | Frozen graph neighborhood with test-review-static-analysis-change-safety | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| prog-api-refactoring-change-safety | Frozen graph neighborhood with test-review-static-analysis-change-safety | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
-- `prog-api-refactoring-change-safety` remains separate pending its own mechanism/evidence boundary.
-
-## lu-test-unit-integration-contract
-
-### Identity
-
-- **Unit ID:** lu-test-unit-integration-contract
-- **Working title:** Choose unit/integration/contract by behavior boundary and state what each cannot prove
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| test-unit-integration-contract | Testing & Engineering Quality | L3 |
-
-### Shared problem / need
-
-Choose unit/integration/contract by behavior boundary and state what each cannot prove.
-
-### Shared mechanism / state trace
-
-Unit isolates deterministic logic; integration runs real collaborator; contract verifies external compatibility.
-
-### Shared observable evidence
-
-Real dependency state; contract; DB rows; double boundary; failure lost when wrong layer mocked.
-
-### Shared failure / debug story
-
-Mock repo claimed SQL; HTTP 200 DB wrong; semantic provider change missed; duplicate layers no evidence.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| test-risk-strategy-boundaries | Frozen graph neighborhood with test-unit-integration-contract | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| test-real-dependency-fixtures | Frozen graph neighborhood with test-unit-integration-contract | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `test-risk-strategy-boundaries` remains separate pending its own mechanism/evidence boundary.
-- `test-real-dependency-fixtures` remains separate pending its own mechanism/evidence boundary.
-
-## lu-arch-boundaries-ownership
-
-### Identity
-
-- **Unit ID:** lu-arch-boundaries-ownership
-- **Working title:** Choose module/service boundary by invariant, change ownership and operational owner
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-boundaries-ownership | Architecture & System Design | L3 |
-| arch-requirements-quality-attributes | Architecture & System Design | L3 |
-| arch-data-ownership-source-of-truth | Architecture & System Design | L3 |
-| arch-failure-recovery-security-observability | Architecture & System Design | L4 |
-
-### Shared problem / need
-
-Choose module/service boundary by invariant, change ownership and operational owner.
-
-### Shared mechanism / state trace
-
-Boundary grants one owner authority over state/rules; crossing it needs explicit contract. → Decisions only matter against correctness, latency, availability, throughput, durability, security, operability, changeability and cost needs. → One owner accepts transition; derived systems copy/calculate with different freshness. → Critical transition needs failure behavior, recovery owner, trust path and diagnostic evidence.
-
-### Shared observable evidence
-
-State owner; write paths; invariant; API/event dependencies; coupling; deployment owner.; Requirement list; quality scenario; traffic/data estimates; constraints; assumption register.; Write paths; source version; update flow; derived copy; rebuild/reconcile.; Failure table; recovery owner; data flow; telemetry path; RPO/RTO/SLO; operation ID.
-
-### Shared failure / debug story
-
-Service per table; shared DB mutation; split invariant; chatty arbitrary decomposition; no owner.; Technology-first; scale no number; conflict implicit; optional feature drives core; imagined hyperscale.; Two authorities; cache/search mutated as source; reporting write leaks; unrebuildable projection; migration ambiguity.; No timeout/recovery owner; unmodeled trust path; async uncorrelated; dependency collapse; no recovery plan.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `arch-boundaries-ownership`, `arch-requirements-quality-attributes`, `arch-data-ownership-source-of-truth`, `arch-failure-recovery-security-observability` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
-- `prog-composition-dependencies` remains separate pending its own mechanism/evidence boundary.
-
-## lu-arch-consistency-latency-availability
-
-### Identity
-
-- **Unit ID:** lu-arch-consistency-latency-availability
-- **Working title:** Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-consistency-latency-availability | Architecture & System Design | L4 |
-
-### Shared problem / need
-
-Choose where strong guarantee is required and where stale view is acceptable from invariant/failure assumptions.
-
-### Shared mechanism / state trace
-
-Operations need different visibility/order; stronger coordination affects latency/availability.
-
-### Shared observable evidence
-
-Invariant; history; source/replica role; SLO; failure assumption; reconciliation path.
-
-### Shared failure / debug story
-
-Eventual for atomic invariant; strong for harmless report; CAP slogan; stale window undefined.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| arch-requirements-quality-attributes | Frozen graph neighborhood with arch-consistency-latency-availability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| prog-invariants-domain-model | Frozen graph neighborhood with arch-consistency-latency-availability | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
-- `prog-invariants-domain-model` remains separate pending its own mechanism/evidence boundary.
-
-## lu-arch-cost-complexity-changeability
-
-### Identity
-
-- **Unit ID:** lu-arch-cost-complexity-changeability
-- **Working title:** Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-cost-complexity-changeability | Architecture & System Design | L4 |
-| arch-decision-communication-transfer | Architecture & System Design | L4 |
-
-### Shared problem / need
-
-Reject design whose lifecycle cost exceeds properties bought and revisit when constraints change.
-
-### Shared mechanism / state trace
-
-Component/boundary creates deploy, failure, data movement, skills, cloud and migration cost. → Explicit assumptions let future engineer know why/when decision changes.
-
-### Shared observable evidence
-
-Component count; ownership/incident burden; cost; latency/capacity; change frequency.; ADR; capacity evidence; option comparison; risk; revisit condition; outcome.
-
-### Shared failure / debug story
-
-Microservices no change need; résumé Kafka/Redis/K8s; irrelevant optimization; lock-in ignored.; Diagram no rationale; universal best practice; rejected choices hidden; stale decision persists.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `arch-cost-complexity-changeability`, `arch-decision-communication-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
-- `arch-boundaries-ownership` remains separate pending its own mechanism/evidence boundary.
-
-## lu-arch-evolution-migration-strangler
-
-### Identity
-
-- **Unit ID:** lu-arch-evolution-migration-strangler
-- **Working title:** Move old to target incrementally while paths coexist safely
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-evolution-migration-strangler | Architecture & System Design | L3 |
-
-### Shared problem / need
-
-Move old to target incrementally while paths coexist safely.
-
-### Shared mechanism / state trace
-
-Add seam, route subset, keep compatibility/ownership, observe then remove old.
-
-### Shared observable evidence
-
-Traffic split; old/new comparison; compatibility; progress; reconcile; rollback.
-
-### Shared failure / debug story
-
-Big bang; dual write no reconcile; divergence; rollback impossible; seam permanent.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| arch-boundaries-ownership | Frozen graph neighborhood with arch-evolution-migration-strangler | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| prog-api-refactoring-change-safety | Frozen graph neighborhood with arch-evolution-migration-strangler | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `arch-boundaries-ownership` remains separate pending its own mechanism/evidence boundary.
-- `prog-api-refactoring-change-safety` remains separate pending its own mechanism/evidence boundary.
-
-## lu-arch-scale-capacity-partitioning
-
-### Identity
-
-- **Unit ID:** lu-arch-scale-capacity-partitioning
-- **Working title:** Estimate bottleneck and choose scale/partition boundary from measurable demand
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-scale-capacity-partitioning | Architecture & System Design | L3 |
-
-### Shared problem / need
-
-Estimate bottleneck and choose scale/partition boundary from measurable demand.
-
-### Shared mechanism / state trace
-
-Scale-out helps only distributable work and cannot remove shared bottleneck.
-
-### Shared observable evidence
-
-Rate; concurrency; CPU/memory; downstream capacity; key distribution; queue/latency.
-
-### Shared failure / debug story
-
-Add replicas while DB saturated; shard without pattern; skew; late autoscale; ignore burst/concurrency.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| arch-requirements-quality-attributes | Frozen graph neighborhood with arch-scale-capacity-partitioning | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| obs-latency-throughput-saturation | Frozen graph neighborhood with arch-scale-capacity-partitioning | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
-- `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
-
-## lu-arch-sync-async-integration
-
-### Identity
-
-- **Unit ID:** lu-arch-sync-async-integration
-- **Working title:** Choose sync/async from coupling, completion semantics, latency and recovery
-- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| arch-sync-async-integration | Architecture & System Design | L3 |
-
-### Shared problem / need
-
-Choose sync/async from coupling, completion semantics, latency and recovery.
-
-### Shared mechanism / state trace
-
-Sync couples caller lifetime to response; async decouples time but needs durable state/retry/completion model.
-
-### Shared observable evidence
-
-Required response; critical path; availability; operation state; queue/lag; recovery.
-
-### Shared failure / debug story
-
-Async for scale only; long workflow blocks chain; immediate answer via event; sync cascade; async no status.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| arch-requirements-quality-attributes | Frozen graph neighborhood with arch-sync-async-integration | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| net-http-semantics | Frozen graph neighborhood with arch-sync-async-integration | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `arch-requirements-quality-attributes` remains separate pending its own mechanism/evidence boundary.
-- `net-http-semantics` remains separate pending its own mechanism/evidence boundary.
-
-
-
-- **Unit ID:** lu-delivery-artifact-image-config
-- **Working title:** Produce reproducible versioned artifact and separate immutable build from runtime config/secret
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-artifact-image-config | Containers / Kubernetes / Cloud Delivery | L2 |
-| delivery-cicd-promotion-provenance | Containers / Kubernetes / Cloud Delivery | L3 |
-| delivery-rollout-rollback-strategies | Containers / Kubernetes / Cloud Delivery | L3 |
-| delivery-platform-evidence-debug | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Shared problem / need
-
-Produce reproducible versioned artifact and separate immutable build from runtime config/secret.
-
-### Shared mechanism / state trace
-
-Build creates versioned image; runtime injects config; same digest promotes environments. → CI builds once; registry stores immutable artifact; CD promotes exact reference. → Platform moves traffic/version sets over time; strategy controls coexistence/exposure. → Platform state/events cover scheduling, startup, probes, resources/restarts; app logs alone omit not-running cause.
-
-### Shared observable evidence
-
-Digest/tag; Git SHA; config source; SBOM/provenance; deployed identity.; SHA; pipeline run; digest; registry metadata; deployment record; approval.; Replica/version; deployment status; traffic; readiness; digest; rollback history.; Workload status; events; exit; metrics; logs; config refs; endpoints; revision.
-
-### Shared failure / debug story
-
-Rebuild production differently; latest tag lost provenance; secret baked image; config drift; unknown rollback artifact.; Separate prod rebuild; tag moves digest; no source tie; manual bypass; rollback artifact absent.; Old/new incompatible; availability gap; irreversible schema/event; unrepresentative canary; readiness stall.; CrashLoop no exit reason; pending pod app-log only; OOMKill normal crash; mount ignored; selector mismatch.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `delivery-artifact-image-config`, `delivery-cicd-promotion-provenance`, `delivery-rollout-rollback-strategies`, `delivery-platform-evidence-debug` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `delivery-platform-transfer` remains separate pending its own mechanism/evidence boundary.
-- `rel-change-rollout-rollback-risk` remains separate pending its own mechanism/evidence boundary.
-
-
-
-- **Unit ID:** lu-delivery-autoscaling-signal-boundary
-- **Working title:** Choose platform scaling signal matching resource/work pressure and know when replicas cannot help
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-autoscaling-signal-boundary | Containers / Kubernetes / Cloud Delivery | L3 |
-| delivery-resources-cpu-memory | Containers / Kubernetes / Cloud Delivery | L3 |
-| delivery-platform-transfer | Containers / Kubernetes / Cloud Delivery | L4 |
-
-### Shared problem / need
-
-Choose platform scaling signal matching resource/work pressure and know when replicas cannot help.
-
-### Shared mechanism / state trace
-
-Autoscaler observes signal then changes replicas after delay; scale helps parallel app work but can increase downstream pressure. → Scheduler uses requests; CPU may throttle and memory policy may kill/evict workload. → Artifact/config/resource/health/shutdown/network/telemetry are portable requirements; platform implementations differ.
-
-### Shared observable evidence
-
-Signal; replicas; CPU/queue/concurrency; downstream; events; p95/p99.; Requests/limits; throttle; RSS; OOM; restart; node/pod metrics.; Requirement matrix; platform config; lifecycle behavior; deployment/failure result.
-
-### Shared failure / debug story
-
-CPU for I/O bottleneck; consumers beyond DB; burst faster scale; hot partition; cold scale violates latency.; Throttle called lock; OOM only GC; no request; excessive reservation; limit ignores working/native/page cache.; YAML treated architecture; health shifts; filesystem assumption; CPU/memory change; debug evidence hidden.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `delivery-autoscaling-signal-boundary`, `delivery-resources-cpu-memory`, `delivery-platform-transfer` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `obs-latency-throughput-saturation` remains separate pending its own mechanism/evidence boundary.
-- `rel-overload-load-shedding-degradation` remains separate pending its own mechanism/evidence boundary.
-
-
-
-- **Unit ID:** lu-delivery-cloud-responsibility-managed-services
-- **Working title:** State application-team responsibilities when platform component is managed
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-cloud-responsibility-managed-services | Containers / Kubernetes / Cloud Delivery | L2 |
-
-### Shared problem / need
-
-State application-team responsibilities when platform component is managed.
-
-### Shared mechanism / state trace
-
-Provider manages agreed hardware/control plane, but app owns usage, model, access, capacity, failure behavior/cost and often recovery verification.
-
-### Shared observable evidence
-
-Service contract; config; IAM; recovery; quota; telemetry; cost.
-
-### Shared failure / debug story
-
-Managed DB assumed infallible; restore unclear; provider SLA equals app SLO; IAM/network ignored; queue semantics assumed same.
-
-### Assessment-coherence argument
-
-The nearest candidates below were tested; one case/evidence policy would not credibly prove both mechanisms.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-| Candidate capability/unit | Why merge looked plausible | Grouping criterion that fails |
-|---|---|---|
-| sec-secrets-third-party-trust | Frozen graph neighborhood with delivery-cloud-responsibility-managed-services | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-| rel-disaster-recovery-rpo-rto | Frozen graph neighborhood with delivery-cloud-responsibility-managed-services | Different canonical mechanism/evidence boundary; one assessment would not credibly prove both. |
-
-### Explicit exclusions
-
-- `sec-secrets-third-party-trust` remains separate pending its own mechanism/evidence boundary.
-- `rel-disaster-recovery-rpo-rto` remains separate pending its own mechanism/evidence boundary.
-
-
-
-- **Unit ID:** lu-delivery-container-process-lifecycle
-- **Working title:** Explain container as primary-process packaging/runtime boundary, not VM
-- **Learner-facing domain candidate:** Production Engineering
-
-### Primary capabilities
-
-| Capability ID | Canonical owner | Frozen target level |
-|---|---|---|
-| delivery-container-process-lifecycle | Containers / Kubernetes / Cloud Delivery | L2 |
-| delivery-probes-health | Containers / Kubernetes / Cloud Delivery | L3 |
-| delivery-graceful-shutdown-draining | Containers / Kubernetes / Cloud Delivery | L3 |
-
-### Shared problem / need
-
-Explain container as primary-process packaging/runtime boundary, not VM.
-
-### Shared mechanism / state trace
-
-Runtime starts process with filesystem/network/resource boundaries; container lifetime follows primary process. → Platform calls probe and converts result to routing/restart by configured type. → Termination → readiness removal → signal → grace window → drain/cancel/ack/release → exit.
-
-### Shared observable evidence
-
-Process tree; state/restart; mounts; exit code; runtime events.; Probe config/result; K8s events; ready condition; restarts; routing.; Termination/readiness time; endpoints; active work; signal; grace; exit.
-
-### Shared failure / debug story
-
-Child lifecycle wrong; PID assumption; durable data ephemeral FS; restart equals recovery.; Readiness wired liveness; outage restart loop; early warmup; expensive probe; terminating still routed.; Still routed after SIGTERM; ack after lost work; grace short; LB delay ignored; no durable handoff.
-
-### Assessment-coherence argument
-
-One mechanism trace and one evidence policy can show the contribution of every Primary capability; split pressure was checked against the direct graph neighborhood.
-
-### Transfer variation
-
-Change workload, failure mode, deployment boundary or data distribution while keeping the same claimed mechanism.
-
-### Merge decisions
-
-Merged because `delivery-container-process-lifecycle`, `delivery-probes-health`, `delivery-graceful-shutdown-draining` share a direct mechanism neighborhood, compatible evidence and one bounded assessment story.
-
-### Explicit exclusions
-
-- `os-process-thread-kernel` remains separate pending its own mechanism/evidence boundary.
-- `delivery-resources-cpu-memory` remains separate pending its own mechanism/evidence boundary.
-
 ## Stage 1A — Runtime & Concurrency closure record
 
 This batch is **REVIEWED**. Canonical unit sections and audit registries hold the final evidence and membership; this record is not a second registry.
@@ -6694,3 +5913,737 @@ Drain orchestration has traffic and durable-work state beyond basic container li
 ## Stage 1E closure
 
 Production Engineering is REVIEWED. The 15 approved historical decisions are materialized in the canonical registries and exactly 26 canonical unit bodies. The batch has 30 scoped Primaries, 22 singleton units, 4 multi-capability units and 2 multi-owner units. Dependency projection remains NOT FINALIZED. Architecture & Engineering Reasoning remains PENDING.
+## lu-test-risk-strategy-boundaries
+
+### Identity
+
+- **Unit ID:** lu-test-risk-strategy-boundaries
+- **Working title:** Choose the smallest trustworthy test boundary for a real mechanism at risk
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-risk-strategy-boundaries | Testing & Engineering Quality | L2 |
+| test-unit-integration-contract | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+A database-backed business-rule change must preserve a transaction or constraint invariant while callers and providers evolve.
+
+### Integrated mechanism / state trace
+
+Risky assumption → identify the real database mechanism → locate the behavior boundary → choose unit, integration or contract evidence → state the blind spot.
+
+### Integrated evidence surface
+
+Risk statement, PostgreSQL transaction/constraint behavior, selected boundary, rejected alternatives, real rows or provider contract and explicit blind spots.
+
+### Failure and debug loop
+
+A mock removes SQL semantics, an E2E test hides localization, or a contract test misses local transaction state. Return to the risky mechanism and retest at the smallest boundary that contains it.
+
+### Shared assessment task
+
+State the invariant, identify PostgreSQL semantics, reject mocked/unit-only evidence, choose integration, compare unit/integration/contract scope and state what the chosen boundary cannot prove.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| test-risk-strategy-boundaries | Risk statement, real mechanism, selected boundary and rejected alternatives. |
+| test-unit-integration-contract | Unit/integration/contract comparison and explicit blind spots. |
+
+### Transfer variation
+
+Pure deterministic rule → PostgreSQL transaction/constraint → independently deployed provider contract.
+
+### Boundary decision
+
+Risk selection precedes boundary comparison inside one assessment; fixture lifecycle and migration compatibility remain separate units.
+
+## lu-test-ci-flakiness-repeatability
+
+### Identity
+
+- **Unit ID:** lu-test-ci-flakiness-repeatability
+- **Working title:** Diagnose CI failure as product defect, environment dependency or nondeterministic test
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-ci-flakiness-repeatability | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+The same commit passes on one worker and fails on another after parallel test execution.
+
+### Integrated mechanism / state trace
+
+Repeat the verdict while controlling order, worker, environment, shared database/static state, ports and network; classify product defect versus test or environment instability.
+
+### Integrated evidence surface
+
+Repeat history, seed, test order, worker/environment, resource owner, timing and failure artefact.
+
+### Failure and debug loop
+
+Retry hides an unstable verdict, quarantine reduces protection, or shared state creates order dependence. Reproduce with the same seed and isolate the first changed state.
+
+### Shared assessment task
+
+Given a flaky CI failure, classify the cause, reproduce it with captured seed/order/worker evidence, and name the smallest safe containment without calling retry health.
+
+### Transfer variation
+
+Local stable run → constrained parallel workers → changed environment or dependency.
+
+### Boundary decision
+
+The unit diagnoses verdict repeatability; deterministic gates and real fixtures remain separate controls.
+
+## lu-test-time-concurrency-determinism
+
+### Identity
+
+- **Unit ID:** lu-test-time-concurrency-determinism
+- **Working title:** Reproduce interleaving and deadline behavior with controlled time and gates
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-time-concurrency-determinism | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+A timeout race passes locally but fails when a worker is slow.
+
+### Integrated mechanism / state trace
+
+Replace wall-clock luck with a controlled clock, barrier, scheduling point, task ownership and deterministic completion.
+
+### Integrated evidence surface
+
+Gate events, controlled clock, task completion, captured interleaving and repeated stable verdict.
+
+### Failure and debug loop
+
+Thread.Sleep makes a race probabilistic, an assertion runs before work completes, or shared mutable data leaks across tests. Inspect the trace and move control to the causal scheduling point.
+
+### Shared assessment task
+
+Construct a gate-controlled timeout/interleaving test, capture event order, and demonstrate repeatable failure followed by repeatable repair.
+
+### Transfer variation
+
+TTL expiry → concurrent update → cancellation/shutdown boundary.
+
+### Boundary decision
+
+Test-control mechanism is distinct from CI-wide flake diagnosis and production race semantics.
+
+## lu-test-real-dependency-fixtures
+
+### Identity
+
+- **Unit ID:** lu-test-real-dependency-fixtures
+- **Working title:** Use a disposable real dependency where engine or protocol semantics are at risk
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-real-dependency-fixtures | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+A repository mock reports success, but PostgreSQL constraint or broker redelivery behavior is the actual risk.
+
+### Integrated mechanism / state trace
+
+Provision a versioned disposable dependency, apply migration and seed, verify health, run the behavior, capture persisted/message result, then clean up isolated state.
+
+### Integrated evidence surface
+
+Dependency version, migration, seed, health, persisted row/message, isolation and cleanup result.
+
+### Failure and debug loop
+
+In-memory behavior drifts from PostgreSQL, a mock broker misses redelivery, or shared state leaks. Compare the real state and fixture lifecycle before changing the assertion.
+
+### Shared assessment task
+
+Build a disposable PostgreSQL or broker fixture for one risky behavior and record setup, health, result and cleanup evidence.
+
+### Transfer variation
+
+Mock repository → PostgreSQL → database plus broker fixture.
+
+### Boundary decision
+
+Fixture fidelity and lifecycle are separate from choosing the test family or testing an old/new migration matrix.
+
+## lu-test-failure-resilience
+
+### Identity
+
+- **Unit ID:** lu-test-failure-resilience
+- **Working title:** Verify outcome, durable state, retry/recovery and invariant under controlled failure
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-failure-resilience | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+A dependency times out during a business mutation and the test must prove the final state is safe.
+
+### Integrated mechanism / state trace
+
+Inject a known boundary failure → capture attempts and operation ID → inspect durable/audit state → recover → assert invariant and duplicate behavior.
+
+### Integrated evidence surface
+
+Injected fault, attempts, operation ID, persisted/audit state, response and recovery state.
+
+### Failure and debug loop
+
+Checking only an exception misses duplicate effects or partial writes. Trace state before and after recovery and verify the authority.
+
+### Shared assessment task
+
+Inject one dependency timeout or deadlock and prove response, durable state, retry policy and invariant after recovery.
+
+### Transfer variation
+
+HTTP timeout → broker redelivery → database deadlock retry.
+
+### Boundary decision
+
+Known-mechanism recovery evidence is distinct from SRE experiment policy and L4 risk transfer.
+
+## lu-test-risk-transfer
+
+### Identity
+
+- **Unit ID:** lu-test-risk-transfer
+- **Working title:** Adapt risk, boundary and falsifying fixture after architecture changes
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-risk-transfer | Testing & Engineering Quality | L4 |
+
+### Canonical scenario
+
+A monolith write becomes an event-fed projection and the old test shape misses eventual-consistency failure.
+
+### Integrated mechanism / state trace
+
+Changed architecture → derive invariant and risk → locate new boundary → design falsifying fixture → reject copied test shape → interpret evidence.
+
+### Integrated evidence surface
+
+Risk matrix, selected boundary, failing/passing fixture, real state and rejected alternative rationale.
+
+### Failure and debug loop
+
+Copying an old unit test leaves a projection race untested, a mock removes the new broker mechanism, or green E2E hides localization. Compare the new state path.
+
+### Shared assessment task
+
+Produce a new risk statement, boundary, fixture, expected failure and blind spot rather than copying the old test.
+
+### Transfer variation
+
+Monolith write → event/projection eventual consistency.
+
+### Boundary decision
+
+This L4 transfer adapts to a changed mechanism and should not gate known L3 recovery evidence.
+
+## lu-test-migration-compatibility
+
+### Identity
+
+- **Unit ID:** lu-test-migration-compatibility
+- **Working title:** Prove old/new app and schema/data/event contract coexist during rollout
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-migration-compatibility | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+An old application instance and a new schema version run together during a rolling deployment.
+
+### Integrated mechanism / state trace
+
+Old/new request, data and event representations coexist → compatibility matrix → migration → rollback attempt → verify each reader/writer.
+
+### Integrated evidence surface
+
+Old/new fixture, schema version, old data/event/request, migration result and rollback result.
+
+### Failure and debug loop
+
+A new reader runs before migration, an old writer cannot read new state, a destructive change blocks rollback or an old fixture fails. Reproduce the exact transition state.
+
+### Shared assessment task
+
+Run a compatibility matrix across old/new app and schema/event versions and prove migration plus rollback behavior.
+
+### Transfer variation
+
+Database migration → database plus API/event rolling migration.
+
+### Boundary decision
+
+Transitional compatibility is distinct from API policy, schema mechanism and disposable fixture lifecycle.
+
+## lu-test-property-boundary-fuzz
+
+### Identity
+
+- **Unit ID:** lu-test-property-boundary-fuzz
+- **Working title:** Falsify an invariant across generated and boundary input
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-property-boundary-fuzz | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+A parser or business rule must hold across malformed combinations and numeric boundaries not covered by examples.
+
+### Integrated mechanism / state trace
+
+State property → generate broad inputs → target boundary transitions → shrink failure → preserve seed and replay.
+
+### Integrated evidence surface
+
+Property, seed/input, boundary values, shrunk example and reproducible counterexample.
+
+### Failure and debug loop
+
+Weak property passes everything, seed is lost, or a rare sequence cannot be replayed. Shrink to the smallest violating transition and keep the seed.
+
+### Shared assessment task
+
+Define one invariant, generate boundary cases, capture a failing seed, shrink it and show the repaired case remains covered.
+
+### Transfer variation
+
+Numeric boundary → nested API/message payload.
+
+### Boundary decision
+
+Broad-input falsification needs its own generator/shrink/debug loop, not just invariant definition or risk selection.
+
+## lu-test-review-static-analysis-change-safety
+
+### Identity
+
+- **Unit ID:** lu-test-review-static-analysis-change-safety
+- **Working title:** Combine review, compiler, analyzer and targeted tests as change evidence
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| test-review-static-analysis-change-safety | Testing & Engineering Quality | L3 |
+
+### Canonical scenario
+
+A broad refactor changes a public contract and must be checked before runtime.
+
+### Integrated mechanism / state trace
+
+Diff intent → review boundary → compiler/analyzer findings → targeted dynamic regression → before/after comparison.
+
+### Integrated evidence surface
+
+Diff, review rationale, analyzer output, invariant/contract, regression result and before/after evidence.
+
+### Failure and debug loop
+
+Style-only review, unexplained suppression, AI diff accepted green or tests asserting the old requirement; trace the changed contract and add targeted evidence.
+
+### Shared assessment task
+
+Review one cross-boundary change, explain the risk, inspect static evidence and run the smallest regression that proves changed behavior.
+
+### Transfer variation
+
+Hand patch → broad automated refactor across boundaries.
+
+### Boundary decision
+
+Complementary static/dynamic evidence is distinct from risk selection and API migration semantics.
+## lu-arch-requirements-quality-attributes
+
+### Identity
+
+- **Unit ID:** lu-arch-requirements-quality-attributes
+- **Working title:** Turn a vague request into measurable quality scenarios and constraints
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-requirements-quality-attributes | Architecture & System Design | L3 |
+
+### Canonical scenario
+
+A request for a new service says fast and highly available but gives no traffic, data or failure assumptions.
+
+### Integrated mechanism / state trace
+
+Vague request → functional need → quality-attribute scenario → traffic/data estimate → constraint and assumption register.
+
+### Integrated evidence surface
+
+Requirement list, quality scenario, traffic/data estimate, scale/constraint and assumption register.
+
+### Failure and debug loop
+
+Technology-first design, imagined hyperscale or hidden conflicting qualities appears when assumptions are made explicit; return to the request and quantify the disputed constraint.
+
+### Shared assessment task
+
+Rewrite the request as measurable scenarios with estimates, constraints, conflicts and assumptions before selecting a design.
+
+### Transfer variation
+
+Internal 100 users → burst, SLO and compliance external workload.
+
+### Boundary decision
+
+Foundation framing is reusable input; it is not repeated as a hidden gate in every mechanism unit.
+
+## lu-arch-boundaries-data-ownership
+
+### Identity
+
+- **Unit ID:** lu-arch-boundaries-data-ownership
+- **Working title:** Choose authority boundary and classify derived copies
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-boundaries-ownership | Architecture & System Design | L3 |
+| arch-data-ownership-source-of-truth | Architecture & System Design | L3 |
+
+### Canonical scenario
+
+Order state is authoritative in one service/database while Redis, search and analytics contain derived copies.
+
+### Integrated mechanism / state trace
+
+Invariant/state → owner and authorized write path → explicit boundary contract → derived-copy update/read → freshness, rebuild and reconciliation.
+
+### Integrated evidence surface
+
+Invariant, state owner, write paths, contract crossings, deployment owner, source version, copy role, freshness, rebuild source and reconciliation.
+
+### Failure and debug loop
+
+Shared database mutation or a projection accepting business writes creates two authorities; trace the invariant and write owner before debugging stale or unrebuildable copies.
+
+### Shared assessment task
+
+Identify the invariant owner, legal transitions and contracts, classify every copy and provide freshness, rebuild and reconciliation evidence.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| arch-boundaries-ownership | Invariant, authorized transition path, owner, contract crossings and deployment responsibility. |
+| arch-data-ownership-source-of-truth | Authoritative write path, derived-copy role, freshness, rebuild source and reconciliation. |
+
+### Transfer variation
+
+Replace Redis/search with an event-fed projection or read replica and reassess authority, lag and rebuild.
+
+### Boundary decision
+
+Boundary ownership is the internal first step; source-of-truth reasoning is assessed next in the same Order trace.
+
+## lu-arch-failure-recovery-security-observability
+
+### Identity
+
+- **Unit ID:** lu-arch-failure-recovery-security-observability
+- **Working title:** Evaluate a design under failure, recovery, trust and evidence constraints
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-failure-recovery-security-observability | Architecture & System Design | L4 |
+
+### Canonical scenario
+
+An already-designed payment boundary must remain diagnosable and recoverable when a dependency fails or an untrusted caller reaches it.
+
+### Integrated mechanism / state trace
+
+Normal boundary → independent failure → recovery owner/state → trust boundary → telemetry/correlation path → user-impact decision.
+
+### Integrated evidence surface
+
+Failure table, recovery owner, data flow, trust path, telemetry path, operation ID and RPO/RTO/SLO evidence.
+
+### Failure and debug loop
+
+No timeout or recovery owner, uncorrelated async work, dependency collapse or unmodelled trust path; trace the transition and assign owner/evidence.
+
+### Shared assessment task
+
+Review one boundary under failure, recovery, trust and observability constraints and state the repair owner and evidence path.
+
+### Transfer variation
+
+Normal dependency → outage, security or recovery case.
+
+### Boundary decision
+
+L4 synthesis is separate so it does not over-gate L3 authority or integration choices.
+
+## lu-arch-consistency-latency-availability
+
+### Identity
+
+- **Unit ID:** lu-arch-consistency-latency-availability
+- **Working title:** Choose strong guarantee or stale view from invariant and failure assumptions
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-consistency-latency-availability | Architecture & System Design | L4 |
+
+### Canonical scenario
+
+A catalog view may be stale, but inventory reservation must not violate its business invariant.
+
+### Integrated mechanism / state trace
+
+Invariant plus failure assumption → required visibility/order → allowed stale window → coordination cost → latency/availability impact → reconciliation.
+
+### Integrated evidence surface
+
+Invariant, read/write history, source/replica role, stale window, SLO, failure assumption and reconciliation path.
+
+### Failure and debug loop
+
+Eventual consistency is used for an atomic invariant, strong coordination is wasted on a report, or stale window is undefined; replay the history and quantify the trade-off.
+
+### Shared assessment task
+
+Choose guarantees for catalog and reservation, state stale windows, coordination cost, failure impact and reconciliation.
+
+### Transfer variation
+
+Catalog projection → balance or inventory reservation.
+
+### Boundary decision
+
+Architecture chooses where guarantees are required; Distributed Systems owns underlying consistency mechanics.
+
+## lu-arch-cost-complexity-changeability
+
+### Identity
+
+- **Unit ID:** lu-arch-cost-complexity-changeability
+- **Working title:** Reject lifecycle cost that exceeds the property bought and record why
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-cost-complexity-changeability | Architecture & System Design | L4 |
+| arch-decision-communication-transfer | Architecture & System Design | L4 |
+
+### Canonical scenario
+
+A modular monolith is proposed for microservice extraction to gain independent payment deployment.
+
+### Integrated mechanism / state trace
+
+Required property → alternatives → deployment/ownership/incident/data/latency/skills/cloud cost → decision → ADR and revisit trigger.
+
+### Integrated evidence surface
+
+Property and estimates, option comparison, component/owner burden, cost/latency evidence, ADR context, constraints, consequences, evidence and measurable revisit trigger.
+
+### Failure and debug loop
+
+Résumé-driven Kafka/Kubernetes, hidden incident burden or stale ADR; replay assumptions and compare the measured trigger before changing architecture.
+
+### Shared assessment task
+
+Identify the property, compare modular extraction/internal module/microservice, estimate lifecycle costs, choose or reject, and record ADR plus measurable revisit trigger.
+
+| Primary capability | What evidence in this same task proves it |
+|---|---|
+| arch-cost-complexity-changeability | Lifecycle-cost comparison against the required property. |
+| arch-decision-communication-transfer | ADR context, assumptions, alternatives, consequences, evidence and revisit trigger. |
+
+### Transfer variation
+
+Change team ownership, deployment independence or latency budget and revise the decision.
+
+### Boundary decision
+
+Both Primaries retain their historical multi-unit; the graph relation between them is RECOMMENDED, not an invented REQUIRED edge.
+
+## lu-arch-evolution-migration-strangler
+
+### Identity
+
+- **Unit ID:** lu-arch-evolution-migration-strangler
+- **Working title:** Move an old path to a target while coexistence remains safe
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-evolution-migration-strangler | Architecture & System Design | L3 |
+
+### Canonical scenario
+
+A legacy order module must move to a service without a big-bang cutover.
+
+### Integrated mechanism / state trace
+
+Old owner/path → migration seam → partial routing/coexistence → comparison/reconciliation → rollback → retire old path.
+
+### Integrated evidence surface
+
+Traffic split, old/new result comparison, compatibility, migration progress, reconciliation and rollback evidence.
+
+### Failure and debug loop
+
+Dual-write divergence, leaked traffic, incompatible readers, impossible rollback or permanent seam; compare paths and stop at the last safe cohort.
+
+### Shared assessment task
+
+Design a staged strangler migration with seam, cohort, compatibility, comparison, rollback and retirement criteria.
+
+### Transfer variation
+
+Legacy module → independently deployed service or old datastore → new live path.
+
+### Boundary decision
+
+Migration-state evidence differs from steady-state ownership, source-of-truth mapping and ADR economics.
+
+## lu-arch-scale-capacity-partitioning
+
+### Identity
+
+- **Unit ID:** lu-arch-scale-capacity-partitioning
+- **Working title:** Estimate bottleneck and choose a scale or partition boundary from demand
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-scale-capacity-partitioning | Architecture & System Design | L3 |
+
+### Canonical scenario
+
+Traffic grows until latency rises while the database remains the shared bottleneck.
+
+### Integrated mechanism / state trace
+
+Measured demand → identify actual bottleneck → estimate capacity → choose replica/partition boundary → detect shared bottleneck that blocks scale-out.
+
+### Integrated evidence surface
+
+Rate, concurrency, CPU/memory, downstream capacity, key distribution, queue and latency.
+
+### Failure and debug loop
+
+Adding replicas while the database is saturated, sharding without access pattern, skew or late autoscale; correlate saturation with the proposed boundary.
+
+### Shared assessment task
+
+Use workload numbers to find the bottleneck, compare replication and partitioning, and state capacity evidence and the shared limit.
+
+### Transfer variation
+
+Service/DB → replicas → sharded ownership after the bottleneck is measured.
+
+### Boundary decision
+
+Architecture chooses structural scale; Observability and Distributed Systems retain measurement and partition ownership mechanisms.
+
+## lu-arch-sync-async-integration
+
+### Identity
+
+- **Unit ID:** lu-arch-sync-async-integration
+- **Working title:** Choose sync or async from coupling, completion and recovery
+- **Learner-facing domain candidate:** Architecture & Engineering Reasoning
+
+### Primary capabilities
+
+| Capability ID | Canonical owner | Frozen target level |
+|---|---|---|
+| arch-sync-async-integration | Architecture & System Design | L3 |
+
+### Canonical scenario
+
+An order API must decide whether payment completion is part of the response or a tracked operation.
+
+### Integrated mechanism / state trace
+
+Required completion semantics → caller coupling/lifetime → latency → operation state → recovery model → sync or async choice.
+
+### Integrated evidence surface
+
+Required response, critical path, availability, timeout, operation state, queue/lag, retry and recovery evidence.
+
+### Failure and debug loop
+
+Async is selected only for a speed slogan, a long workflow blocks callers, immediate answer is promised via an event, or async has no status; trace the caller and durable operation state.
+
+### Shared assessment task
+
+Compare sync payment authorization with async fulfillment, state completion semantics, operation state, failure/recovery and the chosen boundary.
+
+### Transfer variation
+
+Inventory lookup → order/payment fulfillment.
+
+### Boundary decision
+
+HTTP and broker mechanics remain external/local prerequisite slices; Architecture decides the integration style.
+
+## Stage 1F closure
+
+**REVIEWED.** Architecture & Engineering Reasoning is REVIEWED. Stage-1 Learning-Unit semantic decomposition is now complete. Dependency and progression projection remain NOT FINALIZED and are not started by this mutation.
