@@ -104,17 +104,17 @@ This table records analysis only; it creates no lock.
 
 ## 6. Target-unit over-gating review
 
-| Target unit | LOCAL | EXTERNAL | RECOMMENDED surfaced | Whole-unit gating fair? | Evidence note |
+| Target unit | LOCAL | EXTERNAL | RECOMMENDED surfaced | Whole-unit PASSED prerequisite? | Evidence note |
 |---|---:|---:|---:|---|---|
-| lu-concurrency-async-parallelism | 2 | 0 | 1 | No | Avoid deeper OS diagnosis as a gate for async foundation. |
-| lu-net-failure-localization-unknown-outcome | 0 | 4 | 0 | No | Four capability inputs are needed; whole source units add unrelated gates. |
-| lu-net-proxy-tls-forwarded-boundary | 1 | 0 | 2 | No | HTTP is local; TLS-stage evidence remains a separate capability candidate; same-unit recommendation is context only. |
-| lu-net-service-discovery-load-balancing | 2 | 0 | 2 | No | DNS/TCP slices are local; health and HTTP context stay non-blocking; Delivery context is intentionally omitted. |
-| lu-prog-api-refactoring-change-safety | 2 | 0 | 1 | Yes | Contract and invariant slices are bounded. |
-| lu-runtime-allocation-gc | 1 | 0 | 2 | Yes | Managed boundary is local; virtual-memory and diagnostic context are optional. |
-| lu-runtime-diagnostics | 0 | 1 | 0 | No | L4 diagnosis needs allocation/pooling/retention evidence, not unrelated whole-unit gates. |
-| lu-os-resource-exhaustion | 2 | 0 | 0 | Yes | Finite-resource slices are local. |
-| lu-net-http-streaming-cancellation | 1 | 0 | 1 | Yes | HTTP body semantics are internal; cancellation context is non-blocking. |
+| lu-concurrency-async-parallelism | 2 | 0 | 1 | NO | Both REQUIRED slices are local; source-unit PASSED would over-gate async learning. |
+| lu-net-failure-localization-unknown-outcome | 0 | 4 | 0 | NO | Four capability-level evidence slices are needed; only DNS has a clean singleton proxy, so do not require four whole source units. |
+| lu-net-proxy-tls-forwarded-boundary | 1 | 0 | 2 | NO | HTTP request/header semantics are a Local Prerequisite Slice. TCP->TLS and same-unit TLS->proxy are RECOMMENDED context only; there is no External Required Prerequisite Candidate for this target. |
+| lu-net-service-discovery-load-balancing | 2 | 0 | 2 | NO | DNS/TCP slices are local; Reliability/HTTP context is non-blocking; Delivery context is omitted. One RECOMMENDED relation is intentionally not surfaced. |
+| lu-prog-api-refactoring-change-safety | 2 | 0 | 1 | NO | Error-contract and invariant slices are introduced locally; do not require whole Programming source units. |
+| lu-runtime-allocation-gc | 1 | 0 | 2 | NO | Managed runtime/process boundary is local; VM and diagnostic relations are non-blocking context. |
+| lu-runtime-diagnostics | 0 | 1 | 0 | CANDIDATE_ONLY | runtime-retention-pooling-large-objects requires substantive prior evidence. lu-runtime-allocation-gc is currently an ACCEPTABLE_CANDIDATE proxy, not a progression lock, pending global proxy review. |
+| lu-os-resource-exhaustion | 2 | 0 | 0 | NO | Both finite-resource slices are local; do not gate on process/thread or blocking-I/O units. |
+| lu-net-http-streaming-cancellation | 1 | 0 | 1 | NO | Cancellation/lifetime is a Local Slice and resource ownership is only RECOMMENDED context. |
 
 ## 7. Provisional external-candidate graph diagnostic
 

@@ -2,7 +2,7 @@
 
 > **Purpose:** Small, current handoff surface for humans and agents. This file points to canonical authorities and records the workflow cursor. It must not duplicate full policy or architecture specifications.
 >
-> **Last updated:** 2026-10-06
+> **Last updated:** 2026-10-07
 >
 > **Expected branch:** `codex/senior-backend-evidence-map`
 >
@@ -69,7 +69,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Externally review the corrected Stage 2B Foundations artifact. If PASS, seal Batch A and begin Batch B - Data. Do not start Batch B before Stage 2B external seal.
+Externally review the corrected Stage 2B Foundations artifact. If PASS, seal Batch A and begin Batch B — Data. Do not start Batch B before Stage 2B external seal.
 
 ## Stop conditions
 
