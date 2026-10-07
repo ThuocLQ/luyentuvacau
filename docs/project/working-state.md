@@ -44,13 +44,15 @@ Stage 2B Foundations - **SEALED** after external review. Seal reference: c40ccdf
 
 Final Foundations result: 20 Local; 5 External; 9 surfaced RECOMMENDED; 1 intentionally not surfaced; external candidate graph ACYCLIC.
 
-Stage 2C Data - **SEMANTIC REVIEW IN_REVIEW**.
+Stage 2C Data - **SEALED** after external review. Seal reference: 5cd6cb509768d5033a0430fa287be82fd026df36.
 
-Candidate until external seal: 11 LOCAL_PREREQUISITE_SLICE; 17 EXTERNAL_REQUIRED_PREREQUISITE_CANDIDATE; 15 surfaced RECOMMENDED; 8 intentionally not surfaced.
+Final Data result: 11 Local; 17 External; 15 surfaced RECOMMENDED; 8 intentionally not surfaced; external candidate graph ACYCLIC.
 
 Stage 2 rules: capability dependency != learner progression; REQUIRED does not automatically create a hard lock; external candidate != whole-source-unit PASSED; RECOMMENDED is always non-blocking; track/document order is not curriculum order; final external graph must be acyclic and preserve multiple roots; QuanNet locks progression, not curiosity, and learner content remains viewable when progression is gated.
 
-Stage 2 batches: A Foundations - SEALED; B Data - IN_REVIEW; C Distributed Interaction - PENDING; D Production Safety - PENDING; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
+Stage 2D Distributed Interaction - **SEMANTIC REVIEW IN_REVIEW**. Candidate until external seal: 25 same-owner REQUIRED (12 Local / 13 External); 20 cross-owner REQUIRED (13 Local / 7 External); 15 surfaced RECOMMENDED; 9 intentionally not surfaced; 45 REQUIRED / 24 RECOMMENDED; candidate graph ACYCLIC.
+
+Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - IN_REVIEW; D Production Safety - PENDING; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
 
 Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis -> capability-evidence to Learning-Unit proxy review -> over-gating review -> cycle/graph validation -> canonical materialization -> seal Stage 2 -> Golden Pilot learner-facing Vietnamese lesson -> human acceptance -> tune authoring -> scale content.
 
@@ -73,7 +75,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Externally review Stage 2C Data semantic decisions. Do not begin Batch C before Data is externally sealed.
+Externally review Stage 2D Distributed Interaction semantic decisions. Do not begin Production Safety before Stage 2D is externally sealed.
 
 ## Stop conditions
 
