@@ -36,9 +36,19 @@
 
 ## Current phase
 
-**Stage 1 Learning-Unit semantic decomposition: SEALED**
+**Stage 2 - Learning-Unit dependency/progression projection**
 
-All Stage-1 semantic-review batches are **REVIEWED**. Stage 1F Architecture & Engineering Reasoning is sealed; dependency/progression projection has **not started**.
+Stage 2A: **MECHANICAL INVENTORY VERIFIED**.
+
+Stage 2B Foundations: **SEMANTIC REVIEW IN_REVIEW** - candidate correction in current commit; awaiting external review/seal.
+
+Candidate until external seal: 20 LOCAL_PREREQUISITE_SLICE; 5 EXTERNAL_REQUIRED_PREREQUISITE_CANDIDATE; 9 surfaced RECOMMENDED; 1 intentionally not surfaced.
+
+Stage 2 rules: capability dependency != learner progression; REQUIRED does not automatically create a hard lock; external candidate != whole-source-unit PASSED; RECOMMENDED is always non-blocking; track/document order is not curriculum order; final external graph must be acyclic and preserve multiple roots; QuanNet locks progression, not curiosity, and learner content remains viewable when progression is gated.
+
+Stage 2 batches: A Foundations - IN_REVIEW; B Data - PENDING; C Distributed Interaction - PENDING; D Production Safety - PENDING; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
+
+Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis -> capability-evidence to Learning-Unit proxy review -> over-gating review -> cycle/graph validation -> canonical materialization -> seal Stage 2 -> Golden Pilot learner-facing Vietnamese lesson -> human acceptance -> tune authoring -> scale content.
 
 ## Important current facts
 
@@ -59,9 +69,7 @@ All Stage-1 semantic-review batches are **REVIEWED**. Stage 1F Architecture & En
 
 ## Exact next task
 
-Finalize the Learning-Unit dependency/progression projection across the sealed 137-unit map, classifying frozen REQUIRED and RECOMMENDED relations without reopening Learning-Unit semantic decomposition.
-
-Do not call this learner-facing lesson authoring yet.
+Externally review the corrected Stage 2B Foundations artifact. If PASS, seal Batch A and begin Batch B - Data. Do not start Batch B before Stage 2B external seal.
 
 ## Stop conditions
 
