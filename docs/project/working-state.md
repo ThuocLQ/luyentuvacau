@@ -46,7 +46,7 @@ Final Foundations result: 20 Local; 5 External; 9 surfaced RECOMMENDED; 1 intent
 
 Stage 2C Data - **SEMANTIC REVIEW IN_REVIEW**.
 
-Candidate until external seal: 11 LOCAL_PREREQUISITE_SLICE; 17 EXTERNAL_REQUIRED_PREREQUISITE_CANDIDATE; 17 surfaced RECOMMENDED; 6 intentionally not surfaced.
+Candidate until external seal: 11 LOCAL_PREREQUISITE_SLICE; 17 EXTERNAL_REQUIRED_PREREQUISITE_CANDIDATE; 15 surfaced RECOMMENDED; 8 intentionally not surfaced.
 
 Stage 2 rules: capability dependency != learner progression; REQUIRED does not automatically create a hard lock; external candidate != whole-source-unit PASSED; RECOMMENDED is always non-blocking; track/document order is not curriculum order; final external graph must be acyclic and preserve multiple roots; QuanNet locks progression, not curiosity, and learner content remains viewable when progression is gated.
 

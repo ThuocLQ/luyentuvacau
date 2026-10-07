@@ -8,6 +8,7 @@ NON-CANONICAL WORKING REVIEW. This artifact classifies the Stage 2A Data depende
 - 28 REQUIRED; 23 RECOMMENDED; 51 / 51 total.
 - 23 target Learning Units with pending relations; 25 sealed target-owner Learning Units overall.
 - Same-owner REQUIRED: 21; cross-owner REQUIRED: 7.
+- RECOMMENDED: 15 SURFACE_RECOMMENDED_CONTEXT; 8 INTENTIONALLY_NOT_SURFACED.
 - Every scoped relation is accounted for exactly once; no relation outside Data is classified.
 
 ## 2. REQUIRED decision table
@@ -50,22 +51,26 @@ External candidate != learner lock. It is capability evidence for later global p
 | Relation | Required compatible prior evidence | Why local slice is insufficient | Whole-source-unit PASSED proxy |
 |---|---|---|---|
 | dist-replication-leader-quorum -> db-replication-failover | Leader/replica acknowledgement and stale-copy evidence | Engine-specific failover must translate portable semantics | ACCEPTABLE_CANDIDATE |
-| dist-partitioning-ownership-rebalancing -> db-partitioning-sharding-boundary | Ownership assignment and rebalance evidence | Sharding assessment needs ownership movement | NOT_ACCEPTABLE |
+| dist-partitioning-ownership-rebalancing -> db-partitioning-sharding-boundary | Ownership assignment and rebalance evidence | Sharding assessment needs ownership movement | ACCEPTABLE_CANDIDATE |
 | db-buffer-io -> db-production-diagnosis-transfer | Hit/read and physical-I/O evidence | L4 diagnosis must separate I/O | ACCEPTABLE_CANDIDATE |
 | db-optimizer-cardinality-stats -> db-production-diagnosis-transfer | Estimated/actual cardinality and plan evidence | Plan causes cannot be reduced to vocabulary | ACCEPTABLE_CANDIDATE |
 | db-locks-deadlocks-contention -> db-production-diagnosis-transfer | Blocking graph and lock-wait evidence | Must discriminate lock latency | ACCEPTABLE_CANDIDATE |
-| db-connection-pool-exhaustion -> db-production-diagnosis-transfer | Pool wait/acquisition-latency evidence | Must separate pool wait from SQL | NOT_ACCEPTABLE |
-| dist-consistency-linearizability -> nosql-cassandra-lsm-compaction-consistency | Consistency guarantee and observation evidence | Cassandra target needs real consistency semantics | NOT_ACCEPTABLE |
+| db-connection-pool-exhaustion -> db-production-diagnosis-transfer | Pool wait/acquisition-latency evidence | Must separate pool wait from SQL | ACCEPTABLE_CANDIDATE |
+| dist-consistency-linearizability -> nosql-cassandra-lsm-compaction-consistency | Consistency guarantee and observation evidence | Cassandra target needs real consistency semantics | ACCEPTABLE_CANDIDATE |
 | dist-replication-leader-quorum -> nosql-redis-persistence-replication-cluster-streams | Replication, lag and failover evidence | Redis target needs portable replication evidence | ACCEPTABLE_CANDIDATE |
 | nosql-mongo-aggregate-model -> nosql-model-selection | Document access-pattern evidence | Model comparison needs a real document model | ACCEPTABLE_CANDIDATE |
 | nosql-cassandra-partition-model -> nosql-model-selection | Partition-key/access-pattern evidence | Wide-column trade-offs must be demonstrated | NOT_ACCEPTABLE |
-| nosql-redis-structures-memory -> nosql-model-selection | Key/value and memory-boundary evidence | Storage choice needs more than a definition | NOT_ACCEPTABLE |
+| nosql-redis-structures-memory -> nosql-model-selection | Key/value and memory-boundary evidence | Singleton assesses exactly the key/value and finite-memory model required by selection | ACCEPTABLE_CANDIDATE |
 | nosql-search-inverted-index-analysis -> nosql-model-selection | Inverted-index/source-of-truth evidence | Search projection is a distinct model | NOT_ACCEPTABLE |
 | nosql-model-selection -> nosql-transfer-storage-choice | Demonstrated multi-family comparison | L4 transfer needs actual selection evidence | ACCEPTABLE_CANDIDATE |
 | cache-invalidation-consistency -> cache-evidence-transfer | Stale-read/invalidation evidence | Transfer must distinguish staleness | ACCEPTABLE_CANDIDATE |
-| cache-stampede-penetration-avalanche-hot-key -> cache-evidence-transfer | Stampede/penetration/hot-key evidence | Competing overload modes need mechanism evidence | NOT_ACCEPTABLE |
-| cache-capacity-eviction-fallback -> cache-evidence-transfer | Eviction and fallback evidence | Must separate capacity failure | NOT_ACCEPTABLE |
-| cache-multilayer-coherence -> cache-evidence-transfer | Multilayer freshness/version evidence | Local summary would not prove divergence | NOT_ACCEPTABLE |
+| cache-stampede-penetration-avalanche-hot-key -> cache-evidence-transfer | Stampede/penetration/hot-key evidence | lu-cache-patterns contains the coherent miss/population/expiry overload boundary | ACCEPTABLE_CANDIDATE |
+| cache-capacity-eviction-fallback -> cache-evidence-transfer | Eviction and fallback evidence | Singleton assesses exactly capacity and fallback evidence | ACCEPTABLE_CANDIDATE |
+| cache-multilayer-coherence -> cache-evidence-transfer | Multilayer freshness/version evidence | lu-cache-source-of-truth-invalidation coherently assesses source-of-truth, invalidation and multilayer coherence | ACCEPTABLE_CANDIDATE |
+
+One PASSED candidate from lu-cache-source-of-truth-invalidation could later serve as a fair proxy for both capability-level External candidates from that source unit. No progression lock is created here.
+
+ACCEPTABLE_CANDIDATE does not mean the learner is now locked behind that source Learning Unit. It means that, if global progression later chooses whole-unit PASSED as the evidence representation, the source unit is currently considered a fair proxy. Final gating is deferred to the global capability-evidence to Learning-Unit proxy review.
 
 ## 4. Local Prerequisite Slice safety table
 
@@ -115,16 +120,24 @@ Each row is one exact Local REQUIRED relation; no aggregate pseudo-row is used.
 
 ## 6. Target-unit over-gating review
 
-| Target unit | LOCAL | EXTERNAL | RECOMMENDED surfaced | Whole-unit PASSED prerequisite? | Evidence note |
-|---|---:|---:|---:|---|---|
-| lu-db-production-diagnosis-transfer | 0 | 4 | 0 | NO | Four capability-level diagnosis inputs are needed; whole source units would add unrelated mechanisms. |
-| lu-db-schema-evolution | 2 | 0 | 0 | NO | Invariant and lock-duration slices are local; do not require both source units PASSED. |
-| lu-nosql-model-selection | 0 | 4 | 0 | NO | Compare four model capabilities through evidence; do not gate on four whole units. |
-| lu-nosql-storage-choice-transfer | 0 | 1 | 0 | NO | Model-selection evidence is substantive; implementation contexts remain non-blocking. |
-| lu-nosql-redis-persistence-replication-cluster-streams | 1 | 1 | 0 | NO | Structure slice is local; replication evidence is capability-level. |
-| lu-nosql-mongo-index-shard-transaction | 1 | 0 | 2 | NO | Aggregate slice is local; partition/transaction context remains non-blocking. |
-| lu-cache-evidence-transfer | 0 | 4 | 0 | NO | Four failure-mode capabilities are required; no whole source unit is an automatic gate. |
-| lu-db-connection-pool-exhaustion | 1 | 0 | 1 | NO | OS resource slice is local; backpressure is optional context. |
+| Target unit | LOCAL | EXTERNAL | RECOMMENDED surfaced | RECOMMENDED omitted | Whole-unit PASSED prerequisite? | Evidence note |
+|---|---:|---:|---:|---:|---|---|
+| lu-nosql-storage-choice-transfer | 0 | 1 | 0 | 4 | CANDIDATE_ONLY | Its only External source is singleton lu-nosql-model-selection and is a fair proxy candidate. |
+| lu-cache-evidence-transfer | 0 | 4 | 0 | 0 | CANDIDATE_ONLY | Four capability candidates map to three coherent fair source-unit proxies; one source can cover both invalidation and multilayer evidence. |
+| lu-db-production-diagnosis-transfer | 0 | 4 | 0 | 0 | CANDIDATE_ONLY | All four required evidence sources have fair whole-unit proxy candidates; no lock exists until global review. |
+| lu-nosql-model-selection | 0 | 4 | 0 | 0 | NO | Mongo and Redis singleton proxies are fair, but Cassandra and Search units contain deeper unrelated mechanisms; capability evidence remains necessary. |
+| lu-nosql-redis-persistence-replication-cluster-streams | 1 | 1 | 0 | 2 | CANDIDATE_ONLY | External replication evidence comes from singleton lu-dist-replication-leader-quorum. |
+| lu-nosql-mongo-index-shard-transaction | 1 | 0 | 2 | 0 | NO | Aggregate slice is local; partition/transaction context is non-blocking. |
+| lu-cache-capacity-eviction-fallback | 1 | 0 | 1 | 0 | NO | Only Local and surfaced context; no external whole-unit prerequisite. |
+| lu-cache-patterns | 1 | 0 | 1 | 0 | NO | Only Local and surfaced context; no external whole-unit prerequisite. |
+| lu-db-connection-pool-exhaustion | 1 | 0 | 1 | 0 | NO | OS resource slice is local; backpressure is optional context. |
+| lu-db-locks-deadlocks-contention | 1 | 0 | 1 | 0 | NO | Only Local and surfaced context; no external whole-unit prerequisite. |
+| lu-db-partitioning-sharding-boundary | 0 | 1 | 1 | 0 | CANDIDATE_ONLY | External source is singleton lu-dist-partitioning-ownership-rebalancing. |
+| lu-db-replication-failover | 0 | 1 | 1 | 0 | CANDIDATE_ONLY | External source is singleton lu-dist-replication-leader-quorum. |
+| lu-db-schema-evolution | 2 | 0 | 0 | 0 | NO | Invariant and lock-duration slices are local; no source-unit gate. |
+| lu-db-transactions-mvcc-isolation | 1 | 0 | 1 | 0 | NO | Only Local and surfaced context; no external whole-unit prerequisite. |
+| lu-execution-plan-estimates | 0 | 0 | 2 | 0 | NO | Recommended context only; no external whole-unit prerequisite. |
+| lu-nosql-cassandra-lsm-compaction-consistency | 0 | 1 | 0 | 1 | CANDIDATE_ONLY | External source is singleton lu-dist-consistency-linearizability. |
 
 ## 7. Provisional external-candidate graph diagnostic
 
@@ -148,15 +161,15 @@ Using Data External decisions only:
 
 ## 9. Synthesis-target review
 
-- lu-db-production-diagnosis-transfer: substantive buffer, cardinality, lock and pool evidence is necessary. Whole-unit PASSED proxies would over-gate when units contain unrelated Primaries; capability-level evidence keeps the L4 diagnosis reachable.
-- lu-nosql-model-selection: four capability-level model comparisons are necessary. Whole Mongo/Cassandra/Redis/Search units would over-gate with engine-specific mechanisms; the target remains reachable through capability evidence.
-- lu-nosql-storage-choice-transfer: demonstrated model-selection evidence is necessary for L4 transfer. Four implementation units remain context only; the target is reachable through one capability-level candidate.
-- lu-cache-evidence-transfer: staleness, stampede, capacity and multilayer evidence is necessary. Whole source units would duplicate unrelated cache Primaries; capability-level evidence preserves reachability.
+- lu-db-production-diagnosis-transfer: substantive buffer, cardinality, lock and pool evidence is genuinely required. The four source Learning Units are currently fair PASSED proxy candidates because their extra Primaries, where present, are directly part of the same diagnostic mechanism. This remains CANDIDATE_ONLY until global review.
+- lu-nosql-model-selection: four capability-level model inputs are genuinely required. Mongo aggregate and Redis structures are acceptable singleton proxies; Cassandra partition and Search inverted-index sources are not acceptable blanket proxies because their units contain deeper LSM/compaction/consistency or refresh/shard/pagination mechanisms. Whole-unit prerequisite remains NO.
+- lu-nosql-storage-choice-transfer: demonstrated nosql-model-selection evidence is substantive. Its singleton PASSED result is currently a fair candidate proxy; the four engine-operational RECOMMENDED relations remain non-blocking and intentionally not surfaced.
+- lu-cache-evidence-transfer: substantive evidence for invalidation/staleness, stampede/hot-key overload, capacity/eviction/fallback and multilayer divergence is genuinely required. These map to three fair source-unit proxy candidates. Do not create the lock yet.
 
 ## 10. Final counts
 
 - REQUIRED: 11 LOCAL_PREREQUISITE_SLICE + 17 EXTERNAL_REQUIRED_PREREQUISITE_CANDIDATE = 28.
-- RECOMMENDED: 17 SURFACE_RECOMMENDED_CONTEXT + 6 INTENTIONALLY_NOT_SURFACED = 23.
+- RECOMMENDED: 15 SURFACE_RECOMMENDED_CONTEXT + 8 INTENTIONALLY_NOT_SURFACED = 23.
 - Total: 51 / 51.
 - Missing: 0; extra: 0; duplicate: 0; UNKNOWN: 0.
 - Learner locks: 0.
