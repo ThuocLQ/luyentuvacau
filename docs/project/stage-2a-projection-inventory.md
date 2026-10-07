@@ -479,7 +479,7 @@ No semantic classifications are made here; these batches only partition pending 
 
 Target owners: Programming & Software Design Foundations; Runtime & Memory; Operating Systems & I/O Foundations; Concurrency & Async; Networking & HTTP.
 - Pending REQUIRED: **25** (same-owner 20; cross-owner 5).
-- Pending RECOMMENDED: **9**.
+- Pending RECOMMENDED: **10**.
 - Target Learning Units: **29**.
 
 ### Batch B — Data
@@ -499,22 +499,22 @@ Target owners: Distributed Systems; Messaging & Event-Driven Consistency; API Co
 ### Batch D — Production Safety
 
 Target owners: Security; Observability & Performance; Reliability / SRE.
-- Pending REQUIRED: **36** (same-owner 26; cross-owner 10).
-- Pending RECOMMENDED: **34**.
+- Pending REQUIRED: **35** (same-owner 25; cross-owner 10).
+- Pending RECOMMENDED: **29**.
 - Target Learning Units: **30**.
 
 ### Batch E — Delivery & Verification
 
 Target owners: Containers / Kubernetes / Cloud Delivery; Testing & Engineering Quality.
 - Pending REQUIRED: **23** (same-owner 17; cross-owner 6).
-- Pending RECOMMENDED: **36**.
+- Pending RECOMMENDED: **31**.
 - Target Learning Units: **19**.
 
 ### Batch F — Architecture Synthesis
 
 Target owners: Architecture & System Design.
 - Pending REQUIRED: **18** (same-owner 7; cross-owner 11).
-- Pending RECOMMENDED: **13**.
+- Pending RECOMMENDED: **14**.
 - Target Learning Units: **8**.
 
 ## Completeness check
@@ -525,3 +525,24 @@ Target owners: Architecture & System Design.
 - Missing relations: **0**; duplicate relations: **0**; unknown capabilities: **0**; unknown Learning Units: **0**.
 - No semantic dependency decision was made.
 
+
+
+## Clarification: same-unit RECOMMENDED edges
+
+Batch totals cover all 131 PENDING_RECOMMENDED_REVIEW relations, not only the 129 cross-unit relations. The two same-unit relations remain PENDING_RECOMMENDED_REVIEW:
+
+1. net-tls-trust-handshake -> net-proxy-lb-forwarded-boundary; both are in lu-net-proxy-tls-forwarded-boundary; target owner: Networking & HTTP; Batch A.
+2. arch-cost-complexity-changeability -> arch-decision-communication-transfer; both are in lu-arch-cost-complexity-changeability; target owner: Architecture & System Design; Batch F.
+
+No relation is reclassified by this inventory correction.
+
+Batch arithmetic checks: REQUIRED 25 + 28 + 45 + 35 + 23 + 18 = 174; RECOMMENDED 10 + 23 + 24 + 29 + 31 + 14 = 131.
+
+## Clarification: target-unit overlap
+
+Target Learning Unit counts sum to 139, rather than 137, because exactly two sealed multi-owner units appear in both target-owner batches D and E:
+
+- lu-rel-health-probes
+- lu-release-rollout-rollback
+
+Each spans Reliability / SRE and Containers / Kubernetes / Cloud Delivery. This intentional overlap does not indicate duplicate Learning Units in the canonical map.
