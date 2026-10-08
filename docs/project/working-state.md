@@ -75,7 +75,9 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Independently review Stage 2D Local rationale A1 (commit `4fa1128`), then continue Local rationale A2 on the next eight unchanged relation identities. Do not seal Stage 2D until all remaining evidence and global checks have passed.
+Stage 2D Local rationale implementation complete, 29/29, pending independent semantic acceptance.
+
+Exact next task: Review all 29 Local rationale/evidence mappings. If accepted, complete 16 External evidence rationales as the next bounded batch. Stage 2D remains IN_REVIEW.
 
 ## Stop conditions
 
