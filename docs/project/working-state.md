@@ -2,7 +2,7 @@
 
 > **Purpose:** Small, current handoff surface for humans and agents. This file points to canonical authorities and records the workflow cursor. It must not duplicate full policy or architecture specifications.
 >
-> **Last updated:** 2026-10-07
+> **Last updated:** 2026-10-08
 >
 > **Expected branch:** `codex/senior-backend-evidence-map`
 >
@@ -50,7 +50,7 @@ Final Data result: 11 Local; 17 External; 15 surfaced RECOMMENDED; 8 intentional
 
 Stage 2 rules: capability dependency != learner progression; REQUIRED does not automatically create a hard lock; external candidate != whole-source-unit PASSED; RECOMMENDED is always non-blocking; track/document order is not curriculum order; final external graph must be acyclic and preserve multiple roots; QuanNet locks progression, not curiosity, and learner content remains viewable when progression is gated.
 
-Stage 2D Distributed Interaction - **SEMANTIC REVIEW IN_REVIEW**. Candidate until external seal: 25 same-owner REQUIRED (12 Local / 13 External); 20 cross-owner REQUIRED (13 Local / 7 External); 15 surfaced RECOMMENDED; 9 intentionally not surfaced; 45 REQUIRED / 24 RECOMMENDED; candidate graph ACYCLIC.
+Stage 2D Distributed Interaction - **SEMANTIC REVIEW IN_REVIEW**. Candidate until external seal: 29 Local / 16 External REQUIRED (14 Local / 11 External same-owner; 15 Local / 5 External cross-owner); 21 surfaced RECOMMENDED; 3 intentionally not surfaced; 45 REQUIRED / 24 RECOMMENDED; 16 External unit pairs; candidate graph ACYCLIC.
 
 Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - IN_REVIEW; D Production Safety - PENDING; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
 
