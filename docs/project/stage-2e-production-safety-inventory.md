@@ -98,8 +98,8 @@ NON-CANONICAL WORKING INVENTORY. Source: Stage 2A authoritative pending-relation
 
 ## Coverage check
 
-- Security: 21 relations.
-- Observability: 21 relations.
-- Reliability / SRE: 22 relations.
+- Security: 25 relations = 18 REQUIRED + 7 RECOMMENDED.
+- Observability: 19 relations = 9 REQUIRED + 10 RECOMMENDED.
+- Reliability / SRE: 20 relations = 8 REQUIRED + 12 RECOMMENDED.
 - Total: 64 relations = 35 REQUIRED + 29 RECOMMENDED.
 - Exact next semantic work package: Security.
