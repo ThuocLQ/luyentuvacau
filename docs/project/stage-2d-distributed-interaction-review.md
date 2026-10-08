@@ -164,6 +164,7 @@ ACCEPTABLE_CANDIDATE != learner lock. It only means a whole-unit PASSED result i
 | lu-msg-replay-backfill | 0 | 1 | 2 | 0 | CANDIDATE_ONLY | Consumer offset evidence is External; schema and idempotency are context. |
 | lu-msg-workflow-saga-compensation | 2 | 0 | 0 | 1 | NO | Message-step and partial-completion slices are local; reconciliation is omitted. |
 | lu-api-circuit-bulkhead-rate-limit | 1 | 0 | 1 | 0 | NO | Finite-capacity overload boundary is local; partial-failure context is surfaced. |
+| lu-api-contract-resource-semantics | 1 | 0 | 0 | 0 | NO | HTTP observable response semantics are taught locally; no full networking-unit pass is required. |
 | lu-api-request-identity-idempotency | 1 | 0 | 1 | 0 | NO | Contract slice is local; RPC uncertainty is surfaced context. |
 | lu-api-validation-errors-pagination | 2 | 0 | 0 | 0 | NO | Error/result and contract slices are local. |
 | lu-api-versioning-compatibility | 1 | 0 | 1 | 0 | NO | Contract slice is local; refactoring context is surfaced. |
