@@ -75,7 +75,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Stage 2E Production Safety inventory is complete: Security 21, Observability 21, Reliability / SRE 22 relations. Next execute the bounded Security semantic review package; Stage 2E remains PENDING until all three packages and global reconciliation pass.
+Stage 2E Security (25) and Observability (19) semantic evidence are complete, pending independent package acceptance. Reliability / SRE (20) remains unreviewed. Next execute Reliability / SRE semantic review, then reconcile all 64 Stage 2E relations before any Stage 2E seal.
 
 ## Stop conditions
 
