@@ -85,3 +85,10 @@ Stage 1F canonical materialization is `2d410ddc325b47a0f17fed1890713c103c8181b4`
 **Status:** ACTIVE
 
 Finish roadmap/progression architecture first, validate a reusable lesson pattern through a Golden Pilot, then release one complete first chapter and begin real study. Develop later dependency-valid chapters in parallel with study; do not wait for the full catalog. Chapter packaging follows coherent Learning Units, not forced track order. Do not weaken mastery evidence to ship faster or treat prototype pilots as official start order without dependency evidence. See `docs/project/first-chapter-delivery-plan.md`.
+
+## D-011 — Stage 2D Distributed Interaction sealed
+
+**Date:** 2026-10-08
+**Status:** SEALED after independent final acceptance, evidence commit 6b25b816bcdfec1bba1a4ce0474a9d51f72e0ef6.
+
+All 69 relations were reconciled against the frozen registry: **45 REQUIRED** = 29 Local + 16 External candidates; **24 RECOMMENDED** = 21 surfaced + 3 intentionally omitted. The 16 External candidate unit pairs remain candidate-only (not learner locks); local ownership claims and 25 target over-gating records are complete. Combined Foundations + Data + Distributed Interaction graph: 137 units, 37 external unit edges, 118 roots, maximum indegree 5, acyclic. Begin Stage 2E with a bounded Production Safety inventory/review slice; do not reopen sealed Stage 2D without concrete evidence.
