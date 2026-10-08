@@ -54,7 +54,7 @@ Stage 2D Distributed Interaction - **SEMANTIC REVIEW IN_REVIEW**. Candidate unti
 
 Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - IN_REVIEW; D Production Safety - PENDING; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
 
-Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis -> capability-evidence to Learning-Unit proxy review -> over-gating review -> cycle/graph validation -> canonical materialization -> seal Stage 2 -> Golden Pilot learner-facing Vietnamese lesson -> human acceptance -> tune authoring -> scale content.
+Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis -> proxy fairness -> over-gating/cycle validation -> canonical materialization -> Stage 2 seal -> Golden Pilot -> human pilot acceptance -> reusable authoring pattern -> complete first chapter -> chapter release acceptance -> user learning + parallel Codex development. See `docs/project/first-chapter-delivery-plan.md`.
 
 ## Important current facts
 
@@ -73,10 +73,6 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 - `stage-1-review-manifest.json` baseline remains `412216c591404480a6539f220ea324f9ec53af56`; original scope plus declared amendment scope must equal the current frozen capability set.
 - The repaired dependency registry keeps all 14 amendment relations inside its canonical section.
 
-## Exact next task
-
-Externally review Stage 2D Distributed Interaction semantic decisions. Do not begin Production Safety before Stage 2D is externally sealed.
-
-## Stop conditions
+## Exact next task`n`nIndependently review Stage 2D Local rationale A1 (commit `4fa1128`), then continue Local rationale A2 on the next eight unchanged relation identities. Do not seal Stage 2D until all remaining evidence and global checks have passed.`n`n## Stop conditions
 
 Do not reopen sealed Stage 1D, reset historical baselines, rewrite audit history, broaden curriculum scope, or modify learner-facing content without a separately authorized task.
