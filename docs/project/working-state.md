@@ -75,11 +75,12 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Local rationale: independently reviewed and accepted at batch semantic level; Stage 2D still IN_REVIEW.
+- Stage 2D Local 29/29 reviewed.
+- Stage 2D External 16/16 reviewed at batch level.
+- Stage 2D RECOMMENDED 24/24 implementation complete, pending independent final acceptance.
+- Stage 2D remains IN_REVIEW.
 
-External evidence: implementation complete, 16/16; pending independent semantic review.
-
-Exact next task: Review all 16 External evidence decisions. If accepted, complete 24 RECOMMENDED rationales, then perform Stage 2D global review.
+Exact next task: Independently review all 69 Stage 2D relations, over-gating, proxy fairness, external graph and cross-artifact consistency. Seal Stage 2D only if all acceptance gates pass. Then proceed to Production Safety.
 
 ## Stop conditions
 
