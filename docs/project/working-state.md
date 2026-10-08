@@ -75,7 +75,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Stage 2D is SEALED. Stage 2E — Production Safety: independently inventory and classify its first bounded required-relation slice before touching any other Stage 2E relations.
+Stage 2E Production Safety inventory is complete: Security 21, Observability 21, Reliability / SRE 22 relations. Next execute the bounded Security semantic review package; Stage 2E remains PENDING until all three packages and global reconciliation pass.
 
 ## Stop conditions
 
