@@ -76,3 +76,7 @@ For research traceability, use:
 `docs/research/source-map-template.md`
 
 For architecture mutation tasks, run `npm run validate:architecture`; a failed gate blocks REVIEWED and commit. Use batch diff-scope flags before closure; prose does not waive a failed gate.
+
+## ChatGPT ↔ Codex Decision Sync
+
+Chat history is not the project source of truth. When a user-approved decision is supplied through a ChatGPT Session Sync task: verify Git/working-state; distinguish decisions from proposals; compare existing decisions; record durable decisions; update only explicitly authorized artifacts; update true progress and one next task; validate, commit and push. Do not store raw conversations, promote proposals silently, overwrite history without review, or claim false PASSED/REVIEWED/SEALED status. Future sessions reconstruct context from Git and canonical artifacts.
