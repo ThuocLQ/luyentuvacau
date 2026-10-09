@@ -75,7 +75,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Stage 2E Security (25) and Observability (19) semantic evidence are complete, pending independent package acceptance. Reliability / SRE (20) remains unreviewed. Next execute Reliability / SRE semantic review, then reconcile all 64 Stage 2E relations before any Stage 2E seal.
+Repair Stage 2E Security + Observability: replace the generic evidence in all 44 relations with relation-specific Local/External/Recommended rationale, then run independent package acceptance. Reliability / SRE remains unreviewed; Stage 2E remains IN_REVIEW.
 
 ## Stop conditions
 

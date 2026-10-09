@@ -1,6 +1,6 @@
 # Stage 2E Security + Observability Dependency Semantic Review — Working Evidence
 
-NON-CANONICAL WORKING REVIEW. Candidate edges do not create learner locks. Reliability / SRE is explicitly out of scope.
+NON-CANONICAL WORKING REVIEW — NOT ACCEPTED. The current relation evidence is structurally complete but uses generic templates and must be repaired relation-by-relation before Security or Observability can be marked reviewed. Candidate edges do not create learner locks. Reliability / SRE is explicitly out of scope.
 
 ## Required decision evidence
 
