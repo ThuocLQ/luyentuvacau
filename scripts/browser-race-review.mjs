@@ -156,10 +156,15 @@ async function reviewViewport(cdp, width) {
   await cdp.evaluate(clickButton('Bỏ qua ghi chú'))
   await cdp.evaluate(clickButton('Sang experiment tiếp theo'))
   await cdp.evaluate(clickButton('Bỏ qua dự đoán'))
+  const labRunInstruction = await cdp.evaluate(`(() => ({ instrumentation: document.querySelector('.race-lab-run-copy')?.textContent.includes('Console.WriteLine') ?? false, leakedExpectedRead: document.querySelector('.race-lab-workflow')?.textContent.includes('current=100') ?? false }))()`)
+  if (!labRunInstruction.instrumentation || labRunInstruction.leakedExpectedRead) throw new Error(`Experiment 3 Run order is incorrect: ${JSON.stringify(labRunInstruction)}`)
+  await cdp.evaluate(scrollToSelector('.race-lab-workflow'))
+  await sleep(120)
+  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-guided-lab-run-instrumentation-${width}.png`))
   await cdp.evaluate(clickButton('Tôi chỉ đọc hoặc inspect output'))
   await cdp.evaluate(clickButton('Bỏ qua ghi chú'))
-  const labDiagnostics = await cdp.evaluate(`(() => ({ experiment: document.querySelector('.race-lab-workflow')?.dataset.experiment, phase: document.querySelector('.race-lab-workflow')?.dataset.phase, instrumentation: document.querySelector('.race-lab-reveal-copy')?.textContent.includes('Console.WriteLine') ?? false }))()`)
-  if (labDiagnostics.experiment !== 'controlled' || labDiagnostics.phase !== 'reveal' || !labDiagnostics.instrumentation) throw new Error(`Experiment 3 instrumentation was not visible: ${JSON.stringify(labDiagnostics)}`)
+  const labDiagnostics = await cdp.evaluate(`(() => ({ experiment: document.querySelector('.race-lab-workflow')?.dataset.experiment, phase: document.querySelector('.race-lab-workflow')?.dataset.phase, expectedRead: document.querySelector('.race-lab-reveal-copy')?.textContent.includes('snapshot READ đều là 100') ?? false, nondeterministicOrder: document.querySelector('.race-lab-reveal-copy')?.textContent.includes('có thể đổi chỗ') ?? false }))()`)
+  if (labDiagnostics.experiment !== 'controlled' || labDiagnostics.phase !== 'reveal' || !labDiagnostics.expectedRead || !labDiagnostics.nondeterministicOrder) throw new Error(`Experiment 3 Reveal is incomplete: ${JSON.stringify(labDiagnostics)}`)
   await cdp.evaluate(scrollToSelector('.race-lab-workflow'))
   await sleep(120)
   if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-guided-lab-expanded-${width}.png`))
@@ -169,7 +174,7 @@ async function reviewViewport(cdp, width) {
   await completeAssessment(cdp)
   await cdp.evaluate(scrollToSelector('.race-assessment-result'))
   await sleep(120)
-  const result = { width, home: homeGeometry, guidedStages, labResume, labDiagnostics, race: await geometry(cdp), screenshots }
+  const result = { width, home: homeGeometry, guidedStages, labResume, labRunInstruction, labDiagnostics, race: await geometry(cdp), screenshots }
   const geometryFailures = [result.home, result.race, ...guidedStages.map(stage => stage.geometry)].some(item => item.scrollWidth !== item.clientWidth || item.offenders.length || item.inlineCodeOverflow.length)
   if (geometryFailures) throw new Error(`Layout failure at ${width}px: ${JSON.stringify(result)}`)
   return result

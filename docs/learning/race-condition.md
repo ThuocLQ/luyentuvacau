@@ -258,16 +258,22 @@ Hai `Barrier` cố tình buộc cả hai call đọc 100 trước khi WRITE. M�
 **Question:** tại sao không chỉ chạy 1.000 lần rồi chờ bug?
 <!-- QN_RACE_LAB:EXPERIMENT:controlled:QUESTION:END -->
 
-<!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:START -->
-### Kết quả cần quan sát
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:RUN:START -->
+### Instrumentation tạm để nhìn READ
 
-Sau khi đã xem summary của Experiment 2, chèn **tạm thời ngay dưới** dòng `var current = unsafeBalance; // READ` trong `UnsafeWithdraw`:
+Ngay sau dòng `var current = unsafeBalance; // READ` trong `UnsafeWithdraw`, chèn tạm:
 
 ```csharp
 Console.WriteLine($"read: amount={amount}, current={current}");
 ```
 
-Chạy lại với input 80/30. Bạn sẽ thấy hai snapshot READ đều là 100; thứ tự hai dòng không được hứa:
+Sau đó chạy lại `dotnet run` với input hiện tại. Chỉ ghi lại các dòng thực tế bạn thấy; đừng dùng một thứ tự log cố định làm tiêu chí đúng/sai. Xóa log này sau khi đã quan sát xong nếu bạn không còn cần nó.
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:RUN:END -->
+
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:START -->
+### Kết quả cần quan sát
+
+Với input 80/30 và instrumentation ở bước Chạy, hai snapshot READ đều là 100; thứ tự hai dòng không được hứa. Một output **có thể có** là:
 
 ```text
 read: amount=80, current=100
@@ -275,7 +281,7 @@ read: amount=30, current=100
 unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70
 ```
 
-Hai dòng `read` có thể đổi chỗ. Summary `unsafe` vẫn do code mẫu in ra; log READ chỉ là instrumentation do bạn chủ động thêm để nhìn snapshot trước CHECK/WRITE.
+Hai dòng `read` có thể đổi chỗ; đây là alternative hợp lệ, không phải một console transcript bắt buộc theo đúng thứ tự. Summary `unsafe` vẫn do code mẫu in ra; log READ chỉ là instrumentation do bạn chủ động thêm để nhìn snapshot trước CHECK/WRITE.
 
 ### Vì sao cần Barrier?
 

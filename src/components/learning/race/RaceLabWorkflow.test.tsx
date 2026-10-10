@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import RaceLabWorkflow from './RaceLabWorkflow'
 import { initialRaceLabProgress, raceLabStorageKey } from './raceLabProgress'
 
-const experiments = ['sequential', 'unsafe', 'controlled', 'protected'].map(id => ({ id: id as 'sequential' | 'unsafe' | 'controlled' | 'protected', questionHtml: `<p>Câu hỏi ${id}</p>`, revealHtml: `<p>Đáp án ${id}</p>` }))
+const experiments = ['sequential', 'unsafe', 'controlled', 'protected'].map(id => ({ id: id as 'sequential' | 'unsafe' | 'controlled' | 'protected', questionHtml: `<p>Câu hỏi ${id}</p>`, ...(id === 'controlled' ? { runHtml: '<p>Chèn Console.WriteLine instrumentation rồi chạy lại.</p>', revealHtml: '<p>Đáp án controlled: hai READ đều có current=100.</p>' } : { revealHtml: `<p>Đáp án ${id}</p>` }) }))
 
 beforeEach(() => window.localStorage.clear())
 afterEach(cleanup)
@@ -27,7 +27,7 @@ describe('Race guided lab progress', () => {
     unmount()
     render(<RaceLabWorkflow setupHtml="<p>setup</p>" experiments={experiments} />)
     expect(screen.getByText('Experiment 3 / 4')).toBeInTheDocument()
-    expect(screen.getByText('Đáp án controlled')).toBeInTheDocument()
+    expect(screen.getByText(/Đáp án controlled/)).toBeInTheDocument()
   })
 
   it('requires an attempt or explicit skip and records self-reported execution separately', () => {
@@ -85,5 +85,16 @@ describe('Race guided lab progress', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Experiment 3 · 1. Dự đoán' }))
     expect(screen.getByText('Experiment 3 / 4')).toBeInTheDocument()
     expect(JSON.parse(window.localStorage.getItem(raceLabStorageKey)!).observations.sequential).toBe('approvedCount=1, finalBalance=20')
+  })
+
+  it('shows Experiment 3 instrumentation during Run before revealing its expected READ values', () => {
+    render(<RaceLabWorkflow setupHtml="<p>setup</p>" experiments={experiments} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Experiment 3 · 1. Dự đoán' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Bỏ qua dự đoán' }))
+    expect(screen.getByText(/Chèn Console.WriteLine instrumentation/)).toBeInTheDocument()
+    expect(screen.queryByText(/current=100/)).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /Tôi chỉ đọc hoặc inspect output/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Bỏ qua ghi chú' }))
+    expect(screen.getByText(/hai READ đều có current=100/)).toBeInTheDocument()
   })
 })

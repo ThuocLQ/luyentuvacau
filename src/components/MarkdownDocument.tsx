@@ -87,6 +87,7 @@ export default function MarkdownDocument({ doc }: Props) {
   const raceLabExperiments = useMemo(() => raceGuidedLab?.experiments.map(experiment => ({
     id: experiment.id,
     questionHtml: enhanceHtml(renderMarkdown(experiment.question)).html,
+    ...(experiment.run ? { runHtml: enhanceHtml(renderMarkdown(experiment.run)).html } : {}),
     revealHtml: enhanceHtml(renderMarkdown(experiment.reveal)).html,
   })) ?? [], [raceGuidedLab])
   const rendered = useMemo(() => lessonRendered ?? (!isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered), [fullRendered, lessonRendered, isLearning, mode])

@@ -1,6 +1,7 @@
 export type RaceLabExperiment = {
   id: 'sequential' | 'unsafe' | 'controlled' | 'protected'
   question: string
+  run?: string
   reveal: string
 }
 
@@ -29,11 +30,12 @@ export function parseRaceGuidedLab(source: string) {
   const experiments = experimentIds.map(id => {
     const experiment = block(source, `EXPERIMENT:${id}`)
     const question = block(source, `EXPERIMENT:${id}:QUESTION`)
+    const run = id === 'controlled' ? block(source, `EXPERIMENT:${id}:RUN`) : null
     const reveal = block(source, `EXPERIMENT:${id}:REVEAL`)
-    if (question.start <= experiment.start || question.end >= experiment.end || reveal.start <= question.end || reveal.end >= experiment.end) throw new Error(`Race Guided Lab has invalid ${id} field boundaries.`)
-    return { id, ...experiment, question: question.markdown, reveal: reveal.markdown }
+    if (question.start <= experiment.start || question.end >= experiment.end || (run && (run.start <= question.end || run.end >= reveal.start)) || reveal.start <= (run?.end ?? question.end) || reveal.end >= experiment.end) throw new Error(`Race Guided Lab has invalid ${id} field boundaries.`)
+    return { id, ...experiment, question: question.markdown, ...(run ? { run: run.markdown } : {}), reveal: reveal.markdown }
   })
   const starts = [setup.start, ...experiments.map(experiment => experiment.start)]
   if (starts.some((value, index) => index > 0 && value <= starts[index - 1])) throw new Error('Race Guided Lab semantic blocks must stay in teaching order.')
-  return { setup: setup.markdown, experiments: experiments.map(({ id, question, reveal }) => ({ id, question, reveal })) }
+  return { setup: setup.markdown, experiments: experiments.map(({ id, question, run, reveal }) => ({ id, question, ...(run ? { run } : {}), reveal })) }
 }

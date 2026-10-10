@@ -99,10 +99,15 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labRunInstruction": {
+        "instrumentation": true,
+        "leakedExpectedRead": false
+      },
       "labDiagnostics": {
         "experiment": "controlled",
         "phase": "reveal",
-        "instrumentation": true
+        "expectedRead": true,
+        "nondeterministicOrder": true
       },
       "race": {
         "viewport": {
@@ -213,10 +218,15 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labRunInstruction": {
+        "instrumentation": true,
+        "leakedExpectedRead": false
+      },
       "labDiagnostics": {
         "experiment": "controlled",
         "phase": "reveal",
-        "instrumentation": true
+        "expectedRead": true,
+        "nondeterministicOrder": true
       },
       "race": {
         "viewport": {
@@ -229,6 +239,7 @@
         "inlineCodeOverflow": []
       },
       "screenshots": [
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-run-instrumentation-390.png",
         "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-390.png"
       ]
     },
@@ -329,10 +340,15 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labRunInstruction": {
+        "instrumentation": true,
+        "leakedExpectedRead": false
+      },
       "labDiagnostics": {
         "experiment": "controlled",
         "phase": "reveal",
-        "instrumentation": true
+        "expectedRead": true,
+        "nondeterministicOrder": true
       },
       "race": {
         "viewport": {
@@ -443,10 +459,15 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labRunInstruction": {
+        "instrumentation": true,
+        "leakedExpectedRead": false
+      },
       "labDiagnostics": {
         "experiment": "controlled",
         "phase": "reveal",
-        "instrumentation": true
+        "expectedRead": true,
+        "nondeterministicOrder": true
       },
       "race": {
         "viewport": {
@@ -459,6 +480,7 @@
         "inlineCodeOverflow": []
       },
       "screenshots": [
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-run-instrumentation-1280.png",
         "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-1280.png"
       ]
     },
@@ -559,10 +581,15 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labRunInstruction": {
+        "instrumentation": true,
+        "leakedExpectedRead": false
+      },
       "labDiagnostics": {
         "experiment": "controlled",
         "phase": "reveal",
-        "instrumentation": true
+        "expectedRead": true,
+        "nondeterministicOrder": true
       },
       "race": {
         "viewport": {
