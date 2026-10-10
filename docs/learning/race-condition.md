@@ -113,19 +113,24 @@ Thay `Program.cs` bằng code sau rồi chạy `dotnet run`. Ba phần chạy đ
 ```csharp
 using System.Threading;
 
+// Change inputs only here. Keep the baseline at 80 / 30 first, then try 60 / 50.
+const int openingBalance = 100;
+const int firstAmount = 80;
+const int secondAmount = 30;
+
 // 1. Sequential baseline
-var sequentialBalance = 100;
-bool SequentialWithdraw(int amount)
+var sequentialBalance = openingBalance;
+WithdrawalResult SequentialWithdraw(int amount)
 {
-    if (sequentialBalance < amount) return false;
+    if (sequentialBalance < amount) return new(false, 0);
     sequentialBalance -= amount;
-    return true;
+    return new(true, amount);
 }
-var sequentialResults = new[] { SequentialWithdraw(80), SequentialWithdraw(30) };
-Console.WriteLine($"sequential: approvedCount={sequentialResults.Count(x => x)}, approvedAmount=80, finalBalance={sequentialBalance}");
+var sequentialResults = new[] { SequentialWithdraw(firstAmount), SequentialWithdraw(secondAmount) };
+Console.WriteLine($"sequential: approvedCount={sequentialResults.Count(x => x.Approved)}, approvedAmount={sequentialResults.Sum(x => x.ApprovedAmount)}, finalBalance={sequentialBalance}");
 
 // 2. Controlled unsafe reproduction: both calls read 100 before either writes.
-var unsafeBalance = 100;
+var unsafeBalance = openingBalance;
 using var bothRead = new Barrier(2);
 using var releaseWrite = new Barrier(2);
 Task<WithdrawalResult> UnsafeWithdraw(int amount) => Task.Run(() =>
@@ -137,11 +142,11 @@ Task<WithdrawalResult> UnsafeWithdraw(int amount) => Task.Run(() =>
     if (approved) unsafeBalance = current - amount; // WRITE from a stale snapshot
     return new WithdrawalResult(approved, approved ? amount : 0);
 });
-var unsafeResults = await Task.WhenAll(UnsafeWithdraw(80), UnsafeWithdraw(30));
+var unsafeResults = await Task.WhenAll(UnsafeWithdraw(firstAmount), UnsafeWithdraw(secondAmount));
 Console.WriteLine($"unsafe: approvedCount={unsafeResults.Count(x => x.Approved)}, approvedAmount={unsafeResults.Sum(x => x.ApprovedAmount)}, finalBalance={unsafeBalance}");
 
 // 3. Controlled protected version: A owns the same gate before B can enter it.
-var protectedBalance = 100;
+var protectedBalance = openingBalance;
 var gate = new object();
 using var firstOwnsGate = new ManualResetEventSlim(false);
 using var releaseFirst = new ManualResetEventSlim(false);
@@ -157,13 +162,13 @@ var first = Task.Run(() =>
     {
         firstOwnsGate.Set();
         releaseFirst.Wait();
-        return SafeWithdrawInsideGate(80);
+        return SafeWithdrawInsideGate(firstAmount);
     }
 });
 firstOwnsGate.Wait();
 var second = Task.Run(() =>
 {
-    lock (gate) return SafeWithdrawInsideGate(30);
+    lock (gate) return SafeWithdrawInsideGate(secondAmount);
 });
 releaseFirst.Set();
 var protectedResults = await Task.WhenAll(first, second);
@@ -181,6 +186,16 @@ protected: approvedCount=1, approvedAmount=80, finalBalance=20
 ```
 
 Hai giá trị cuối hợp lệ ở dòng `unsafe` là một phần của bài học: thứ tự WRITE cuối không phải evidence rằng code đúng. `approvedAmount=110` mới là evidence trực tiếp rằng invariant đã vỡ.
+
+Sau baseline, đổi **chỉ hai dòng input** thành `firstAmount = 60` và `secondAmount = 50`, rồi chạy lại:
+
+```text
+sequential: approvedCount=1, approvedAmount=60, finalBalance=40
+unsafe: approvedCount=2, approvedAmount=110, finalBalance=40 hoặc 50
+protected: approvedCount=1, approvedAmount=60, finalBalance=40
+```
+
+`approvedAmount` luôn được cộng từ các `WithdrawalResult` đã approve, không phải một number được viết sẵn. Vì vậy output vẫn là evidence đúng khi bạn đổi input.
 
 ### Experiment 1 — sequential baseline
 
@@ -306,7 +321,7 @@ Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi co
 ## Evidence checks — L1 đến L4
 
 - **L1 · Understand:** không nhìn lại timeline, nói invariant của withdrawal và giải thích vì sao hai local snapshot đều có thể là 100.
-- **L2 · Apply:** đổi amounts thành 60 và 50 trong lab. Dự đoán trước khi chạy: unsafe vẫn có thể approve tổng 110; protected chỉ approve một withdrawal theo request vào gate trước.
+- **L2 · Apply:** đổi hai input ở đầu lab thành 60 và 50. Dự đoán trước khi chạy: unsafe approve tổng 110, final balance là 40 hoặc 50; protected chỉ approve withdrawal 60 vào gate trước, còn lại 40.
 - **L3 · Debug:** production báo `finalBalance=70` nhưng có hai reservation success. Viết candidate timeline, rồi nêu ba evidence cần lấy: operation ID, số row thay đổi ở source of truth, và instance ID. Giải thích vì sao chỉ log final balance là chưa đủ.
 - **L4 · Reason / trade-off:** API chạy bốn instance, inventory ở PostgreSQL, payment provider có thể timeout. So sánh local `lock`, conditional update và optimistic concurrency: mechanism nào giữ inventory invariant, caller phải xử lý outcome nào, và external payment cần state/reconciliation nào? Không có một tool mặc định đúng cho cả ba boundary.
 

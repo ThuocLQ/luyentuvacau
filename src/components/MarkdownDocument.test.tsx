@@ -9,6 +9,7 @@ import PlannerEstimateVisual from './learning/index/PlannerEstimateVisual'
 import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import OutboxGoldenLesson from './learning/outbox/OutboxGoldenLesson'
+import { findCompleteDoc } from '../data/docs'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
 import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
 import outboxLesson from '../../docs/learning/outbox-idempotency.md?raw'
@@ -98,11 +99,15 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/Cả A và B đều đọc 100/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
     fireEvent.click(screen.getByLabelText(/Cả hai có thể được chấp nhận/))
+    expect(screen.getByText(/Đúng. Chọn Next để reveal hai CHECK/i)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(screen.getByText(/Invariant bị vi phạm/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Reset' }))
     expect(screen.getByText(/Approved 0 \/ 100/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
   })
 
   it('keeps relay publish attempts separate from consumer deliveries', () => {
@@ -210,7 +215,9 @@ describe('Golden Learning Lab visuals', () => {
   })
 
   it('renders the complete Golden Pilot with accessible visual controls', () => {
-    render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'learning-race-condition', title: 'Race Condition & Concurrency — Golden Pilot', contentKind: 'learning', content: raceLesson }} /></MemoryRouter>)
+    const raceDocument = findCompleteDoc('learning-race-condition')!
+    if (!raceDocument.content) throw new Error('Golden Pilot route must have rendered content')
+    render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content }} /></MemoryRouter>)
     expect(screen.getAllByRole('heading', { name: 'Race Condition & Concurrency — Golden Pilot' })).toHaveLength(2)
     expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn execution mode' })).toBeInTheDocument()
@@ -221,6 +228,10 @@ describe('Golden Learning Lab visuals', () => {
 
   it('keeps the Golden Pilot race lab observable and separates L1–L4 from English evidence', () => {
     expect(raceLesson).toContain('unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70')
+    expect(raceLesson).toContain('const int firstAmount = 80;')
+    expect(raceLesson).toContain('const int secondAmount = 30;')
+    expect(raceLesson).toContain('unsafe: approvedCount=2, approvedAmount=110, finalBalance=40 hoặc 50')
+    expect(raceLesson).not.toContain('approvedAmount=80, finalBalance={sequentialBalance}')
     expect(raceLesson).toContain('## Evidence checks — L1 đến L4')
     expect(raceLesson).toContain('**English short explanation:**')
     expect(raceLesson).toContain('Không có quiz hay completion nào tự unlock level.')

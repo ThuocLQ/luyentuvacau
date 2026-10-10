@@ -4,6 +4,8 @@ import { learningDomains, learningLessons, techLevelLabels, englishLevelLabels }
 import { useLearningProgress } from '../hooks/useLearningProgress'
 import { useReviewProgress } from '../hooks/useReviewProgress'
 
+const goldenPilot = learningLessons.find(lesson => lesson.slug === 'learning-race-condition')!
+
 export default function HomePage() {
   const { currentLesson, get } = useLearningProgress()
   const { dueItems } = useReviewProgress()
@@ -14,6 +16,8 @@ export default function HomePage() {
     <section className="home-hero"><div className="hero-copy"><div className="eyebrow">Engineering learning hub</div><h1>Học để hiểu, làm, debug và reasoning.</h1><p>Chọn lesson theo domain và evidence học tập, không theo deadline hay phần trăm hoàn thành. Progress là self-assessment của từng lesson.</p><div className="home-actions"><Link className="primary-button" to={`/docs/${currentLesson.slug}`}><BookOpen size={17} /> Tiếp tục: {currentLesson.title} <ArrowRight size={17} /></Link><Link className="secondary-button" to="/library">Mở Reference Library</Link></div></div><div className="hero-progress"><strong>{dueItems.length}</strong><span>nội dung đến hạn</span><p>Due review đến từ quiz, interview và self-review hiện có — không phải điểm mastery.</p></div></section>
 
     <section className="learning-now"><div><span className="mini-label">Current domain</span><h2>{currentDomain.title}</h2><p>{currentDomain.principles}</p><p><strong>Current lesson:</strong> {currentLesson.title}</p></div><div className="lesson-target"><span>Target technical</span><strong>{techLevelLabels[currentLesson.targetTechLevel]}</strong><span>Target English</span><strong>{englishLevelLabels[currentLesson.targetEnglishLevel]}</strong><em>Hiện tại: L{currentProgress.techLevel} / E{currentProgress.englishLevel}</em></div></section>
+
+    <section className="golden-pilot-entry" aria-labelledby="golden-pilot-title"><div><span className="mini-label">Recommended Golden Pilot</span><h2 id="golden-pilot-title">{goldenPilot.title}</h2><p>Bắt đầu bằng một invariant backend có thể quan sát: chạy local .NET lab, xem interleaving và debug từ evidence. Đây là gợi ý cho người mới, không thay đổi lesson đang học hay learning path bạn đã chọn.</p></div><Link className="secondary-button" to={`/docs/${goldenPilot.slug}`}>Mở Golden Pilot <ArrowRight size={16} /></Link></section>
 
     <section className="quick-start-grid"><Link className="continue-card" to={`/docs/${currentLesson.slug}`}><div><span className="continue-icon"><BookOpen size={17} /></span><span className="category-chip">Why this lesson</span></div><h2>{currentLesson.title}</h2><p>Đi từ problem → visual → lab → break/debug → explain → transfer → recall. Không coi đã đọc là đã học.</p><span className="continue-link">Mở Learning Lab <ArrowRight size={16} /></span></Link><div className="goal-card"><div className="goal-icon"><Languages size={20} /></div><div><span className="mini-label">Next action</span><h2>Recall hoặc transfer case</h2></div><p>Learning Lab không có thứ tự bắt buộc. Khi lesson hiện tại chưa solid, hãy làm recall hoặc transfer case thay vì nhảy sang bài khác chỉ vì UI gợi ý.</p><Link className="secondary-button" to="/review">Mở khu vực ôn lại</Link></div></section>
 

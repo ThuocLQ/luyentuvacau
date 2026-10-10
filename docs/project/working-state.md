@@ -85,7 +85,7 @@ Stage 2E Production Safety: **SEALED** after independent acceptance. Final recon
 
 ## Exact next task
 
-**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** It was selected because it has no external learner lock, starts from an inspectable backend invariant, has a runnable Windows-friendly .NET console lab, learner-controlled visuals, a concrete production transfer to multi-instance/database correctness, and a source map. Its status is **Ready for human study — Golden Pilot**, never Human validated. Next: a real learner studies `learning-race-condition`, records vocabulary/visual/lab friction, then the team makes only evidence-backed repairs.
+**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** It has no external learner lock, starts from an inspectable backend invariant, exposes a visible homepage entry without replacing the learner's current lesson, and has a Windows-friendly .NET console lab with configurable inputs and runtime-verified output contracts. Its learner-controlled visual is covered for prediction, reveal and reset. Its status is **Ready for human study — Golden Pilot**, never Human validated. Next: a real learner studies `learning-race-condition`, records vocabulary/visual/lab friction, then the team makes only evidence-backed repairs.
 
 ## Stop conditions
 

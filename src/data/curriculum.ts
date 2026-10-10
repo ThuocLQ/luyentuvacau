@@ -40,7 +40,7 @@ export const learningDomains: LearningDomain[] = [
 
 export const learningLessons: LearningLessonMeta[] = [
   { slug: 'learning-index-execution-plan', domainId: 'data-consistency', title: 'Index & Execution Plan', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, referenceSlug: 'sql-index-locking', quizPath: '/quiz?topic=EF%20Core%20v%C3%A0%20SQL', interviewPath: '/interview?question=sql-lost-update' },
-  { slug: 'learning-race-condition', domainId: 'runtime-concurrency', title: 'Race Condition & Concurrency', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, referenceSlug: 'async-concurrency', quizPath: '/quiz?topic=Async%20v%C3%A0%20background%20work', interviewPath: '/interview?question=async-fanout' },
+  { slug: 'learning-race-condition', domainId: 'runtime-concurrency', title: 'Race Condition & Concurrency — Golden Pilot', status: 'pilot', targetTechLevel: 3, targetEnglishLevel: 2, referenceSlug: 'async-concurrency', quizPath: '/quiz?topic=Async%20v%C3%A0%20background%20work', interviewPath: '/interview?question=async-fanout' },
   { slug: 'learning-outbox-idempotency', domainId: 'distributed-systems', title: 'Outbox & Idempotency', status: 'pilot', targetTechLevel: 4, targetEnglishLevel: 3, referenceSlug: 'distributed-systems', quizPath: '/quiz?topic=Outbox%20v%C3%A0%20Saga', interviewPath: '/interview?question=idempotency-key' },
 ]
 
