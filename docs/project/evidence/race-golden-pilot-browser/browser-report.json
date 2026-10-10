@@ -99,6 +99,11 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labDiagnostics": {
+        "experiment": "controlled",
+        "phase": "reveal",
+        "instrumentation": true
+      },
       "race": {
         "viewport": {
           "width": 360,
@@ -208,6 +213,11 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labDiagnostics": {
+        "experiment": "controlled",
+        "phase": "reveal",
+        "instrumentation": true
+      },
       "race": {
         "viewport": {
           "width": 390,
@@ -219,11 +229,7 @@
         "inlineCodeOverflow": []
       },
       "screenshots": [
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-390.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-first-visual-390.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-390.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-boundary-visual-390.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-assessment-completion-390.png"
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-390.png"
       ]
     },
     {
@@ -322,6 +328,11 @@
         "experiment": "sequential",
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
+      "labDiagnostics": {
+        "experiment": "controlled",
+        "phase": "reveal",
+        "instrumentation": true
       },
       "race": {
         "viewport": {
@@ -432,6 +443,11 @@
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
       },
+      "labDiagnostics": {
+        "experiment": "controlled",
+        "phase": "reveal",
+        "instrumentation": true
+      },
       "race": {
         "viewport": {
           "width": 1280,
@@ -443,11 +459,7 @@
         "inlineCodeOverflow": []
       },
       "screenshots": [
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-1280.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-first-visual-1280.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-1280.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-boundary-visual-1280.png",
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-assessment-completion-1280.png"
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-1280.png"
       ]
     },
     {
@@ -546,6 +558,11 @@
         "experiment": "sequential",
         "phase": "reveal",
         "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
+      "labDiagnostics": {
+        "experiment": "controlled",
+        "phase": "reveal",
+        "instrumentation": true
       },
       "race": {
         "viewport": {

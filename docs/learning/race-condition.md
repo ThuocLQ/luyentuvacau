@@ -140,7 +140,7 @@ using var bothRead = new Barrier(2);
 using var releaseWrite = new Barrier(2);
 Task<WithdrawalResult> UnsafeWithdraw(int amount) => Task.Run(() =>
 {
-    var current = unsafeBalance; // READ
+    var current = unsafeBalance; // READ — Experiment 3 sẽ chèn log tạm ngay dưới dòng này.
     bothRead.SignalAndWait();
     var approved = current >= amount; // CHECK
     releaseWrite.SignalAndWait();
@@ -261,7 +261,21 @@ Hai `Barrier` cố tình buộc cả hai call đọc 100 trước khi WRITE. M�
 <!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:START -->
 ### Kết quả cần quan sát
 
-Hai log `current=100` và hai accepted result cho thấy failure mechanism đã được tái tạo có chủ đích.
+Sau khi đã xem summary của Experiment 2, chèn **tạm thời ngay dưới** dòng `var current = unsafeBalance; // READ` trong `UnsafeWithdraw`:
+
+```csharp
+Console.WriteLine($"read: amount={amount}, current={current}");
+```
+
+Chạy lại với input 80/30. Bạn sẽ thấy hai snapshot READ đều là 100; thứ tự hai dòng không được hứa:
+
+```text
+read: amount=80, current=100
+read: amount=30, current=100
+unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70
+```
+
+Hai dòng `read` có thể đổi chỗ. Summary `unsafe` vẫn do code mẫu in ra; log READ chỉ là instrumentation do bạn chủ động thêm để nhìn snapshot trước CHECK/WRITE.
 
 ### Vì sao cần Barrier?
 

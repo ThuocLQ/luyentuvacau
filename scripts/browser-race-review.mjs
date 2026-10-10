@@ -120,7 +120,7 @@ async function reviewViewport(cdp, width) {
   await cdp.send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: width <= 390 })
   await navigate(cdp, '/')
   const captureScreenshots = width === 390 || width === 1280
-  const screenshots = captureScreenshots ? [await screenshot(cdp, `home-navigation-${width}.png`)] : []
+  const screenshots = []
   const homeGeometry = await geometry(cdp)
   await navigate(cdp, '/docs/learning-race-condition?mode=guided')
   await cdp.evaluate(`localStorage.removeItem('ltvc-race-assessment-v4'); localStorage.removeItem('ltvc-race-lab-progress-v1'); localStorage.setItem('ltvc-race-guided-step', '0')`)
@@ -130,7 +130,6 @@ async function reviewViewport(cdp, width) {
   }, 'Race first step')
   await cdp.evaluate(scrollToSelector('.race-guided > div:not([hidden]) .race-visual-card'))
   await sleep(120)
-  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-first-visual-${width}.png`))
   const guidedStages = []
   for (let index = 0; index < 6; index += 1) {
     await cdp.evaluate(`document.querySelectorAll('[aria-label^="Bước "]')[${index}]?.click()`)
@@ -151,16 +150,26 @@ async function reviewViewport(cdp, width) {
   const labResume = await cdp.evaluate(`(() => { const workflow = document.querySelector('.race-lab-workflow'); return { experiment: workflow?.dataset.experiment, phase: workflow?.dataset.phase, prediction: document.querySelector('.race-lab-feedback p')?.textContent ?? '' } })()`)
   await cdp.evaluate(scrollToSelector('.race-lab-workflow'))
   await sleep(120)
+  await cdp.evaluate(clickButton('Sang experiment tiếp theo'))
+  await cdp.evaluate(clickButton('Bỏ qua dự đoán'))
+  await cdp.evaluate(clickButton('Tôi chỉ đọc hoặc inspect output'))
+  await cdp.evaluate(clickButton('Bỏ qua ghi chú'))
+  await cdp.evaluate(clickButton('Sang experiment tiếp theo'))
+  await cdp.evaluate(clickButton('Bỏ qua dự đoán'))
+  await cdp.evaluate(clickButton('Tôi chỉ đọc hoặc inspect output'))
+  await cdp.evaluate(clickButton('Bỏ qua ghi chú'))
+  const labDiagnostics = await cdp.evaluate(`(() => ({ experiment: document.querySelector('.race-lab-workflow')?.dataset.experiment, phase: document.querySelector('.race-lab-workflow')?.dataset.phase, instrumentation: document.querySelector('.race-lab-reveal-copy')?.textContent.includes('Console.WriteLine') ?? false }))()`)
+  if (labDiagnostics.experiment !== 'controlled' || labDiagnostics.phase !== 'reveal' || !labDiagnostics.instrumentation) throw new Error(`Experiment 3 instrumentation was not visible: ${JSON.stringify(labDiagnostics)}`)
+  await cdp.evaluate(scrollToSelector('.race-lab-workflow'))
+  await sleep(120)
   if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-guided-lab-expanded-${width}.png`))
   await cdp.evaluate(`document.querySelector('[aria-label="Bước 5: Chuyển tình huống"]')?.click()`)
   await cdp.evaluate(scrollToSelector('.race-visual-card'))
   await sleep(120)
-  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-boundary-visual-${width}.png`))
   await completeAssessment(cdp)
   await cdp.evaluate(scrollToSelector('.race-assessment-result'))
   await sleep(120)
-  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-assessment-completion-${width}.png`))
-  const result = { width, home: homeGeometry, guidedStages, labResume, race: await geometry(cdp), screenshots }
+  const result = { width, home: homeGeometry, guidedStages, labResume, labDiagnostics, race: await geometry(cdp), screenshots }
   const geometryFailures = [result.home, result.race, ...guidedStages.map(stage => stage.geometry)].some(item => item.scrollWidth !== item.clientWidth || item.offenders.length || item.inlineCodeOverflow.length)
   if (geometryFailures) throw new Error(`Layout failure at ${width}px: ${JSON.stringify(result)}`)
   return result

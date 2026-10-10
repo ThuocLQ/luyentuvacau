@@ -8,6 +8,9 @@ export interface RaceLabProgress {
   version: typeof RACE_LAB_PROGRESS_VERSION
   experimentId: RaceLabExperimentId
   phase: RaceLabPhase
+  // Optional so existing v1 study notes remain readable; new navigation records
+  // the last visible phase for each experiment without changing the storage key.
+  experimentPhases?: Partial<Record<RaceLabExperimentId, RaceLabPhase>>
   predictions: Partial<Record<RaceLabExperimentId, string>>
   observations: Partial<Record<RaceLabExperimentId, string>>
   viewed: RaceLabExperimentId[]
@@ -40,9 +43,11 @@ export function isRaceLabProgress(value: unknown): value is RaceLabProgress {
   const candidate = value as Partial<RaceLabProgress>
   const validIds = (items: unknown): items is RaceLabExperimentId[] => Array.isArray(items) && items.every(item => typeof item === 'string' && experimentIds.includes(item as RaceLabExperimentId))
   const validNotes = (items: unknown) => !!items && typeof items === 'object' && !Array.isArray(items) && Object.values(items).every(item => typeof item === 'string')
+  const validExperimentPhases = (items: unknown) => items === undefined || (!!items && typeof items === 'object' && !Array.isArray(items) && Object.entries(items).every(([id, phase]) => experimentIds.includes(id as RaceLabExperimentId) && phases.includes(phase as RaceLabPhase)))
   return candidate.version === RACE_LAB_PROGRESS_VERSION
     && typeof candidate.experimentId === 'string' && experimentIds.includes(candidate.experimentId as RaceLabExperimentId)
     && typeof candidate.phase === 'string' && phases.includes(candidate.phase as RaceLabPhase)
+    && validExperimentPhases(candidate.experimentPhases)
     && validNotes(candidate.predictions) && validNotes(candidate.observations)
     && validIds(candidate.viewed) && validIds(candidate.attempted) && validIds(candidate.recorded)
     && validIds(candidate.selfReportedExecution) && validIds(candidate.skippedPrediction) && validIds(candidate.skippedObservation)
