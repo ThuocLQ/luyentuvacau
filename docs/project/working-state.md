@@ -75,7 +75,9 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Repair Stage 2E Security + Observability: replace the generic evidence in all 44 relations with relation-specific Local/External/Recommended rationale, then run independent package acceptance. Reliability / SRE remains unreviewed; Stage 2E remains IN_REVIEW.
+Stage 2E Observability semantic review: author and independently validate relation-specific Local/External/Recommended evidence for its 19 relations and 7 target Learning Units. Stage 2E remains IN_REVIEW; Reliability / SRE is unreviewed.
+
+Security is a completed bounded Stage 2E package: 25 / 25 relations (18 REQUIRED, 7 RECOMMENDED) across 11 target Learning Units. It has 12 LOCAL REQUIRED slices, 5 acceptable whole-unit External candidate proxies, one rejected multi-capability whole-unit proxy (`lu-sec-auth-session-oauth`) and 5 surfaced / 2 omitted RECOMMENDED contexts. The Stage 2 Security validator and negative tests are the executable structural gate; candidate edges remain non-locking until final Stage 2 policy materialization.
 
 ## Stop conditions
 

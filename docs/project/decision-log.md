@@ -92,3 +92,10 @@ Finish roadmap/progression architecture first, validate a reusable lesson patter
 **Status:** SEALED after independent final acceptance, evidence commit 6b25b816bcdfec1bba1a4ce0474a9d51f72e0ef6.
 
 All 69 relations were reconciled against the frozen registry: **45 REQUIRED** = 29 Local + 16 External candidates; **24 RECOMMENDED** = 21 surfaced + 3 intentionally omitted. The 16 External candidate unit pairs remain candidate-only (not learner locks); local ownership claims and 25 target over-gating records are complete. Combined Foundations + Data + Distributed Interaction graph: 137 units, 37 external unit edges, 118 roots, maximum indegree 5, acyclic. Begin Stage 2E with a bounded Production Safety inventory/review slice; do not reopen sealed Stage 2D without concrete evidence.
+
+## D-012 — Stage 2E Security bounded review accepted
+
+**Date:** 2026-10-10
+**Status:** ACTIVE; Stage 2E remains IN_REVIEW
+
+Security has 25 relation-specific decisions across 11 target Learning Units: **18 REQUIRED** = 12 Local slices + 6 External evidence candidates, and **7 RECOMMENDED** = 5 surfaced + 2 omitted. Five singleton whole-unit proxies into `lu-sec-unseen-attack-transfer` are acceptable candidates only. `sec-auth-session-token → sec-authorization-object-tenant` is not a whole-unit proxy: `lu-sec-auth-session-oauth` also owns OAuth/OIDC awareness, so later policy must use compatible authentication evidence rather than whole-unit PASSED. An executable validator and negative tests now enforce inventory identity, row shape, duplicate decisions, proxy membership/fairness and target over-gating coverage. Observability and Reliability / SRE remain unreviewed.

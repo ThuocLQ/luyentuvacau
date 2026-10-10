@@ -8,13 +8,15 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "vitest run --exclude scripts/architecture-validation.test.mjs",
+    "test": "vitest run --exclude scripts/architecture-validation.test.mjs --exclude scripts/validate-stage2-security.test.mjs",
     "validate": "npm run validate:content",
     "validate:content": "node scripts/validate-content.mjs",
     "validate:architecture": "node scripts/validate-architecture.mjs",
+    "validate:stage2-security": "node scripts/validate-stage2-security.mjs",
+    "test:stage2-security": "node --test scripts/validate-stage2-security.test.mjs",
     "test:architecture": "node --test scripts/architecture-validation.test.mjs",
     "validate:css": "node scripts/validate-css-tokens.mjs",
-    "check": "npm run validate:content && npm run validate:architecture && npm run test:architecture && npm run validate:css && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
+    "check": "npm run validate:content && npm run validate:architecture && npm run test:architecture && npm run validate:stage2-security && npm run test:stage2-security && npm run validate:css && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.4.1",
