@@ -3,10 +3,10 @@ import { englishLevelLabels, techLevelLabels, type EnglishLevel, type LearningSt
 import { useLearningProgress } from '../../hooks/useLearningProgress'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 
-interface Props { lessonSlug: string; evidenceChecks?: string[] }
+interface Props { lessonSlug: string; evidenceChecks?: string[]; allowStatusSelection?: boolean; assessmentNote?: string }
 const statusLabels: Record<LearningStatus, string> = { 'not-started': 'Chưa bắt đầu', learning: 'Đang học', solid: 'Khá vững' }
 
-export default function LearningMasteryPanel({ lessonSlug, evidenceChecks = [] }: Props) {
+export default function LearningMasteryPanel({ lessonSlug, evidenceChecks = [], allowStatusSelection = true, assessmentNote }: Props) {
   const { get, update } = useLearningProgress()
   const progress = get(lessonSlug)
   const [reported, setReported] = useLocalStorage<Record<string, string[]>>('ltvc-learning-evidence-v1', {})
@@ -24,8 +24,9 @@ export default function LearningMasteryPanel({ lessonSlug, evidenceChecks = [] }
     <div className="mastery-controls">
       <label>Technical mastery<select value={progress.techLevel} onChange={event => update(lessonSlug, { techLevel: Number(event.target.value) as TechLevel })}>{([1, 2, 3, 4] as TechLevel[]).map(level => <option key={level} value={level}>{techLevelLabels[level]}</option>)}</select></label>
       <label>English mastery<select value={progress.englishLevel} onChange={event => update(lessonSlug, { englishLevel: Number(event.target.value) as EnglishLevel })}>{([1, 2, 3, 4] as EnglishLevel[]).map(level => <option key={level} value={level}>{englishLevelLabels[level]}</option>)}</select></label>
-      <label>Trạng thái<select value={progress.status} onChange={event => update(lessonSlug, { status: event.target.value as LearningStatus })}>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+      {allowStatusSelection && <label>Trạng thái<select value={progress.status} onChange={event => update(lessonSlug, { status: event.target.value as LearningStatus })}>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>}
     </div>
+    {assessmentNote && <p className="mastery-assessment-note">{assessmentNote}</p>}
     <p className="mastery-english-note">English E1–E4 là track riêng: chọn sau khi bạn đọc hoặc nói lại phần English explanation, không suy ra từ checkbox technical.</p>
     <div className="learning-friction"><label>Điều làm bạn vướng<select value={frictionType} onChange={event => setFrictionType(event.target.value)}><option>Thuật ngữ</option><option>Visual</option><option>Lab setup/output</option><option>Transfer reasoning</option></select></label><label>Ghi chú ngắn<textarea value={frictionNote} onChange={event => setFrictionNote(event.target.value)} placeholder="Ví dụ: chưa hiểu vì sao final balance 70 vẫn sai." /></label><div className="learning-friction-actions"><button className="secondary-button" onClick={saveFriction}>Lưu ghi chú trên máy này</button><button className="secondary-button" onClick={() => navigator.clipboard?.writeText(`${frictionType}: ${frictionNote.trim()}`)}>Chép để gửi người review</button></div><small>Ghi chú chỉ ở trình duyệt này cho đến khi bạn chủ động chép và gửi.</small></div>
   </section>

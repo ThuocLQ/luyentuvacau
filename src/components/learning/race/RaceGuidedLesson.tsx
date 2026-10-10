@@ -12,9 +12,9 @@ const steps: { id: string; label: string; shortLabel: string; title: string; pro
   { id: 'explain-recall', label: '6. Giải thích và nhớ lại', shortLabel: '6 / 6 · Giải thích', title: 'Giải thích bằng evidence, không chỉ bằng định nghĩa', prompt: 'Trong 60–120 giây, nói lại invariant, một interleaving sai, boundary đúng và evidence cần debug.', action: 'Tự ghi evidence L1–L4 dưới bài. English là track riêng: chỉ tự đánh giá sau khi bạn nói lại phần English explanation.', evidence: 'Với 60/50, unsafe vẫn approve 110 và final balance có thể 40 hoặc 50.', visual: 'boundary' },
 ]
 
-interface Props { step: RaceGuidedStep; onStep: (step: RaceGuidedStep) => void; onShowFull: () => void; labHtml: string; contextHtml: string[] }
+interface Props { step: RaceGuidedStep; onStep: (step: RaceGuidedStep) => void; onStartPractice: () => void; labHtml: string; contextHtml: string[] }
 
-export default function RaceGuidedLesson({ step, onStep, onShowFull, labHtml, contextHtml }: Props) {
+export default function RaceGuidedLesson({ step, onStep, onStartPractice, labHtml, contextHtml }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const current = steps[step]
   const moveTo = (next: RaceGuidedStep) => onStep(next)
@@ -31,6 +31,6 @@ export default function RaceGuidedLesson({ step, onStep, onShowFull, labHtml, co
     {contextHtml[step] && <div className="race-guided-context" dangerouslySetInnerHTML={{ __html: contextHtml[step] }} />}
     {(['interleaving', 'protection', 'boundary'] as RaceVisualStage[]).map(visual => <div key={visual} hidden={visual !== current.visual}><RaceGoldenLesson stage={visual} /></div>)}
     {step === 2 && <section className="race-guided-lab" aria-labelledby="race-guided-lab-title"><div><span className="mini-label">Lab chạy được trên Windows</span><h3 id="race-guided-lab-title">Predict → Run → Inspect → Interpret</h3><p>Phần này lấy trực tiếp từ bài Race gốc. Nút <strong>Chép mã</strong> nằm ngay trên code block; không cần đổi sang Xem toàn bài.</p></div><div dangerouslySetInnerHTML={{ __html: labHtml }} /></section>}
-    <div className="race-guided-controls"><button className="secondary-button" onClick={() => moveTo(Math.max(0, step - 1) as RaceGuidedStep)} disabled={step === 0}>Bước trước</button>{step < steps.length - 1 ? <button className="primary-button" onClick={() => moveTo((step + 1) as RaceGuidedStep)}>Tiếp tục</button> : <button className="primary-button" onClick={onShowFull}>Xem toàn bài</button>}</div>
+    <div className="race-guided-controls"><button className="secondary-button" onClick={() => moveTo(Math.max(0, step - 1) as RaceGuidedStep)} disabled={step === 0}>Bước trước</button>{step < steps.length - 1 ? <button className="primary-button" onClick={() => moveTo((step + 1) as RaceGuidedStep)}>Tiếp tục</button> : <button className="primary-button" onClick={onStartPractice}>Bắt đầu bài luyện tập</button>}</div>
   </section>
 }

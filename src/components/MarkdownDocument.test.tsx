@@ -328,6 +328,20 @@ describe('Golden Learning Lab visuals', () => {
     expect(raceLesson).toContain('Không có quiz hay completion nào tự unlock level.')
   })
 
+  it('opens the dedicated Race practice from final Guided step and does not expose a manual completion status', () => {
+    window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
+    window.localStorage.setItem('ltvc-race-guided-step', JSON.stringify(5))
+    const raceDocument = findCompleteDoc('learning-race-condition')!
+    render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
+    expect(screen.getByRole('button', { name: 'Bắt đầu bài luyện tập' })).toBeInTheDocument()
+    expect(screen.queryByLabelText('Trạng thái')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Bắt đầu bài luyện tập' }))
+    expect(screen.getByRole('heading', { name: 'Kiểm tra evidence Race Condition' })).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText('Technical mastery'), { target: { value: '4' } })
+    expect(screen.queryByRole('heading', { name: 'Đã thỏa yêu cầu bài luyện tập Race' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /Next Lesson/i })).not.toBeInTheDocument()
+  })
+
   it('keeps Quick mode available for reference Markdown', () => {
     render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'reference-test', title: 'Reference', contentKind: 'reference' }} /></MemoryRouter>)
     expect(screen.getByRole('button', { name: 'Ôn nhanh' })).toBeInTheDocument()

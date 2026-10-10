@@ -26,7 +26,7 @@ Reopen only to finish this learner-evidence cycle, for a factual correctness iss
 
 ## Race Condition & Concurrency
 
-Status: **Ready for human study — Golden Pilot**
+Status: **Human study in progress — UX and assessment issues being repaired**
 Research: [race-condition-source-map.md](../research/race-condition-source-map.md)
 
 Known state:
@@ -34,6 +34,7 @@ Known state:
 - local versus multi-instance correctness boundary is explicit.
 - console lab now states its observable output contract, includes failure/debug evidence and separates L1–L4 technical checks from an optional English explanation.
 - this is the selected first Golden Pilot; it is not Human validated until a real learner studies this exact version and records friction evidence.
+- learner feedback found Guided UI friction and the absence of an honest practice → assessment → completion loop; the repair is awaiting a full learner retest on the updated version.
 
 Reopen only for learner evidence, factual correctness issue, concrete UI bug, or a material runtime-version change.
 
