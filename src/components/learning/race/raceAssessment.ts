@@ -1,4 +1,4 @@
-export const RACE_ASSESSMENT_VERSION = 'race-atomicity-v3'
+export const RACE_ASSESSMENT_VERSION = 'race-atomicity-v4'
 
 export type RaceAnswer = string | string[]
 export interface RaceAttempt { questionId: string; answer: RaceAnswer; correct: boolean; submittedAt: string; provenance: 'automatically-checked' | 'self-reviewed' }
@@ -11,6 +11,8 @@ export interface RaceAssessmentState {
   labConfirmed: boolean
   debugTimeline: string
   debugSelfReviewed: boolean
+  debugRepairNote: string
+  debugRepairSelfReviewed: boolean
 }
 
 export interface RaceQuestion {
@@ -33,7 +35,7 @@ export const raceQuestions: RaceQuestion[] = [
   { id: 'transfer-boundary', level: 'L4', prompt: 'Stretch: inventory sống ở database, API chạy bốn instance. Candidate nào giữ invariant gần source of truth nhất?', type: 'single', options: [{ id: 'database-boundary', label: 'Conditional update/transaction hoặc optimistic concurrency tại database boundary.' }, { id: 'local-lock', label: 'Một lock object trong mỗi API instance.' }, { id: 'semaphore', label: 'SemaphoreSlim chỉ để giới hạn số request.' }], correct: ['database-boundary'], explanation: 'L4 là enrichment: local lock và concurrency limit không phối hợp state giữa các instance.', reviewStep: 4 },
 ]
 
-export const initialRaceAssessment = (): RaceAssessmentState => ({ version: RACE_ASSESSMENT_VERSION, currentQuestion: 0, answers: {}, attempts: [], labObservation: '', labConfirmed: false, debugTimeline: '', debugSelfReviewed: false })
+export const initialRaceAssessment = (): RaceAssessmentState => ({ version: RACE_ASSESSMENT_VERSION, currentQuestion: 0, answers: {}, attempts: [], labObservation: '', labConfirmed: false, debugTimeline: '', debugSelfReviewed: false, debugRepairNote: '', debugRepairSelfReviewed: false })
 
 export function isRaceAssessmentState(value: unknown): value is RaceAssessmentState {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false
@@ -43,6 +45,7 @@ export function isRaceAssessmentState(value: unknown): value is RaceAssessmentSt
     && !!candidate.answers && typeof candidate.answers === 'object' && !Array.isArray(candidate.answers)
     && Array.isArray(candidate.attempts) && typeof candidate.labObservation === 'string' && typeof candidate.labConfirmed === 'boolean'
     && typeof candidate.debugTimeline === 'string' && typeof candidate.debugSelfReviewed === 'boolean'
+    && typeof candidate.debugRepairNote === 'string' && typeof candidate.debugRepairSelfReviewed === 'boolean'
 }
 
 export function answersMatch(answer: RaceAnswer | undefined, expected: string[]) {
@@ -59,6 +62,7 @@ export function raceRequirements(state: RaceAssessmentState) {
   const l2 = hasCorrectAttempt(state, 'baseline') && hasCorrectAttempt(state, 'variation')
   const lab = state.labConfirmed && state.labObservation.trim().length >= 8
   const l3Checked = hasCorrectAttempt(state, 'debug-failure-repair')
-  const l3ReflectionRecorded = state.debugSelfReviewed && state.debugTimeline.trim().length > 0
-  return { l1, l2, lab, l3Checked, l3ReflectionRecorded, satisfied: l1 && l2 && lab && l3Checked && l3ReflectionRecorded }
+  const l3TimelineRecorded = state.debugSelfReviewed && state.debugTimeline.trim().length > 0
+  const l3RepairRecorded = state.debugRepairSelfReviewed && state.debugRepairNote.trim().length > 0
+  return { l1, l2, lab, l3Checked, l3TimelineRecorded, l3RepairRecorded, satisfied: l1 && l2 && lab && l3Checked && l3TimelineRecorded && l3RepairRecorded }
 }

@@ -10,7 +10,7 @@ describe('HomePage Golden Pilot entry', () => {
   it('starts a new learner at the Golden Pilot', () => {
     render(<MemoryRouter><HomePage /></MemoryRouter>)
 
-    expect(screen.getByRole('heading', { name: 'Race Condition & Concurrency — Golden Pilot' })).toBeInTheDocument()
+    expect(screen.getByText(/Golden Pilot giúp bạn thấy race condition/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Bắt đầu Golden Pilot' })).toHaveAttribute('href', '/docs/learning-race-condition')
   })
 

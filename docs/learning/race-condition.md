@@ -211,13 +211,19 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 <!-- QN_RACE_LAB:EXPERIMENT:sequential:QUESTION:END -->
 
 <!-- QN_RACE_LAB:EXPERIMENT:sequential:REVEAL:START -->
-**Predict:** chỉ một success, `approvedAmount=80`, `finalBalance=20`.
-**Expected evidence:** `sequential: approvedCount=1, approvedAmount=80, finalBalance=20`.
-**60/50 variation:** đổi đúng hai input thành `firstAmount = 60`, `secondAmount = 50`; expected là `sequential: approvedCount=1, approvedAmount=60, finalBalance=40`.
-**Run:** đọc dòng `sequential` của chương trình, không thay đổi code.
-**Inspect:** `approvedCount`, `approvedAmount`, `finalBalance`.
-**Observation / Why:** B đọc state sau write của A. Không có interleaving vào logical operation.
-**Learn:** sequential success chưa chứng minh code concurrent-safe; nó chỉ là baseline cho invariant.
+### Kết quả cần quan sát
+
+`sequential: approvedCount=1, approvedAmount=80, finalBalance=20`.
+
+Khi đổi input thành 60/50, dòng này thành `approvedCount=1, approvedAmount=60, finalBalance=40`.
+
+### Vì sao có kết quả đó?
+
+B chỉ đọc balance sau WRITE của A. Logical operation không bị interleave, nên request thứ hai bị từ chối khi balance chỉ còn 20 (hoặc 40 ở biến thể 60/50).
+
+### Điều cần ghi nhớ
+
+Sequential success là baseline để kiểm tra invariant; nó chưa chứng minh code concurrent-safe.
 <!-- QN_RACE_LAB:EXPERIMENT:sequential:REVEAL:END -->
 <!-- QN_RACE_LAB:EXPERIMENT:sequential:END -->
 
@@ -229,14 +235,19 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 <!-- QN_RACE_LAB:EXPERIMENT:unsafe:QUESTION:END -->
 
 <!-- QN_RACE_LAB:EXPERIMENT:unsafe:REVEAL:START -->
-**Predict:** cả hai được approve, `approvedAmount=110`; `finalBalance` có thể là 20 hoặc 70 vì write cuối dùng snapshot cũ.
-**Expected evidence:** `unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70`.
-**60/50 variation:** với `firstAmount = 60`, `secondAmount = 50`, expected là `unsafe: approvedCount=2, approvedAmount=110, finalBalance=40 hoặc 50`.
-**Run:** đọc dòng `unsafe`; hai `Barrier` đã buộc cả hai call hoàn tất READ trước khi WRITE.
-**Inspect:** `approvedCount=2`, `approvedAmount=110`, `finalBalance`.
-**Observation:** approved total 110 là evidence invariant violation, dù final balance có thể trông “hợp lý”.
-**Why:** `current` là local snapshot; WRITE sau không biết request khác đã thay đổi state.
-**Learn:** “chạy một lần không lỗi” không phải proof of thread safety. Reasoning phải bao phủ interleaving được phép.
+### Kết quả cần quan sát
+
+`unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70`.
+
+Với `firstAmount = 60` và `secondAmount = 50`, cả hai vẫn approve tổng 110; final balance có thể là 40 hoặc 50.
+
+### Vì sao invariant vỡ?
+
+Hai `Barrier` cố tình buộc cả hai call đọc 100 trước khi WRITE. Mỗi biến `current` là local snapshot, nên WRITE sau không biết request kia đã được approve từ cùng state cũ.
+
+### Điều cần ghi nhớ
+
+`approvedAmount=110` là evidence trực tiếp của invariant violation. Final balance trông có vẻ hợp lý không xóa được hai approval đã xảy ra.
 <!-- QN_RACE_LAB:EXPERIMENT:unsafe:REVEAL:END -->
 <!-- QN_RACE_LAB:EXPERIMENT:unsafe:END -->
 
@@ -248,11 +259,17 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 <!-- QN_RACE_LAB:EXPERIMENT:controlled:QUESTION:END -->
 
 <!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:START -->
-**Predict:** `Barrier` làm cả hai READ trước CHECK/WRITE nên failure mechanism xuất hiện có chủ đích.
-**Run:** giữ hai `Barrier` trong block `unsafe` và thêm log `current`, `amount`, result nếu muốn quan sát.
-**Inspect:** hai `current=100`, hai accepted result.
-**Why:** timing gate là evidence aid trong lab; nó không phải production fix.
-**Learn:** debug race bằng candidate timeline, boundary và evidence, không bằng random `Thread.Sleep`.
+### Kết quả cần quan sát
+
+Hai log `current=100` và hai accepted result cho thấy failure mechanism đã được tái tạo có chủ đích.
+
+### Vì sao cần Barrier?
+
+`Barrier` chỉ là timing gate trong lab: nó ép cả hai READ xảy ra trước CHECK/WRITE để failure lặp lại. Nó không phải production fix.
+
+### Điều cần ghi nhớ
+
+Debug race bằng candidate timeline, correctness boundary và evidence; đừng chờ một `Thread.Sleep` ngẫu nhiên làm bug xuất hiện.
 <!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:END -->
 <!-- QN_RACE_LAB:EXPERIMENT:controlled:END -->
 
@@ -264,12 +281,19 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 <!-- QN_RACE_LAB:EXPERIMENT:protected:QUESTION:END -->
 
 <!-- QN_RACE_LAB:EXPERIMENT:protected:REVEAL:START -->
-**Run:** đọc dòng `protected`. `firstOwnsGate` chỉ làm demo reproducible: A đã giữ gate trước khi B thử vào. Nó không phải một phần của production solution.
-**Inspect:** `approvedCount=1`, `approvedAmount=80`, `finalBalance=20`.
-**Expected evidence:** `protected: approvedCount=1, approvedAmount=80, finalBalance=20`.
-**60/50 variation:** expected là `protected: approvedCount=1, approvedAmount=60, finalBalance=40`.
-**Why:** B chỉ vào critical section sau khi A release chính **cùng một** gate, rồi đọc 20.
-**Learn:** lock placement phải cover read/check/write của invariant, không chỉ final assignment.
+### Kết quả cần quan sát
+
+`protected: approvedCount=1, approvedAmount=80, finalBalance=20`.
+
+Khi đổi input thành 60/50, chỉ withdrawal 60 được approve và final balance là 40.
+
+### Vì sao lock này giữ được rule?
+
+`firstOwnsGate` chỉ làm demo reproducible. Production-relevant part là A và B dùng **cùng một** gate, nên B chỉ READ sau khi A release gate và thấy balance mới.
+
+### Điều cần ghi nhớ
+
+Lock phải cover toàn bộ READ → CHECK → WRITE của invariant, không chỉ final assignment.
 <!-- QN_RACE_LAB:EXPERIMENT:protected:REVEAL:END -->
 <!-- QN_RACE_LAB:EXPERIMENT:protected:END -->
 
@@ -361,7 +385,7 @@ Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi co
 
 ## Tự kiểm bằng bài luyện tập
 
-Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v3`: L1/L2 và diagnosis + repair của L3 được auto-check theo câu trả lời. L3 dùng một failure mới: hai code path giữ hai lock object khác nhau nhưng cùng sửa `balance`. Output local lab và candidate timeline của L3 được gắn rõ là self-reported / self-reviewed evidence; app không chấm chất lượng reasoning mở. Evidence của v2 không tự tương thích với v3 vì L3 đã đổi scenario. Bạn có thể retry và quay về đúng step để ôn lại.
+Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v4`: L1/L2 và diagnosis L3 được auto-check theo câu trả lời. L3 dùng một failure mới: hai code path giữ hai lock object khác nhau nhưng cùng sửa `balance`; bạn còn tự review một candidate timeline và repair note ngắn. Output local lab cùng hai ghi chú mở được gắn rõ là self-reported / self-reviewed evidence; app không chấm chất lượng reasoning mở. Evidence v3 không tự tương thích với v4 vì điều kiện completion của L3 đã thêm repair note. Bạn có thể retry và quay về đúng step để ôn lại.
 
 Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidence **của bài Race trên thiết bị này**. Nó không tự tạo `PASSED`, không mở khóa một bài kế tiếp và không thay thế Human Validation. L4 là transfer enrichment: hãy làm sau khi đã tự chạy lab, không cần cài PostgreSQL để hoàn thành phần core.
 

@@ -34,8 +34,8 @@ describe('Race guided lab progress', () => {
     render(<RaceLabWorkflow setupHtml="<p>setup</p>" experiments={experiments} />)
     expect(screen.getByRole('button', { name: 'Sang bước chạy' })).toBeDisabled()
     fireEvent.click(screen.getByRole('button', { name: 'Bỏ qua dự đoán' }))
-    fireEvent.click(screen.getByRole('button', { name: /Tôi đã chạy hoặc đọc kết quả/ }))
-    expect(screen.getByText(/tự báo cáo đã chạy\/đọc 1\/4/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /Tôi đã chạy C# lab/ }))
+    expect(screen.getByText(/tự báo cáo đã chạy C# 1\/4/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Bỏ qua ghi chú' }))
     expect(screen.getByText(/Bạn đã bỏ qua dự đoán/)).toBeInTheDocument()
     expect(screen.getByText(/Bạn chưa ghi observation/)).toBeInTheDocument()
@@ -46,5 +46,24 @@ describe('Race guided lab progress', () => {
     window.localStorage.setItem(raceLabStorageKey, JSON.stringify({ version: 'old-lab', experimentId: 'protected' }))
     render(<RaceLabWorkflow setupHtml="<p>setup</p>" experiments={experiments} />)
     expect(screen.getByText('Experiment 1 / 4')).toBeInTheDocument()
+  })
+
+  it('derives attempt and observation status from current notes after reload and deletion', () => {
+    const saved = initialRaceLabProgress()
+    saved.phase = 'inspect'
+    saved.predictions.sequential = 'Hai request sẽ bị kiểm tra theo thứ tự.'
+    saved.observations.sequential = 'approvedCount=1, approvedAmount=80, finalBalance=20'
+    saved.attempted = ['sequential']
+    saved.recorded = ['sequential']
+    window.localStorage.setItem(raceLabStorageKey, JSON.stringify(saved))
+    const { unmount } = render(<RaceLabWorkflow setupHtml="<p>setup</p>" experiments={experiments} />)
+    expect(screen.getByText(/còn ghi dự đoán 1\/4/)).toBeInTheDocument()
+    expect(screen.getByText(/còn ghi observation 1\/4/)).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText(/Observation của bạn/), { target: { value: '' } })
+    expect(screen.getByText(/còn ghi observation 0\/4/)).toBeInTheDocument()
+    unmount()
+    render(<RaceLabWorkflow setupHtml="<p>setup</p>" experiments={experiments} />)
+    expect(screen.getByText(/còn ghi dự đoán 1\/4/)).toBeInTheDocument()
+    expect(screen.getByText(/còn ghi observation 0\/4/)).toBeInTheDocument()
   })
 })

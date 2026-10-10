@@ -94,6 +94,11 @@
           }
         }
       ],
+      "labResume": {
+        "experiment": "sequential",
+        "phase": "reveal",
+        "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
       "race": {
         "viewport": {
           "width": 360,
@@ -104,9 +109,7 @@
         "offenders": [],
         "inlineCodeOverflow": []
       },
-      "screenshots": [
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-360.png"
-      ]
+      "screenshots": []
     },
     {
       "width": 390,
@@ -200,6 +203,11 @@
           }
         }
       ],
+      "labResume": {
+        "experiment": "sequential",
+        "phase": "reveal",
+        "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
       "race": {
         "viewport": {
           "width": 390,
@@ -310,6 +318,11 @@
           }
         }
       ],
+      "labResume": {
+        "experiment": "sequential",
+        "phase": "reveal",
+        "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
       "race": {
         "viewport": {
           "width": 768,
@@ -320,9 +333,7 @@
         "offenders": [],
         "inlineCodeOverflow": []
       },
-      "screenshots": [
-        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-768.png"
-      ]
+      "screenshots": []
     },
     {
       "width": 1280,
@@ -416,6 +427,11 @@
           }
         }
       ],
+      "labResume": {
+        "experiment": "sequential",
+        "phase": "reveal",
+        "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
       "race": {
         "viewport": {
           "width": 1280,
@@ -433,6 +449,115 @@
         "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-boundary-visual-1280.png",
         "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-assessment-completion-1280.png"
       ]
+    },
+    {
+      "width": 1440,
+      "home": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "guidedStages": [
+        {
+          "step": 1,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1425,
+            "clientWidth": 1425,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 2,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1425,
+            "clientWidth": 1425,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 3,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1425,
+            "clientWidth": 1425,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 4,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1425,
+            "clientWidth": 1425,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 5,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1425,
+            "clientWidth": 1425,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 6,
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "scrollWidth": 1425,
+            "clientWidth": 1425,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        }
+      ],
+      "labResume": {
+        "experiment": "sequential",
+        "phase": "reveal",
+        "prediction": "Dự đoán: “Sequential chỉ approve request đầu tiên.”"
+      },
+      "race": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1425,
+        "clientWidth": 1425,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "screenshots": []
     }
   ],
   "artifactDir": "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser"

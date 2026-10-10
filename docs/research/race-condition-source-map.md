@@ -15,13 +15,13 @@ Research audit: 2026-10-10. This is authoring traceability, not required reading
 
 ## Assessment evidence map
 
-Assessment version: `race-atomicity-v2`. It records a local attempt only; it does not create global progression locks or a fabricated next lesson. It supersedes v1 because the L3 task and feedback-state behavior changed; v1 local attempts are intentionally not treated as compatible completion evidence.
+Assessment version: `race-atomicity-v4`. It records a local attempt only; it does not create global progression locks or a fabricated next lesson. It supersedes v3 because local completion now requires a self-reviewed L3 repair note; v3 local attempts are intentionally not treated as compatible completion evidence.
 
 | Level | Objective | Independent task / scenario | Accepted evidence or rubric | Provenance | Required or optional | Retry / remediation |
 |---|---|---|---|---|---|---|
 | L1 | Trace invariant and interleaving | Identify why two reads of 100 can approve too much. | Select the mechanism/evidence explanation; feedback names the missed state transition. | automatically checked | required for local completion | retry with guided mental-model step |
 | L2 | Apply to changed inputs | Predict and run 60/50 instead of copying 80/30. | Correct checked prediction plus learner records observed local output. | automatically checked + self-reported lab observation | required for local completion | retry and return to runnable lab |
-| L3 | Debug a new failure and choose a repair | Diagnose stale READ/CHECK reasoning in a new in-memory withdrawal case and select the full-gate repair. Then write a production candidate timeline. | Diagnosis + repair option is auto-checked. Timeline is recorded only as self-reviewed reasoning; no character count, keyword or checkbox claims to grade it. | automatically checked + self-reviewed | required for local completion | retry and return to debugging step |
+| L3 | Debug a new failure and choose a repair | Diagnose two code paths using different lock objects for one in-memory balance. Select the shared-gate diagnosis, then write a candidate timeline and a minimal corrected path. | Diagnosis option is auto-checked. Timeline and repair note are explicitly self-reviewed; no character count, keyword or checkbox claims to grade their quality. | automatically checked + self-reviewed | required for local completion | retry and return to debugging step |
 | L4 | Reason across a changed boundary | Four instances, PostgreSQL inventory and payment timeout. | Compare local lock, conditional update/optimistic concurrency and recovery need. | manual learner reasoning | optional enrichment | transfer prompt and model direction |
 
 English E1–E4 remains a separate explanation exercise. No self-report or manual technical-mastery dropdown produces a verified PASS.

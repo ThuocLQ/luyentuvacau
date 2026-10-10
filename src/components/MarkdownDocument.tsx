@@ -165,7 +165,7 @@ export default function MarkdownDocument({ doc }: Props) {
     setRaceView(view)
   }
 
-  return <div className={`document-layout ${isRaceGoldenPilot ? 'race-learning-layout' : ''}`}>
+  return <div className={`document-layout ${isRaceGoldenPilot ? 'race-learning-layout' : ''} ${showRaceGuided || showRacePractice ? 'race-learning-active-layout' : ''}`}>
     {!showRaceGuided && !showRacePractice && <div className="reading-progress"><span style={{ width: `${readingProgress}%` }} /></div>}
     <section className="document-main">
       <header className={`document-hero compact-document-hero ${isRaceGoldenPilot ? 'race-document-hero' : ''}`}>
