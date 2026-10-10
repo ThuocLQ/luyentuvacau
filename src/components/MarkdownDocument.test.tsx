@@ -24,6 +24,16 @@ beforeEach(() => { window.scrollTo = vi.fn(); window.localStorage.clear(); windo
 afterEach(cleanup)
 
 describe('Golden Learning Lab visuals', () => {
+  it('keeps Race controls in a bounded DOM region for overflow regression checks', () => {
+    render(<RaceGoldenLesson stage="interleaving" />)
+    const visual = document.querySelector<HTMLElement>('[data-layout-boundary]')!
+    const buttons = [...document.querySelectorAll<HTMLButtonElement>('.index-step-controls button')]
+    Object.defineProperty(visual, 'clientWidth', { configurable: true, value: 320 })
+    Object.defineProperty(visual, 'scrollWidth', { configurable: true, value: 320 })
+    expect(visual.scrollWidth).toBeLessThanOrEqual(visual.clientWidth)
+    expect(buttons.map(button => button.textContent)).toEqual(['Làm lại', 'Bước trước', 'Xem bước tiếp'])
+  })
+
   it('progresses, predicts and resets the Index B-tree trace', () => {
     render(<IndexGoldenLesson stage="btree" />)
     fireEvent.click(screen.getByLabelText('31–60'))
@@ -91,23 +101,23 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/key này được sắp toàn cục theo tenant trước/)).toBeInTheDocument()
   })
 
-  it('traces, predicts and resets the Race interleaving with a visible invariant', () => {
+  it('traces, predicts and resets the Race interleaving without revealing the diagnosis early', () => {
     render(<RaceGoldenLesson stage="interleaving" />)
-    expect(screen.getByText(/Invariant còn đúng/)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(screen.getByText(/Chưa kết luận/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
     expect(screen.getByText(/Cả A và B đều đọc 100/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Xem bước tiếp' })).toBeDisabled()
     fireEvent.click(screen.getByLabelText(/Cả hai có thể được chấp nhận/))
     expect(screen.getByText(/Đúng. Chọn Next để reveal hai CHECK/i)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
     expect(screen.getByText(/Invariant bị vi phạm/)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Reset' }))
-    expect(screen.getByText(/Approved 0 \/ 100/)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }))
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled()
+    fireEvent.click(screen.getByRole('button', { name: 'Làm lại' }))
+    expect(screen.getByText(/Chưa kết luận/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    expect(screen.getByRole('button', { name: 'Xem bước tiếp' })).toBeDisabled()
   })
 
   it('keeps relay publish attempts separate from consumer deliveries', () => {
@@ -138,7 +148,7 @@ describe('Golden Learning Lab visuals', () => {
   })
   it('switches Race protection and multi-instance boundary modes', () => {
     render(<><RaceGoldenLesson stage="protection" /><RaceGoldenLesson stage="boundary" /></>)
-    fireEvent.click(screen.getByRole('button', { name: '`lock` trong một process' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Dùng `lock` trong một process' }))
     expect(screen.getByText(/wait: same lock is held/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Hai instance' }))
     expect(screen.getByText(/gateB chỉ sống trong B/)).toBeInTheDocument()
@@ -223,7 +233,7 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn execution mode' })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn số instance' })).toBeInTheDocument()
-    expect(screen.getByText('Evidence checks — L1 đến L4')).toBeInTheDocument()
+    expect(screen.getByText('Tự kiểm L1 đến L4')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
   })
 
@@ -237,15 +247,24 @@ describe('Golden Learning Lab visuals', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
     expect(screen.getByRole('heading', { name: /Lỗi không nằm ở.*dòng WRITE/i })).toBeInTheDocument()
     expect(document.activeElement).toBe(screen.getByRole('heading', { name: /Lỗi không nằm ở.*dòng WRITE/i }))
-    fireEvent.click(screen.getByRole('button', { name: 'Bước trước' }))
+    fireEvent.click(within(document.querySelector('.race-guided-controls')!).getByRole('button', { name: 'Bước trước' }))
     expect(screen.getByRole('heading', { name: /Hai request cùng nhìn 100/i })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Xem toàn bài' }))
-    expect(screen.getByText('Hands-on Lab')).toBeInTheDocument()
+    expect(screen.getByText('Tự chạy: cùng input, ba cách thực thi')).toBeInTheDocument()
     const technical = screen.getByLabelText('Technical mastery') as HTMLSelectElement
     expect(technical.value).toBe('1')
     fireEvent.click(screen.getByRole('checkbox', { name: /Nêu invariant/i }))
     expect(technical.value).toBe('1')
     expect(screen.getByText(/không tạo PASSED, MASTERED/i)).toBeInTheDocument()
+  })
+
+  it('uses compact numbered step controls while retaining a named stage chooser', () => {
+    window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
+    const raceDocument = findCompleteDoc('learning-race-condition')!
+    render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
+    expect(screen.getByRole('button', { name: 'Bước 1: Bài toán và dự đoán' })).toHaveTextContent('1')
+    expect(screen.getByRole('button', { name: 'Bước 6: Giải thích và nhớ lại' })).toHaveTextContent('6')
+    expect(screen.getByText('Chọn bước khác')).toBeInTheDocument()
   })
 
   it('keeps the runnable C# lab and expected outputs inside Guided Practice', () => {
@@ -267,24 +286,34 @@ describe('Golden Learning Lab visuals', () => {
 
     const context = () => document.querySelector<HTMLElement>('.race-guided-context')!
     expect(within(context()).getByText(/Bạn cần biết variable, method, C# cơ bản/)).toBeInTheDocument()
-    expect(within(context()).getByText('Engineering Problem')).toBeInTheDocument()
+    expect(within(context()).getByText('Nếu hai request cùng rút tiền, rule nào phải giữ?')).toBeInTheDocument()
     expect(within(context()).queryByText('Shared state là gì?')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
     expect(within(context()).getByText('Shared state là gì?')).toBeInTheDocument()
-    expect(context().querySelector('#interlocked-giai-quyet-dung-bai-toan-nao')).toBeInTheDocument()
-    expect(context().querySelector('#async-khong-loai-race')).toBeInTheDocument()
+    expect(within(context()).queryByText(/Bây giờ mới gọi tên lỗi/)).not.toBeInTheDocument()
+    expect(screen.getByText(/Hãy dự đoán rồi xem đến nhịp CHECK của B/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    fireEvent.click(screen.getByLabelText(/Cả hai có thể được chấp nhận/))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Xem bước tiếp' }))
+    const revealedExplanation = document.querySelectorAll<HTMLElement>('.race-guided-context')[1]!
+    expect(within(revealedExplanation).queryByText('Shared state là gì?')).not.toBeInTheDocument()
+    expect(within(revealedExplanation).getByText(/Bây giờ mới gọi tên lỗi/)).toBeInTheDocument()
+    expect(revealedExplanation.querySelector('#interlocked-giai-quyet-dung-bai-toan-nao')).toBeInTheDocument()
+    expect(revealedExplanation.querySelector('#async-khong-loai-race')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
-    expect(screen.getByText('Hands-on Lab')).toBeInTheDocument()
+    expect(screen.getByText('Tự chạy: cùng input, ba cách thực thi')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
     expect(within(context()).getByText(/Khi production có duplicate reservation/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
     expect(context().querySelector('#transfer-challenge')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
-    expect(within(context()).getByText('Evidence checks — L1 đến L4')).toBeInTheDocument()
-    expect(within(context()).getByText('Recall Questions')).toBeInTheDocument()
-    expect(within(context()).getByText('Further Learning')).toBeInTheDocument()
+    expect(within(context()).getByText('Tự kiểm L1 đến L4')).toBeInTheDocument()
+    expect(within(context()).getByText('Nhớ lại không nhìn đáp án')).toBeInTheDocument()
+    expect(within(context()).getByText('Học thêm khi cần')).toBeInTheDocument()
   })
 
   it('preserves the guided step when switching to Full View and back', () => {
@@ -293,17 +322,17 @@ describe('Golden Learning Lab visuals', () => {
     const raceDocument = findCompleteDoc('learning-race-condition')!
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
     fireEvent.click(screen.getByRole('button', { name: 'Xem toàn bài' }))
-    expect(screen.getByText('Hands-on Lab')).toBeInTheDocument()
+    expect(screen.getByText('Tự chạy: cùng input, ba cách thực thi')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Học theo bước' }))
     expect(screen.getByRole('heading', { name: /Chạy reproduction có kiểm soát/i })).toBeInTheDocument()
   })
 
   it('opens a deep-linked Race lesson in Full View but lets the learner deliberately return to Guided View', () => {
-    window.history.replaceState(null, '', '/docs/learning-race-condition#hands-on-lab')
+    window.history.replaceState(null, '', '/docs/learning-race-condition#tu-chay-cung-input-ba-cach-thuc-thi')
     window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
     const raceDocument = findCompleteDoc('learning-race-condition')!
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
-    expect(screen.getByText('Hands-on Lab')).toBeInTheDocument()
+    expect(screen.getByText('Tự chạy: cùng input, ba cách thực thi')).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Học theo bước' }))
     expect(window.location.hash).toBe('')
     expect(screen.getByRole('heading', { name: /Hai request cùng nhìn 100/i })).toBeInTheDocument()
@@ -323,7 +352,7 @@ describe('Golden Learning Lab visuals', () => {
     expect(raceLesson).toContain('const int secondAmount = 30;')
     expect(raceLesson).toContain('unsafe: approvedCount=2, approvedAmount=110, finalBalance=40 hoặc 50')
     expect(raceLesson).not.toContain('approvedAmount=80, finalBalance={sequentialBalance}')
-    expect(raceLesson).toContain('## Evidence checks — L1 đến L4')
+    expect(raceLesson).toContain('## Tự kiểm L1 đến L4')
     expect(raceLesson).toContain('**English short explanation:**')
     expect(raceLesson).toContain('Không có quiz hay completion nào tự unlock level.')
   })

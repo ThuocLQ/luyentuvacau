@@ -40,6 +40,8 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] Distinguish broad abstractions from specific implementations.
 - [ ] Use tiny inspectable examples before generalization.
 - [ ] Move production complexity after the foundational mechanism.
+- [ ] Learner-facing headings name the current question or decision, not an authoring phase.
+- [ ] One instructional step has one meaningful learner action/question.
 
 ## D. Terminology & vocabulary friction
 
@@ -68,6 +70,9 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] No meaning depends only on color/animation.
 - [ ] Mobile/touch/keyboard/reduced-motion remain usable.
 - [ ] No unnecessary generic visualization framework was introduced.
+- [ ] The observation target is stated before the visual state is interpreted.
+- [ ] A model answer, diagnosis or conclusion is not visible before the learner's prediction/attempt.
+- [ ] Visual state remains readable in a narrow lesson container without relying on colour or animation.
 
 ## F. Hands-on lab
 
@@ -83,6 +88,7 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] At least one meaningful failure/broken assumption is explored when relevant.
 - [ ] Debugging uses Observation → Hypothesis → Evidence → Experiment → Conclusion.
 - [ ] The lab's expected output distinguishes controlled outcomes from multiple valid outcomes.
+- [ ] Question, Predict, Run, Inspect, Explain and Learn are visually separable instead of one dense instruction block.
 
 ## F1. Independent exercise and assessment
 
@@ -119,6 +125,7 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] No prose inside percentage-width bars.
 - [ ] No text clipping/overlap.
 - [ ] No accidental horizontal page scroll.
+- [ ] Grid/flex children that can contain code, controls or long text have a valid shrink boundary (`minmax(0, ...)` / `min-width: 0`) where needed.
 - [ ] Typography is readable and compact.
 - [ ] Semantic blocks help scanning rather than dominate the page.
 - [ ] Desktop and mobile are manually checked for learner-facing changes.
@@ -132,6 +139,7 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] `npm run build`
 - [ ] `npm run check`
 - [ ] Browser verification performed.
+- [ ] Desktop and mobile checks include the active learning path, narrow container reflow and primary control discoverability.
 - [ ] No claim of success without actual command/browser evidence.
 - [ ] Diff scope and any unrelated user-owned files have been checked before commit.
 

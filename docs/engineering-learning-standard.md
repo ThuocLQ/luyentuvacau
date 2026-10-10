@@ -1495,6 +1495,50 @@ and never make RECOMMENDED context blocking.
 
 ---
 
+## 54D. Learner-facing presentation contract
+
+The rendered lesson is part of the teaching mechanism, not a neutral wrapper
+around correct prose. Present each learning activity as one clear question:
+
+```text
+problem / context
+→ learner attempt or prediction
+→ observable trace or run
+→ explanation from that evidence
+→ bounded practice or transfer
+```
+
+Use learner-facing headings that state the question or decision being made.
+Editorial labels such as “Mental Model”, “Experiment 1” or “Engineering
+Problem” may guide authors, but must not become a disconnected chain of
+headings in the learner view. Explain an essential term in natural Vietnamese
+when it first carries meaning; never require a glossary lookup to understand
+the current paragraph.
+
+For visuals, show only the state needed for the current observation. Do not
+reveal a prediction, model answer or diagnosis before the learner has had a
+meaningful opportunity to attempt it. A visual must identify its observation
+target, make state changes legible without colour or motion alone, and remain
+usable by keyboard and on a narrow container. A runnable lab must visibly
+separate Question, Predict, Run, Inspect, Explain and Learn rather than
+compressing them into one dense paragraph.
+
+The learning shell must make the next action prominent while keeping Practice,
+Review and Library distinct. Reference trees, metadata and secondary actions
+must not compete with the active learning task. Layouts must use shrinkable
+grid/flex tracks and child `min-width: 0` where content can otherwise force a
+page-level horizontal overflow. Never conceal an overflow with a global
+`overflow-x: hidden` rule.
+
+The following are blocking learner-facing acceptance failures: unexplained
+essential jargon; an answer exposed before the relevant prediction; a visual
+without a stated observation target; disconnected heading structure; an
+unreadable lab; ordinary content, cards or controls causing horizontal page
+overflow; or confusing primary navigation. Static checks may detect candidates,
+but browser and human-study evidence remain necessary to establish clarity.
+
+---
+
 ## 55. Freeze criteria
 
 A lesson is not frozen merely because:

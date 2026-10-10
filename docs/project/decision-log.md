@@ -148,3 +148,17 @@ The frozen registry is globally reconciled: **167** Primary homes, **137** Learn
 **Status:** ACTIVE
 
 `engineering-learning-standard.md` remains the sole canonical learning-design authority. Golden Lessons now use its evidence lifecycle: outcome/boundary, research/claim traceability, design, runnable practice, independent exercises, assessment/rubric, technical/UI validation, human study and retention review. Technical readiness, assessment evidence and Human Validation are distinct. `race-atomicity-v1` demonstrates the contract but is **not** Human validated; its next gate is a real learner retest.
+
+## D-020 — Learner-facing presentation is an acceptance boundary
+
+**Date:** 2026-10-10
+**Status:** ACTIVE
+
+The engineering learning standard now treats the rendered lesson as part of
+the teaching mechanism. A lesson must expose one question/action at a time,
+introduce terms after their need is visible, defer answers until a meaningful
+learner attempt, and keep runnable-lab actions distinct. Page-level horizontal
+overflow, a visual without an observation target, disconnected headings,
+unreadable labs and confusing primary navigation are blocking acceptance
+failures. Race remains technically verified but **not Human validated**:
+desktop/mobile browser capture and a real study session are still required.

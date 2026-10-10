@@ -37,10 +37,11 @@ function withoutLeadingH1(html: string) {
 }
 
 function markdownSection(source: string, heading: string, until: string) {
-  const start = source.search(new RegExp(`^## ${heading}\\s*$`, 'm'))
+  const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const start = source.search(new RegExp(`^## ${escapeRegex(heading)}\\s*$`, 'm'))
   if (start < 0) return ''
   const rest = source.slice(start)
-  const end = rest.search(new RegExp(`^## ${until}\\s*$`, 'm'))
+  const end = rest.search(new RegExp(`^## ${escapeRegex(until)}\\s*$`, 'm'))
   return end < 0 ? rest : rest.slice(0, end)
 }
 
@@ -73,15 +74,17 @@ export default function MarkdownDocument({ doc }: Props) {
     toc: lessonPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).flatMap(part => part.toc),
   } : null, [lessonPartRenderings])
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
-  const raceLabHtml = useMemo(() => enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Hands-on Lab', 'Debug from evidence'))).html, [doc.content])
+  const raceMechanismParts = useMemo(() => markdownSection(doc.content, 'Khi hai request dùng chung balance, điều gì xảy ra?', 'Tự chạy: cùng input, ba cách thực thi').split(/\r?\n\{\{RACE_VISUAL:interleaving\}\}\r?\n/), [doc.content])
+  const raceLabHtml = useMemo(() => enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Tự chạy: cùng input, ba cách thực thi', 'Debug: evidence nào cho biết rule đã vỡ?'))).html, [doc.content])
   const raceGuidedContexts = useMemo(() => [
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Prerequisites', 'Mental Model').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Mental Model', 'Hands-on Lab').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Trước khi bắt đầu, bạn cần biết gì?', 'Khi hai request dùng chung balance, điều gì xảy ra?').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(raceMechanismParts[0] ?? '')).html),
     '',
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Debug from evidence', 'Break It: process-local protection không phải multi-instance protection'))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Break It: process-local protection không phải multi-instance protection', 'Explain It'))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Explain It', 'Continue'))).html),
-  ], [doc.content])
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Debug: evidence nào cho biết rule đã vỡ?', 'Khi app có nhiều instance, `lock` còn đủ không?'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Khi app có nhiều instance, `lock` còn đủ không?', 'Tự giải thích lại bằng evidence'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Tự giải thích lại bằng evidence', 'Đi tiếp'))).html),
+  ], [doc.content, raceMechanismParts])
+  const raceAfterVisualHtml = useMemo(() => withoutLeadingHeading(enhanceHtml(renderMarkdown(raceMechanismParts.slice(1).join('\n'))).html), [raceMechanismParts])
   const rendered = useMemo(() => lessonRendered ?? (!isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered), [fullRendered, lessonRendered, isLearning, mode])
   const showRaceGuided = isRaceGoldenPilot && raceView === 'guided'
   const showRacePractice = isRaceGoldenPilot && raceView === 'practice'
@@ -163,7 +166,7 @@ export default function MarkdownDocument({ doc }: Props) {
       </header>
       {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
       {!isLearning && mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
-      {showRaceGuided ? <article ref={articleRef} className="markdown-body race-guided-body"><RaceGuidedLesson step={raceStep} onStep={setRaceStep} onStartPractice={() => switchRaceView('practice')} labHtml={raceLabHtml} contextHtml={raceGuidedContexts} /></article>
+      {showRaceGuided ? <article ref={articleRef} className="markdown-body race-guided-body"><RaceGuidedLesson step={raceStep} onStep={setRaceStep} onStartPractice={() => switchRaceView('practice')} labHtml={raceLabHtml} contextHtml={raceGuidedContexts} afterVisualHtml={raceAfterVisualHtml} /></article>
       : showRacePractice ? <article ref={articleRef} className="markdown-body race-practice-body"><RaceAssessment onBackToGuided={() => switchRaceView('guided')} onReviewStep={step => { setRaceStep(step); switchRaceView('guided') }} /></article>
       : lessonParts && lessonPartRenderings ? <article ref={articleRef} className="markdown-body">{lessonParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: isRaceGoldenPilot ? withoutLeadingH1(lessonPartRenderings[index]?.html ?? '') : lessonPartRenderings[index]?.html ?? '' }} /> : <Fragment key={`visual-${index}`}>{visualRenderer?.(part)}</Fragment>)}</article>
       : <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />}

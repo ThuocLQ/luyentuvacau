@@ -4,13 +4,13 @@
 Sau bài này, bạn có thể nhìn một giá trị bị nhiều operation cùng đọc/ghi, nêu rule cần giữ, trace các bước bị xen kẽ làm rule vỡ, chạy reproduction C# nhỏ và chọn đúng correctness boundary. Mục tiêu không phải nhớ nhiều primitive.
 :::
 
-## Prerequisites
+## Trước khi bắt đầu, bạn cần biết gì?
 
 Bạn cần biết variable, method, C# cơ bản và đã từng thấy `async`/`await`.
 
 Bạn **không** cần biết trước race condition, atomicity, critical section, `lock`, `Interlocked`, memory visibility hay thread safety. Bài này chỉ xây những phần cần để reasoning về lỗi.
 
-## Engineering Problem
+## Nếu hai request cùng rút tiền, rule nào phải giữ?
 
 `balance = 100`. Request A muốn rút 80; request B muốn rút 30.
 
@@ -26,11 +26,11 @@ if (current >= amount)       // CHECK
 
 Vấn đề xuất hiện khi hai request đang cùng tiến triển. Đừng đặt tên lỗi vội; trước hết hãy trace điều gì thực sự xảy ra.
 
-## Learning Goal
+## Sau bài này, bạn sẽ tự làm được gì?
 
 Bạn sẽ đi từ “hai thread chạy cùng lúc” tới câu chính xác hơn: correctness phụ thuộc vào execution ordering không được kiểm soát giữa các operation dùng chung state. Bạn phải chỉ ra được state, invariant, candidate interleaving, evidence và boundary của giải pháp.
 
-## Mental Model
+## Khi hai request dùng chung balance, điều gì xảy ra?
 
 ### Shared state là gì?
 
@@ -54,7 +54,7 @@ Không suy ra “mỗi C# statement là atomic”. Điều cần hỏi là: *to�
 
 Phần phải không bị interleave sai được gọi là **critical section**. Từ invariant, ta mới chọn property cần có: **mutual exclusion** (một execution vào thì execution khác phải chờ) cho multi-step shared memory, hay simple atomic update cho một counter, hay database concurrency rule cho state ở database.
 
-## Same requests, different execution boundary
+## Cùng request, vì sao boundary khác cho kết quả khác?
 
 {{RACE_VISUAL:protection}}
 
@@ -95,7 +95,7 @@ Nhưng `Interlocked.Increment` không tự bảo vệ invariant “chỉ rút kh
 
 `SemaphoreSlim` cũng không phải “lock thay thế” theo mặc định. Nó hợp khi cần permit limit, ví dụ tối đa 5 I/O call đắt tiền cùng lúc. Giới hạn concurrency không tự đặt atomicity cho inventory/database state.
 
-## Hands-on Lab
+## Tự chạy: cùng input, ba cách thực thi
 
 :::hands-on
 Đây là **local simulation**: console app chạy trên máy bạn, không dùng production database. `Barrier` và `ManualResetEventSlim` trong lab chỉ là teaching instrumentation để tạo interleaving có kiểm soát; không phải cách debug production chính.
@@ -240,7 +240,7 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 ### Optional observation — tranh cùng lock và phạm vi (không phải experiment chạy sẵn)
 
 Sau khi correctness đã được chứng minh, bạn có thể đo thời gian chờ trước `lock` trong một benchmark riêng và tăng số concurrent call. Dùng kết quả đó để cân nhắc **granularity** (phạm vi lock rộng hay hẹp); đừng kết luận từ laptop benchmark nhỏ. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant. Thời gian chờ khi nhiều operation tranh cùng lock được gọi là **contention**.
-## Debug from evidence
+## Debug: evidence nào cho biết rule đã vỡ?
 
 Khi production có duplicate reservation, missing update hoặc final count bất thường, dùng loop này:
 
@@ -251,7 +251,7 @@ Khi production có duplicate reservation, missing update hoặc final count bấ
 5. **Experiment:** reproduce trong test/local simulation bằng controllable gate; không lấy random sleep làm primary technique.
 6. **Fix boundary:** bảo vệ đúng **source of truth** — nơi chốt dữ liệu/rule nghiệp vụ — rồi viết regression test để lỗi cũ không quay lại.
 
-## Break It: process-local protection không phải multi-instance protection
+## Khi app có nhiều instance, `lock` còn đủ không?
 
 {{RACE_VISUAL:boundary}}
 
@@ -306,7 +306,7 @@ Checklist: có coupon usage record/unique rule hay chưa; retry có thể gửi 
 
 Model direction: local lock không đủ qua 4 instance. Nếu database sở hữu “một coupon chỉ dùng một lần”, unique/conditional database operation là candidate gần rule hơn. Nhưng cần biết transaction boundary và retry behavior trước khi kết luận final design.
 
-## Explain It
+## Tự giải thích lại bằng evidence
 
 Đừng xem model answer ngay. Trong 60–120 giây, giải thích: vì sao hai request riêng lẻ đúng vẫn tạo kết quả sai; invariant nằm đâu; READ/CHECK/WRITE xen kẽ ra sao; và vì sao fix phụ thuộc state boundary.
 
@@ -318,13 +318,13 @@ Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi co
 
 **English short explanation:** “A race condition appears when two operations use shared mutable state and correctness depends on an execution order the system does not control. I first state the invariant, then reproduce one interleaving, and finally place the protection at the real source-of-truth boundary.” Không có concept mới ở bản tiếng Anh; nó chỉ là cách nói lại reasoning vừa làm bằng tiếng Việt.
 
-## Bài luyện tập và evidence
+## Tự kiểm bằng bài luyện tập
 
 Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v2`: L1/L2 và diagnosis + repair của L3 được auto-check theo câu trả lời. Output local lab và candidate timeline của L3 được gắn rõ là self-reported / self-reviewed evidence; app không chấm chất lượng reasoning mở. Bạn có thể retry và quay về đúng step để ôn lại.
 
 Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidence **của bài Race trên thiết bị này**. Nó không tự tạo `PASSED`, không mở khóa một bài kế tiếp và không thay thế Human Validation. L4 là transfer enrichment: hãy làm sau khi đã tự chạy lab, không cần cài PostgreSQL để hoàn thành phần core.
 
-## Evidence checks — L1 đến L4
+## Tự kiểm L1 đến L4
 
 - **L1 · Understand:** không nhìn lại timeline, nói invariant của withdrawal và giải thích vì sao hai local snapshot đều có thể là 100.
 - **L2 · Apply:** đổi hai input ở đầu lab thành 60 và 50. Dự đoán trước khi chạy: unsafe approve tổng 110, final balance là 40 hoặc 50; protected chỉ approve withdrawal 60 vào gate trước, còn lại 40.
@@ -333,7 +333,7 @@ Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidenc
 
 Tự chấm technical mastery theo evidence trên; English mastery được chấm riêng khi bạn nói lại phần **English short explanation** trong 60–120 giây. Không có quiz hay completion nào tự unlock level.
 
-## Recall Questions
+## Nhớ lại không nhìn đáp án
 
 1. Điều gì biến hai operation concurrent thành race condition, thay vì chỉ “chạy cùng lúc”?
 2. Invariant của withdrawal example là gì và evidence nào chứng minh nó vỡ?
@@ -345,14 +345,14 @@ Tự chấm technical mastery theo evidence trên; English mastery được ch�
 
 Tóm tắt: trace state trước, đặt tên race sau; bảo vệ invariant chứ không sưu tập tool; local lock có local scope; source of truth quyết định correctness boundary.
 
-## Further Learning
+## Học thêm khi cần
 
 - [Official `lock` reference](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/lock) — semantics, current C# guidance và giới hạn `await` trong `lock`.
 - [Official `Interlocked` reference](https://learn.microsoft.com/en-us/dotnet/api/system.threading.interlocked) — phạm vi atomic update đơn giản.
 - [TAP with async/await](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/task-asynchronous-programming-model) — hiểu `await` không đồng nghĩa tạo thread.
 - [Visual race-condition explanation](https://www.youtube.com/watch?v=zMzo0xcS37o) — reinforcement cho interleaving/critical section; technical claims trong QuanNet đã cross-check bằng official docs.
 
-## Continue
+## Đi tiếp
 
 - Reference: [Async, Threading và Concurrency](/docs/async-threading-concurrency)
 - Quiz: [Quiz Async và background work](/quiz?topic=Async%20v%C3%A0%20background%20work)

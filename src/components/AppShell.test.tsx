@@ -8,6 +8,14 @@ beforeEach(() => window.localStorage.clear())
 afterEach(cleanup)
 
 describe('AppShell learner navigation', () => {
+  it('keeps learning, practice, review and library as distinct navigation groups', () => {
+    render(<MemoryRouter><AppShell /></MemoryRouter>)
+    expect(screen.getAllByText('Học').length).toBeGreaterThan(0)
+    expect(screen.getByText('Luyện tập')).toBeInTheDocument()
+    expect(screen.getByText('Ôn lại')).toBeInTheDocument()
+    expect(screen.getByText('Thư viện')).toBeInTheDocument()
+  })
+
   it('keeps documentation sections collapsed until a learner opens one', () => {
     render(<MemoryRouter><AppShell /></MemoryRouter>)
     const section = screen.getByRole('button', { name: 'Nền tảng .NET' })
