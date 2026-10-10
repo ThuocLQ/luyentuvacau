@@ -83,7 +83,7 @@ NON-CANONICAL WORKING REVIEW. Stage 2E semantic review is accepted and sealed as
 
 ## Superseded draft evidence
 
-The former generic combined tables were removed because they conflicted with the authoritative Security evidence above. Observability requires its own relation-specific repair before acceptance.
+The former generic combined tables were removed because they conflicted with the relation-specific package evidence. Security, Observability and Reliability / SRE are sealed; this note remains only to prevent stale tables from being treated as active decisions.
 
 ## Security target over-gating review
 

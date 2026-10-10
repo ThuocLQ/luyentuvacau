@@ -75,7 +75,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Stage 2F Delivery & Verification semantic review: inventory and review 54 pending relations (23 REQUIRED, 31 RECOMMENDED) across 19 target Learning Units. Preserve sealed Stage 2E; do not treat candidate edges as learner locks.
+Stage 2F Delivery semantic review is **IN_REVIEW**: 30 / 30 inter-unit relations (14 REQUIRED, 16 RECOMMENDED) across 9 inter-unit targets, plus 3 same-unit REQUIRED edges and one internal-only target. Delivery candidate evidence is validated but not learner-lock policy. Exact next task: **Stage 2F Testing/Verification semantic review**.
 
 Security is a completed bounded Stage 2E package: 25 / 25 relations (18 REQUIRED, 7 RECOMMENDED) across 11 target Learning Units. It has 12 LOCAL REQUIRED slices, 5 acceptable whole-unit External candidate proxies, one rejected multi-capability whole-unit proxy (`lu-sec-auth-session-oauth`) and 5 surfaced / 2 omitted RECOMMENDED contexts. The Stage 2 Security validator and negative tests are the executable structural gate; candidate edges remain non-locking until final Stage 2 policy materialization.
 

@@ -11,6 +11,7 @@ const packages = [
   { name: 'Observability', inventoryHeading: 'Package Observability', evidenceHeading: 'Observability relation-specific evidence — authoritative repair', overGatingHeading: 'Observability target over-gating review', required: 9, recommended: 10, targets: 7 },
   { name: 'Reliability / SRE', inventoryHeading: 'Package Reliability / SRE', evidenceHeading: 'Reliability / SRE relation-specific evidence — authoritative repair', overGatingHeading: 'Reliability / SRE target over-gating review', required: 8, recommended: 12, targets: 9 },
 ];
+const deliveryPackage = { name: 'Delivery', inventoryHeading: 'Delivery inter-unit relations', evidenceHeading: 'Delivery relation-specific evidence', overGatingHeading: 'Delivery target over-gating review', required: 14, recommended: 16, targets: 9 };
 const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const cells = line => line.split('|').slice(1, -1).map(value => value.trim());
 const relation = (from, to) => `${from} -> ${to}`;
@@ -137,7 +138,42 @@ export function validateStage2E({ reviewText, inventoryText, mapText, dependency
   return { errors: [...results.flatMap(result => result.errors), ...invariantErrors, ...graph.errors], packages: results.map((result, index) => ({ name: packages[index].name, ...result.counts, candidates: result.external.length })), securityGraph, graph, totals: { relations: inventory.length, targets: allTargets.size } };
 }
 
+export function validateStage2Delivery({ reviewText, inventoryText, stage2eReviewText, stage2eInventoryText, mapText, dependencyText = '', priorReviewTexts = [], additionalCandidateEdges = [] }) {
+  const frozenPairs = frozenDependencyPairs(dependencyText);
+  const internalRows = parseTable(inventoryText, 'Same-unit internal REQUIRED relations', ['From capability', 'To capability', 'Learning Unit', 'Reason'], []);
+  const expectedInternal = [
+    ['rel-health-readiness-semantics', 'delivery-probes-health', 'lu-rel-health-probes'],
+    ['delivery-artifact-image-config', 'delivery-cicd-promotion-provenance', 'lu-delivery-artifact-provenance'],
+    ['rel-change-rollout-rollback-risk', 'delivery-rollout-rollback-strategies', 'lu-release-rollout-rollback'],
+  ];
+  const errors = []; const homes = primaryUnits(mapText);
+  if (internalRows.length !== 3) errors.push(`incorrect Delivery internal-edge count ${internalRows.length}/3`);
+  const seenInternal = new Set();
+  for (const row of internalRows) {
+    const key = relation(row[0], row[1]); if (seenInternal.has(key)) errors.push(`duplicate Delivery internal edge ${key}`); seenInternal.add(key);
+    if (frozenPairs.get(key) !== 'REQUIRED') errors.push(`invalid Delivery internal edge ${key}`);
+    if (!homes.get(row[0]) || homes.get(row[0]) !== homes.get(row[1]) || homes.get(row[0]) !== row[2]) errors.push(`Delivery internal home mismatch ${key}`);
+  }
+  for (const [from, to, unit] of expectedInternal) if (!seenInternal.has(relation(from, to))) errors.push(`missing Delivery internal edge ${relation(from, to)}`);
+  const strippedReview = reviewText.replace(/^\| lu-delivery-artifact-provenance \| 0 \| 0 \| 0 \| 0 \| Internal order only \|.*\r?\n/m, '');
+  const result = validatePackage(deliveryPackage, strippedReview, inventoryText, mapText, frozenPairs);
+  const fullOverGating = parseTable(reviewText, deliveryPackage.overGatingHeading, overGatingColumns, errors);
+  if (fullOverGating.length !== 10) errors.push(`incorrect Delivery full-scope over-gating count ${fullOverGating.length}/10`);
+  const fullTargets = new Set(fullOverGating.map(row => row[0]));
+  if (!fullTargets.has('lu-delivery-artifact-provenance')) errors.push('missing internal-only Delivery over-gating target lu-delivery-artifact-provenance');
+  const stage2e = packages.map(config => validatePackage(config, stage2eReviewText, stage2eInventoryText, mapText, frozenPairs));
+  const nodes = learningUnitIds(mapText); const prior = priorExternalEdges(priorReviewTexts);
+  const graph = validateCandidateGraph(nodes, [...prior, ...stage2e.flatMap(entry => entry.external), ...result.external, ...additionalCandidateEdges]);
+  return { errors: [...errors, ...result.errors, ...stage2e.flatMap(entry => entry.errors), ...graph.errors], counts: { ...result.counts, internal: internalRows.length, fullTargets: fullTargets.size, candidates: result.external.length }, graph };
+}
+
 function main() {
+  if (process.argv[2] === '--delivery') {
+    const reviewText = readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'); const inventoryText = readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'); const mapText = readFileSync(defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8');
+    const result = validateStage2Delivery({ reviewText, inventoryText, stage2eReviewText: readFileSync(defaults.review, 'utf8'), stage2eInventoryText: readFileSync(defaults.inventory, 'utf8'), mapText, dependencyText, priorReviewTexts: defaults.priorReviews.map(path => readFileSync(path, 'utf8')) });
+    if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
+    console.log(`Stage 2F Delivery validation passed: ${result.counts.required} REQUIRED/${result.counts.recommended} RECOMMENDED; ${result.counts.targets} inter-unit targets + ${result.counts.fullTargets - result.counts.targets} internal-only target; ${result.counts.internal} internal edges; ${result.counts.candidates} external candidates; combined graph ${result.graph.edges} unique edges/${result.graph.roots} roots, acyclic.`); return;
+  }
   const reviewText = readFileSync(process.argv[2] ?? defaults.review, 'utf8'); const inventoryText = readFileSync(process.argv[3] ?? defaults.inventory, 'utf8'); const mapText = readFileSync(process.argv[4] ?? defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8'); const priorReviewTexts = defaults.priorReviews.map(path => readFileSync(path, 'utf8'));
   const result = validateStage2E({ reviewText, inventoryText, mapText, dependencyText, priorReviewTexts }); if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
   console.log(`Stage 2E validation passed: ${result.packages.map(entry => `${entry.name} ${entry.required} REQUIRED/${entry.recommended} RECOMMENDED`).join('; ')}; ${result.totals.relations} relations/${result.totals.targets} targets; prior+Security graph ${result.securityGraph.edges} unique edges/${result.securityGraph.roots} roots; full graph ${result.graph.edges} unique external candidate edges/${result.graph.roots} roots, acyclic.`);
