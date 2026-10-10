@@ -1,9 +1,9 @@
 # QuanNet Learning-Unit Map — Stage 1
 
-> **Status:** DRAFT — Stage 1 Primary-boundary architecture review required.
+> **Status:** FROZEN — Stage 1 Learning-Unit decomposition sealed; Stage 2 progression policy materialized.
 > **Frozen input SHA:** `771f6541872adceb52786387006059e2059df6a8`.
 
-Frozen capabilities: 167. Proposed Learning Units: 132. Singleton units: 105. Multi-capability units: 27. Single-owner units: 130. Multi-owner units: 2.
+Frozen capabilities: 167. Learning Units: 137. Singleton units: 111. Multi-capability units: 26. Single-owner units: 135. Multi-owner units: 2.
 
 File order is **not** curriculum order. REQUIRED/RECOMMENDED projection is **not finalized** in Stage 1.
 
@@ -3778,7 +3778,7 @@ Change workload, failure mode, deployment boundary or data distribution while ke
 
 This batch is **REVIEWED**. Canonical unit sections and audit registries hold the final evidence and membership; this record is not a second registry.
 
-Stage 1 remains DRAFT: every other domain batch is pending and REQUIRED/RECOMMENDED projection is not finalized.
+At the time of this Stage 1A closure record, Stage 1 remained DRAFT and REQUIRED/RECOMMENDED projection had not started. The current sealed progression policy is recorded in `learning-unit-progression.md`.
 ## lu-net-service-discovery-load-balancing
 
 ### Identity

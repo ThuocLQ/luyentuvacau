@@ -55,8 +55,8 @@ External candidate != learner lock. It is capability evidence for later global p
 |---|---|---|---|
 | dist-replication-leader-quorum -> db-replication-failover | Leader/replica acknowledgement and stale-copy evidence | Engine-specific failover must translate portable semantics | ACCEPTABLE_CANDIDATE |
 | dist-partitioning-ownership-rebalancing -> db-partitioning-sharding-boundary | Ownership assignment and rebalance evidence | Sharding assessment needs ownership movement | ACCEPTABLE_CANDIDATE |
-| db-buffer-io -> db-production-diagnosis-transfer | Hit/read and physical-I/O evidence | L4 diagnosis must separate I/O | ACCEPTABLE_CANDIDATE |
-| db-optimizer-cardinality-stats -> db-production-diagnosis-transfer | Estimated/actual cardinality and plan evidence | Plan causes cannot be reduced to vocabulary | ACCEPTABLE_CANDIDATE |
+| db-buffer-io -> db-production-diagnosis-transfer | Hit/read and physical-I/O evidence | L4 diagnosis must separate I/O; the source Unit has multiple Primary evidence boundaries | NOT_ACCEPTABLE |
+| db-optimizer-cardinality-stats -> db-production-diagnosis-transfer | Estimated/actual cardinality and plan evidence | Plan causes cannot be reduced to vocabulary; the source Unit has multiple Primary evidence boundaries | NOT_ACCEPTABLE |
 | db-locks-deadlocks-contention -> db-production-diagnosis-transfer | Blocking graph and lock-wait evidence | Must discriminate lock latency | ACCEPTABLE_CANDIDATE |
 | db-connection-pool-exhaustion -> db-production-diagnosis-transfer | Pool wait/acquisition-latency evidence | Must separate pool wait from SQL | ACCEPTABLE_CANDIDATE |
 | dist-consistency-linearizability -> nosql-cassandra-lsm-compaction-consistency | Consistency guarantee and observation evidence | Cassandra target needs real consistency semantics | ACCEPTABLE_CANDIDATE |
@@ -66,12 +66,12 @@ External candidate != learner lock. It is capability evidence for later global p
 | nosql-redis-structures-memory -> nosql-model-selection | Key/value and memory-boundary evidence | Singleton assesses exactly the key/value and finite-memory model required by selection | ACCEPTABLE_CANDIDATE |
 | nosql-search-inverted-index-analysis -> nosql-model-selection | Inverted-index/source-of-truth evidence | Search projection is a distinct model | NOT_ACCEPTABLE |
 | nosql-model-selection -> nosql-transfer-storage-choice | Demonstrated multi-family comparison | L4 transfer needs actual selection evidence | ACCEPTABLE_CANDIDATE |
-| cache-invalidation-consistency -> cache-evidence-transfer | Stale-read/invalidation evidence | Transfer must distinguish staleness | ACCEPTABLE_CANDIDATE |
-| cache-stampede-penetration-avalanche-hot-key -> cache-evidence-transfer | Stampede/penetration/hot-key evidence | lu-cache-patterns contains the coherent miss/population/expiry overload boundary | ACCEPTABLE_CANDIDATE |
+| cache-invalidation-consistency -> cache-evidence-transfer | Stale-read/invalidation evidence | Transfer must distinguish staleness; `lu-cache-source-of-truth-invalidation` has multiple Primary boundaries | NOT_ACCEPTABLE |
+| cache-stampede-penetration-avalanche-hot-key -> cache-evidence-transfer | Stampede/penetration/hot-key evidence | `lu-cache-patterns` has multiple Primary boundaries, so only compatible evidence may transfer | NOT_ACCEPTABLE |
 | cache-capacity-eviction-fallback -> cache-evidence-transfer | Eviction and fallback evidence | Singleton assesses exactly capacity and fallback evidence | ACCEPTABLE_CANDIDATE |
-| cache-multilayer-coherence -> cache-evidence-transfer | Multilayer freshness/version evidence | lu-cache-source-of-truth-invalidation coherently assesses source-of-truth, invalidation and multilayer coherence | ACCEPTABLE_CANDIDATE |
+| cache-multilayer-coherence -> cache-evidence-transfer | Multilayer freshness/version evidence | `lu-cache-source-of-truth-invalidation` has multiple Primary boundaries, so only compatible evidence may transfer | NOT_ACCEPTABLE |
 
-One PASSED candidate from lu-cache-source-of-truth-invalidation could later serve as a fair proxy for both capability-level External candidates from that source unit. No progression lock is created here.
+`lu-cache-source-of-truth-invalidation` is multi-Primary, so its two External candidates need capability-compatible evidence rather than one whole-Unit `PASSED` proxy. No progression lock is created here.
 
 ACCEPTABLE_CANDIDATE does not mean the learner is now locked behind that source Learning Unit. It means that, if global progression later chooses whole-unit PASSED as the evidence representation, the source unit is currently considered a fair proxy. Final gating is deferred to the global capability-evidence to Learning-Unit proxy review.
 

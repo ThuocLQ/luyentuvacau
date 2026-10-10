@@ -27,9 +27,9 @@ After chapter acceptance, the user studies and reports real learning evidence; C
 - **First chapter:** all lessons accepted, supported labs, fair assessment/progression, no hidden prerequisites, executed content/UI/browser checks, stable version.
 - **Parallel development:** published chapter stable by default; next chapter separate; feedback drives targeted changes; each release independently validated.
 
-## Current snapshot — 2026-10-08
+## Current snapshot — 2026-10-10
 
-Stage 1 is sealed: 167 frozen capabilities, 137 Learning Units and 332 relations (201 REQUIRED, 131 RECOMMENDED). Stage 2A is verified; Stage 2B Foundations and Stage 2C Data are sealed. Stage 2D Distributed Interaction is sealed after independent final acceptance: 45 REQUIRED (29 Local, 16 External) and 24 RECOMMENDED (21 Surface, 3 Omit); its external candidate graph remains acyclic. Production Safety, Delivery & Verification and Architecture Synthesis remain PENDING.
+Stage 1 is sealed: 167 frozen capabilities, 137 Learning Units and 332 relations (201 REQUIRED, 131 RECOMMENDED). Stage 2B–2G and the global acceptance are sealed. The canonical projection preserves 303 inter-unit and 29 same-unit relations, 64 deduplicated external evidence-candidate pairs, 100 entry roots and an acyclic graph. Candidate evidence is not an implemented learner lock; RECOMMENDED remains non-blocking and local slices are taught in the target. The next phase is Golden Pilot Unit selection and authoring.
 
 ## Cross-session handoff
 

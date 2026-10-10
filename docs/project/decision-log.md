@@ -127,3 +127,10 @@ Stage 2F reconciled **54** inter-unit relations (**23 REQUIRED**, **31 RECOMMEND
 **Status:** SEALED
 
 Stage 2G reconciled **31** inter-unit relations (**18 REQUIRED**, **13 RECOMMENDED**) plus two same-unit relations across eight full-scope Architecture Units. It has 11 Local slices and seven External evidence candidates. The singleton quality-attribute Unit is a fair compatible proxy for five synthesis assessments; the multi-Primary boundaries/data-ownership Unit explicitly rejects whole-unit PASSED proxy treatment for failure/recovery and evolution. The combined 137-Unit candidate graph has **64** deduplicated edges, **100** roots and no cycle. Global Stage 2 remains unsealed: perform cross-stage synthesis, proxy-fairness/over-gating acceptance and only then canonical progression materialization.
+
+## D-017 — Stage 2 global progression projection sealed
+
+**Date:** 2026-10-10
+**Status:** SEALED
+
+The frozen registry is globally reconciled: **167** Primary homes, **137** Learning Units, and **332** capability relations (**201 REQUIRED**, **131 RECOMMENDED**) project to **303** inter-unit and **29** same-unit relationships with no missing, duplicate, or orphan reviewed key. The candidate graph contains **64** deduplicated Unit pairs, **100** roots and no cycle. `LOCAL_PREREQUISITE_SLICE` remains target-local, RECOMMENDED remains non-blocking, and all External relationships remain evidence candidates—not implemented learner locks. Whole-Unit `PASSED` is permitted only by a future explicit, versioned gate policy and only for an accepted fair proxy; rejected multi-Primary proxies require capability-compatible evidence. Stage 2B–2G and `learning-unit-progression.md` are the sealed canonical projection. Next: Golden Pilot Unit selection and authoring; do not reopen sealed semantics without concrete contradictory evidence.

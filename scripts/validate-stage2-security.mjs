@@ -79,10 +79,74 @@ function frozenDependencyPairs(text) {
   }));
 }
 
-function primaryUnits(mapText) {
+export function primaryUnits(mapText) {
   const units = new Map();
   for (const unitId of learningUnitIds(mapText)) for (const capability of unitPrimaries(mapText, unitId)) units.set(capability, unitId);
   return units;
+}
+
+function historicalDecisionRows(text, frozenPairs) {
+  const records = [];
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.startsWith('|')) continue;
+    const row = cells(line);
+    if (row.length < 4) continue;
+    const key = relation(row[0], row[2]);
+    if (frozenPairs.has(key) && row[1].startsWith('lu-') && row[3].startsWith('lu-')) records.push({ key, kind: frozenPairs.get(key), from: row[0], to: row[2], fromUnit: row[1], toUnit: row[3] });
+  }
+  return records;
+}
+
+function inventoryDecisionRows(text, headings, errors) {
+  return headings.flatMap(heading => inventoryRows(text, heading, errors).map(row => ({ key: relation(row.from, row.to), ...row })));
+}
+
+function historicalProxyErrors(text, mapText, label) {
+  const errors = []; const homes = primaryUnits(mapText);
+  const body = section(text, '3. External candidate evidence table');
+  if (body == null) return [`missing external-candidate evidence ${label}`];
+  for (const line of body.split(/\r?\n/).filter(line => line.startsWith('|'))) {
+    const row = cells(line); if (row.length !== 4 || !row[3].endsWith('ACCEPTABLE_CANDIDATE')) continue;
+    const source = row[0].split(/\s*(?:→|->)\s*/)[0]; const unit = homes.get(source);
+    if (!unit) errors.push(`historical proxy source missing ${label} ${source}`);
+    else if (unitPrimaries(mapText, unit).length !== 1) errors.push(`historical false whole-unit proxy ${label} ${source}`);
+  }
+  return errors;
+}
+
+export function validateStage2Global({ mapText, dependencyText, foundationsText, dataText, distributedText, stage2eInventoryText, deliveryInventoryText, testingInventoryText, architectureInventoryText, architectureInput, progressionText = '', deliveryPlanText = '', additionalCandidateEdges = [] }) {
+  const errors = []; const frozenPairs = frozenDependencyPairs(dependencyText); const homes = primaryUnits(mapText); const units = learningUnitIds(mapText);
+  const frozen = [...frozenPairs].map(([key, kind]) => { const [from, to] = key.split(' -> '); return { key, kind, from, to, fromUnit: homes.get(from), toUnit: homes.get(to) }; });
+  const inter = frozen.filter(row => row.fromUnit !== row.toUnit); const same = frozen.filter(row => row.fromUnit === row.toUnit);
+  if (units.size !== 137 || homes.size !== 167) errors.push(`canonical map totals mismatch ${units.size} units/${homes.size} homes`);
+  if (!/\*\*Status:\*\* FROZEN — Stage 1 Learning-Unit decomposition sealed; Stage 2 progression policy materialized\./.test(mapText) || !/Frozen capabilities: 167\. Learning Units: 137\. Singleton units: 111\. Multi-capability units: 26\. Single-owner units: 135\. Multi-owner units: 2\./.test(mapText)) errors.push('stale Learning Unit map metadata');
+  if (frozen.length !== 332 || frozen.filter(row => row.kind === 'REQUIRED').length !== 201 || frozen.filter(row => row.kind === 'RECOMMENDED').length !== 131) errors.push('frozen dependency totals mismatch');
+  if (inter.length !== 303 || inter.filter(row => row.kind === 'REQUIRED').length !== 174 || inter.filter(row => row.kind === 'RECOMMENDED').length !== 129 || same.length !== 29 || same.filter(row => row.kind === 'REQUIRED').length !== 27 || same.filter(row => row.kind === 'RECOMMENDED').length !== 2) errors.push('inter-unit/same-unit projection totals mismatch');
+  if (homes.get('net-tls-trust-handshake') !== homes.get('net-proxy-lb-forwarded-boundary')) errors.push('TLS/proxy same-unit relation is not internal');
+  const reviewRecords = [
+    ...historicalDecisionRows(foundationsText, frozenPairs), ...historicalDecisionRows(dataText, frozenPairs), ...historicalDecisionRows(distributedText, frozenPairs),
+    ...inventoryDecisionRows(stage2eInventoryText, packages.map(entry => entry.inventoryHeading), errors),
+    ...inventoryDecisionRows(deliveryInventoryText, [deliveryPackage.inventoryHeading], errors),
+    ...inventoryDecisionRows(testingInventoryText, [testingPackage.inventoryHeading], errors),
+    ...inventoryDecisionRows(architectureInventoryText, [architecturePackage.inventoryHeading], errors),
+  ];
+  const expectedReviewed = new Set([...inter.map(row => row.key), relation('net-tls-trust-handshake', 'net-proxy-lb-forwarded-boundary')]);
+  const seen = new Set();
+  for (const row of reviewRecords) {
+    if (seen.has(row.key)) errors.push(`duplicate global review relation ${row.key}`); seen.add(row.key);
+    const frozenKind = frozenPairs.get(row.key); if (!frozenKind) errors.push(`orphan global review relation ${row.key}`); else if (frozenKind !== row.kind) errors.push(`global review kind mismatch ${row.key}`);
+  }
+  for (const key of expectedReviewed) if (!seen.has(key)) errors.push(`missing global review relation ${key}`);
+  for (const key of seen) if (!expectedReviewed.has(key)) errors.push(`unexpected global review relation ${key}`);
+  if (reviewRecords.length !== 304 || seen.size !== 304) errors.push(`global review coverage mismatch ${reviewRecords.length}/${seen.size}`);
+  for (const [label, text] of [['Foundations', foundationsText], ['Data', dataText], ['Distributed', distributedText]]) errors.push(...historicalProxyErrors(text, mapText, label));
+  const architecture = validateStage2Architecture({ ...architectureInput, mapText, dependencyText, additionalCandidateEdges });
+  errors.push(...architecture.errors);
+  if (architecture.graph.edges !== 64 || architecture.graph.roots !== 100 || architecture.graph.cycle) errors.push(`global candidate graph mismatch ${architecture.graph.edges} edges/${architecture.graph.roots} roots`);
+  if (!/No actual unit-to-unit progression locks are materialized by this Stage 2 projection\./.test(progressionText)) errors.push('missing explicit non-locking progression policy');
+  if (!/LOCAL_PREREQUISITE_SLICE/.test(progressionText) || !/EXTERNAL_REQUIRED_PREREQUISITE_CANDIDATE/.test(progressionText) || !/RECOMMENDED/.test(progressionText)) errors.push('missing canonical treatment policy');
+  if (!/Stage 2B–2G and the global acceptance are sealed\./.test(deliveryPlanText)) errors.push('stale Golden Pilot delivery snapshot');
+  return { errors, totals: { capabilities: homes.size, units: units.size, relations: frozen.length, required: 201, recommended: 131, inter: inter.length, same: same.length, reviewed: seen.size }, graph: architecture.graph };
 }
 
 function validatePackage(config, reviewText, inventoryText, mapText, frozenPairs = new Map()) {
@@ -219,6 +283,18 @@ export function validateStage2Architecture({ reviewText, inventoryText, testingR
 }
 
 function main() {
+  if (process.argv[2] === '--global') {
+    const read = path => readFileSync(path, 'utf8'); const mapText = read(defaults.map); const dependencyText = read(defaults.dependency);
+    const architectureInput = {
+      reviewText: read('docs/project/stage-2g-architecture-review.md'), inventoryText: read('docs/project/stage-2g-architecture-inventory.md'),
+      testingReviewText: read('docs/project/stage-2f-testing-review.md'), testingInventoryText: read('docs/project/stage-2f-testing-inventory.md'),
+      deliveryReviewText: read('docs/project/stage-2f-delivery-review.md'), deliveryInventoryText: read('docs/project/stage-2f-delivery-inventory.md'),
+      stage2eReviewText: read(defaults.review), stage2eInventoryText: read(defaults.inventory), priorReviewTexts: defaults.priorReviews.map(read),
+    };
+    const result = validateStage2Global({ mapText, dependencyText, foundationsText: read(defaults.priorReviews[0]), dataText: read(defaults.priorReviews[1]), distributedText: read(defaults.priorReviews[2]), stage2eInventoryText: read(defaults.inventory), deliveryInventoryText: architectureInput.deliveryInventoryText, testingInventoryText: architectureInput.testingInventoryText, architectureInventoryText: architectureInput.inventoryText, architectureInput, progressionText: read('docs/roadmap/learning-unit-progression.md'), deliveryPlanText: read('docs/project/first-chapter-delivery-plan.md') });
+    if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
+    console.log(`Stage 2 global validation passed: ${result.totals.capabilities} capabilities/${result.totals.units} Units; ${result.totals.relations} relations = ${result.totals.inter} inter-unit + ${result.totals.same} same-unit; ${result.totals.reviewed} reviewed keys; ${result.graph.edges} candidate edges/${result.graph.roots} roots, acyclic; no candidate is an implemented learner lock.`); return;
+  }
   if (process.argv[2] === '--delivery') {
     const reviewText = readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'); const inventoryText = readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'); const mapText = readFileSync(defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8');
     const result = validateStage2Delivery({ reviewText, inventoryText, stage2eReviewText: readFileSync(defaults.review, 'utf8'), stage2eInventoryText: readFileSync(defaults.inventory, 'utf8'), mapText, dependencyText, priorReviewTexts: defaults.priorReviews.map(path => readFileSync(path, 'utf8')) });

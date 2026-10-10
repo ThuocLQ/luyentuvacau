@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "vitest run --exclude scripts/architecture-validation.test.mjs --exclude scripts/validate-stage2-security.test.mjs --exclude scripts/validate-stage2-delivery.test.mjs --exclude scripts/validate-stage2-testing.test.mjs --exclude scripts/validate-stage2-architecture.test.mjs",
+    "test": "vitest run --exclude scripts/architecture-validation.test.mjs --exclude scripts/validate-stage2-security.test.mjs --exclude scripts/validate-stage2-delivery.test.mjs --exclude scripts/validate-stage2-testing.test.mjs --exclude scripts/validate-stage2-architecture.test.mjs --exclude scripts/validate-stage2-global.test.mjs",
     "validate": "npm run validate:content",
     "validate:content": "node scripts/validate-content.mjs",
     "validate:architecture": "node scripts/validate-architecture.mjs",
@@ -20,9 +20,11 @@
     "test:stage2-testing": "node --test scripts/validate-stage2-testing.test.mjs",
     "validate:stage2-synthesis": "node scripts/validate-stage2-security.mjs --synthesis",
     "test:stage2-synthesis": "node --test scripts/validate-stage2-architecture.test.mjs",
+    "validate:stage2-global": "node scripts/validate-stage2-security.mjs --global",
+    "test:stage2-global": "node --test scripts/validate-stage2-global.test.mjs",
     "test:architecture": "node --test scripts/architecture-validation.test.mjs",
     "validate:css": "node scripts/validate-css-tokens.mjs",
-    "check": "npm run validate:content && npm run validate:architecture && npm run test:architecture && npm run validate:stage2-security && npm run test:stage2-security && npm run validate:stage2-delivery && npm run test:stage2-delivery && npm run validate:stage2-testing && npm run test:stage2-testing && npm run validate:stage2-synthesis && npm run test:stage2-synthesis && npm run validate:css && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
+    "check": "npm run validate:content && npm run validate:architecture && npm run test:architecture && npm run validate:stage2-security && npm run test:stage2-security && npm run validate:stage2-delivery && npm run test:stage2-delivery && npm run validate:stage2-testing && npm run test:stage2-testing && npm run validate:stage2-synthesis && npm run test:stage2-synthesis && npm run validate:stage2-global && npm run test:stage2-global && npm run validate:css && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.4.1",

@@ -58,7 +58,7 @@ This table records analysis only; it creates no lock.
 
 
 
-| runtime-retention-pooling-large-objects → runtime-memory-performance-debug | Allocation, pooling and retention observations tied to heap evidence | L4 diagnosis needs mechanism evidence, not only vocabulary | ACCEPTABLE_CANDIDATE |
+| runtime-retention-pooling-large-objects → runtime-memory-performance-debug | Allocation, pooling and retention observations tied to heap evidence | L4 diagnosis needs mechanism evidence, not only vocabulary; `lu-runtime-allocation-gc` also owns other Primary evidence | NOT_ACCEPTABLE |
 | net-request-path-dns → net-failure-localization-unknown-outcome | Resolver result/error and pre-connect boundary | Must separate name resolution from later stages | ACCEPTABLE_CANDIDATE |
 | net-tcp-connection-semantics → net-failure-localization-unknown-outcome | Connect/reset evidence and connection target | Whole source adds unrelated pooling content | NOT_ACCEPTABLE |
 | net-tls-trust-handshake → net-failure-localization-unknown-outcome | Handshake phase, trust result, termination side | Requires trust-stage evidence | NOT_ACCEPTABLE |
