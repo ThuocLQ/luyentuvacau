@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import AppShell from './AppShell'
+import { sections } from '../data/docs'
 
 beforeEach(() => window.localStorage.clear())
 afterEach(cleanup)
@@ -13,6 +14,14 @@ describe('AppShell learner navigation', () => {
     expect(section).toHaveAttribute('aria-expanded', 'false')
     fireEvent.click(section)
     expect(section).toHaveAttribute('aria-expanded', 'true')
+    fireEvent.click(section)
+    expect(section).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('migrates only the former all-expanded sidebar default to collapsed sections', () => {
+    window.localStorage.setItem('ltvc-open-sections', JSON.stringify(sections))
+    render(<MemoryRouter><AppShell /></MemoryRouter>)
+    expect(screen.getByRole('button', { name: 'Nền tảng .NET' })).toHaveAttribute('aria-expanded', 'false')
   })
 
   it('opens and closes the mobile navigation with dialog semantics', () => {

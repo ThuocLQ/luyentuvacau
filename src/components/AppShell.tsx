@@ -13,13 +13,20 @@ export default function AppShell() {
   const activeRef = useRef<HTMLAnchorElement>(null)
   const sidebarRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const didCheckLegacySections = useRef(false)
   const location = useLocation(); const navigate = useNavigate()
   useEffect(() => { document.documentElement.dataset.theme = theme }, [theme])
   useEffect(() => { activeRef.current?.scrollIntoView({ block: 'nearest' }) }, [location.pathname])
   useEffect(() => {
+    if (didCheckLegacySections.current) return
+    didCheckLegacySections.current = true
+    const isFormerDefault = openSections.length === sections.length && openSections.every((section, index) => section === sections[index])
+    if (isFormerDefault) setOpenSections([])
+  }, [openSections, setOpenSections])
+  useEffect(() => {
     const active = completeDocs.find(doc => location.pathname.endsWith(`/docs/${doc.slug}`))
-    if (active && !openSections.includes(active.section)) setOpenSections([...openSections, active.section])
-  }, [location.pathname, openSections, setOpenSections])
+    if (active) setOpenSections(current => current.includes(active.section) ? current : [...current, active.section])
+  }, [location.pathname, setOpenSections])
   useEffect(() => { const handler = (event: KeyboardEvent) => { const editable = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement; if (!editable && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); document.querySelector<HTMLInputElement>('#global-search')?.focus() } if (event.key === 'Escape') { setQuery(''); setMobileOpen(false) } }; window.addEventListener('keydown', handler); return () => window.removeEventListener('keydown', handler) }, [])
   useEffect(() => {
     if (!mobileOpen) return

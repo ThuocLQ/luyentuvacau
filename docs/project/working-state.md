@@ -85,7 +85,7 @@ Stage 2E Production Safety: **SEALED** after independent acceptance. Final recon
 
 ## Exact next task
 
-**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** The learner can enter through a single next-action homepage CTA: new learners start Race; existing learners resume their selected lesson. Race has a guided 6-step view plus the original full article/deep links, runtime-verified Windows local lab, working visuals, self-reported evidence/friction capture, and no automatic PASSED/MASTERED behavior. Its status is **Ready for human study — Golden Pilot**, never Human validated. Next: a real learner studies `learning-race-condition`, records vocabulary/visual/lab friction, then the team makes only evidence-backed repairs.
+**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** The learner enters through one next-action CTA: genuinely active learners resume their selected lesson; new, completed, or historical records start Race. Guided Race now includes the canonical Windows local lab, copyable code, 80/30 and 60/50 expected outcomes, all three visuals, safe persisted step validation, deliberate deep-link/full-view handling, and self-reported evidence/friction capture. It never turns self-reporting into PASSED or MASTERED. Its status is **Ready for human study — Golden Pilot**, never Human validated. Next: a real learner studies `learning-race-condition`, records vocabulary/visual/lab friction, then the team makes only evidence-backed repairs.
 
 ## Stop conditions
 

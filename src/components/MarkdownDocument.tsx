@@ -35,12 +35,26 @@ function withoutLeadingH1(html: string) {
   return parsed.body.innerHTML
 }
 
+function markdownSection(source: string, heading: string, until: string) {
+  const start = source.search(new RegExp(`^## ${heading}\\s*$`, 'm'))
+  if (start < 0) return ''
+  const rest = source.slice(start)
+  const end = rest.search(new RegExp(`^## ${until}\\s*$`, 'm'))
+  return end < 0 ? rest : rest.slice(0, end)
+}
+
+function withoutLeadingHeading(html: string) {
+  const parsed = new DOMParser().parseFromString(html, 'text/html')
+  parsed.body.querySelector(':scope > h1, :scope > h2')?.remove()
+  return parsed.body.innerHTML
+}
+
 export default function MarkdownDocument({ doc }: Props) {
   const articleRef = useRef<HTMLElement>(null)
   const [readingProgress, setReadingProgress] = useState(0)
   const [mode, setMode] = useLocalStorage<'quick' | 'full'>('ltvc-reading-mode', 'full')
-  const [raceView, setRaceView] = useLocalStorage<'guided' | 'full'>('ltvc-race-view', 'guided')
-  const [raceStep, setRaceStep] = useLocalStorage<RaceGuidedStep>('ltvc-race-guided-step', 0)
+  const [raceView, setRaceView] = useLocalStorage<'guided' | 'full'>('ltvc-race-view', 'guided', (value): value is 'guided' | 'full' => value === 'guided' || value === 'full')
+  const [raceStep, setRaceStep] = useLocalStorage<RaceGuidedStep>('ltvc-race-guided-step', 0, (value): value is RaceGuidedStep => Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 5)
   const [termId, setTermId] = useState<string | null>(null)
   const [completed, setCompleted] = useLocalStorage<string[]>('ltvc-completed', [])
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>('ltvc-bookmarks', [])
@@ -58,8 +72,17 @@ export default function MarkdownDocument({ doc }: Props) {
     toc: lessonPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).flatMap(part => part.toc),
   } : null, [lessonPartRenderings])
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
+  const raceLabHtml = useMemo(() => enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Hands-on Lab', 'Debug from evidence'))).html, [doc.content])
+  const raceGuidedContexts = useMemo(() => [
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Engineering Problem', 'Same requests, different execution boundary').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Mental Model', 'Same requests, different execution boundary').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
+    '',
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Debug from evidence', 'Break It: process-local protection không phải multi-instance protection'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Break It: process-local protection không phải multi-instance protection', 'Transfer Challenge'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Explain It', 'Recall Questions'))).html),
+  ], [doc.content])
   const rendered = useMemo(() => lessonRendered ?? (!isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered), [fullRendered, lessonRendered, isLearning, mode])
-  const showRaceGuided = isRaceGoldenPilot && raceView === 'guided' && !window.location.hash
+  const showRaceGuided = isRaceGoldenPilot && raceView === 'guided'
   const activeHeading = useScrollSpy({
     selector: 'h2, h3',
     root: articleRef,
@@ -78,7 +101,7 @@ export default function MarkdownDocument({ doc }: Props) {
     const target = targetId ? document.getElementById(targetId) : null
     if (target) {
       window.requestAnimationFrame(() => {
-        target.scrollIntoView({ block: 'start', behavior: 'auto' })
+        target.scrollIntoView?.({ block: 'start', behavior: 'auto' })
         target.setAttribute('tabindex', '-1')
         target.focus({ preventScroll: true })
       })
@@ -93,6 +116,10 @@ export default function MarkdownDocument({ doc }: Props) {
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [doc.slug, mode, raceView])
+
+  useEffect(() => {
+    if (isRaceGoldenPilot && window.location.hash) setRaceView('full')
+  }, [doc.slug, isRaceGoldenPilot, setRaceView])
 
   useEffect(() => {
     const article = articleRef.current
@@ -111,12 +138,16 @@ export default function MarkdownDocument({ doc }: Props) {
     const focusHandler = (event: FocusEvent) => handleTerm(event.target)
     article.addEventListener('click', clickHandler); article.addEventListener('focusin', focusHandler)
     return () => { article.removeEventListener('click', clickHandler); article.removeEventListener('focusin', focusHandler) }
-  }, [rendered.html])
+  }, [rendered.html, raceLabHtml])
 
   const toggleValue = (items: string[], slug: string, setter: (next: string[]) => void) => setter(items.includes(slug) ? items.filter(item => item !== slug) : [...items, slug])
   const navigateToHeading = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
     window.history.replaceState(null, '', `#${id}`)
+  }
+  const switchRaceView = (view: 'guided' | 'full') => {
+    if (view === 'guided' && window.location.hash) window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    setRaceView(view)
   }
 
   return <div className="document-layout">
@@ -126,11 +157,11 @@ export default function MarkdownDocument({ doc }: Props) {
         <div className="breadcrumb">{isLearning ? <><Link to="/">Roadmap</Link><span>/</span><span>{learningDomain?.title ?? 'Learning Lab'}</span><span>/</span><span>{doc.title}</span></> : <><Link to="/library">Library</Link><span>/</span><span>{doc.section}</span><span>/</span><span>{doc.title}</span></>}</div>
         <h1>{doc.title}</h1><p>{doc.description}</p>
         <div className="document-meta-row"><span className="weight-badge">{contentKind === 'learning' ? 'Learning lab' : contentKind === 'standard' ? 'Standard' : contentKind === 'interview' ? 'Interview practice' : 'Reference'}</span><span className="weight-badge">{doc.interviewFrequency === 'AlmostAlways' ? 'Almost always' : doc.interviewFrequency === 'RoleDependent' ? 'Role dependent' : doc.interviewFrequency}</span><span className="weight-badge">{doc.expectedDepth}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
-        <div className="document-actions">{isRaceGoldenPilot ? <div className="reading-mode" role="group" aria-label="Chế độ học Race Condition"><button className={showRaceGuided ? 'active' : ''} onClick={() => setRaceView('guided')}>Học theo bước</button><button className={!showRaceGuided ? 'active' : ''} onClick={() => setRaceView('full')}>Xem toàn bài</button></div> : !isLearning && <><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button></>}<button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => reviewItem?.manualPin ? remove(`cheatsheet:${doc.slug}`) : pin({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {reviewItem?.manualPin ? 'Bỏ ghim ôn' : needsReviewForDoc ? 'Đã có lịch ôn' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
+        <div className="document-actions">{isRaceGoldenPilot ? <div className="reading-mode" role="group" aria-label="Chế độ học Race Condition"><button className={showRaceGuided ? 'active' : ''} onClick={() => switchRaceView('guided')}>Học theo bước</button><button className={!showRaceGuided ? 'active' : ''} onClick={() => switchRaceView('full')}>Xem toàn bài</button></div> : !isLearning && <><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button></>}<button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => reviewItem?.manualPin ? remove(`cheatsheet:${doc.slug}`) : pin({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {reviewItem?.manualPin ? 'Bỏ ghim ôn' : needsReviewForDoc ? 'Đã có lịch ôn' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
       </header>
       {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
       {!isLearning && mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
-      {showRaceGuided ? <article ref={articleRef} className="markdown-body race-guided-body"><RaceGuidedLesson step={raceStep} onStep={setRaceStep} onShowFull={() => setRaceView('full')} /></article>
+      {showRaceGuided ? <article ref={articleRef} className="markdown-body race-guided-body"><RaceGuidedLesson step={raceStep} onStep={setRaceStep} onShowFull={() => switchRaceView('full')} labHtml={raceLabHtml} contextHtml={raceGuidedContexts} /></article>
       : lessonParts && lessonPartRenderings ? <article ref={articleRef} className="markdown-body">{lessonParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: isRaceGoldenPilot ? withoutLeadingH1(lessonPartRenderings[index]?.html ?? '') : lessonPartRenderings[index]?.html ?? '' }} /> : <Fragment key={`visual-${index}`}>{visualRenderer?.(part)}</Fragment>)}</article>
       : <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />}
       <PersonalExample slug={doc.slug} />
