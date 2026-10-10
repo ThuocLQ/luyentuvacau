@@ -106,3 +106,10 @@ Security has 25 relation-specific decisions across 11 target Learning Units: **1
 **Status:** ACTIVE; Stage 2E remains IN_REVIEW
 
 Observability has 19 relation-specific decisions across 7 target Learning Units: **9 REQUIRED** = 6 Local slices + 3 External evidence candidates, and **10 RECOMMENDED** = 10 surfaced contexts. The runtime-diagnostics → profiling candidate explicitly rejects whole-unit PASSED because `lu-runtime-diagnostics` is multi-Primary; two singleton evidence candidates into `lu-obs-diagnostic-method` are fair but remain non-locking. The executable graph now derives all 137 Units, includes rejected-proxy candidates, deduplicates pairs and verifies 43 prior+Security edges / 116 roots and 46 prior+Security+Observability edges / 114 roots, acyclic. Reliability / SRE remains unreviewed.
+
+## D-014 — Stage 2E Production Safety sealed
+
+**Date:** 2026-10-10
+**Status:** SEALED
+
+Stage 2E independently reconciled all **64** inventory relations (**35 REQUIRED**, **29 RECOMMENDED**) across **27** target Learning Units. The final treatment is 19 Local slices + 16 External evidence candidates and 27 surfaced + 2 omitted non-blocking contexts. All four multi-Primary External sources reject whole-unit PASSED proxy treatment; candidates remain distinct from learner locks. The validator checks frozen dependency membership, the two separately handled same-unit internal relations, exact inventory/target coverage, proxy fairness, duplicate decisions and the full 137-Unit graph. Final graph: **53** unique candidate edges, **108** roots, acyclic. Next task is Stage 2F Delivery & Verification; do not reopen the sealed Stage 2E evidence without concrete contradiction.

@@ -1,6 +1,6 @@
-# Stage 2E Security + Observability Dependency Semantic Review — Working Evidence
+# Stage 2E Production Safety Dependency Semantic Review — Working Evidence
 
-NON-CANONICAL WORKING REVIEW. Security and Observability evidence are accepted bounded Stage 2E packages; Reliability / SRE remains unreviewed. Candidate edges do not create learner locks.
+NON-CANONICAL WORKING REVIEW. Stage 2E semantic review is accepted and sealed as a working-evidence milestone. Candidate edges do not create learner locks.
 
 ## Security relation-specific evidence — authoritative repair
 
@@ -56,6 +56,31 @@ NON-CANONICAL WORKING REVIEW. Security and Observability evidence are accepted b
 | RECOMMENDED | obs-logs-structured-correlation -> obs-diagnostic-method | SURFACE | For a state-transition hypothesis, optionally query correlated order events before choosing a repair. | Structured logs are optional corroboration; the target still teaches the hypothesis loop. |
 | RECOMMENDED | obs-load-test-benchmark-validity -> obs-diagnostic-method | SURFACE | When an incident follows a load test, optionally check whether the workload, data and warm-up assumptions still match production. | Experimental validity is useful context but a diagnostic method must not require a prior benchmark pass. |
 
+## Reliability / SRE relation-specific evidence — authoritative repair
+
+| Kind | Relation | Decision | Concrete target-native evidence | Ownership / proxy boundary |
+|---|---|---|---|---|
+| REQUIRED | obs-latency-throughput-saturation -> rel-user-journey-sli-slo-budget | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: turn p50/p95, success rate and saturation into an observable workload statement. The target must define a user journey SLI/SLO from measured behavior rather than a dashboard slogan. | The source is a singleton and its symptom-reading evidence is directly reused, so whole-unit PASSED is a fair candidate only. |
+| REQUIRED | api-deadlines-timeout-cancellation -> rel-dependency-budgets | EXTERNAL — WHOLE-UNIT PROXY NOT_ACCEPTABLE | Prior capability evidence: propagate an 800 ms deadline, cancel an expired downstream call and explain remaining budget. The target allocates that budget across a multi-dependency journey. | `lu-api-deadline-retry-policy` also owns retry/backoff, so whole-unit PASSED would over-gate dependency budgets; use compatible deadline evidence only if policy later needs it. |
+| REQUIRED | concurrency-bounded-backpressure -> rel-overload-load-shedding-degradation | EXTERNAL — WHOLE-UNIT PROXY NOT_ACCEPTABLE | Prior capability evidence: bound in-flight work, observe queue growth and reject work before memory or workers are exhausted. The target chooses admission and degradation policy under overload. | `lu-concurrency-async-parallelism` is multi-Primary; a whole-unit pass would include unrelated async/cancellation evidence. |
+| REQUIRED | obs-latency-throughput-saturation -> rel-overload-load-shedding-degradation | LOCAL | A checkout has 40 worker slots, a growing queue and rising p95. Evidence: pick a load-shedding threshold and state the user-visible degraded response. | The target owns overload policy; it teaches the required symptom panel locally and does not claim the source performance assessment. |
+| REQUIRED | rel-overload-load-shedding-degradation -> rel-cascading-failure-queue-capacity | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: apply bounded admission/degradation when finite capacity is exceeded. The target must trace pressure propagating from one saturated dependency into upstream queues and retries. | The source is a singleton with the same admission-control evidence boundary, so whole-unit PASSED is a fair candidate only. |
+| REQUIRED | db-backup-restore -> rel-disaster-recovery-rpo-rto | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: restore a backup, identify recovered data point and measure restore duration. The target sets and proves RPO/RTO against that recovery evidence. | The source is a singleton; its restore evidence is the direct substrate for the DR assessment and is a fair candidate only. |
+| REQUIRED | test-failure-resilience -> rel-failure-injection-verification | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: inject a controlled dependency failure, assert the expected invariant and verify recovery. The target designs an experiment with blast-radius controls and observable user impact. | The source is a singleton and its controlled-failure evidence is reused directly; candidate only, never an automatic lock. |
+| REQUIRED | rel-user-journey-sli-slo-budget -> rel-failure-injection-verification | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: state a journey SLI, SLO and error budget with a measurable threshold. The target needs that threshold to decide whether the injected failure was acceptable. | The singleton source supplies the exact user-impact evidence required by the failure-injection assessment. |
+| RECOMMENDED | api-retry-backoff-jitter -> rel-dependency-budgets | SURFACE | When allocating 800 ms, optionally calculate how a retry delay consumes the caller's remaining budget. | Retry policy is an optional cost illustration; dependency budgets remain the assessed target mechanism. |
+| RECOMMENDED | api-retry-backoff-jitter -> rel-cascading-failure-queue-capacity | SURFACE | During a downstream brownout, optionally compare one retry fan-out with a load-shedding response. | Retry amplification is optional failure context, not a required API-resilience pass. |
+| RECOMMENDED | rel-dependency-budgets -> rel-cascading-failure-queue-capacity | SURFACE | In the cascade trace, optionally show that expired downstream budget prevents one caller from waiting indefinitely. | Time-budget allocation enriches the story but cascade pressure remains usable without prior budget mastery. |
+| RECOMMENDED | rel-user-journey-sli-slo-budget -> rel-change-rollout-rollback-risk | SURFACE | At canary analysis, optionally attach checkout success rate and p95 to a rollback threshold. | SLO is optional release evidence; rollout mechanics remain target-owned. |
+| RECOMMENDED | api-versioning-compatibility -> rel-change-rollout-rollback-risk | SURFACE | During a rolling release, optionally test an old client against the new API before expanding the cohort. | Compatibility is a release variation, never a prerequisite for rollout-risk evidence. |
+| RECOMMENDED | db-schema-evolution -> rel-change-rollout-rollback-risk | SURFACE | Before rollback, optionally inspect whether an old app can still read the new schema/data shape. | Schema evolution is optional coexistence context, not a gate for the target's rollback decision. |
+| RECOMMENDED | msg-schema-evolution-contract-ownership -> rel-change-rollout-rollback-risk | SURFACE | For an event consumer rollout, optionally compare old and new payload readers before promoting the producer. | Event compatibility is a transfer variant, not required progress. |
+| RECOMMENDED | obs-diagnostic-method -> rel-incident-response-postmortem | SURFACE | When an alert fires, optionally show a hypothesis/evidence log before writing the incident timeline. | Diagnostic method helps investigation but incident ownership and follow-up remain target-owned. |
+| RECOMMENDED | rel-user-journey-sli-slo-budget -> rel-incident-response-postmortem | SURFACE | In the impact section, optionally compare affected checkout success against the stated SLO. | SLO gives impact context, not an incident-response prerequisite. |
+| RECOMMENDED | dist-replication-leader-quorum -> rel-disaster-recovery-rpo-rto | SURFACE | During recovery planning, optionally show why replicated copies with lag or shared corruption are not automatically backups. | Replication is a useful DR warning, not a required Distributed Systems pass. |
+| RECOMMENDED | obs-diagnostic-method -> rel-failure-injection-verification | SURFACE | Before injecting a timeout, optionally write the prediction and the discriminating signal that will falsify it. | Diagnostic structure is optional experiment discipline; the target still assesses controlled resilience verification. |
+| RECOMMENDED | obs-signals-correlation -> rel-health-readiness-semantics | SURFACE | When deciding readiness, optionally map one signal to the exact dependency property that should stop traffic. | Signal correlation informs probe choice but never gates health semantics. |
+
 ## Superseded draft evidence
 
 The former generic combined tables were removed because they conflicted with the authoritative Security evidence above. Observability requires its own relation-specific repair before acceptance.
@@ -91,3 +116,28 @@ Security accounting: 18 REQUIRED = 12 LOCAL + 6 EXTERNAL; 7 RECOMMENDED = 5 SURF
 | lu-obs-diagnostic-method | 0 | 2 | 4 | 0 | Two acceptable singleton candidates remain candidate-only | Signal correlation and workload symptoms are substantive reusable evidence; DB, profile, logs and load-test material remain optional hypothesis variants. |
 
 Observability accounting: 9 REQUIRED = 6 LOCAL + 3 EXTERNAL; 10 RECOMMENDED = 10 SURFACED + 0 OMITTED. External candidates express evidence compatibility only; the future progression policy must keep all content viewable and must not silently turn them into locks.
+
+## Reliability / SRE target over-gating review
+
+| Target unit | LOCAL | EXTERNAL | SURFACED | OMITTED | Progression treatment | Over-gating check |
+|---|---|---|---|---|---|---|
+| lu-rel-user-journey-sli-slo-budget | 0 | 1 | 0 | 0 | One acceptable singleton candidate only | Measured symptoms are substantively reused to define a journey SLI/SLO; the candidate is not a reader lock. |
+| lu-rel-dependency-budgets | 0 | 1 | 1 | 0 | Capability-compatible deadline evidence only | The deadline source is multi-Primary, so retry/backoff cannot be silently required through whole-unit PASSED. |
+| lu-rel-overload-load-shedding-degradation | 1 | 1 | 0 | 0 | Capability-compatible backpressure evidence only | The target teaches the workload symptom panel locally; multi-Primary concurrency evidence cannot become a broad gate. |
+| lu-rel-cascading-failure-queue-capacity | 0 | 1 | 2 | 0 | One acceptable singleton candidate only | Admission/degradation evidence is substantively reused; retry and budget relationships are optional cascade branches. |
+| lu-rel-disaster-recovery-rpo-rto | 0 | 1 | 1 | 0 | One acceptable singleton candidate only | Restore evidence is required for RPO/RTO proof; replication context is optional to avoid a Distributed Systems lock. |
+| lu-rel-failure-injection-verification | 0 | 2 | 1 | 0 | Two acceptable singleton candidates only | Controlled failure and user-impact evidence are substantive; diagnosis context is optional and does not gate experiments. |
+| lu-release-rollout-rollback | 0 | 0 | 4 | 0 | No external candidate | SLO, API/schema/event compatibility are four independent release contexts and remain optional. |
+| lu-rel-incident-response-postmortem | 0 | 0 | 2 | 0 | No external candidate | Diagnosis and SLO provide useful impact/investigation context without requiring prior PASSED evidence. |
+| lu-rel-health-probes | 0 | 0 | 1 | 0 | No external candidate | Signal selection is optional context; health semantics and platform probe behavior retain their own bounded assessment. |
+
+Reliability / SRE accounting: 8 REQUIRED = 1 LOCAL + 7 EXTERNAL; 12 RECOMMENDED = 12 SURFACED + 0 OMITTED. Two External sources are multi-Primary and therefore explicitly reject whole-unit PASSED; all candidate evidence remains distinct from future learner locks.
+
+## Stage 2E independent acceptance
+
+- Exact inventory reconciliation: 64 / 64 relations = 35 REQUIRED + 29 RECOMMENDED; 27 / 27 target Learning Units; one active decision per relation.
+- Required decisions: 19 LOCAL + 16 EXTERNAL candidates. Recommended decisions: 27 SURFACED + 2 OMITTED. No RECOMMENDED relation creates an unlock requirement.
+- Proxy fairness: accepted whole-unit proxies are singleton sources with directly reused assessment evidence. Rejected multi-Primary sources are `lu-sec-auth-session-oauth`, `lu-runtime-diagnostics`, `lu-api-deadline-retry-policy` and `lu-concurrency-async-parallelism`; they remain capability-compatible evidence candidates, never whole-unit learner locks.
+- Frozen-registry check: every Stage 2E inventory relation exists in the frozen dependency map. The excluded same-unit internal relations remain separately accounted for: `sec-auth-session-token → sec-oauth-oidc-awareness` and `obs-instrumentation-context → obs-tracing-distributed-evidence`.
+- Graph check: 137 canonical Learning Units; prior sealed graph plus Security has 43 unique candidate edges and 116 roots; full Stage 2E has 53 unique candidate edges and 108 roots; both are acyclic and preserve multiple entries.
+- Content remains viewable; any later official progression policy must materialize a compatible evidence rule explicitly rather than treating a candidate edge as an automatic lock.

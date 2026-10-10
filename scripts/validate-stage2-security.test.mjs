@@ -8,6 +8,7 @@ const fixture = () => ({
   reviewText: read('docs/project/stage-2e-security-observability-review.md'),
   inventoryText: read('docs/project/stage-2e-production-safety-inventory.md'),
   mapText: read('docs/roadmap/learning-unit-map.md'),
+  dependencyText: read('docs/roadmap/dependency-map.md'),
   priorReviewTexts: [
     read('docs/project/stage-2b-foundations-review.md'),
     read('docs/project/stage-2c-data-review.md'),
@@ -23,14 +24,15 @@ test('accepts the complete Security evidence', () => {
   assert.deepEqual(validateStage2Security(fixture()).errors, []);
 });
 
-test('accepts Security and Observability against the full Learning Unit graph', () => {
+test('accepts all Stage 2E packages against the full Learning Unit graph', () => {
   const result = validateStage2E(fixture());
   assert.deepEqual(result.errors, []);
   assert.equal(learningUnitIds(fixture().mapText).size, 137);
   assert.equal(result.securityGraph.edges, 43);
   assert.equal(result.securityGraph.roots, 116);
-  assert.equal(result.graph.edges, 46);
-  assert.equal(result.graph.roots, 114);
+  assert.equal(result.graph.edges, 53);
+  assert.equal(result.graph.roots, 108);
+  assert.deepEqual(result.totals, { relations: 64, targets: 27 });
   assert.ok(result.graph.roots > 1);
 });
 
@@ -71,6 +73,14 @@ test('rejects a real cross-stage candidate cycle', () => {
     ['lu-sec-authorization-object-tenant', 'lu-sec-unseen-attack-transfer'],
     ['lu-sec-unseen-attack-transfer', 'lu-sec-authorization-object-tenant'],
   ]);
+  assert.ok(result.errors.includes('candidate graph cycle'));
+});
+
+test('rejects a backwards edge injected into the real combined fixture graph', () => {
+  const result = validateStage2E({
+    ...fixture(),
+    additionalCandidateEdges: [['lu-rel-failure-injection-verification', 'lu-test-failure-resilience']],
+  });
   assert.ok(result.errors.includes('candidate graph cycle'));
 });
 

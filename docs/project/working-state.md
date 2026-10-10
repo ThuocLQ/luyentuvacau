@@ -52,7 +52,7 @@ Stage 2 rules: capability dependency != learner progression; REQUIRED does not a
 
 Stage 2D Distributed Interaction - **SEALED** after independent final acceptance. Seal evidence: `6b25b816bcdfec1bba1a4ce0474a9d51f72e0ef6`. Final result: 29 Local / 16 External REQUIRED (14 Local / 11 External same-owner; 15 Local / 5 External cross-owner); 21 surfaced RECOMMENDED; 3 intentionally not surfaced; 45 REQUIRED / 24 RECOMMENDED; 16 External unit pairs; combined external graph ACYCLIC.
 
-Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - SEALED; D Production Safety - PENDING; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
+Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - SEALED; D Production Safety - SEALED; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
 
 Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis -> proxy fairness -> over-gating/cycle validation -> canonical materialization -> Stage 2 seal -> Golden Pilot -> human pilot acceptance -> reusable authoring pattern -> complete first chapter -> chapter release acceptance -> user learning + parallel Codex development. See `docs/project/first-chapter-delivery-plan.md`.
 
@@ -75,11 +75,13 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Stage 2E Reliability / SRE semantic review: author and independently validate relation-specific Local/External/Recommended evidence for its 20 relations and 9 target Learning Units. Stage 2E remains IN_REVIEW; it cannot be sealed until Reliability and whole-stage acceptance pass.
+Stage 2F Delivery & Verification semantic review: inventory and review 54 pending relations (23 REQUIRED, 31 RECOMMENDED) across 19 target Learning Units. Preserve sealed Stage 2E; do not treat candidate edges as learner locks.
 
 Security is a completed bounded Stage 2E package: 25 / 25 relations (18 REQUIRED, 7 RECOMMENDED) across 11 target Learning Units. It has 12 LOCAL REQUIRED slices, 5 acceptable whole-unit External candidate proxies, one rejected multi-capability whole-unit proxy (`lu-sec-auth-session-oauth`) and 5 surfaced / 2 omitted RECOMMENDED contexts. The Stage 2 Security validator and negative tests are the executable structural gate; candidate edges remain non-locking until final Stage 2 policy materialization.
 
 Observability is a completed bounded Stage 2E package: 19 / 19 relations (9 REQUIRED, 10 RECOMMENDED) across 7 target Learning Units. It has 6 LOCAL and 3 External REQUIRED candidates; `lu-runtime-diagnostics` is multi-Primary, so its profiling dependency is explicitly capability-compatible evidence only, not whole-unit PASSED. The combined Stage 2 validator derives all 137 Units, deduplicates all candidate pairs and confirms prior + Security = 43 edges / 116 roots and prior + Security + Observability = 46 edges / 114 roots, both acyclic.
+
+Stage 2E Production Safety: **SEALED** after independent acceptance. Final reconciliation: 64 / 64 relations = 35 REQUIRED + 29 RECOMMENDED across 27 target Units; 19 LOCAL + 16 External candidates; 27 surfaced + 2 omitted RECOMMENDED. Full graph: 53 unique candidate edges, 108 roots, acyclic. Reliability / SRE completed 20 / 20 relations across 9 targets (1 LOCAL + 7 External REQUIRED; 12 surfaced RECOMMENDED). Four multi-Primary source units explicitly reject whole-unit PASSED proxy treatment.
 
 ## Stop conditions
 
