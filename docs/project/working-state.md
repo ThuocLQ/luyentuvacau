@@ -85,7 +85,7 @@ Stage 2E Production Safety: **SEALED** after independent acceptance. Final recon
 
 ## Exact next task
 
-**Golden Pilot Unit selection and authoring** under `docs/engineering-learning-standard.md`: choose one dependency-valid Unit from the sealed progression policy, research it, build its complete Vietnamese lesson/lab/evidence flow, and obtain real learner feedback. Do not treat the 137-Unit map as a forced sequential syllabus.
+**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** It was selected because it has no external learner lock, starts from an inspectable backend invariant, has a runnable Windows-friendly .NET console lab, learner-controlled visuals, a concrete production transfer to multi-instance/database correctness, and a source map. Its status is **Ready for human study — Golden Pilot**, never Human validated. Next: a real learner studies `learning-race-condition`, records vocabulary/visual/lab friction, then the team makes only evidence-backed repairs.
 
 ## Stop conditions
 

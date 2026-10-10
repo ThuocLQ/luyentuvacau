@@ -1,4 +1,4 @@
-# Race Condition & Concurrency
+# Race Condition & Concurrency — Golden Pilot
 
 :::learning-goal
 Sau bài này, bạn có thể nhìn một giá trị bị nhiều operation cùng đọc/ghi, nêu rule cần giữ, trace các bước bị xen kẽ làm rule vỡ, chạy reproduction C# nhỏ và chọn đúng correctness boundary. Mục tiêu không phải nhớ nhiều primitive.
@@ -172,6 +172,16 @@ Console.WriteLine($"protected: approvedCount={protectedResults.Count(x => x.Appr
 record WithdrawalResult(bool Approved, int ApprovedAmount);
 ```
 
+Kết quả cần quan sát sau `dotnet run`:
+
+```text
+sequential: approvedCount=1, approvedAmount=80, finalBalance=20
+unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70
+protected: approvedCount=1, approvedAmount=80, finalBalance=20
+```
+
+Hai giá trị cuối hợp lệ ở dòng `unsafe` là một phần của bài học: thứ tự WRITE cuối không phải evidence rằng code đúng. `approvedAmount=110` mới là evidence trực tiếp rằng invariant đã vỡ.
+
 ### Experiment 1 — sequential baseline
 
 **Question:** nếu gọi withdraw 80 rồi withdraw 30 theo thứ tự, output nào giữ invariant?
@@ -290,6 +300,17 @@ Sau khi tự nói, check xem bạn có đủ: shared mutable state, invariant, l
 Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi correctness của shared state phụ thuộc vào thứ tự execution không được kiểm soát. Với balance 100, A và B cùng READ 100 rồi cùng CHECK nên đều được accept; các WRITE sau dùng snapshot cũ, tổng withdrawal đã vượt invariant. Trong một process, em có thể dùng cùng `lock` cho cả read/check/write. Nếu state ở database hoặc có nhiều instance, local lock không phối hợp được; em đặt rule ở database boundary và kiểm tra số row update thực tế và version concurrency (nếu flow dùng) để verify.”
 
 **Technical English:** `shared mutable state`, `race condition`, `interleaving`, `atomic operation`, `critical section`, `mutual exclusion`, `contention`, `process-local lock`.
+
+**English short explanation:** “A race condition appears when two operations use shared mutable state and correctness depends on an execution order the system does not control. I first state the invariant, then reproduce one interleaving, and finally place the protection at the real source-of-truth boundary.” Không có concept mới ở bản tiếng Anh; nó chỉ là cách nói lại reasoning vừa làm bằng tiếng Việt.
+
+## Evidence checks — L1 đến L4
+
+- **L1 · Understand:** không nhìn lại timeline, nói invariant của withdrawal và giải thích vì sao hai local snapshot đều có thể là 100.
+- **L2 · Apply:** đổi amounts thành 60 và 50 trong lab. Dự đoán trước khi chạy: unsafe vẫn có thể approve tổng 110; protected chỉ approve một withdrawal theo request vào gate trước.
+- **L3 · Debug:** production báo `finalBalance=70` nhưng có hai reservation success. Viết candidate timeline, rồi nêu ba evidence cần lấy: operation ID, số row thay đổi ở source of truth, và instance ID. Giải thích vì sao chỉ log final balance là chưa đủ.
+- **L4 · Reason / trade-off:** API chạy bốn instance, inventory ở PostgreSQL, payment provider có thể timeout. So sánh local `lock`, conditional update và optimistic concurrency: mechanism nào giữ inventory invariant, caller phải xử lý outcome nào, và external payment cần state/reconciliation nào? Không có một tool mặc định đúng cho cả ba boundary.
+
+Tự chấm technical mastery theo evidence trên; English mastery được chấm riêng khi bạn nói lại phần **English short explanation** trong 60–120 giây. Không có quiz hay completion nào tự unlock level.
 
 ## Recall Questions
 

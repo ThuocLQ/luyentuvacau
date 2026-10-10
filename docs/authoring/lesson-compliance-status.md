@@ -26,13 +26,14 @@ Reopen only to finish this learner-evidence cycle, for a factual correctness iss
 
 ## Race Condition & Concurrency
 
-Status: **Ready for human study**
+Status: **Ready for human study — Golden Pilot**
 Research: [race-condition-source-map.md](../research/race-condition-source-map.md)
 
 Known state:
 - controlled interleaving exposes the invariant before naming the race.
 - local versus multi-instance correctness boundary is explicit.
-- console lab and vocabulary hardening are complete enough for a first learner study.
+- console lab now states its observable output contract, includes failure/debug evidence and separates L1–L4 technical checks from an optional English explanation.
+- this is the selected first Golden Pilot; it is not Human validated until a real learner studies this exact version and records friction evidence.
 
 Reopen only for learner evidence, factual correctness issue, concrete UI bug, or a material runtime-version change.
 

@@ -179,7 +179,7 @@ describe('Golden Learning Lab visuals', () => {
   })
   it('removes the Limit confounder when the lab isolates estimate accuracy', () => {
     const estimateExperiment = indexLesson.split('### Experiment 3')[1].split('### Experiment 4')[0]
-    const estimateSql = estimateExperiment.match(/```sql\n([\s\S]*?)```/)?.[1] ?? ''
+    const estimateSql = estimateExperiment.match(/```sql\r?\n([\s\S]*?)```/)?.[1] ?? ''
     expect(estimateSql).toContain('SELECT id, created_at, total')
     expect(estimateExperiment).toContain('cô lập một câu hỏi duy nhất')
     expect(estimateSql).not.toContain('LIMIT')
@@ -207,6 +207,23 @@ describe('Golden Learning Lab visuals', () => {
   })
   it('keeps the source map internal rather than exposing a dead learner link', () => {
     expect(raceLesson).not.toContain('/docs/research/race-condition-source-map')
+  })
+
+  it('renders the complete Golden Pilot with accessible visual controls', () => {
+    render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'learning-race-condition', title: 'Race Condition & Concurrency — Golden Pilot', contentKind: 'learning', content: raceLesson }} /></MemoryRouter>)
+    expect(screen.getAllByRole('heading', { name: 'Race Condition & Concurrency — Golden Pilot' })).toHaveLength(2)
+    expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Chọn execution mode' })).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Chọn số instance' })).toBeInTheDocument()
+    expect(screen.getByText('Evidence checks — L1 đến L4')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
+  })
+
+  it('keeps the Golden Pilot race lab observable and separates L1–L4 from English evidence', () => {
+    expect(raceLesson).toContain('unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70')
+    expect(raceLesson).toContain('## Evidence checks — L1 đến L4')
+    expect(raceLesson).toContain('**English short explanation:**')
+    expect(raceLesson).toContain('Không có quiz hay completion nào tự unlock level.')
   })
 
   it('keeps Quick mode available for reference Markdown', () => {
