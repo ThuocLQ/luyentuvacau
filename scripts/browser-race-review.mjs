@@ -6,7 +6,7 @@ import path from 'node:path'
 
 const port = Number(process.env.RACE_BROWSER_PORT ?? 9233)
 const appUrl = process.env.RACE_BROWSER_URL ?? 'http://127.0.0.1:5173'
-const artifactDir = path.resolve(process.env.BROWSER_ARTIFACT_DIR ?? path.join(os.tmpdir(), 'quannet-browser-race-review'))
+const artifactDir = path.resolve(process.env.BROWSER_ARTIFACT_DIR ?? 'docs/project/evidence/race-golden-pilot-browser')
 const chromePath = process.env.CHROME_PATH ?? [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
@@ -69,6 +69,7 @@ async function navigate(cdp, route) {
 }
 
 const clickButton = text => `(() => { const button = [...document.querySelectorAll('button')].find(item => item.textContent.trim() === ${JSON.stringify(text)}); if (!button) throw new Error('Missing button: ${text}'); button.click() })()`
+const clickButtonContaining = text => `(() => { const button = [...document.querySelectorAll('button')].find(item => item.textContent.includes(${JSON.stringify(text)})); if (!button) throw new Error('Missing button: ${text}'); button.click() })()`
 const clickLabel = text => `(() => { const label = [...document.querySelectorAll('label')].find(item => item.textContent.includes(${JSON.stringify(text)})); const input = label?.querySelector('input'); if (!input) throw new Error('Missing answer label: ${text}'); input.click() })()`
 const setLabeledValue = (text, value) => `(() => { const label = [...document.querySelectorAll('label')].find(item => item.textContent.includes(${JSON.stringify(text)})); const input = label?.querySelector('input, textarea') ?? document.getElementById(label?.htmlFor); if (!(input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement)) throw new Error('Missing input: ${text}'); const setter = Object.getOwnPropertyDescriptor(input instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype, 'value').set; setter.call(input, ${JSON.stringify(value)}); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true })) })()`
 const scrollToSelector = selector => `(() => { const element = document.querySelector(${JSON.stringify(selector)}); if (!element) throw new Error('Missing scroll target: ${selector}'); window.scrollTo({ top: Math.max(0, element.getBoundingClientRect().top + window.scrollY - 72), behavior: 'instant' }) })()`
@@ -90,7 +91,7 @@ async function completeAssessment(cdp) {
   await cdp.evaluate(setLabeledValue('Kết quả bạn quan sát được', '60/50 unsafe approve 110; final balance 40.'))
   await cdp.evaluate(clickLabel('Tôi đã chạy hoặc đối chiếu local lab'))
   await cdp.evaluate(clickButton('Tiếp tục'))
-  await cdp.evaluate(clickLabel('Cả hai có thể CHECK từ cùng snapshot 100'))
+  await cdp.evaluate(clickLabel('Hai lock object khác nhau không loại trừ nhau'))
   await cdp.evaluate(clickButton('Nộp câu trả lời'))
   await cdp.evaluate(setLabeledValue('Candidate timeline', 'A và B đọc snapshot cũ; operation ID, row count và instance ID nối evidence với effect.'))
   await cdp.evaluate(clickLabel('Tôi đã tự review timeline'))
@@ -119,28 +120,40 @@ async function reviewViewport(cdp, width) {
   const screenshots = [await screenshot(cdp, `home-navigation-${width}.png`)]
   const homeGeometry = await geometry(cdp)
   await navigate(cdp, '/docs/learning-race-condition?mode=guided')
-  await cdp.evaluate(`localStorage.removeItem('ltvc-race-assessment-v2'); localStorage.setItem('ltvc-race-guided-step', '0')`)
+  await cdp.evaluate(`localStorage.removeItem('ltvc-race-assessment-v3'); localStorage.removeItem('ltvc-race-lab-progress-v1'); localStorage.setItem('ltvc-race-guided-step', '0')`)
   await cdp.evaluate('location.reload()')
   await waitFor(async () => {
     if (!await cdp.evaluate(`document.querySelector('#race-guided-title')?.textContent.includes('Hai request cùng nhìn 100')`)) throw new Error('Race first step not ready')
   }, 'Race first step')
+  const captureScreenshots = width === 390 || width === 1280
   await cdp.evaluate(scrollToSelector('.race-guided > div:not([hidden]) .race-visual-card'))
   await sleep(120)
-  screenshots.push(await screenshot(cdp, `race-first-visual-${width}.png`))
+  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-first-visual-${width}.png`))
+  const guidedStages = []
+  for (let index = 0; index < 6; index += 1) {
+    await cdp.evaluate(`document.querySelectorAll('[aria-label^="Bước "]')[${index}]?.click()`)
+    await sleep(80)
+    guidedStages.push({ step: index + 1, geometry: await geometry(cdp) })
+  }
   await cdp.evaluate(`document.querySelector('[aria-label="Bước 3: Chạy lab"]')?.click()`)
   await waitFor(async () => { if (!await cdp.evaluate(`Boolean(document.querySelector('.race-lab-workflow'))`)) throw new Error('guided lab not open') }, 'guided lab')
-  await cdp.evaluate(clickButton('Sang bước chạy'))
-  await cdp.evaluate(clickButton('Tôi đã chạy hoặc đọc kết quả'))
-  await cdp.evaluate(clickButton('Mở đối chiếu và giải thích'))
+  await cdp.evaluate(clickButton('Bỏ qua dự đoán'))
+  await cdp.evaluate(clickButtonContaining('Tôi đã chạy hoặc đọc kết quả'))
+  await cdp.evaluate(clickButton('Bỏ qua ghi chú'))
   await cdp.evaluate(scrollToSelector('.race-lab-workflow'))
   await sleep(120)
-  screenshots.push(await screenshot(cdp, `race-guided-lab-expanded-${width}.png`))
+  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-guided-lab-expanded-${width}.png`))
+  await cdp.evaluate(`document.querySelector('[aria-label="Bước 5: Chuyển tình huống"]')?.click()`)
+  await cdp.evaluate(scrollToSelector('.race-visual-card'))
+  await sleep(120)
+  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-boundary-visual-${width}.png`))
   await completeAssessment(cdp)
   await cdp.evaluate(scrollToSelector('.race-assessment-result'))
   await sleep(120)
-  screenshots.push(await screenshot(cdp, `race-assessment-completion-${width}.png`))
-  const result = { width, home: homeGeometry, race: await geometry(cdp), screenshots }
-  if (result.home.scrollWidth !== result.home.clientWidth || result.race.scrollWidth !== result.race.clientWidth || result.home.offenders.length || result.race.offenders.length || result.home.inlineCodeOverflow.length || result.race.inlineCodeOverflow.length) throw new Error(`Layout failure at ${width}px: ${JSON.stringify(result)}`)
+  if (captureScreenshots) screenshots.push(await screenshot(cdp, `race-assessment-completion-${width}.png`))
+  const result = { width, home: homeGeometry, guidedStages, race: await geometry(cdp), screenshots }
+  const geometryFailures = [result.home, result.race, ...guidedStages.map(stage => stage.geometry)].some(item => item.scrollWidth !== item.clientWidth || item.offenders.length || item.inlineCodeOverflow.length)
+  if (geometryFailures) throw new Error(`Layout failure at ${width}px: ${JSON.stringify(result)}`)
   return result
 }
 
@@ -166,7 +179,7 @@ async function main() {
     await cdp.send('Page.enable')
     await cdp.send('Runtime.enable')
     const viewports = []
-    for (const width of [390, 1280]) viewports.push(await reviewViewport(cdp, width))
+    for (const width of [360, 390, 768, 1280]) viewports.push(await reviewViewport(cdp, width))
     const report = { command: 'npm run test:browser:race', appUrl, viewports, artifactDir }
     await writeFile(path.join(artifactDir, 'browser-report.json'), `${JSON.stringify(report, null, 2)}\n`)
     console.log(JSON.stringify(report, null, 2))

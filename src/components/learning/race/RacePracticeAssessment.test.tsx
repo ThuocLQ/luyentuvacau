@@ -25,11 +25,11 @@ describe('Race practice assessment', () => {
   it('resumes compatible work but discards a stale assessment version', () => {
     const compatible = initialRaceAssessment()
     compatible.currentQuestion = 2
-    window.localStorage.setItem('ltvc-race-assessment-v2', JSON.stringify(compatible))
+    window.localStorage.setItem('ltvc-race-assessment-v3', JSON.stringify(compatible))
     const { unmount } = render(<RacePracticeAssessment {...props} />)
     expect(screen.getByText(/Với input 80\/30/)).toBeInTheDocument()
     unmount()
-    window.localStorage.setItem('ltvc-race-assessment-v2', JSON.stringify({ ...compatible, version: 'old-version' }))
+    window.localStorage.setItem('ltvc-race-assessment-v3', JSON.stringify({ ...compatible, version: 'old-version' }))
     render(<RacePracticeAssessment {...props} />)
     expect(screen.getByText(/Điều nào cho phép cả A rút 80/)).toBeInTheDocument()
   })
@@ -40,7 +40,7 @@ describe('Race practice assessment', () => {
       { questionId: 'baseline', answer: '80-30', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
       { questionId: 'variation', answer: '60-50', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
     ]
-    window.localStorage.setItem('ltvc-race-assessment-v2', JSON.stringify(state))
+    window.localStorage.setItem('ltvc-race-assessment-v3', JSON.stringify(state))
     render(<RacePracticeAssessment {...props} />)
     expect(screen.getByText(/Đây là ghi nhận của bạn, không phải app xác minh execution/)).toBeInTheDocument()
   })
@@ -54,9 +54,9 @@ describe('Race practice assessment', () => {
       { questionId: 'baseline', answer: '80-30', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
       { questionId: 'variation', answer: '60-50', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
     ]
-    window.localStorage.setItem('ltvc-race-assessment-v2', JSON.stringify(state))
+    window.localStorage.setItem('ltvc-race-assessment-v3', JSON.stringify(state))
     render(<RacePracticeAssessment {...props} />)
-    fireEvent.click(screen.getByLabelText(/Cả hai có thể CHECK từ cùng snapshot 100/))
+    fireEvent.click(screen.getByLabelText(/Hai lock object khác nhau không loại trừ nhau/))
     fireEvent.click(screen.getByRole('button', { name: 'Nộp câu trả lời' }))
     expect(screen.getByRole('button', { name: 'Tiếp tục' })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
@@ -100,9 +100,9 @@ describe('Race practice assessment', () => {
     fireEvent.click(screen.getByLabelText(/Tôi đã chạy hoặc đối chiếu local lab/))
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
 
-    fireEvent.click(screen.getByLabelText(/Cả hai có thể CHECK từ cùng snapshot 100/))
+    fireEvent.click(screen.getByLabelText(/Hai lock object khác nhau không loại trừ nhau/))
     fireEvent.click(screen.getByRole('button', { name: 'Nộp câu trả lời' }))
-    expect(screen.getByText(/Wallet chỉ sống trong memory/)).toBeInTheDocument()
+    expect(screen.getByText(/Một Wallet sống trong memory/)).toBeInTheDocument()
     fireEvent.change(screen.getByLabelText('Candidate timeline'), { target: { value: 'A và B cùng đọc availability cũ; đối chiếu operation ID, row count và instance ID trước khi sửa database boundary.' } })
     fireEvent.click(screen.getByLabelText(/Tôi đã tự review timeline/))
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))

@@ -10,7 +10,7 @@ import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import OutboxGoldenLesson from './learning/outbox/OutboxGoldenLesson'
 import { findCompleteDoc } from '../data/docs'
-import { parseRaceGuidedLab } from '../utils/raceGuidedContent'
+import { parseRaceGuidedContent, parseRaceGuidedLab } from '../utils/raceGuidedContent'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
 import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
 import outboxLesson from '../../docs/learning/outbox-idempotency.md?raw'
@@ -250,6 +250,17 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/không tạo PASSED, MASTERED/i)).toBeInTheDocument()
   })
 
+  it('keeps Guided content when learner-facing Race headings are renamed and rejects missing semantic blocks', () => {
+    const renamed = raceLesson.replace('## Khi hai request dùng chung balance, điều gì xảy ra?', '## Một heading biên tập mới')
+    expect(parseRaceGuidedContent(renamed).mechanism).toContain('shared mutable state')
+    window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
+    const raceDocument = findCompleteDoc('learning-race-condition')!
+    render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: renamed }} /></MemoryRouter>)
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(screen.getByText(/shared mutable state/)).toBeInTheDocument()
+    expect(() => parseRaceGuidedContent(raceLesson.replace('<!-- QN_RACE_GUIDED:debug:END -->', ''))).toThrow(/debug semantic block/)
+  })
+
   it('uses compact numbered step controls while retaining a named stage chooser', () => {
     window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
     const raceDocument = findCompleteDoc('learning-race-condition')!
@@ -269,13 +280,15 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.queryByText(/unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70/)).not.toBeInTheDocument()
     fireEvent.change(screen.getByLabelText(/Dự đoán của bạn/), { target: { value: 'Sequential chỉ approve 80.' } })
     fireEvent.click(screen.getByRole('button', { name: 'Sang bước chạy' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Tôi đã chạy hoặc đọc kết quả' }))
+    fireEvent.click(screen.getByRole('button', { name: /Tôi đã chạy hoặc đọc kết quả/ }))
     fireEvent.change(screen.getByLabelText(/Observation của bạn/), { target: { value: 'Một request bị từ chối.' } })
     fireEvent.click(screen.getByRole('button', { name: 'Mở đối chiếu và giải thích' }))
     expect(screen.getAllByText(/sequential: approvedCount=1/)).toHaveLength(2)
     fireEvent.click(screen.getByRole('button', { name: 'Sang experiment tiếp theo' }))
+    fireEvent.change(screen.getByLabelText(/Dự đoán của bạn/), { target: { value: 'Cả hai có thể approve.' } })
     fireEvent.click(screen.getByRole('button', { name: 'Sang bước chạy' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Tôi đã chạy hoặc đọc kết quả' }))
+    fireEvent.click(screen.getByRole('button', { name: /Tôi đã chạy hoặc đọc kết quả/ }))
+    fireEvent.change(screen.getByLabelText(/Observation của bạn/), { target: { value: 'approvedAmount=110.' } })
     fireEvent.click(screen.getByRole('button', { name: 'Mở đối chiếu và giải thích' }))
     expect(screen.getByText(/unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70/)).toBeInTheDocument()
     expect(screen.getByText(/firstAmount = 60/)).toBeInTheDocument()

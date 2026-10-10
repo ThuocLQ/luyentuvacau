@@ -33,7 +33,10 @@ describe('AppShell learner navigation', () => {
     expect(within(focus).getByText(/Race Condition & Concurrency/)).toBeInTheDocument()
     expect(within(focus).getByText('Đang học · Bước 3/6')).toBeInTheDocument()
     expect(within(focus).getByRole('link', { name: 'Tiếp tục bài' })).toHaveAttribute('href', '/docs/learning-race-condition?mode=guided')
-    expect(document.querySelector('.learning-secondary-nav')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Tra cứu khi cần/ })).toHaveAttribute('aria-expanded', 'false')
+    fireEvent.click(screen.getByRole('button', { name: /Tra cứu khi cần/ }))
+    expect(screen.getByRole('button', { name: /Tra cứu khi cần/ })).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getByRole('link', { name: 'Quiz tình huống' })).toBeVisible()
   })
 
   it('migrates only the former all-expanded sidebar default to collapsed sections', () => {

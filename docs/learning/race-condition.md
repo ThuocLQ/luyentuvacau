@@ -10,6 +10,7 @@ Bạn cần biết variable, method, C# cơ bản và đã từng thấy `async`
 
 Bạn **không** cần biết trước race condition, atomicity, critical section, `lock`, `Interlocked`, memory visibility hay thread safety. Bài này chỉ xây những phần cần để reasoning về lỗi.
 
+<!-- QN_RACE_GUIDED:problem:START -->
 ## Nếu hai request cùng rút tiền, rule nào phải giữ?
 
 `balance = 100`. Request A muốn rút 80; request B muốn rút 30.
@@ -29,7 +30,9 @@ Vấn đề xuất hiện khi hai request đang cùng tiến triển. Đừng đ
 ## Sau bài này, bạn sẽ tự làm được gì?
 
 Bạn sẽ đi từ “hai thread chạy cùng lúc” tới câu chính xác hơn: correctness phụ thuộc vào execution ordering không được kiểm soát giữa các operation dùng chung state. Bạn phải chỉ ra được state, invariant, candidate interleaving, evidence và boundary của giải pháp.
+<!-- QN_RACE_GUIDED:problem:END -->
 
+<!-- QN_RACE_GUIDED:mechanism:START -->
 ## Khi hai request dùng chung balance, điều gì xảy ra?
 
 ### Shared state là gì?
@@ -94,6 +97,7 @@ Nhưng `Interlocked.Increment` không tự bảo vệ invariant “chỉ rút kh
 `async`/`await` không tự tạo thread cho mỗi async method; `await` nhả thread trong lúc chờ incomplete task. Nhưng hai logical request vẫn có thể overlap và cùng đọc state trước khi một request write. Vì vậy async I/O không làm shared mutable state tự thread-safe. Xem Reference Async/Concurrency nếu cần sâu hơn về Task/Thread.
 
 `SemaphoreSlim` cũng không phải “lock thay thế” theo mặc định. Nó hợp khi cần permit limit, ví dụ tối đa 5 I/O call đắt tiền cùng lúc. Giới hạn concurrency không tự đặt atomicity cho inventory/database state.
+<!-- QN_RACE_GUIDED:mechanism:END -->
 
 ## Tự chạy: cùng input, ba cách thực thi
 
@@ -272,6 +276,7 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 ### Optional observation — tranh cùng lock và phạm vi (không phải experiment chạy sẵn)
 
 Sau khi correctness đã được chứng minh, bạn có thể đo thời gian chờ trước `lock` trong một benchmark riêng và tăng số concurrent call. Dùng kết quả đó để cân nhắc **granularity** (phạm vi lock rộng hay hẹp); đừng kết luận từ laptop benchmark nhỏ. Lock quá rộng làm request chờ lâu, lock quá hẹp có thể lại lọt invariant. Thời gian chờ khi nhiều operation tranh cùng lock được gọi là **contention**.
+<!-- QN_RACE_GUIDED:debug:START -->
 ## Debug: evidence nào cho biết rule đã vỡ?
 
 Khi production có duplicate reservation, missing update hoặc final count bất thường, dùng loop này:
@@ -282,7 +287,9 @@ Khi production có duplicate reservation, missing update hoặc final count bấ
 4. **Evidence:** structured log theo operation, số row update thực tế và version concurrency (nếu flow có dùng), trace timeline; thread/task ID chỉ thêm khi thực sự giúp phân biệt work.
 5. **Experiment:** reproduce trong test/local simulation bằng controllable gate; không lấy random sleep làm primary technique.
 6. **Fix boundary:** bảo vệ đúng **source of truth** — nơi chốt dữ liệu/rule nghiệp vụ — rồi viết regression test để lỗi cũ không quay lại.
+<!-- QN_RACE_GUIDED:debug:END -->
 
+<!-- QN_RACE_GUIDED:transfer:START -->
 ## Khi app có nhiều instance, `lock` còn đủ không?
 
 {{RACE_VISUAL:boundary}}
@@ -337,7 +344,9 @@ Trước khi xem model, trả lời:
 Checklist: có coupon usage record/unique rule hay chưa; retry có thể gửi lại request và tạo duplicate không; số row update/constraint violation cho evidence gì; external discount side effect cần recovery gì.
 
 Model direction: local lock không đủ qua 4 instance. Nếu database sở hữu “một coupon chỉ dùng một lần”, unique/conditional database operation là candidate gần rule hơn. Nhưng cần biết transaction boundary và retry behavior trước khi kết luận final design.
+<!-- QN_RACE_GUIDED:transfer:END -->
 
+<!-- QN_RACE_GUIDED:recall:START -->
 ## Tự giải thích lại bằng evidence
 
 Đừng xem model answer ngay. Trong 60–120 giây, giải thích: vì sao hai request riêng lẻ đúng vẫn tạo kết quả sai; invariant nằm đâu; READ/CHECK/WRITE xen kẽ ra sao; và vì sao fix phụ thuộc state boundary.
@@ -352,7 +361,7 @@ Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi co
 
 ## Tự kiểm bằng bài luyện tập
 
-Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v2`: L1/L2 và diagnosis + repair của L3 được auto-check theo câu trả lời. Output local lab và candidate timeline của L3 được gắn rõ là self-reported / self-reviewed evidence; app không chấm chất lượng reasoning mở. Bạn có thể retry và quay về đúng step để ôn lại.
+Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v3`: L1/L2 và diagnosis + repair của L3 được auto-check theo câu trả lời. L3 dùng một failure mới: hai code path giữ hai lock object khác nhau nhưng cùng sửa `balance`. Output local lab và candidate timeline của L3 được gắn rõ là self-reported / self-reviewed evidence; app không chấm chất lượng reasoning mở. Evidence của v2 không tự tương thích với v3 vì L3 đã đổi scenario. Bạn có thể retry và quay về đúng step để ôn lại.
 
 Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidence **của bài Race trên thiết bị này**. Nó không tự tạo `PASSED`, không mở khóa một bài kế tiếp và không thay thế Human Validation. L4 là transfer enrichment: hãy làm sau khi đã tự chạy lab, không cần cài PostgreSQL để hoàn thành phần core.
 
@@ -360,7 +369,7 @@ Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidenc
 
 - **L1 · Understand:** không nhìn lại timeline, nói invariant của withdrawal và giải thích vì sao hai local snapshot đều có thể là 100.
 - **L2 · Apply:** đổi hai input ở đầu lab thành 60 và 50. Dự đoán trước khi chạy: unsafe approve tổng 110, final balance là 40 hoặc 50; protected chỉ approve withdrawal 60 vào gate trước, còn lại 40.
-- **L3 · Debug:** production báo `finalBalance=70` nhưng có hai reservation success. Viết candidate timeline, rồi nêu ba evidence cần lấy: operation ID, số row thay đổi ở source of truth, và instance ID. Giải thích vì sao chỉ log final balance là chưa đủ.
+- **L3 · Debug:** `Reserve` và `Withdraw` dùng hai lock object khác nhau nhưng cùng sửa balance. Viết candidate timeline: code path nào giữ gate nào, cả hai đọc state gì, rồi nêu operation ID, số row thay đổi và instance ID để kiểm. Giải thích vì sao chỉ log final balance là chưa đủ.
 - **L4 · Reason / trade-off:** API chạy bốn instance, inventory ở PostgreSQL, payment provider có thể timeout. So sánh local `lock`, conditional update và optimistic concurrency: mechanism nào giữ inventory invariant, caller phải xử lý outcome nào, và external payment cần state/reconciliation nào? Không có một tool mặc định đúng cho cả ba boundary.
 
 Tự chấm technical mastery theo evidence trên; English mastery được chấm riêng khi bạn nói lại phần **English short explanation** trong 60–120 giây. Không có quiz hay completion nào tự unlock level.
@@ -383,6 +392,7 @@ Tóm tắt: trace state trước, đặt tên race sau; bảo vệ invariant ch�
 - [Official `Interlocked` reference](https://learn.microsoft.com/en-us/dotnet/api/system.threading.interlocked) — phạm vi atomic update đơn giản.
 - [TAP with async/await](https://learn.microsoft.com/en-us/dotnet/csharp/asynchronous-programming/task-asynchronous-programming-model) — hiểu `await` không đồng nghĩa tạo thread.
 - [Visual race-condition explanation](https://www.youtube.com/watch?v=zMzo0xcS37o) — reinforcement cho interleaving/critical section; technical claims trong QuanNet đã cross-check bằng official docs.
+<!-- QN_RACE_GUIDED:recall:END -->
 
 ## Đi tiếp
 

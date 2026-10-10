@@ -6,13 +6,20 @@ export type RaceLabExperiment = {
 
 const experimentIds: RaceLabExperiment['id'][] = ['sequential', 'unsafe', 'controlled', 'protected']
 
-function block(source: string, name: string) {
-  const startMarker = `<!-- QN_RACE_LAB:${name}:START -->`
-  const endMarker = `<!-- QN_RACE_LAB:${name}:END -->`
+function block(source: string, name: string, prefix = 'QN_RACE_LAB') {
+  const startMarker = `<!-- ${prefix}:${name}:START -->`
+  const endMarker = `<!-- ${prefix}:${name}:END -->`
   const start = source.indexOf(startMarker)
   const end = source.indexOf(endMarker)
   if (start < 0 || end < 0 || end <= start) throw new Error(`Race Guided Lab requires the ${name} semantic block.`)
   return { start, end, markdown: source.slice(start + startMarker.length, end).trim() }
+}
+
+export function parseRaceGuidedContent(source: string) {
+  const names = ['problem', 'mechanism', 'debug', 'transfer', 'recall'] as const
+  const blocks = names.map(name => ({ name, ...block(source, name, 'QN_RACE_GUIDED') }))
+  if (blocks.some((item, index) => index > 0 && item.start <= blocks[index - 1].end)) throw new Error('Race Guided content semantic blocks must stay in teaching order.')
+  return Object.fromEntries(blocks.map(item => [item.name, item.markdown])) as Record<typeof names[number], string>
 }
 
 // These comments are authoring boundaries, not learner-visible headings. They let

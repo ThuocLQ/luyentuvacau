@@ -1,0 +1,439 @@
+{
+  "command": "npm run test:browser:race",
+  "appUrl": "http://127.0.0.1:5173",
+  "viewports": [
+    {
+      "width": 360,
+      "home": {
+        "viewport": {
+          "width": 360,
+          "height": 900
+        },
+        "scrollWidth": 360,
+        "clientWidth": 360,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "guidedStages": [
+        {
+          "step": 1,
+          "geometry": {
+            "viewport": {
+              "width": 360,
+              "height": 900
+            },
+            "scrollWidth": 360,
+            "clientWidth": 360,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 2,
+          "geometry": {
+            "viewport": {
+              "width": 360,
+              "height": 900
+            },
+            "scrollWidth": 360,
+            "clientWidth": 360,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 3,
+          "geometry": {
+            "viewport": {
+              "width": 360,
+              "height": 900
+            },
+            "scrollWidth": 360,
+            "clientWidth": 360,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 4,
+          "geometry": {
+            "viewport": {
+              "width": 360,
+              "height": 900
+            },
+            "scrollWidth": 360,
+            "clientWidth": 360,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 5,
+          "geometry": {
+            "viewport": {
+              "width": 360,
+              "height": 900
+            },
+            "scrollWidth": 360,
+            "clientWidth": 360,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 6,
+          "geometry": {
+            "viewport": {
+              "width": 360,
+              "height": 900
+            },
+            "scrollWidth": 360,
+            "clientWidth": 360,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        }
+      ],
+      "race": {
+        "viewport": {
+          "width": 360,
+          "height": 900
+        },
+        "scrollWidth": 360,
+        "clientWidth": 360,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "screenshots": [
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-360.png"
+      ]
+    },
+    {
+      "width": 390,
+      "home": {
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "guidedStages": [
+        {
+          "step": 1,
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 900
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 2,
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 900
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 3,
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 900
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 4,
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 900
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 5,
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 900
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 6,
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 900
+            },
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        }
+      ],
+      "race": {
+        "viewport": {
+          "width": 390,
+          "height": 900
+        },
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "screenshots": [
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-390.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-first-visual-390.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-390.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-boundary-visual-390.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-assessment-completion-390.png"
+      ]
+    },
+    {
+      "width": 768,
+      "home": {
+        "viewport": {
+          "width": 768,
+          "height": 900
+        },
+        "scrollWidth": 768,
+        "clientWidth": 768,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "guidedStages": [
+        {
+          "step": 1,
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 900
+            },
+            "scrollWidth": 753,
+            "clientWidth": 753,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 2,
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 900
+            },
+            "scrollWidth": 753,
+            "clientWidth": 753,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 3,
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 900
+            },
+            "scrollWidth": 753,
+            "clientWidth": 753,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 4,
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 900
+            },
+            "scrollWidth": 753,
+            "clientWidth": 753,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 5,
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 900
+            },
+            "scrollWidth": 753,
+            "clientWidth": 753,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 6,
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 900
+            },
+            "scrollWidth": 753,
+            "clientWidth": 753,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        }
+      ],
+      "race": {
+        "viewport": {
+          "width": 768,
+          "height": 900
+        },
+        "scrollWidth": 753,
+        "clientWidth": 753,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "screenshots": [
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-768.png"
+      ]
+    },
+    {
+      "width": 1280,
+      "home": {
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "guidedStages": [
+        {
+          "step": 1,
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 900
+            },
+            "scrollWidth": 1265,
+            "clientWidth": 1265,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 2,
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 900
+            },
+            "scrollWidth": 1265,
+            "clientWidth": 1265,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 3,
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 900
+            },
+            "scrollWidth": 1265,
+            "clientWidth": 1265,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 4,
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 900
+            },
+            "scrollWidth": 1265,
+            "clientWidth": 1265,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 5,
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 900
+            },
+            "scrollWidth": 1265,
+            "clientWidth": 1265,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        },
+        {
+          "step": 6,
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 900
+            },
+            "scrollWidth": 1265,
+            "clientWidth": 1265,
+            "offenders": [],
+            "inlineCodeOverflow": []
+          }
+        }
+      ],
+      "race": {
+        "viewport": {
+          "width": 1280,
+          "height": 900
+        },
+        "scrollWidth": 1265,
+        "clientWidth": 1265,
+        "offenders": [],
+        "inlineCodeOverflow": []
+      },
+      "screenshots": [
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\home-navigation-1280.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-first-visual-1280.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-guided-lab-expanded-1280.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-boundary-visual-1280.png",
+        "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser\\race-assessment-completion-1280.png"
+      ]
+    }
+  ],
+  "artifactDir": "D:\\Books\\luyentuvacau\\docs\\project\\evidence\\race-golden-pilot-browser"
+}

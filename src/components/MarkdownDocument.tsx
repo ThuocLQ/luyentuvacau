@@ -9,7 +9,7 @@ import RaceGuidedLesson, { type RaceGuidedStep } from './learning/race/RaceGuide
 import RaceAssessment from './learning/race/RacePracticeAssessment'
 import TermTooltip from './TermTooltip'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
-import { parseRaceGuidedLab } from '../utils/raceGuidedContent'
+import { parseRaceGuidedContent, parseRaceGuidedLab } from '../utils/raceGuidedContent'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useReviewProgress } from '../hooks/useReviewProgress'
 import { useScrollSpy } from '../hooks/useScrollSpy'
@@ -35,15 +35,6 @@ function withoutLeadingH1(html: string) {
   const parsed = new DOMParser().parseFromString(html, 'text/html')
   parsed.body.querySelector(':scope > h1')?.remove()
   return parsed.body.innerHTML
-}
-
-function markdownSection(source: string, heading: string, until: string) {
-  const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const start = source.search(new RegExp(`^## ${escapeRegex(heading)}\\s*$`, 'm'))
-  if (start < 0) return ''
-  const rest = source.slice(start)
-  const end = rest.search(new RegExp(`^## ${escapeRegex(until)}\\s*$`, 'm'))
-  return end < 0 ? rest : rest.slice(0, end)
 }
 
 function withoutLeadingHeading(html: string) {
@@ -80,16 +71,17 @@ export default function MarkdownDocument({ doc }: Props) {
     toc: lessonPartRenderings.filter((part): part is NonNullable<typeof part> => part !== null).flatMap(part => part.toc),
   } : null, [lessonPartRenderings])
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
-  const raceMechanismParts = useMemo(() => markdownSection(doc.content, 'Khi hai request dùng chung balance, điều gì xảy ra?', 'Tự chạy: cùng input, ba cách thực thi').split(/\r?\n\{\{RACE_VISUAL:interleaving\}\}\r?\n/), [doc.content])
+  const raceGuidedContent = useMemo(() => isRaceGoldenPilot && doc.content.includes('<!-- QN_RACE_LAB:SETUP:START -->') ? parseRaceGuidedContent(doc.content) : null, [doc.content, isRaceGoldenPilot])
+  const raceMechanismParts = useMemo(() => raceGuidedContent?.mechanism.split(/\r?\n\{\{RACE_VISUAL:interleaving\}\}\r?\n/) ?? [], [raceGuidedContent])
   const raceGuidedLab = useMemo(() => isRaceGoldenPilot && doc.content.includes('<!-- QN_RACE_LAB:SETUP:START -->') ? parseRaceGuidedLab(doc.content) : null, [doc.content, isRaceGoldenPilot])
   const raceGuidedContexts = useMemo(() => [
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Nếu hai request cùng rút tiền, rule nào phải giữ?', 'Sau bài này, bạn sẽ tự làm được gì?'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(raceGuidedContent?.problem ?? '')).html),
     withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(raceMechanismParts[0] ?? ''))).html),
     '',
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(markdownSection(doc.content, 'Debug: evidence nào cho biết rule đã vỡ?', 'Khi app có nhiều instance, `lock` còn đủ không?')))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(markdownSection(doc.content, 'Khi app có nhiều instance, `lock` còn đủ không?', 'Tự giải thích lại bằng evidence')))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(markdownSection(doc.content, 'Tự giải thích lại bằng evidence', 'Đi tiếp')))).html),
-  ], [doc.content, raceMechanismParts])
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(raceGuidedContent?.debug ?? ''))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(raceGuidedContent?.transfer ?? ''))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(raceGuidedContent?.recall ?? ''))).html),
+  ], [raceGuidedContent, raceMechanismParts])
   const raceAfterVisualHtml = useMemo(() => withoutLeadingHeading(enhanceHtml(renderMarkdown(stripRaceVisualMarkers(raceMechanismParts.slice(1).join('\n')))).html), [raceMechanismParts])
   const raceLabSetupHtml = useMemo(() => raceGuidedLab ? withoutLeadingHeading(enhanceHtml(renderMarkdown(raceGuidedLab.setup)).html) : '', [raceGuidedLab])
   const raceLabExperiments = useMemo(() => raceGuidedLab?.experiments.map(experiment => ({

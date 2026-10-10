@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import RaceGoldenLesson, { type RaceVisualStage } from './RaceGoldenLesson'
 import RaceLabWorkflow from './RaceLabWorkflow'
+import type { RaceLabExperimentId } from './raceLabProgress'
 
 export type RaceGuidedStep = 0 | 1 | 2 | 3 | 4 | 5
 
@@ -13,7 +14,7 @@ const steps: { id: string; label: string; shortLabel: string; title: string; pro
   { id: 'explain-recall', label: 'Giải thích và nhớ lại', shortLabel: 'Bước 6 / 6 · Giải thích', title: 'Giải thích bằng evidence, không chỉ bằng định nghĩa', prompt: 'Trong 60–120 giây, nói lại invariant, một interleaving sai, boundary đúng và evidence cần debug.', action: 'Tự ghi evidence L1–L4 dưới bài. English là track riêng: chỉ tự đánh giá sau khi bạn nói lại phần English explanation.', evidence: 'Với 60/50, unsafe vẫn approve 110 và final balance có thể 40 hoặc 50.', visual: 'boundary' },
 ]
 
-interface Props { step: RaceGuidedStep; onStep: (step: RaceGuidedStep) => void; onStartPractice: () => void; labSetupHtml: string; labExperiments: { id: string; questionHtml: string; revealHtml: string }[]; contextHtml: string[]; afterVisualHtml: string }
+interface Props { step: RaceGuidedStep; onStep: (step: RaceGuidedStep) => void; onStartPractice: () => void; labSetupHtml: string; labExperiments: { id: RaceLabExperimentId; questionHtml: string; revealHtml: string }[]; contextHtml: string[]; afterVisualHtml: string }
 
 export default function RaceGuidedLesson({ step, onStep, onStartPractice, labSetupHtml, labExperiments, contextHtml, afterVisualHtml }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null)

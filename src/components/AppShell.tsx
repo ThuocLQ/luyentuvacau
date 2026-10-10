@@ -7,6 +7,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 
 export default function AppShell() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [learningSecondaryOpen, setLearningSecondaryOpen] = useState(false)
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('ltvc-theme', 'light')
   const [openSections, setOpenSections] = useLocalStorage<string[]>('ltvc-open-sections', [])
   const [raceGuidedStep] = useLocalStorage<number>('ltvc-race-guided-step', 0, (value): value is number => typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 5)
@@ -92,7 +93,8 @@ export default function AppShell() {
           <small>Giữ đúng bài hiện tại; không thay đổi trạng thái học hay mastery.</small>
           <NavLink className="learning-focus-action" to={focusHref} onClick={() => setMobileOpen(false)}>Tiếp tục bài</NavLink>
         </section>}
-        <div className={isLearningRoute ? 'learning-secondary-nav' : undefined}>
+        {isLearningRoute && <button className="learning-secondary-toggle" aria-expanded={learningSecondaryOpen} onClick={() => setLearningSecondaryOpen(open => !open)}>Tra cứu khi cần: Quiz, phỏng vấn, ôn lại và thư viện</button>}
+        <div className={isLearningRoute ? 'learning-secondary-nav' : undefined} hidden={isLearningRoute && !learningSecondaryOpen}>
           <span className="nav-group-label">Luyện tập</span>
           <NavLink to="/quiz" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}><CircleHelp size={17} /> Quiz tình huống</NavLink>
           <NavLink to="/interview" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}><Sparkles size={17} /> Phỏng vấn</NavLink>
