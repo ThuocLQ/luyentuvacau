@@ -320,7 +320,7 @@ Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi co
 
 ## Bài luyện tập và evidence
 
-Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v1`: L1/L2/L3 được auto-check theo câu trả lời, còn output local lab và candidate timeline được gắn rõ là self-reported / self-reviewed evidence. Bạn có thể retry và quay về đúng step để ôn lại.
+Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v2`: L1/L2 và diagnosis + repair của L3 được auto-check theo câu trả lời. Output local lab và candidate timeline của L3 được gắn rõ là self-reported / self-reviewed evidence; app không chấm chất lượng reasoning mở. Bạn có thể retry và quay về đúng step để ôn lại.
 
 Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidence **của bài Race trên thiết bị này**. Nó không tự tạo `PASSED`, không mở khóa một bài kế tiếp và không thay thế Human Validation. L4 là transfer enrichment: hãy làm sau khi đã tự chạy lab, không cần cài PostgreSQL để hoàn thành phần core.
 
