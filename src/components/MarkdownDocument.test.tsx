@@ -260,6 +260,33 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getAllByRole('button', { name: 'Chép mã' }).length).toBeGreaterThan(0)
   })
 
+  it('keeps every essential canonical section in its intended Guided step without repeating the mental model', () => {
+    window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
+    const raceDocument = findCompleteDoc('learning-race-condition')!
+    render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
+
+    const context = () => document.querySelector<HTMLElement>('.race-guided-context')!
+    expect(within(context()).getByText(/Bạn cần biết variable, method, C# cơ bản/)).toBeInTheDocument()
+    expect(within(context()).getByText('Engineering Problem')).toBeInTheDocument()
+    expect(within(context()).queryByText('Shared state là gì?')).not.toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(within(context()).getByText('Shared state là gì?')).toBeInTheDocument()
+    expect(context().querySelector('#interlocked-giai-quyet-dung-bai-toan-nao')).toBeInTheDocument()
+    expect(context().querySelector('#async-khong-loai-race')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(screen.getByText('Hands-on Lab')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(within(context()).getByText(/Khi production có duplicate reservation/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(context().querySelector('#transfer-challenge')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(within(context()).getByText('Evidence checks — L1 đến L4')).toBeInTheDocument()
+    expect(within(context()).getByText('Recall Questions')).toBeInTheDocument()
+    expect(within(context()).getByText('Further Learning')).toBeInTheDocument()
+  })
+
   it('preserves the guided step when switching to Full View and back', () => {
     window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
     window.localStorage.setItem('ltvc-race-guided-step', JSON.stringify(2))

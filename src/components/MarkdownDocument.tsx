@@ -74,12 +74,12 @@ export default function MarkdownDocument({ doc }: Props) {
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
   const raceLabHtml = useMemo(() => enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Hands-on Lab', 'Debug from evidence'))).html, [doc.content])
   const raceGuidedContexts = useMemo(() => [
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Engineering Problem', 'Same requests, different execution boundary').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Mental Model', 'Same requests, different execution boundary').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Prerequisites', 'Mental Model').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Mental Model', 'Hands-on Lab').replace(/\n\{\{RACE_VISUAL:[a-z]+\}\}\n/g, '\n'))).html),
     '',
     withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Debug from evidence', 'Break It: process-local protection không phải multi-instance protection'))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Break It: process-local protection không phải multi-instance protection', 'Transfer Challenge'))).html),
-    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Explain It', 'Recall Questions'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Break It: process-local protection không phải multi-instance protection', 'Explain It'))).html),
+    withoutLeadingHeading(enhanceHtml(renderMarkdown(markdownSection(doc.content, 'Explain It', 'Continue'))).html),
   ], [doc.content])
   const rendered = useMemo(() => lessonRendered ?? (!isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered), [fullRendered, lessonRendered, isLearning, mode])
   const showRaceGuided = isRaceGoldenPilot && raceView === 'guided'
