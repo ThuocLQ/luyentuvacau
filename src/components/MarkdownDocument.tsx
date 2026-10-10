@@ -5,6 +5,7 @@ import DocumentToc from './document/DocumentToc'
 import PersonalExample from './document/PersonalExample'
 import LearningMasteryPanel from './document/LearningMasteryPanel'
 import { learningVisualRenderers } from './learning/visualRegistry'
+import RaceGuidedLesson, { type RaceGuidedStep } from './learning/race/RaceGuidedLesson'
 import TermTooltip from './TermTooltip'
 import { enhanceHtml, renderMarkdown } from '../utils/markdown'
 import { useLocalStorage } from '../hooks/useLocalStorage'
@@ -28,16 +29,25 @@ function quickHtml(html: string) {
   return parsed.body.innerHTML
 }
 
+function withoutLeadingH1(html: string) {
+  const parsed = new DOMParser().parseFromString(html, 'text/html')
+  parsed.body.querySelector(':scope > h1')?.remove()
+  return parsed.body.innerHTML
+}
+
 export default function MarkdownDocument({ doc }: Props) {
   const articleRef = useRef<HTMLElement>(null)
   const [readingProgress, setReadingProgress] = useState(0)
   const [mode, setMode] = useLocalStorage<'quick' | 'full'>('ltvc-reading-mode', 'full')
+  const [raceView, setRaceView] = useLocalStorage<'guided' | 'full'>('ltvc-race-view', 'guided')
+  const [raceStep, setRaceStep] = useLocalStorage<RaceGuidedStep>('ltvc-race-guided-step', 0)
   const [termId, setTermId] = useState<string | null>(null)
   const [completed, setCompleted] = useLocalStorage<string[]>('ltvc-completed', [])
   const [bookmarks, setBookmarks] = useLocalStorage<string[]>('ltvc-bookmarks', [])
   const { find, pin, record, remove } = useReviewProgress()
   const contentKind = getContentKind(doc)
   const isLearning = contentKind === 'learning'
+  const isRaceGoldenPilot = doc.slug === 'learning-race-condition'
   const learningLesson = isLearning ? findLearningLesson(doc.slug) : undefined
   const learningDomain = learningLesson ? learningDomains.find(domain => domain.id === learningLesson.domainId) : undefined
   const visualRenderer = learningVisualRenderers[doc.slug]
@@ -49,6 +59,7 @@ export default function MarkdownDocument({ doc }: Props) {
   } : null, [lessonPartRenderings])
   const fullRendered = useMemo(() => enhanceHtml(renderMarkdown(doc.content)), [doc.content])
   const rendered = useMemo(() => lessonRendered ?? (!isLearning && mode === 'quick' ? enhanceHtml(quickHtml(fullRendered.html)) : fullRendered), [fullRendered, lessonRendered, isLearning, mode])
+  const showRaceGuided = isRaceGoldenPilot && raceView === 'guided' && !window.location.hash
   const activeHeading = useScrollSpy({
     selector: 'h2, h3',
     root: articleRef,
@@ -81,7 +92,7 @@ export default function MarkdownDocument({ doc }: Props) {
     }
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll()
     return () => window.removeEventListener('scroll', onScroll)
-  }, [doc.slug, mode])
+  }, [doc.slug, mode, raceView])
 
   useEffect(() => {
     const article = articleRef.current
@@ -115,17 +126,18 @@ export default function MarkdownDocument({ doc }: Props) {
         <div className="breadcrumb">{isLearning ? <><Link to="/">Roadmap</Link><span>/</span><span>{learningDomain?.title ?? 'Learning Lab'}</span><span>/</span><span>{doc.title}</span></> : <><Link to="/library">Library</Link><span>/</span><span>{doc.section}</span><span>/</span><span>{doc.title}</span></>}</div>
         <h1>{doc.title}</h1><p>{doc.description}</p>
         <div className="document-meta-row"><span className="weight-badge">{contentKind === 'learning' ? 'Learning lab' : contentKind === 'standard' ? 'Standard' : contentKind === 'interview' ? 'Interview practice' : 'Reference'}</span><span className="weight-badge">{doc.interviewFrequency === 'AlmostAlways' ? 'Almost always' : doc.interviewFrequency === 'RoleDependent' ? 'Role dependent' : doc.interviewFrequency}</span><span className="weight-badge">{doc.expectedDepth}</span><span>{statusLabel[doc.status]}</span><span><Clock3 size={15} /> {doc.readingMinutes} phút</span>{doc.tags.slice(0, 3).map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
-        <div className="document-actions">{!isLearning && <><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button></>}<button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => reviewItem?.manualPin ? remove(`cheatsheet:${doc.slug}`) : pin({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {reviewItem?.manualPin ? 'Bỏ ghim ôn' : needsReviewForDoc ? 'Đã có lịch ôn' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
+        <div className="document-actions">{isRaceGoldenPilot ? <div className="reading-mode" role="group" aria-label="Chế độ học Race Condition"><button className={showRaceGuided ? 'active' : ''} onClick={() => setRaceView('guided')}>Học theo bước</button><button className={!showRaceGuided ? 'active' : ''} onClick={() => setRaceView('full')}>Xem toàn bài</button></div> : !isLearning && <><div className="reading-mode" role="group" aria-label="Chế độ đọc"><button className={mode === 'quick' ? 'active' : ''} onClick={() => setMode('quick')}>Ôn nhanh</button><button className={mode === 'full' ? 'active' : ''} onClick={() => setMode('full')}>Đầy đủ</button></div><button className={isCompleted ? 'icon-text-button success' : 'icon-text-button'} onClick={() => toggleValue(completed, doc.slug, setCompleted)}>{isCompleted ? <CheckCircle2 size={17} /> : <Circle size={17} />}{isCompleted ? 'Đã học' : 'Hoàn thành'}</button></>}<button className={needsReviewForDoc ? 'icon-text-button active-review' : 'icon-text-button'} onClick={() => reviewItem?.manualPin ? remove(`cheatsheet:${doc.slug}`) : pin({ id: `cheatsheet:${doc.slug}`, kind: 'cheatsheet', title: doc.title, relatedDoc: doc.slug })}><RotateCcw size={17} /> {reviewItem?.manualPin ? 'Bỏ ghim ôn' : needsReviewForDoc ? 'Đã có lịch ôn' : 'Cần ôn lại'}</button><button className="icon-text-button" onClick={() => toggleValue(bookmarks, doc.slug, setBookmarks)}>{isBookmarked ? <BookmarkCheck size={17} /> : <Bookmark size={17} />}{isBookmarked ? 'Đã lưu' : 'Lưu'}</button></div>
       </header>
       {reviewItem?.manualPin && <div className="quiz-certainty document-review-rating"><span>Đọc lại xong, bạn thấy sao?</span><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'missed')}>Chưa chắc</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'hesitant')}>Còn lưỡng lự</button><button className="secondary-button" onClick={() => record({ id: reviewItem.id, kind: reviewItem.kind, title: doc.title, relatedDoc: doc.slug }, 'confident')}>Tự tin</button></div>}
       {!isLearning && mode === 'quick' && <p className="quick-review-note">Đang lọc các phần để nhắc nhanh. Chuyển sang <strong>Đầy đủ</strong> để đọc ví dụ, bẫy production và trade-off chi tiết.</p>}
-      {lessonParts && lessonPartRenderings ? <article ref={articleRef} className="markdown-body">{lessonParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: lessonPartRenderings[index]?.html ?? '' }} /> : <Fragment key={`visual-${index}`}>{visualRenderer?.(part)}</Fragment>)}</article>
+      {showRaceGuided ? <article ref={articleRef} className="markdown-body race-guided-body"><RaceGuidedLesson step={raceStep} onStep={setRaceStep} onShowFull={() => setRaceView('full')} /></article>
+      : lessonParts && lessonPartRenderings ? <article ref={articleRef} className="markdown-body">{lessonParts.map((part, index) => index % 2 === 0 ? <div key={`markdown-${index}`} dangerouslySetInnerHTML={{ __html: isRaceGoldenPilot ? withoutLeadingH1(lessonPartRenderings[index]?.html ?? '') : lessonPartRenderings[index]?.html ?? '' }} /> : <Fragment key={`visual-${index}`}>{visualRenderer?.(part)}</Fragment>)}</article>
       : <article ref={articleRef} className="markdown-body" dangerouslySetInnerHTML={{ __html: rendered.html }} />}
       <PersonalExample slug={doc.slug} />
-      {learningLesson && <LearningMasteryPanel lessonSlug={learningLesson.slug} />}
-      {learningLesson ? <nav className="doc-pagination learning-pagination" aria-label="Điều hướng Learning Lab"><Link className="secondary-button" to="/"><ArrowLeft size={17} /> Back to Roadmap</Link><Link className="secondary-button" to={`/docs/${learningLesson.referenceSlug}`}>Reference</Link><Link className="secondary-button" to={learningLesson.quizPath}>Quiz</Link><Link className="primary-button" to={learningLesson.interviewPath}>Interview <ArrowRight size={17} /></Link></nav> : <nav className="doc-pagination" aria-label="Điều hướng cheatsheet">{previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}{nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Luyện phỏng vấn <ArrowRight size={17} /></Link>}</nav>}
+      {learningLesson && <LearningMasteryPanel lessonSlug={learningLesson.slug} evidenceChecks={isRaceGoldenPilot ? ['Nêu invariant và hai snapshot local.', 'Đổi input 60/50, dự đoán rồi đối chiếu output.', 'Viết candidate timeline và ba evidence debug.', 'Chọn correctness boundary cho nhiều instance/database.'] : undefined} />}
+      {learningLesson ? <nav className="doc-pagination learning-pagination" aria-label="Điều hướng Learning Lab"><Link className="secondary-button" to="/"><ArrowLeft size={17} /> Bắt đầu học</Link><Link className="secondary-button" to={`/docs/${learningLesson.referenceSlug}`}>Tài liệu liên quan</Link><Link className="secondary-button" to={learningLesson.quizPath}>Quiz tham khảo</Link><Link className="secondary-button" to={learningLesson.interviewPath}>Câu hỏi tham khảo <ArrowRight size={17} /></Link></nav> : <nav className="doc-pagination" aria-label="Điều hướng cheatsheet">{previousDoc ? <Link className="secondary-button" to={`/docs/${previousDoc.slug}`}><ArrowLeft size={17} /> {previousDoc.title}</Link> : <span />}{nextDoc ? <Link className="primary-button" to={`/docs/${nextDoc.slug}`}>{nextDoc.title} <ArrowRight size={17} /></Link> : <Link className="primary-button" to="/interview">Luyện phỏng vấn <ArrowRight size={17} /></Link>}</nav>}
     </section>
-    <DocumentToc items={rendered.toc.filter(item => item.level > 1)} activeId={activeHeading} onNavigate={navigateToHeading} />
+    {!showRaceGuided && <DocumentToc items={rendered.toc.filter(item => item.level > 1)} activeId={activeHeading} onNavigate={navigateToHeading} />}
     {readingProgress > 18 && <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })} aria-label="Lên đầu bài"><ChevronUp size={18} /></button>}
     <TermTooltip termId={termId} onClose={() => setTermId(null)} />
   </div>

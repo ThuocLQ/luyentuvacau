@@ -215,15 +215,36 @@ describe('Golden Learning Lab visuals', () => {
   })
 
   it('renders the complete Golden Pilot with accessible visual controls', () => {
+    window.localStorage.setItem('ltvc-race-view', JSON.stringify('full'))
     const raceDocument = findCompleteDoc('learning-race-condition')!
     if (!raceDocument.content) throw new Error('Golden Pilot route must have rendered content')
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content }} /></MemoryRouter>)
-    expect(screen.getAllByRole('heading', { name: 'Race Condition & Concurrency — Golden Pilot' })).toHaveLength(2)
+    expect(screen.getAllByRole('heading', { name: 'Race Condition & Concurrency — Golden Pilot' })).toHaveLength(1)
     expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn execution mode' })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn số instance' })).toBeInTheDocument()
     expect(screen.getByText('Evidence checks — L1 đến L4')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
+  })
+
+  it('guides Race one step at a time and can return to the complete lesson', () => {
+    window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
+    window.localStorage.setItem('ltvc-race-guided-step', JSON.stringify(0))
+    const raceDocument = findCompleteDoc('learning-race-condition')!
+    if (!raceDocument.content) throw new Error('Golden Pilot route must have rendered content')
+    render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content }} /></MemoryRouter>)
+    expect(screen.getByRole('heading', { name: /Hai request cùng nhìn 100/i })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }))
+    expect(screen.getByRole('heading', { name: /Lỗi không nằm ở một dòng WRITE/i })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }))
+    expect(screen.getByRole('heading', { name: /Hai request cùng nhìn 100/i })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Xem toàn bài' }))
+    expect(screen.getByText('Hands-on Lab')).toBeInTheDocument()
+    const technical = screen.getByLabelText('Technical mastery') as HTMLSelectElement
+    expect(technical.value).toBe('1')
+    fireEvent.click(screen.getByRole('checkbox', { name: /Nêu invariant/i }))
+    expect(technical.value).toBe('1')
+    expect(screen.getByText(/không tạo PASSED, MASTERED/i)).toBeInTheDocument()
   })
 
   it('keeps the Golden Pilot race lab observable and separates L1–L4 from English evidence', () => {
