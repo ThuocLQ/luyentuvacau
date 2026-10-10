@@ -85,7 +85,7 @@ Stage 2E Production Safety: **SEALED** after independent acceptance. Final recon
 
 ## Exact next task
 
-**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** Human-study feedback exposed Guided UI friction and the lack of an honest lesson assessment. Race now has a versioned local assessment (`race-atomicity-v1`): auto-checked L1/L2/L3 questions, explicitly self-reported local-lab and timeline evidence, optional L4 stretch, retry/resume, and no phantom next lesson. Dropdowns and self-report cannot create assessment completion. Status is **Human study in progress — UX and assessment issues being repaired**, never Human validated. **Exact next task:** one real learner completes the updated Race flow, recording Guided/UI friction at desktop/mobile, local lab output, answers/retries, transfer reasoning and recall evidence; the team then makes only evidence-backed repairs.
+**Golden Pilot human study — `lu-race-atomicity` / Race Condition & Concurrency.** The canonical Golden Lesson lifecycle and source-map traceability contract are now applied to Race. Its versioned local assessment (`race-atomicity-v1`) auto-checks L1/L2/L3 answers and labels local-lab/timeline evidence as self-reported/self-reviewed; L4 is optional, and no result creates a global lock or phantom next lesson. Source audit covers .NET concurrency, OSTEP teaching scope and PostgreSQL database boundaries. Status is **Human study in progress — pending retest**, never Human validated. **Exact next task:** one real learner completes the updated Race flow, recording desktop/mobile Guided friction, local lab output, answers/retries, transfer reasoning and recall evidence; the team then makes only evidence-backed repairs.
 
 ## Stop conditions
 

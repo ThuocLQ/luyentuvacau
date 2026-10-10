@@ -318,6 +318,12 @@ Model answer: “Race condition không chỉ là hai thread. Nó xảy ra khi co
 
 **English short explanation:** “A race condition appears when two operations use shared mutable state and correctness depends on an execution order the system does not control. I first state the invariant, then reproduce one interleaving, and finally place the protection at the real source-of-truth boundary.” Không có concept mới ở bản tiếng Anh; nó chỉ là cách nói lại reasoning vừa làm bằng tiếng Việt.
 
+## Bài luyện tập và evidence
+
+Chọn **Bài luyện tập** ở đầu trang sau khi đi hết Guided view. Bài này dùng assessment version `race-atomicity-v1`: L1/L2/L3 được auto-check theo câu trả lời, còn output local lab và candidate timeline được gắn rõ là self-reported / self-reviewed evidence. Bạn có thể retry và quay về đúng step để ôn lại.
+
+Hoàn tất bài luyện tập chỉ nói rằng bạn đã hoàn thành evidence **của bài Race trên thiết bị này**. Nó không tự tạo `PASSED`, không mở khóa một bài kế tiếp và không thay thế Human Validation. L4 là transfer enrichment: hãy làm sau khi đã tự chạy lab, không cần cài PostgreSQL để hoàn thành phần core.
+
 ## Evidence checks — L1 đến L4
 
 - **L1 · Understand:** không nhìn lại timeline, nói invariant của withdrawal và giải thích vì sao hai local snapshot đều có thể là 100.

@@ -141,3 +141,10 @@ The frozen registry is globally reconciled: **167** Primary homes, **137** Learn
 **Status:** READY FOR HUMAN STUDY; not Human validated
 
 `lu-race-atomicity` is the first Golden Pilot. It is a fair entry choice because it has no external progression lock, exposes one backend invariant through a controlled local trace, and has a Windows-friendly .NET console lab with observable unsafe/protected outcomes. Its learner-facing lesson includes the mechanism, visual state transitions, failure/debug loop, database/multi-instance transfer, L1–L4 technical checks and a separate English explanation. The next evidence required is a real learner study session on this exact version; do not claim Human validation or broadly rewrite it without that feedback or a concrete defect.
+
+## D-019 — Golden Lesson evidence lifecycle
+
+**Date:** 2026-10-10
+**Status:** ACTIVE
+
+`engineering-learning-standard.md` remains the sole canonical learning-design authority. Golden Lessons now use its evidence lifecycle: outcome/boundary, research/claim traceability, design, runnable practice, independent exercises, assessment/rubric, technical/UI validation, human study and retention review. Technical readiness, assessment evidence and Human Validation are distinct. `race-atomicity-v1` demonstrates the contract but is **not** Human validated; its next gate is a real learner retest.

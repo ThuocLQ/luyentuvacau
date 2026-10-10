@@ -12,6 +12,8 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] Identify the naive/simple approach and where it breaks.
 - [ ] Build a concept dependency map.
 - [ ] Check that motivation dependencies come before terminology.
+- [ ] Name the target L1–L4 evidence before drafting the prose; keep English E1–E4 separate.
+- [ ] Record what a learner may browse freely versus what, if anything, an accepted assessment can gate.
 
 ## B. Research
 
@@ -23,6 +25,8 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] Cross-check teaching simplifications against primary sources.
 - [ ] Extract teaching insights, not prose/diagrams.
 - [ ] Stop research once the mechanism, misconceptions, lab and production boundary are sufficiently grounded.
+- [ ] For each high-impact claim, record source/location, version/provider scope, guarantee, limitation and the lesson evidence that tests it.
+- [ ] Never present an unverified chapter, external example or popular video as factual proof.
 
 ## C. Narrative
 
@@ -78,6 +82,17 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] Toy mechanism is connected to real evidence.
 - [ ] At least one meaningful failure/broken assumption is explored when relevant.
 - [ ] Debugging uses Observation → Hypothesis → Evidence → Experiment → Conclusion.
+- [ ] The lab's expected output distinguishes controlled outcomes from multiple valid outcomes.
+
+## F1. Independent exercise and assessment
+
+- [ ] L1 asks the learner to trace/explain the mechanism without copying a definition.
+- [ ] L2 uses runnable inputs or a practical task distinct from the worked path.
+- [ ] L3 diagnoses a genuinely new failure case and names evidence needed for the fix.
+- [ ] L4 transfer/trade-off is optional only when it is enrichment rather than the declared core outcome.
+- [ ] Each task has enough context, an accepted answer/rubric, feedback and a retry/remediation path.
+- [ ] Evidence provenance is labelled: automatically checked, executed in app, manually reviewed or self-reported.
+- [ ] Assessment version/compatibility is recorded; a checkbox, visit or manual mastery dropdown cannot award verified PASS.
 
 ## G. Production reasoning
 
@@ -118,6 +133,7 @@ Use this checklist for a major new lesson or a substantial rewrite.
 - [ ] `npm run check`
 - [ ] Browser verification performed.
 - [ ] No claim of success without actual command/browser evidence.
+- [ ] Diff scope and any unrelated user-owned files have been checked before commit.
 
 ## K. Freeze
 
@@ -148,3 +164,9 @@ After freeze:
 - [ ] records sections that feel too compressed or too verbose.
 
 Only this learner evidence, or a concrete correctness/UI bug, should reopen a frozen lesson.
+
+## M. Release and retention handoff
+
+- [ ] Technical readiness, assessment completion and Human validation are reported as separate facts.
+- [ ] Known limitations and the exact learner retest/review evidence are recorded.
+- [ ] A later recall/retention check is planned without inventing a completion or next lesson.

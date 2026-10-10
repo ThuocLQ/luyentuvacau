@@ -1418,6 +1418,81 @@ Browser verification is required for learner-facing visual/UI changes.
 
 Check desktop and mobile behavior.
 
+## 54A. Golden Lesson production lifecycle
+
+For a Golden Lesson, use one evidence-bearing sequence rather than treating
+authoring, implementation and learner validation as the same thing:
+
+```text
+learning outcome + prerequisite boundary
+→ source research
+→ claim verification
+→ lesson / visual design
+→ runnable practice
+→ independent exercises
+→ assessment + rubric
+→ technical / UI validation
+→ human study
+→ release + retention review
+```
+
+Each gate needs concrete evidence and a clear blocker:
+
+| Gate | Required evidence | Block acceptance when |
+|---|---|---|
+| Outcome and boundary | capability, prerequisite and out-of-scope decision | the lesson silently needs earlier knowledge |
+| Research and claims | source-map entries for high-impact claims, including scope/version | a correctness claim has no trustworthy boundary |
+| Lesson and visual | original problem-to-mechanism narrative; visual maps to observable evidence | visual decorates instead of explaining a mechanism |
+| Runnable practice | exact setup/run/inspect instructions and verified outcome contract | commands cannot run or observation cannot test the question |
+| Independent exercise | a new scenario that cannot be solved by copying the worked example | the exercise only changes numbers or asks recall |
+| Assessment and rubric | objective, task context, accepted answers/rubric, feedback and provenance | a checkbox, visit or self-selected level awards verified PASS |
+| Technical and UI validation | relevant automated checks plus real desktop/mobile browser evidence for UI changes | primary interaction is broken, inaccessible or visually unverified |
+| Human study | a real learner's friction, outputs, answers and recall on this exact version | the lesson is called Human validated without that evidence |
+| Release and retention | versioned outcome, known limitations and a later recall/review plan | release claims more learning proof than has been collected |
+
+This lifecycle is an acceptance workflow, not a mandatory page template. A
+mechanism decides whether the practice is code, a trace, a debugger exercise,
+a design worksheet or another observable task.
+
+## 54B. Technical source and claim traceability
+
+Use sources by role: official specifications/version-specific documentation
+first for guarantees; maintainer/vendor material for implementation details;
+strong textbooks, peer-reviewed or independent engineering material for
+mechanism; measured cases for operating boundaries; and videos only when their
+teaching value is cross-checked against factual sources.
+
+For every high-impact mechanism, correctness, provider or runtime claim, the
+source map records: the claim/capability, URL or publication, useful location,
+runtime/provider/version applicability, guarantee and boundary, known
+limitation or misconception, and the specific lesson/lab/assessment evidence
+that tests it. Source quantity, search ranking and video popularity are not
+authority. Never imply a book chapter was read or an external example executed
+unless it was actually verified.
+
+## 54C. Practice, assessment and progression evidence
+
+Map target competency to observable evidence before writing the final prose:
+
+```text
+L1 understand / trace
+L2 apply with runnable inputs or a practical task
+L3 diagnose and repair a new failure case
+L4 transfer a changed boundary and defend the trade-off
+```
+
+English E1–E4 is recorded separately. Every assessment declares its objective,
+scenario/context, accepted answer or rubric, alternatives, feedback,
+provenance (`automatically checked`, `executed in app`, `manually reviewed` or
+`self-reported`), version/compatibility, retry/remediation path and whether it
+is required or optional enrichment. A self-report may record learner evidence;
+it cannot by itself award a verified technical PASS.
+
+Official path progression may use only an explicitly declared, accepted
+assessment rule. It must keep reference browsing open, respect the sealed
+progression policy, never turn a dependency candidate into an automatic lock,
+and never make RECOMMENDED context blocking.
+
 ---
 
 ## 55. Freeze criteria

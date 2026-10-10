@@ -22,13 +22,24 @@ What should the learner be able to reason about after this lesson?
 → <evidence>
 ```
 
-## Sources
+## Sources and high-impact claim traceability
 
-| Source | Type / role | Version/date | Fact or concept verified | Teaching insight extracted | How QuanNet uses it |
+Use only the rows needed for the lesson. A source can verify a fact, explain a
+mechanism or inspire a teaching order; it does not automatically do all three.
+
+| Claim / capability | Source and role | Location + version/provider scope | Guarantee / boundary and misconception | QuanNet evidence using the claim | Status |
 |---|---|---|---|---|---|
-| <official docs> | Primary fact | <version> | <fact> | <reference structure> | <usage> |
-| <teaching article/book/site> | Teaching | <date if useful> | <cross-checked concept> | <problem framing / analogy / ordering> | <original synthesis> |
-| <video> | Teaching video | <date if useful> | <cross-checked mechanism> | <visual/temporal pattern> | <original visual idea> |
+| <claim> | <official / maintainer / book / case / teaching video> | <URL, chapter/heading, version/date> | <what it does not guarantee> | <lesson, visual, lab, exercise or assessment> | <verified / needs check> |
+
+## Source-use notes
+
+For each strong source, briefly record:
+
+- teaching insight extracted (not copied prose/diagram);
+- claims intentionally not imported;
+- availability limitation, contradiction or version boundary that affects the lesson;
+- whether the linked example was actually executed. Do not claim execution or
+  reading that did not happen.
 
 ## Misconceptions / failure cases found during research
 
@@ -39,6 +50,19 @@ What should the learner be able to reason about after this lesson?
 
 - <boundary 1>
 - <boundary 2>
+
+## Assessment evidence map
+
+| Level | Objective | Independent task / scenario | Accepted evidence or rubric | Provenance | Required or optional | Retry / remediation |
+|---|---|---|---|---|---|---|
+| L1 | <understand> | <trace/explain> | <what proves it> | <automatic/manual/self-report> | <required/optional> | <path> |
+| L2 | <apply> | <runnable/practical task> | <what proves it> | <provenance> | <required/optional> | <path> |
+| L3 | <debug> | <new failure> | <what proves it> | <provenance> | <required/optional> | <path> |
+| L4 | <reason/transfer> | <changed boundary> | <rubric> | <provenance> | <usually enrichment> | <path> |
+
+Record assessment version/compatibility beside the task when it changes over
+time. English E1–E4 belongs in a separate row/set, never in the technical
+mastery result.
 
 ## Claims intentionally kept out
 
