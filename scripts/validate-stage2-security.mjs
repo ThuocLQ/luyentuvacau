@@ -12,6 +12,7 @@ const packages = [
   { name: 'Reliability / SRE', inventoryHeading: 'Package Reliability / SRE', evidenceHeading: 'Reliability / SRE relation-specific evidence — authoritative repair', overGatingHeading: 'Reliability / SRE target over-gating review', required: 8, recommended: 12, targets: 9 },
 ];
 const deliveryPackage = { name: 'Delivery', inventoryHeading: 'Delivery inter-unit relations', evidenceHeading: 'Delivery relation-specific evidence', overGatingHeading: 'Delivery target over-gating review', required: 14, recommended: 16, targets: 9 };
+const testingPackage = { name: 'Testing', inventoryHeading: 'Testing inter-unit relations', evidenceHeading: 'Testing relation-specific evidence', overGatingHeading: 'Testing target over-gating review', required: 9, recommended: 15, targets: 9 };
 const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const cells = line => line.split('|').slice(1, -1).map(value => value.trim());
 const relation = (from, to) => `${from} -> ${to}`;
@@ -167,12 +168,44 @@ export function validateStage2Delivery({ reviewText, inventoryText, stage2eRevie
   return { errors: [...errors, ...result.errors, ...stage2e.flatMap(entry => entry.errors), ...graph.errors], counts: { ...result.counts, internal: internalRows.length, fullTargets: fullTargets.size, candidates: result.external.length }, graph };
 }
 
+const withoutDeliveryInternalOnlyRow = text => text.split('\n').filter(line => !line.startsWith('| lu-delivery-artifact-provenance | 0 | 0 | 0 | 0 | Internal order only |')).join('\n');
+
+export function validateStage2Testing({ reviewText, inventoryText, deliveryReviewText, deliveryInventoryText, stage2eReviewText, stage2eInventoryText, mapText, dependencyText = '', priorReviewTexts = [], additionalCandidateEdges = [] }) {
+  const frozenPairs = frozenDependencyPairs(dependencyText); const errors = []; const homes = primaryUnits(mapText);
+  const internal = parseTable(inventoryText, 'Same-unit internal REQUIRED relation', ['From capability', 'To capability', 'Learning Unit', 'Reason'], errors);
+  const expectedInternal = relation('test-risk-strategy-boundaries', 'test-unit-integration-contract'); const internalRow = internal[0];
+  if (internal.length !== 1) errors.push(`incorrect Testing internal-edge count ${internal.length}/1`);
+  if (!internalRow || relation(internalRow[0], internalRow[1]) !== expectedInternal || internalRow[2] !== 'lu-test-risk-strategy-boundaries' || frozenPairs.get(expectedInternal) !== 'REQUIRED' || homes.get(internalRow?.[0]) !== internalRow?.[2] || homes.get(internalRow?.[1]) !== internalRow?.[2]) errors.push(`invalid Testing internal edge ${expectedInternal}`);
+  const testing = validatePackage(testingPackage, reviewText, inventoryText, mapText, frozenPairs);
+  const delivery = validatePackage(deliveryPackage, withoutDeliveryInternalOnlyRow(deliveryReviewText), deliveryInventoryText, mapText, frozenPairs);
+  const stage2e = packages.map(config => validatePackage(config, stage2eReviewText, stage2eInventoryText, mapText, frozenPairs));
+  const nodes = learningUnitIds(mapText); const prior = priorExternalEdges(priorReviewTexts);
+  const graph = validateCandidateGraph(nodes, [...prior, ...stage2e.flatMap(entry => entry.external), ...delivery.external, ...testing.external, ...additionalCandidateEdges]);
+  return { errors: [...errors, ...testing.errors, ...delivery.errors, ...stage2e.flatMap(entry => entry.errors), ...graph.errors], counts: { ...testing.counts, internal: internal.length, candidates: testing.external.length }, graph };
+}
+
+export function validateStage2F(input) {
+  const testing = validateStage2Testing(input);
+  const delivery = validateStage2Delivery({ reviewText: input.deliveryReviewText, inventoryText: input.deliveryInventoryText, stage2eReviewText: input.stage2eReviewText, stage2eInventoryText: input.stage2eInventoryText, mapText: input.mapText, dependencyText: input.dependencyText, priorReviewTexts: input.priorReviewTexts });
+  const deliveryInventory = inventoryRows(input.deliveryInventoryText, deliveryPackage.inventoryHeading, []); const testingInventory = inventoryRows(input.inventoryText, testingPackage.inventoryHeading, []);
+  const targets = new Set([...deliveryInventory, ...testingInventory].map(entry => entry.toUnit)); targets.add('lu-delivery-artifact-provenance');
+  const totals = { relations: deliveryInventory.length + testingInventory.length, required: [...deliveryInventory, ...testingInventory].filter(entry => entry.kind === 'REQUIRED').length, recommended: [...deliveryInventory, ...testingInventory].filter(entry => entry.kind === 'RECOMMENDED').length, targets: targets.size, internal: delivery.counts.internal + testing.counts.internal };
+  const errors = [...testing.errors, ...delivery.errors]; if (totals.relations !== 54 || totals.required !== 23 || totals.recommended !== 31 || totals.targets !== 19 || totals.internal !== 4) errors.push('Stage 2F combined totals mismatch');
+  return { errors, testing, delivery, totals, graph: testing.graph };
+}
+
 function main() {
   if (process.argv[2] === '--delivery') {
     const reviewText = readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'); const inventoryText = readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'); const mapText = readFileSync(defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8');
     const result = validateStage2Delivery({ reviewText, inventoryText, stage2eReviewText: readFileSync(defaults.review, 'utf8'), stage2eInventoryText: readFileSync(defaults.inventory, 'utf8'), mapText, dependencyText, priorReviewTexts: defaults.priorReviews.map(path => readFileSync(path, 'utf8')) });
     if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
     console.log(`Stage 2F Delivery validation passed: ${result.counts.required} REQUIRED/${result.counts.recommended} RECOMMENDED; ${result.counts.targets} inter-unit targets + ${result.counts.fullTargets - result.counts.targets} internal-only target; ${result.counts.internal} internal edges; ${result.counts.candidates} external candidates; combined graph ${result.graph.edges} unique edges/${result.graph.roots} roots, acyclic.`); return;
+  }
+  if (process.argv[2] === '--testing') {
+    const mapText = readFileSync(defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8');
+    const result = validateStage2F({ reviewText: readFileSync('docs/project/stage-2f-testing-review.md', 'utf8'), inventoryText: readFileSync('docs/project/stage-2f-testing-inventory.md', 'utf8'), deliveryReviewText: readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'), deliveryInventoryText: readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'), stage2eReviewText: readFileSync(defaults.review, 'utf8'), stage2eInventoryText: readFileSync(defaults.inventory, 'utf8'), mapText, dependencyText, priorReviewTexts: defaults.priorReviews.map(path => readFileSync(path, 'utf8')) });
+    if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
+    console.log(`Stage 2F Testing/Verification validation passed: ${result.testing.counts.required} REQUIRED/${result.testing.counts.recommended} RECOMMENDED; ${result.testing.counts.targets} targets; ${result.testing.counts.internal} internal edge; Stage 2F ${result.totals.relations} relations/${result.totals.targets} full-scope targets/${result.totals.internal} internal edges; graph ${result.graph.edges} unique edges/${result.graph.roots} roots, acyclic.`); return;
   }
   const reviewText = readFileSync(process.argv[2] ?? defaults.review, 'utf8'); const inventoryText = readFileSync(process.argv[3] ?? defaults.inventory, 'utf8'); const mapText = readFileSync(process.argv[4] ?? defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8'); const priorReviewTexts = defaults.priorReviews.map(path => readFileSync(path, 'utf8'));
   const result = validateStage2E({ reviewText, inventoryText, mapText, dependencyText, priorReviewTexts }); if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }

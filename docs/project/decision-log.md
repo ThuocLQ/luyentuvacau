@@ -113,3 +113,10 @@ Observability has 19 relation-specific decisions across 7 target Learning Units:
 **Status:** SEALED
 
 Stage 2E independently reconciled all **64** inventory relations (**35 REQUIRED**, **29 RECOMMENDED**) across **27** target Learning Units. The final treatment is 19 Local slices + 16 External evidence candidates and 27 surfaced + 2 omitted non-blocking contexts. All four multi-Primary External sources reject whole-unit PASSED proxy treatment; candidates remain distinct from learner locks. The validator checks frozen dependency membership, the two separately handled same-unit internal relations, exact inventory/target coverage, proxy fairness, duplicate decisions and the full 137-Unit graph. Final graph: **53** unique candidate edges, **108** roots, acyclic. Next task is Stage 2F Delivery & Verification; do not reopen the sealed Stage 2E evidence without concrete contradiction.
+
+## D-015 — Stage 2F Delivery & Testing / Verification sealed
+
+**Date:** 2026-10-10
+**Status:** SEALED
+
+Stage 2F reconciled **54** inter-unit relations (**23 REQUIRED**, **31 RECOMMENDED**) across **19** full-scope target Units. Delivery supplied 30 relations, three separately verified same-unit REQUIRED edges and one internal-only target; Testing supplied 24 relations and one same-unit REQUIRED edge. Multi-Primary artifact/provenance and test-boundary sources reject whole-unit PASSED proxies; the remaining singleton External candidates are fair evidence candidates only, not learner locks. The combined 137-Unit graph contains **58** deduplicated candidate edges, **106** roots and no cycle. Next task: Stage 2G Architecture Synthesis; do not reopen sealed Stage 2F evidence without concrete contradiction.

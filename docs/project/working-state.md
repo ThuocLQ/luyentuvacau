@@ -52,7 +52,7 @@ Stage 2 rules: capability dependency != learner progression; REQUIRED does not a
 
 Stage 2D Distributed Interaction - **SEALED** after independent final acceptance. Seal evidence: `6b25b816bcdfec1bba1a4ce0474a9d51f72e0ef6`. Final result: 29 Local / 16 External REQUIRED (14 Local / 11 External same-owner; 15 Local / 5 External cross-owner); 21 surfaced RECOMMENDED; 3 intentionally not surfaced; 45 REQUIRED / 24 RECOMMENDED; 16 External unit pairs; combined external graph ACYCLIC.
 
-Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - SEALED; D Production Safety - SEALED; E Delivery & Verification - PENDING; F Architecture Synthesis - PENDING.
+Stage 2 batches: A Foundations - SEALED; B Data - SEALED; C Distributed Interaction - SEALED; D Production Safety - SEALED; E Delivery & Verification - SEALED; F Architecture Synthesis - PENDING.
 
 Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis -> proxy fairness -> over-gating/cycle validation -> canonical materialization -> Stage 2 seal -> Golden Pilot -> human pilot acceptance -> reusable authoring pattern -> complete first chapter -> chapter release acceptance -> user learning + parallel Codex development. See `docs/project/first-chapter-delivery-plan.md`.
 
@@ -75,7 +75,7 @@ Forward workflow: Stage 2A inventory -> semantic batches A-F -> global synthesis
 
 ## Exact next task
 
-Stage 2F Delivery semantic review is **IN_REVIEW**: 30 / 30 inter-unit relations (14 REQUIRED, 16 RECOMMENDED) across 9 inter-unit targets, plus 3 same-unit REQUIRED edges and one internal-only target. Delivery candidate evidence is validated but not learner-lock policy. Exact next task: **Stage 2F Testing/Verification semantic review**.
+Stage 2F Delivery & Testing / Verification is **SEALED**: 54 / 54 inter-unit relations = 23 REQUIRED + 31 RECOMMENDED across 19 full-scope target Units. Delivery contributes 30 / 30 (14 REQUIRED, 16 RECOMMENDED), 3 same-unit REQUIRED edges and one internal-only target; Testing contributes 24 / 24 (9 REQUIRED, 15 RECOMMENDED) and one same-unit REQUIRED edge. The 137-Unit candidate graph has 58 deduplicated edges, 106 roots and no cycle. Candidates and proxy suitability remain distinct from learner locks. Exact next task: **Stage 2G Architecture Synthesis semantic review**.
 
 Security is a completed bounded Stage 2E package: 25 / 25 relations (18 REQUIRED, 7 RECOMMENDED) across 11 target Learning Units. It has 12 LOCAL REQUIRED slices, 5 acceptable whole-unit External candidate proxies, one rejected multi-capability whole-unit proxy (`lu-sec-auth-session-oauth`) and 5 surfaced / 2 omitted RECOMMENDED contexts. The Stage 2 Security validator and negative tests are the executable structural gate; candidate edges remain non-locking until final Stage 2 policy materialization.
 
