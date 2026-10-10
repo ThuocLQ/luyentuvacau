@@ -26,11 +26,14 @@ describe('AppShell learner navigation', () => {
     expect(section).toHaveAttribute('aria-expanded', 'false')
   })
 
-  it('shows the active learning document without turning the library tree into a second primary flow', () => {
+  it('puts the active learning document and resume action ahead of secondary navigation', () => {
+    window.localStorage.setItem('ltvc-race-guided-step', JSON.stringify(2))
     render(<MemoryRouter initialEntries={['/docs/learning-race-condition']}><AppShell /></MemoryRouter>)
     const focus = screen.getByLabelText('Bài đang học')
     expect(within(focus).getByText(/Race Condition & Concurrency/)).toBeInTheDocument()
-    expect(within(focus).getByText(/Thư viện vẫn ở dưới để tra cứu/)).toBeInTheDocument()
+    expect(within(focus).getByText('Đang học · Bước 3/6')).toBeInTheDocument()
+    expect(within(focus).getByRole('link', { name: 'Tiếp tục bài' })).toHaveAttribute('href', '/docs/learning-race-condition?mode=guided')
+    expect(document.querySelector('.learning-secondary-nav')).toBeInTheDocument()
   })
 
   it('migrates only the former all-expanded sidebar default to collapsed sections', () => {

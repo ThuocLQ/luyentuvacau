@@ -10,6 +10,7 @@ import ExecutionPlanFlowVisual from './learning/index/ExecutionPlanFlowVisual'
 import RaceGoldenLesson from './learning/race/RaceGoldenLesson'
 import OutboxGoldenLesson from './learning/outbox/OutboxGoldenLesson'
 import { findCompleteDoc } from '../data/docs'
+import { parseRaceGuidedLab } from '../utils/raceGuidedContent'
 import raceLesson from '../../docs/learning/race-condition.md?raw'
 import indexLesson from '../../docs/learning/index-execution-plan.md?raw'
 import outboxLesson from '../../docs/learning/outbox-idempotency.md?raw'
@@ -258,18 +259,39 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText('Chọn bước khác')).toBeInTheDocument()
   })
 
-  it('keeps the runnable C# lab and expected outputs inside Guided Practice', () => {
+  it('keeps the runnable C# lab sequential and hides each output until the learner reveals it', () => {
     window.localStorage.setItem('ltvc-race-view', JSON.stringify('guided'))
     window.localStorage.setItem('ltvc-race-guided-step', JSON.stringify(2))
     const raceDocument = findCompleteDoc('learning-race-condition')!
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
     expect(screen.getByRole('heading', { name: /Chạy reproduction có kiểm soát/i })).toBeInTheDocument()
     expect(screen.getByText((_, element) => element?.tagName === 'CODE' && element.textContent?.includes('const int firstAmount = 80;') === true)).toBeInTheDocument()
-    expect(document.querySelector<HTMLDetailsElement>('.race-lab-reveal')?.open).toBe(false)
-    fireEvent.click(screen.getByText(/Đã chạy xong\? Mở để đối chiếu output 80\/30 và 60\/50/))
+    expect(screen.queryByText(/unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70/)).not.toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText(/Dự đoán của bạn/), { target: { value: 'Sequential chỉ approve 80.' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Sang bước chạy' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Tôi đã chạy hoặc đọc kết quả' }))
+    fireEvent.change(screen.getByLabelText(/Observation của bạn/), { target: { value: 'Một request bị từ chối.' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Mở đối chiếu và giải thích' }))
+    expect(screen.getAllByText(/sequential: approvedCount=1/)).toHaveLength(2)
+    fireEvent.click(screen.getByRole('button', { name: 'Sang experiment tiếp theo' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Sang bước chạy' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Tôi đã chạy hoặc đọc kết quả' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Mở đối chiếu và giải thích' }))
     expect(screen.getByText(/unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70/)).toBeInTheDocument()
     expect(screen.getByText(/firstAmount = 60/)).toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Chép mã' }).length).toBeGreaterThan(0)
+  })
+
+  it('derives Guided lab composition from semantic markers in the canonical Race Markdown', () => {
+    const lab = parseRaceGuidedLab(raceLesson)
+    expect(lab.setup).toContain('const int firstAmount = 80;')
+    expect(lab.experiments.map(experiment => experiment.id)).toEqual(['sequential', 'unsafe', 'controlled', 'protected'])
+    expect(lab.experiments.every(experiment => experiment.question.length > 20 && experiment.reveal.length > 80)).toBe(true)
+    expect(lab.experiments[0].question).not.toContain('approvedAmount=80')
+    expect(lab.experiments[1].reveal).toContain('approvedAmount=110')
+    expect(lab.experiments.map(experiment => experiment.question).join('\n')).not.toContain('approvedAmount=110')
+    expect(() => parseRaceGuidedLab(raceLesson.replace('<!-- QN_RACE_LAB:SETUP:START -->', ''))).toThrow(/SETUP/i)
+    expect(() => parseRaceGuidedLab(raceLesson.replace('<!-- QN_RACE_LAB:EXPERIMENT:unsafe:REVEAL:END -->', ''))).toThrow(/unsafe/i)
   })
 
   it('keeps every essential canonical section in its intended Guided step without repeating the mental model', () => {
@@ -300,7 +322,7 @@ describe('Golden Learning Lab visuals', () => {
     expect(screen.getByText(/Hãy dự đoán rồi xem đến nhịp CHECK của B/)).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
-    expect(screen.getByRole('heading', { name: /Tự dự đoán, rồi mới đối chiếu output/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Tự dự đoán, chạy và đối chiếu từng tình huống/i })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
     expect(within(context()).getByText(/Khi production có duplicate reservation/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))

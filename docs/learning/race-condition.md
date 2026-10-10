@@ -97,6 +97,7 @@ Nhưng `Interlocked.Increment` không tự bảo vệ invariant “chỉ rút kh
 
 ## Tự chạy: cùng input, ba cách thực thi
 
+<!-- QN_RACE_LAB:SETUP:START -->
 :::hands-on
 Đây là **local simulation**: console app chạy trên máy bạn, không dùng production database. `Barrier` và `ManualResetEventSlim` trong lab chỉ là teaching instrumentation để tạo interleaving có kiểm soát; không phải cách debug production chính.
 :::
@@ -176,6 +177,7 @@ Console.WriteLine($"protected: approvedCount={protectedResults.Count(x => x.Appr
 
 record WithdrawalResult(bool Approved, int ApprovedAmount);
 ```
+<!-- QN_RACE_LAB:SETUP:END -->
 
 Kết quả cần quan sát sau `dotnet run`:
 
@@ -199,43 +201,73 @@ protected: approvedCount=1, approvedAmount=60, finalBalance=40
 
 ### Experiment 1 — sequential baseline
 
+<!-- QN_RACE_LAB:EXPERIMENT:sequential:START -->
+<!-- QN_RACE_LAB:EXPERIMENT:sequential:QUESTION:START -->
 **Question:** nếu gọi withdraw 80 rồi withdraw 30 theo thứ tự, output nào giữ invariant?
+<!-- QN_RACE_LAB:EXPERIMENT:sequential:QUESTION:END -->
 
+<!-- QN_RACE_LAB:EXPERIMENT:sequential:REVEAL:START -->
 **Predict:** chỉ một success, `approvedAmount=80`, `finalBalance=20`.
+**Expected evidence:** `sequential: approvedCount=1, approvedAmount=80, finalBalance=20`.
+**60/50 variation:** đổi đúng hai input thành `firstAmount = 60`, `secondAmount = 50`; expected là `sequential: approvedCount=1, approvedAmount=60, finalBalance=40`.
 **Run:** đọc dòng `sequential` của chương trình, không thay đổi code.
 **Inspect:** `approvedCount`, `approvedAmount`, `finalBalance`.
 **Observation / Why:** B đọc state sau write của A. Không có interleaving vào logical operation.
 **Learn:** sequential success chưa chứng minh code concurrent-safe; nó chỉ là baseline cho invariant.
+<!-- QN_RACE_LAB:EXPERIMENT:sequential:REVEAL:END -->
+<!-- QN_RACE_LAB:EXPERIMENT:sequential:END -->
 
 ### Experiment 2 — concurrent unsafe version
 
+<!-- QN_RACE_LAB:EXPERIMENT:unsafe:START -->
+<!-- QN_RACE_LAB:EXPERIMENT:unsafe:QUESTION:START -->
 **Question:** code có thể accept bao nhiêu withdrawal khi cả hai cùng đọc 100?
+<!-- QN_RACE_LAB:EXPERIMENT:unsafe:QUESTION:END -->
 
+<!-- QN_RACE_LAB:EXPERIMENT:unsafe:REVEAL:START -->
 **Predict:** cả hai được approve, `approvedAmount=110`; `finalBalance` có thể là 20 hoặc 70 vì write cuối dùng snapshot cũ.
+**Expected evidence:** `unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70`.
+**60/50 variation:** với `firstAmount = 60`, `secondAmount = 50`, expected là `unsafe: approvedCount=2, approvedAmount=110, finalBalance=40 hoặc 50`.
 **Run:** đọc dòng `unsafe`; hai `Barrier` đã buộc cả hai call hoàn tất READ trước khi WRITE.
 **Inspect:** `approvedCount=2`, `approvedAmount=110`, `finalBalance`.
 **Observation:** approved total 110 là evidence invariant violation, dù final balance có thể trông “hợp lý”.
 **Why:** `current` là local snapshot; WRITE sau không biết request khác đã thay đổi state.
 **Learn:** “chạy một lần không lỗi” không phải proof of thread safety. Reasoning phải bao phủ interleaving được phép.
+<!-- QN_RACE_LAB:EXPERIMENT:unsafe:REVEAL:END -->
+<!-- QN_RACE_LAB:EXPERIMENT:unsafe:END -->
 
 ### Experiment 3 — reproduce có kiểm soát
 
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:START -->
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:QUESTION:START -->
 **Question:** tại sao không chỉ chạy 1.000 lần rồi chờ bug?
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:QUESTION:END -->
 
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:START -->
 **Predict:** `Barrier` làm cả hai READ trước CHECK/WRITE nên failure mechanism xuất hiện có chủ đích.
 **Run:** giữ hai `Barrier` trong block `unsafe` và thêm log `current`, `amount`, result nếu muốn quan sát.
 **Inspect:** hai `current=100`, hai accepted result.
 **Why:** timing gate là evidence aid trong lab; nó không phải production fix.
 **Learn:** debug race bằng candidate timeline, boundary và evidence, không bằng random `Thread.Sleep`.
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:REVEAL:END -->
+<!-- QN_RACE_LAB:EXPERIMENT:controlled:END -->
 
 ### Experiment 4 — protect the multi-step rule
 
+<!-- QN_RACE_LAB:EXPERIMENT:protected:START -->
+<!-- QN_RACE_LAB:EXPERIMENT:protected:QUESTION:START -->
 **Question:** nếu toàn bộ check/update đi qua một shared `lock`, B sẽ thấy gì?
+<!-- QN_RACE_LAB:EXPERIMENT:protected:QUESTION:END -->
 
+<!-- QN_RACE_LAB:EXPERIMENT:protected:REVEAL:START -->
 **Run:** đọc dòng `protected`. `firstOwnsGate` chỉ làm demo reproducible: A đã giữ gate trước khi B thử vào. Nó không phải một phần của production solution.
 **Inspect:** `approvedCount=1`, `approvedAmount=80`, `finalBalance=20`.
+**Expected evidence:** `protected: approvedCount=1, approvedAmount=80, finalBalance=20`.
+**60/50 variation:** expected là `protected: approvedCount=1, approvedAmount=60, finalBalance=40`.
 **Why:** B chỉ vào critical section sau khi A release chính **cùng một** gate, rồi đọc 20.
 **Learn:** lock placement phải cover read/check/write của invariant, không chỉ final assignment.
+<!-- QN_RACE_LAB:EXPERIMENT:protected:REVEAL:END -->
+<!-- QN_RACE_LAB:EXPERIMENT:protected:END -->
 
 ### Optional observation — tranh cùng lock và phạm vi (không phải experiment chạy sẵn)
 

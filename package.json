@@ -24,6 +24,7 @@
     "test:stage2-global": "node --test scripts/validate-stage2-global.test.mjs",
     "test:architecture": "node --test scripts/architecture-validation.test.mjs",
     "validate:css": "node scripts/validate-css-tokens.mjs",
+    "test:browser:race": "node scripts/browser-race-review.mjs",
     "check": "npm run validate:content && npm run validate:architecture && npm run test:architecture && npm run validate:stage2-security && npm run test:stage2-security && npm run validate:stage2-delivery && npm run test:stage2-delivery && npm run validate:stage2-testing && npm run test:stage2-testing && npm run validate:stage2-synthesis && npm run test:stage2-synthesis && npm run validate:stage2-global && npm run test:stage2-global && npm run validate:css && npm run lint && npm run test && npm run build && node scripts/assert-build.mjs"
   },
   "dependencies": {

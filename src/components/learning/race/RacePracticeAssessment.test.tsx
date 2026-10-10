@@ -45,6 +45,27 @@ describe('Race practice assessment', () => {
     expect(screen.getByText(/Đây là ghi nhận của bạn, không phải app xác minh execution/)).toBeInTheDocument()
   })
 
+  it('does not offer optional L4 after an actual L3 submission when lab and timeline evidence are incomplete', () => {
+    const state = initialRaceAssessment()
+    state.currentQuestion = 4
+    state.attempts = [
+      { questionId: 'interleaving', answer: 'both-read', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
+      { questionId: 'shared-state', answer: ['approved-total', 'balance'], correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
+      { questionId: 'baseline', answer: '80-30', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
+      { questionId: 'variation', answer: '60-50', correct: true, submittedAt: '2026-10-10T00:00:00.000Z', provenance: 'automatically-checked' },
+    ]
+    window.localStorage.setItem('ltvc-race-assessment-v2', JSON.stringify(state))
+    render(<RacePracticeAssessment {...props} />)
+    fireEvent.click(screen.getByLabelText(/Cả hai có thể CHECK từ cùng snapshot 100/))
+    fireEvent.click(screen.getByRole('button', { name: 'Nộp câu trả lời' }))
+    expect(screen.getByRole('button', { name: 'Tiếp tục' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
+    expect(screen.getByRole('heading', { name: 'Hoàn thiện evidence bắt buộc trước stretch L4' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Làm stretch L4' })).not.toBeInTheDocument()
+    expect(screen.queryByText(/Stretch: inventory/)).not.toBeInTheDocument()
+    expect(screen.getByText(/self-reported evidence/)).toBeInTheDocument()
+  })
+
   it('lets a learner review an earlier question without granting later completion', () => {
     render(<RacePracticeAssessment {...props} />)
     fireEvent.click(screen.getByLabelText(/Cả hai READ 100/))
