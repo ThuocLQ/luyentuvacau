@@ -13,6 +13,7 @@ const packages = [
 ];
 const deliveryPackage = { name: 'Delivery', inventoryHeading: 'Delivery inter-unit relations', evidenceHeading: 'Delivery relation-specific evidence', overGatingHeading: 'Delivery target over-gating review', required: 14, recommended: 16, targets: 9 };
 const testingPackage = { name: 'Testing', inventoryHeading: 'Testing inter-unit relations', evidenceHeading: 'Testing relation-specific evidence', overGatingHeading: 'Testing target over-gating review', required: 9, recommended: 15, targets: 9 };
+const architecturePackage = { name: 'Architecture', inventoryHeading: 'Architecture inter-unit relations', evidenceHeading: 'Architecture relation-specific evidence', overGatingHeading: 'Architecture target over-gating review', required: 18, recommended: 13, targets: 7 };
 const escape = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const cells = line => line.split('|').slice(1, -1).map(value => value.trim());
 const relation = (from, to) => `${from} -> ${to}`;
@@ -194,6 +195,29 @@ export function validateStage2F(input) {
   return { errors, testing, delivery, totals, graph: testing.graph };
 }
 
+const withoutArchitectureRootRow = text => text.split('\n').filter(line => !line.startsWith('| lu-arch-requirements-quality-attributes | 0 | 0 | 0 | 0 | Root architecture Unit |')).join('\n');
+
+export function validateStage2Architecture({ reviewText, inventoryText, testingReviewText, testingInventoryText, deliveryReviewText, deliveryInventoryText, stage2eReviewText, stage2eInventoryText, mapText, dependencyText = '', priorReviewTexts = [], additionalCandidateEdges = [] }) {
+  const frozenPairs = frozenDependencyPairs(dependencyText); const errors = []; const homes = primaryUnits(mapText);
+  const internal = parseTable(inventoryText, 'Same-unit relations', ['Kind', 'From capability', 'To capability', 'Learning Unit', 'Reason'], errors);
+  const expected = new Map([
+    [relation('arch-boundaries-ownership', 'arch-data-ownership-source-of-truth'), ['REQUIRED', 'lu-arch-boundaries-data-ownership']],
+    [relation('arch-cost-complexity-changeability', 'arch-decision-communication-transfer'), ['RECOMMENDED', 'lu-arch-cost-complexity-changeability']],
+  ]);
+  if (internal.length !== 2) errors.push(`incorrect Architecture internal-edge count ${internal.length}/2`);
+  const seen = new Set(); for (const row of internal) { const key = relation(row[1], row[2]); seen.add(key); const info = expected.get(key); if (!info || row[0] !== info[0] || row[3] !== info[1] || frozenPairs.get(key) !== row[0] || homes.get(row[1]) !== row[3] || homes.get(row[2]) !== row[3]) errors.push(`invalid Architecture internal edge ${key}`); }
+  for (const key of expected.keys()) if (!seen.has(key)) errors.push(`missing Architecture internal edge ${key}`);
+  const architecture = validatePackage(architecturePackage, withoutArchitectureRootRow(reviewText), inventoryText, mapText, frozenPairs);
+  const fullOverGating = parseTable(reviewText, architecturePackage.overGatingHeading, overGatingColumns, errors);
+  if (fullOverGating.length !== 8 || !fullOverGating.some(row => row[0] === 'lu-arch-requirements-quality-attributes')) errors.push('invalid Architecture full-scope target coverage');
+  const testing = validatePackage(testingPackage, testingReviewText, testingInventoryText, mapText, frozenPairs);
+  const delivery = validatePackage(deliveryPackage, withoutDeliveryInternalOnlyRow(deliveryReviewText), deliveryInventoryText, mapText, frozenPairs);
+  const stage2e = packages.map(config => validatePackage(config, stage2eReviewText, stage2eInventoryText, mapText, frozenPairs));
+  const nodes = learningUnitIds(mapText); const prior = priorExternalEdges(priorReviewTexts);
+  const graph = validateCandidateGraph(nodes, [...prior, ...stage2e.flatMap(entry => entry.external), ...delivery.external, ...testing.external, ...architecture.external, ...additionalCandidateEdges]);
+  return { errors: [...errors, ...architecture.errors, ...testing.errors, ...delivery.errors, ...stage2e.flatMap(entry => entry.errors), ...graph.errors], counts: { ...architecture.counts, internal: internal.length, fullTargets: fullOverGating.length, candidates: architecture.external.length }, graph };
+}
+
 function main() {
   if (process.argv[2] === '--delivery') {
     const reviewText = readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'); const inventoryText = readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'); const mapText = readFileSync(defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8');
@@ -206,6 +230,12 @@ function main() {
     const result = validateStage2F({ reviewText: readFileSync('docs/project/stage-2f-testing-review.md', 'utf8'), inventoryText: readFileSync('docs/project/stage-2f-testing-inventory.md', 'utf8'), deliveryReviewText: readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'), deliveryInventoryText: readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'), stage2eReviewText: readFileSync(defaults.review, 'utf8'), stage2eInventoryText: readFileSync(defaults.inventory, 'utf8'), mapText, dependencyText, priorReviewTexts: defaults.priorReviews.map(path => readFileSync(path, 'utf8')) });
     if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
     console.log(`Stage 2F Testing/Verification validation passed: ${result.testing.counts.required} REQUIRED/${result.testing.counts.recommended} RECOMMENDED; ${result.testing.counts.targets} targets; ${result.testing.counts.internal} internal edge; Stage 2F ${result.totals.relations} relations/${result.totals.targets} full-scope targets/${result.totals.internal} internal edges; graph ${result.graph.edges} unique edges/${result.graph.roots} roots, acyclic.`); return;
+  }
+  if (process.argv[2] === '--synthesis') {
+    const mapText = readFileSync(defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8');
+    const result = validateStage2Architecture({ reviewText: readFileSync('docs/project/stage-2g-architecture-review.md', 'utf8'), inventoryText: readFileSync('docs/project/stage-2g-architecture-inventory.md', 'utf8'), testingReviewText: readFileSync('docs/project/stage-2f-testing-review.md', 'utf8'), testingInventoryText: readFileSync('docs/project/stage-2f-testing-inventory.md', 'utf8'), deliveryReviewText: readFileSync('docs/project/stage-2f-delivery-review.md', 'utf8'), deliveryInventoryText: readFileSync('docs/project/stage-2f-delivery-inventory.md', 'utf8'), stage2eReviewText: readFileSync(defaults.review, 'utf8'), stage2eInventoryText: readFileSync(defaults.inventory, 'utf8'), mapText, dependencyText, priorReviewTexts: defaults.priorReviews.map(path => readFileSync(path, 'utf8')) });
+    if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }
+    console.log(`Stage 2G Architecture validation passed: ${result.counts.required} REQUIRED/${result.counts.recommended} RECOMMENDED; ${result.counts.targets} inter-unit targets + ${result.counts.fullTargets - result.counts.targets} root target; ${result.counts.internal} internal edges; ${result.counts.candidates} External candidates; graph ${result.graph.edges} unique edges/${result.graph.roots} roots, acyclic.`); return;
   }
   const reviewText = readFileSync(process.argv[2] ?? defaults.review, 'utf8'); const inventoryText = readFileSync(process.argv[3] ?? defaults.inventory, 'utf8'); const mapText = readFileSync(process.argv[4] ?? defaults.map, 'utf8'); const dependencyText = readFileSync(defaults.dependency, 'utf8'); const priorReviewTexts = defaults.priorReviews.map(path => readFileSync(path, 'utf8'));
   const result = validateStage2E({ reviewText, inventoryText, mapText, dependencyText, priorReviewTexts }); if (result.errors.length) { console.error(result.errors.join('\n')); process.exitCode = 1; return; }

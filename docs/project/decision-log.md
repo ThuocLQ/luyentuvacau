@@ -120,3 +120,10 @@ Stage 2E independently reconciled all **64** inventory relations (**35 REQUIRED*
 **Status:** SEALED
 
 Stage 2F reconciled **54** inter-unit relations (**23 REQUIRED**, **31 RECOMMENDED**) across **19** full-scope target Units. Delivery supplied 30 relations, three separately verified same-unit REQUIRED edges and one internal-only target; Testing supplied 24 relations and one same-unit REQUIRED edge. Multi-Primary artifact/provenance and test-boundary sources reject whole-unit PASSED proxies; the remaining singleton External candidates are fair evidence candidates only, not learner locks. The combined 137-Unit graph contains **58** deduplicated candidate edges, **106** roots and no cycle. Next task: Stage 2G Architecture Synthesis; do not reopen sealed Stage 2F evidence without concrete contradiction.
+
+## D-016 — Stage 2G Architecture Synthesis sealed
+
+**Date:** 2026-10-10
+**Status:** SEALED
+
+Stage 2G reconciled **31** inter-unit relations (**18 REQUIRED**, **13 RECOMMENDED**) plus two same-unit relations across eight full-scope Architecture Units. It has 11 Local slices and seven External evidence candidates. The singleton quality-attribute Unit is a fair compatible proxy for five synthesis assessments; the multi-Primary boundaries/data-ownership Unit explicitly rejects whole-unit PASSED proxy treatment for failure/recovery and evolution. The combined 137-Unit candidate graph has **64** deduplicated edges, **100** roots and no cycle. Global Stage 2 remains unsealed: perform cross-stage synthesis, proxy-fairness/over-gating acceptance and only then canonical progression materialization.
