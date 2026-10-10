@@ -11,16 +11,16 @@ const trace: Trace[] = [
   { label: 'B · WRITE 70', active: 'B', a: 'wrote 20', b: 'wrote 70', balance: 70, approved: 110, status: 'violated', note: 'B ghi snapshot cũ 100 - 30 và che write của A. Final balance cũng không phản ánh hai withdrawal thành công.' },
 ]
 
-export default function RaceInterleavingVisual({ onConclusion }: { onConclusion?: () => void }) {
+export default function RaceInterleavingVisual({ onConclusion, onReset }: { onConclusion?: () => void; onReset?: () => void }) {
   const [step, setStep] = useState(0)
   const [prediction, setPrediction] = useState<string | null>(null)
   const current = trace[step]
   const needsPrediction = step === 2 && !prediction
   const canDiagnose = step >= 4
   useEffect(() => { if (canDiagnose) onConclusion?.() }, [canDiagnose, onConclusion])
-  const reset = () => { setStep(0); setPrediction(null) }
+  const reset = () => { setStep(0); setPrediction(null); onReset?.() }
   return <section className="race-visual-card" aria-labelledby="race-interleaving-title">
-    <span className="mini-label">Visual 1 · Theo từng nhịp</span><h3 id="race-interleaving-title">Hai request có thể phá invariant dù mỗi request nhìn riêng đều hợp lý</h3>
+    <span className="mini-label">Visual 1 · Theo từng nhịp</span><h3 id="race-interleaving-title">Hai request cùng đọc một balance</h3>
     <p><strong>Câu hỏi:</strong> A rút 80 và B rút 30. Khi nào hệ thống đã cho phép rút quá số dư 100?</p>
     <div className={`race-invariant ${canDiagnose ? current.status : 'pending'}`} aria-live="polite"><strong>{canDiagnose ? current.status === 'valid' ? '✓ Invariant còn đúng' : '✗ Invariant bị vi phạm' : '? Chưa kết luận — hãy theo trace'}</strong><span>Rule cần kiểm: approved không vượt 100</span></div>
     <div className="race-timeline" data-layout-boundary aria-live="polite" aria-label={`Timeline step ${step}: ${current.label}`}>

@@ -24,16 +24,6 @@ beforeEach(() => { window.scrollTo = vi.fn(); window.localStorage.clear(); windo
 afterEach(cleanup)
 
 describe('Golden Learning Lab visuals', () => {
-  it('keeps Race controls in a bounded DOM region for overflow regression checks', () => {
-    render(<RaceGoldenLesson stage="interleaving" />)
-    const visual = document.querySelector<HTMLElement>('[data-layout-boundary]')!
-    const buttons = [...document.querySelectorAll<HTMLButtonElement>('.index-step-controls button')]
-    Object.defineProperty(visual, 'clientWidth', { configurable: true, value: 320 })
-    Object.defineProperty(visual, 'scrollWidth', { configurable: true, value: 320 })
-    expect(visual.scrollWidth).toBeLessThanOrEqual(visual.clientWidth)
-    expect(buttons.map(button => button.textContent)).toEqual(['Làm lại', 'Bước trước', 'Xem bước tiếp'])
-  })
-
   it('progresses, predicts and resets the Index B-tree trace', () => {
     render(<IndexGoldenLesson stage="btree" />)
     fireEvent.click(screen.getByLabelText('31–60'))
@@ -156,7 +146,8 @@ describe('Golden Learning Lab visuals', () => {
 
   it('renders Race markers while Learning Quick stays absent', () => {
     render(<MemoryRouter><MarkdownDocument doc={{ ...base, slug: 'learning-race-condition', title: 'Race', contentKind: 'learning', content: `# Test\n\n{{RACE_VISUAL:interleaving}}\n\n{{RACE_VISUAL:protection}}\n\n{{RACE_VISUAL:boundary}}\n\n## Sau visual` }} /></MemoryRouter>)
-    expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Hai request cùng đọc một balance/i })).toBeInTheDocument()
+    expect(screen.queryByText(/\{\{RACE_VISUAL:/)).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Ôn nhanh' })).not.toBeInTheDocument()
   })
 
@@ -230,7 +221,7 @@ describe('Golden Learning Lab visuals', () => {
     if (!raceDocument.content) throw new Error('Golden Pilot route must have rendered content')
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content }} /></MemoryRouter>)
     expect(screen.getAllByRole('heading', { name: 'Race Condition & Concurrency — Golden Pilot' })).toHaveLength(1)
-    expect(screen.getByRole('heading', { name: /Hai request có thể phá invariant/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Hai request cùng đọc một balance/i })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn execution mode' })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Chọn số instance' })).toBeInTheDocument()
     expect(screen.getByText('Tự kiểm L1 đến L4')).toBeInTheDocument()
@@ -274,6 +265,8 @@ describe('Golden Learning Lab visuals', () => {
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
     expect(screen.getByRole('heading', { name: /Chạy reproduction có kiểm soát/i })).toBeInTheDocument()
     expect(screen.getByText((_, element) => element?.tagName === 'CODE' && element.textContent?.includes('const int firstAmount = 80;') === true)).toBeInTheDocument()
+    expect(document.querySelector<HTMLDetailsElement>('.race-lab-reveal')?.open).toBe(false)
+    fireEvent.click(screen.getByText(/Đã chạy xong\? Mở để đối chiếu output 80\/30 và 60\/50/))
     expect(screen.getByText(/unsafe: approvedCount=2, approvedAmount=110, finalBalance=20 hoặc 70/)).toBeInTheDocument()
     expect(screen.getByText(/firstAmount = 60/)).toBeInTheDocument()
     expect(screen.getAllByRole('button', { name: 'Chép mã' }).length).toBeGreaterThan(0)
@@ -285,8 +278,8 @@ describe('Golden Learning Lab visuals', () => {
     render(<MemoryRouter><MarkdownDocument doc={{ ...raceDocument, content: raceDocument.content! }} /></MemoryRouter>)
 
     const context = () => document.querySelector<HTMLElement>('.race-guided-context')!
-    expect(within(context()).getByText(/Bạn cần biết variable, method, C# cơ bản/)).toBeInTheDocument()
-    expect(within(context()).getByText('Nếu hai request cùng rút tiền, rule nào phải giữ?')).toBeInTheDocument()
+    expect(within(context()).getByText(/balance = 100/)).toBeInTheDocument()
+    expect(within(context()).getByText(/Rule nghiệp vụ/)).toBeInTheDocument()
     expect(within(context()).queryByText('Shared state là gì?')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
@@ -303,9 +296,11 @@ describe('Golden Learning Lab visuals', () => {
     expect(within(revealedExplanation).getByText(/Bây giờ mới gọi tên lỗi/)).toBeInTheDocument()
     expect(revealedExplanation.querySelector('#interlocked-giai-quyet-dung-bai-toan-nao')).toBeInTheDocument()
     expect(revealedExplanation.querySelector('#async-khong-loai-race')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Làm lại' }))
+    expect(screen.getByText(/Hãy dự đoán rồi xem đến nhịp CHECK của B/)).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
-    expect(screen.getByText('Tự chạy: cùng input, ba cách thực thi')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Tự dự đoán, rồi mới đối chiếu output/i })).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))
     expect(within(context()).getByText(/Khi production có duplicate reservation/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Tiếp tục' }))

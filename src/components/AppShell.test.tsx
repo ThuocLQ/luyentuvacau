@@ -26,6 +26,13 @@ describe('AppShell learner navigation', () => {
     expect(section).toHaveAttribute('aria-expanded', 'false')
   })
 
+  it('shows the active learning document without turning the library tree into a second primary flow', () => {
+    render(<MemoryRouter initialEntries={['/docs/learning-race-condition']}><AppShell /></MemoryRouter>)
+    const focus = screen.getByLabelText('Bài đang học')
+    expect(within(focus).getByText(/Race Condition & Concurrency/)).toBeInTheDocument()
+    expect(within(focus).getByText(/Thư viện vẫn ở dưới để tra cứu/)).toBeInTheDocument()
+  })
+
   it('migrates only the former all-expanded sidebar default to collapsed sections', () => {
     window.localStorage.setItem('ltvc-open-sections', JSON.stringify(sections))
     render(<MemoryRouter><AppShell /></MemoryRouter>)
