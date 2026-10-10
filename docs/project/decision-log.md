@@ -99,3 +99,10 @@ All 69 relations were reconciled against the frozen registry: **45 REQUIRED** = 
 **Status:** ACTIVE; Stage 2E remains IN_REVIEW
 
 Security has 25 relation-specific decisions across 11 target Learning Units: **18 REQUIRED** = 12 Local slices + 6 External evidence candidates, and **7 RECOMMENDED** = 5 surfaced + 2 omitted. Five singleton whole-unit proxies into `lu-sec-unseen-attack-transfer` are acceptable candidates only. `sec-auth-session-token → sec-authorization-object-tenant` is not a whole-unit proxy: `lu-sec-auth-session-oauth` also owns OAuth/OIDC awareness, so later policy must use compatible authentication evidence rather than whole-unit PASSED. An executable validator and negative tests now enforce inventory identity, row shape, duplicate decisions, proxy membership/fairness and target over-gating coverage. Observability and Reliability / SRE remain unreviewed.
+
+## D-013 — Stage 2E Observability bounded review accepted
+
+**Date:** 2026-10-10
+**Status:** ACTIVE; Stage 2E remains IN_REVIEW
+
+Observability has 19 relation-specific decisions across 7 target Learning Units: **9 REQUIRED** = 6 Local slices + 3 External evidence candidates, and **10 RECOMMENDED** = 10 surfaced contexts. The runtime-diagnostics → profiling candidate explicitly rejects whole-unit PASSED because `lu-runtime-diagnostics` is multi-Primary; two singleton evidence candidates into `lu-obs-diagnostic-method` are fair but remain non-locking. The executable graph now derives all 137 Units, includes rejected-proxy candidates, deduplicates pairs and verifies 43 prior+Security edges / 116 roots and 46 prior+Security+Observability edges / 114 roots, acyclic. Reliability / SRE remains unreviewed.

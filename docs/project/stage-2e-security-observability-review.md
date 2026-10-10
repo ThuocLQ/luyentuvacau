@@ -1,6 +1,6 @@
 # Stage 2E Security + Observability Dependency Semantic Review — Working Evidence
 
-NON-CANONICAL WORKING REVIEW. Security evidence is accepted as a bounded Stage 2E package; Observability and Reliability / SRE remain unreviewed. Candidate edges do not create learner locks.
+NON-CANONICAL WORKING REVIEW. Security and Observability evidence are accepted bounded Stage 2E packages; Reliability / SRE remains unreviewed. Candidate edges do not create learner locks.
 
 ## Security relation-specific evidence — authoritative repair
 
@@ -32,6 +32,30 @@ NON-CANONICAL WORKING REVIEW. Security evidence is accepted as a bounded Stage 2
 | RECOMMENDED | sec-auth-session-token -> sec-cryptography-credentials-tokens | SURFACE | During token signature verification, optionally contrast claims/lifetime with primitive choice; no prior pass required. | Claims and session lifetime orient the example but primitive selection remains target-owned. |
 | RECOMMENDED | delivery-cloud-responsibility-managed-services -> sec-data-encryption-key-lifecycle | SURFACE | At key ownership design, optionally distinguish provider-managed storage from application-managed rotation; the target still assesses lifecycle evidence. | Managed-service responsibility is optional deployment context, not a prerequisite for key-lifecycle evidence. |
 
+## Observability relation-specific evidence — authoritative repair
+
+| Kind | Relation | Decision | Concrete target-native evidence | Ownership / proxy boundary |
+|---|---|---|---|---|
+| REQUIRED | obs-signals-correlation -> obs-logs-structured-correlation | LOCAL | A checkout emits one log for validation and one for payment; add operation ID, order ID and event name, then query only that checkout. Evidence: reconstruct its two events without reading a trace. | The target owns structured event shape and queryability; it only introduces the signal/context distinction locally, not source signal-correlation assessment. |
+| REQUIRED | obs-signals-correlation -> obs-instrumentation-context | LOCAL | One checkout call crosses API, payment and worker. Add the same trace ID and order ID to a span, a log and a metric exemplar. Evidence: follow the operation across the three records. | The target owns propagation and instrumentation context; it does not award broad signal-selection evidence from the source unit. |
+| REQUIRED | obs-instrumentation-context -> obs-cardinality-sampling-cost | LOCAL | A request adds `customerId` and `route` labels; compare one bounded route label with unbounded customer IDs. Evidence: predict which dimension explodes metric series. | The target owns cardinality, sampling and cost trade-offs; it recaps only how context becomes a field or label. |
+| REQUIRED | runtime-diagnostics -> obs-profiling-runtime-evidence | EXTERNAL — WHOLE-UNIT PROXY NOT_ACCEPTABLE | Prior capability evidence: given rising CPU, allocation and blocked-thread counters, choose a profile or dump that could distinguish the competing runtime hypotheses. Target then interprets flame-graph or allocation evidence for that hypothesis. | `lu-runtime-diagnostics` has more than one Primary, so whole-unit PASSED would over-gate profiling. A compatible diagnostic-evidence record may be needed later; it is not an automatic lock. |
+| REQUIRED | obs-latency-throughput-saturation -> obs-db-io-downstream-attribution | LOCAL | A checkout p95 rises while DB connection wait and query duration are shown separately. Evidence: identify whether the visible delay occurs before SQL, inside SQL or in another downstream call. | The target owns attribution across DB/I/O/downstream boundaries; it teaches the small latency/saturation symptom slice locally. |
+| REQUIRED | obs-tracing-distributed-evidence -> obs-db-io-downstream-attribution | LOCAL | A trace has API, DB and shipping spans; the DB span starts after a connection wait. Evidence: point to the span boundary that separates pool wait from query execution. | The target owns attribution diagnosis; it borrows only one span-timing view and does not assess the source unit's distributed tracing transfer. |
+| REQUIRED | obs-latency-throughput-saturation -> obs-load-test-benchmark-validity | LOCAL | A load run doubles arrival rate after warm-up and records p50/p95, error rate and in-flight work. Evidence: state which workload change makes the comparison invalid. | The target owns experiment validity; observed latency/throughput/saturation are introduced as measurements, not a prior observability pass. |
+| REQUIRED | obs-signals-correlation -> obs-diagnostic-method | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: select the right signal and correlate operation/resource identity to confirm or reject a stated production hypothesis. The target diagnostic case must choose evidence before naming a cause. | The source is a singleton with the same evidence boundary, so whole-unit PASSED is a fair candidate proxy only; it does not itself create a learner lock. |
+| REQUIRED | obs-latency-throughput-saturation -> obs-diagnostic-method | EXTERNAL — WHOLE-UNIT PROXY ACCEPTABLE | Prior assessment: interpret p50/p95, throughput, error rate and finite-resource saturation as competing workload symptoms. The target must discriminate those symptoms before claiming root cause. | The source is a singleton and its measured-symptom assessment is directly reused, making whole-unit PASSED a fair candidate proxy only. |
+| RECOMMENDED | net-http-semantics -> obs-tracing-distributed-evidence | SURFACE | When creating the first server span, optionally show request method, route and response status as span attributes for one HTTP boundary. | HTTP semantics orient the trace example only; no networking pass is required. |
+| RECOMMENDED | msg-model-queue-topic-partition-order -> obs-tracing-distributed-evidence | SURFACE | When linking producer and consumer, optionally contrast one synchronous child span with a message handoff and its propagated correlation ID. | Message ordering is contextual transfer material, not a prerequisite for trace context. |
+| RECOMMENDED | db-execution-operators -> obs-db-io-downstream-attribution | SURFACE | When a DB span is slow, optionally show scan and sort operator time to avoid treating SQL as one opaque number. | Plan mechanics are optional diagnostic enrichment; attribution remains the assessed target mechanism. |
+| RECOMMENDED | db-connection-pool-exhaustion -> obs-db-io-downstream-attribution | SURFACE | At the DB-delay branch, optionally compare acquire-time versus query-time metrics so the learner can see a pool wait before SQL begins. | Pool exhaustion is an alternative explanation to surface, never a required prior lesson. |
+| RECOMMENDED | runtime-jit-warmup -> obs-load-test-benchmark-validity | SURFACE | Before comparing runs, optionally show the first minute with JIT warm-up and the later steady-state window. | Warm-up is useful experimental context but does not gate benchmark validity evidence. |
+| RECOMMENDED | concurrency-bounded-backpressure -> obs-load-test-benchmark-validity | SURFACE | As arrival rate exceeds worker capacity, optionally graph queue depth and in-flight work beside p95. | Backpressure is a workload variation, not a concurrency prerequisite. |
+| RECOMMENDED | obs-db-io-downstream-attribution -> obs-diagnostic-method | SURFACE | After forming a latency hypothesis, optionally use one DB-versus-shipping decomposition to choose the next discriminating query. | Detailed downstream attribution is optional case context; the target must remain usable for CPU or cache hypotheses. |
+| RECOMMENDED | obs-profiling-runtime-evidence -> obs-diagnostic-method | SURFACE | For a CPU hypothesis, optionally attach a flame graph and compare it with a counter that would falsify the hypothesis. | Profiling is one evidence modality, not an unlock condition for the diagnostic method. |
+| RECOMMENDED | obs-logs-structured-correlation -> obs-diagnostic-method | SURFACE | For a state-transition hypothesis, optionally query correlated order events before choosing a repair. | Structured logs are optional corroboration; the target still teaches the hypothesis loop. |
+| RECOMMENDED | obs-load-test-benchmark-validity -> obs-diagnostic-method | SURFACE | When an incident follows a load test, optionally check whether the workload, data and warm-up assumptions still match production. | Experimental validity is useful context but a diagnostic method must not require a prior benchmark pass. |
+
 ## Superseded draft evidence
 
 The former generic combined tables were removed because they conflicted with the authoritative Security evidence above. Observability requires its own relation-specific repair before acceptance.
@@ -52,4 +76,18 @@ The former generic combined tables were removed because they conflicted with the
 | lu-sec-cryptography-credentials-tokens | 1 | 0 | 1 | 0 | No external candidate | Token trust-boundary context is local and authentication context is optional; neither is a gate for primitive selection. |
 | lu-sec-data-encryption-key-lifecycle | 2 | 0 | 1 | 0 | No external candidate | Primitive distinction and secret rotation are introduced in a key-lifecycle trace; cloud responsibility is optional deployment context. |
 
-Security accounting: 18 REQUIRED = 12 LOCAL + 6 EXTERNAL; 7 RECOMMENDED = 5 SURFACED + 2 OMITTED. The one rejected external whole-unit proxy remains evidence-only and never becomes a learner lock. Observability and Reliability / SRE remain unreviewed.
+Security accounting: 18 REQUIRED = 12 LOCAL + 6 EXTERNAL; 7 RECOMMENDED = 5 SURFACED + 2 OMITTED. The one rejected external whole-unit proxy remains evidence-only and never becomes a learner lock.
+
+## Observability target over-gating review
+
+| Target unit | LOCAL | EXTERNAL | SURFACED | OMITTED | Progression treatment | Over-gating check |
+|---|---|---|---|---|---|---|
+| lu-obs-logs-structured-correlation | 1 | 0 | 0 | 0 | No external candidate | The checkout event trace introduces only enough correlation context to design structured logs. |
+| lu-obs-instrumentation-tracing | 1 | 0 | 2 | 0 | No external candidate | Signal context is local; HTTP and messaging are optional trace variations, not sequential locks. |
+| lu-obs-cardinality-sampling-cost | 1 | 0 | 0 | 0 | No external candidate | The label-cost decision needs one local context-to-field example, not full tracing mastery. |
+| lu-obs-profiling-runtime-evidence | 0 | 1 | 0 | 0 | Capability-compatible diagnostic evidence only | Runtime diagnostics is multi-Primary, so the external need cannot become a whole-unit PASSED requirement. |
+| lu-obs-db-io-downstream-attribution | 2 | 0 | 2 | 0 | No external candidate | Target-native trace and latency panel teach the two required slices; DB plan and pool facts remain optional branches. |
+| lu-obs-load-test-benchmark-validity | 1 | 0 | 2 | 0 | No external candidate | Workload metrics are local; warm-up and backpressure are optional conditions that enrich one experiment. |
+| lu-obs-diagnostic-method | 0 | 2 | 4 | 0 | Two acceptable singleton candidates remain candidate-only | Signal correlation and workload symptoms are substantive reusable evidence; DB, profile, logs and load-test material remain optional hypothesis variants. |
+
+Observability accounting: 9 REQUIRED = 6 LOCAL + 3 EXTERNAL; 10 RECOMMENDED = 10 SURFACED + 0 OMITTED. External candidates express evidence compatibility only; the future progression policy must keep all content viewable and must not silently turn them into locks.
